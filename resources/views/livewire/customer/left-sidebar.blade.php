@@ -10,7 +10,7 @@
                   <li>
                       <a href="{{ route('customer.portal') }}" class="{{ Route::currentRouteName() == 'customer.portal' ? 'active' : '' }}"><img src="/images/customer/images/category.svg" alt="category" />OVERVIEW</a>
                   </li>
-                  <li class="tours_menu">
+                  <li class="tours_menu submenu-toggle">
                       <a href="{{ route('customer.itinerary') }}" class="{{ Route::currentRouteName() == 'customer.itinerary' ? 'active' : '' }}"><img src="/images/customer/images/airplane.svg" alt="tours" />TOURS</a>
                       <ul class="travel_sub_menu">
                         @foreach($upcomingOrders as $order)
@@ -75,6 +75,19 @@
             const divHeight = targetDiv.offsetHeight;
             header.style.height = divHeight + 'px';
             }
+        });
+
+        document.querySelectorAll('.submenu-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+            const submenu = button.parentElement.querySelector('.travel_sub_menu');
+            if (submenu) {
+                submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+            }
+ 
+                    const menuItem = button.closest('.tours_menu');
+            menuItem.classList.toggle('open');
+ 
+            });
         });
     </script>
 @endpush

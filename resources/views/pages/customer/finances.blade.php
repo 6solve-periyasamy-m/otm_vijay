@@ -41,7 +41,6 @@
                                         @endforeach
                                             <h6 class="btn btn-warning">{{ $order->status->description() }}</h6>
                                             <h4>{{ $order->tour?->event?->name}}</h4>
-                                            <p>{{ $order->tour->name }}</p>
                                             <h6>Lead Guest : {{$order->leadBooker->customer->first_name ?? '' . ' ' .$order->leadBooker->customer->last_name ?? ''}}</h6>
                                             <!-- <h6>Booking Reference : {{ $order->booking_reference }}</h6> -->
                                             <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />{{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}</p>
@@ -77,9 +76,9 @@
                                         <table class="invoice_tbl" style="width: 100%;">
                                             <tr>
                                                 <th>DUE DATE</th> 
-                                                <th>STATUS</th>
+                                                <th>INSTALLMENT</th>
                                                 <th>AMOUNT</th> 
-                                                <th>Type</th>
+                                                <th>Status</th>
                                             </tr>
                                             @php
                                                 $hrefdata = url('/customer/finances/invoice/' .  $order->booking_reference);

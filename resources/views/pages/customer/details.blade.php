@@ -461,8 +461,17 @@
                                     <input type="hidden" name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" >
                                 </div>                                    
                             </div>
-                        </div>
+                        </div>                        
                         <hr/>
+                        <div class="personal_details other_details" id="other_details">
+                            <h3>Other Details</h3>
+                            <div class="other_details_form">
+                                <div class="one_input_field"><input type="text" name="other_notes" value="{{ $customer->external_notes }}"  placeholder="Other Notes"  ></div>
+                                <div class="one_input_field"><input type="text"  name="dietary_notes" value="{{ $customer->dietary_notes }}" placeholder="Dietary Requirements"  ></div>
+                                <div class="one_input_field"><input type="text" name="mobility_notes" value="{{ $customer->mobility_notes }}" placeholder="Mobility Requirements" ></div>                           
+                            </div>
+                        </div>
+                        </hr>
                         <div class="personal_details passport_details" id="passport_details">
                             <h3>Passport Details</h3>
                             
@@ -528,29 +537,26 @@
                         </div>
                         <hr/>
                         <div class="personal_details other_details" id="other_details">
-                            <h3>Other Details</h3>
+                            <h3>Merchandise</h3>
                             <div class="other_details_form">
-                                    <div class="two_input_field">
-                                         <select name="t_shirt_size_id" class="form-control">
-                                            <option value="">Select T Shirt Size</option>
-                                            @foreach(TShirtSize::all() as $tsize)
-                                                <option value="{{ $tsize->id }}" {{ ($customer->t_shirt_size_id ?? '') == $tsize->id ? 'selected' : '' }}>
-                                                    {{ strtoupper($tsize->name) }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                         <select name="hat_size_id" class="form-control">
-                                            <option value="">Select Hat Size</option>
-                                            @foreach(HatSize::all() as $hsize)
-                                                <option value="{{ $hsize->id }}" {{ ($customer->hat_size_id ?? '') == $hsize->id ? 'selected' : '' }}>
-                                                    {{ strtoupper($hsize->name) }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="one_input_field"><input type="text" name="other_notes" value="{{ $customer->external_notes }}"  placeholder="Other Notes"  ></div>
-                                    <div class="one_input_field"><input type="text"  name="dietary_notes" value="{{ $customer->dietary_notes }}" placeholder="Dietary Requirements"  ></div>
-                                    <div class="one_input_field"><input type="text" name="mobility_notes" value="{{ $customer->mobility_notes }}" placeholder="Mobility Requirements" ></div>
+                                <div class="two_input_field">
+                                        <select name="t_shirt_size_id" class="form-control">
+                                        <option value="">Select T Shirt Size</option>
+                                        @foreach(TShirtSize::all() as $tsize)
+                                            <option value="{{ $tsize->id }}" {{ ($customer->t_shirt_size_id ?? '') == $tsize->id ? 'selected' : '' }}>
+                                                {{ strtoupper($tsize->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                        <select name="hat_size_id" class="form-control">
+                                        <option value="">Select Hat Size</option>
+                                        @foreach(HatSize::all() as $hsize)
+                                            <option value="{{ $hsize->id }}" {{ ($customer->hat_size_id ?? '') == $hsize->id ? 'selected' : '' }}>
+                                                {{ strtoupper($hsize->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <hr/>

@@ -27,7 +27,7 @@
     <div class="tours_list">
         <div class="upcoming_tours">
             @if($upcomingOrders->count() > 0)
-                <h2>Upcoming Trips <span class="tours_count">{{ $upcomingOrders->count() }}</span></h2>
+                <h2>Upcoming Trips {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span>--}}</h2>
             @endif
             @foreach($upcomingOrders as $kupcom => $vupcom)
                 <div class="event_list">
@@ -43,7 +43,6 @@
                             <div class="title_date">
 				                <h6  class="btn btn-warning">{{ $vupcom->status->description() }}</h6>
                                 <h4>{{ $vupcom->tour?->event?->name}}</h4>                            
-                                <p>{{ $vupcom->tour->name }}</p>
                                 <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                 {{ Carbon::parse($vupcom->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vupcom->tour->date_to)->format('d M Y')}}</p>
                                 <p class="view_details"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}"> VIEW DETAILS <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a></p>
@@ -70,7 +69,7 @@
             @endforeach
         </div>
         <div class="upcoming_payments">
-            <h2>Upcoming Payments <span class="tours_count">{{ $upcomingOrders->count() }}</span></h2>
+            <h2>Upcoming Payments {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span>--}}</h2>
             <div class="past_tour_row">
                 @foreach($upcomingOrders as $order)
                     @php
@@ -94,13 +93,13 @@
                             </div>
                             <div class="event_title_date pb-0">
                                 <h4>{{ $order->tour?->event?->name}}</h4>                                
-                                @if($order->tour)
+                                {{-- @if($order->tour)
                                     <a href="itinerary/{{$order->booking_reference }}/{{$orderCustomer->customer_id }}" class="view_details">
                                         {{ $order->tour->name }}
                                     </a>
                                 @else
                                     <p>Tour Deleted</p>
-                                @endif
+                                @endif --}}
                                 <p class="calendar_date lh-lg d-flex justify-content-between">
                                     <span>
                                         <img src="{{ asset('images/customer/images/calendar.svg') }}" />
@@ -130,10 +129,16 @@
                             $hrefdata = url('/customer/finances/invoice/' .  $order->booking_reference);
                         @endphp
                         <div class="common_btn">
-                            <!-- <a class="cta_space" href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
-                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a> -->
-                            <a class="cta_space download_itinerary_link" href="{{ route('customer.itinerary.download', ['reference' => $orderCustomer->order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> ITINERARY</a>
-                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> INVOICE</a>
+                            {{-- <a class="cta_space" href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
+                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a> --}}
+                            <a class="cta_space download_itinerary_link" href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
+                                <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
+                                <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> RESERVATION DOCUMENT
+                            </a>
+                            <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space download_itinerary_link">
+                                <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
+                                <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> INVOICE
+                            </a>
                         </div>
                         @if($order->next_installment !== null)
                             @php
@@ -179,7 +184,7 @@
                                                 <div class="order_amount">Due amount to pay : {{ fr_currency($order->next_installment->remaining, $order->currency, false, 0) }} </div>
                                                 <button type="submit" class="next-button">
                                                     <span>
-                                                        <span>CHECKOUT</span>
+                                                        <span>Pay Via Credit Card</span>
                                                         <img src="{{ asset('images/customer/images/Right-arrow-mod.svg') }}" alt="right-arrow">
                                                     </span>
                                                 </button>
@@ -234,9 +239,9 @@
                                 $hrefdata = url('/customer/finances/invoice/' .  $vpast->booking_reference);
                             @endphp
                             <div class="common_btn">
-                                <!-- <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
-                                <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a> -->
-                                <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank" class="download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> ITINERARY</a>
+                                {{-- <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> ITINERARY</a>
+                                <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a> --}}
+                                <a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer?->customer_id]) }}" target="_blank" class="download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> ITINERARY</a>
                                 <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> INVOICE</a>
                             </div>
                         </div>

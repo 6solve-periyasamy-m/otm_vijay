@@ -203,7 +203,6 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         <div class="event_img"><img src="{{asset($evenImg1)}}" alt="{{ $order->tour->event->name }}"/></div>
                         <div class="title_date">                            
                             <h4>{{ $order->tour->event->name }}</h4>
-                            <p>{{ $order->tour->name }} </p>
                             <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
                               {{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}
                             </p>
@@ -234,28 +233,19 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
             <div class="other_guests name_address_font">
                 <h5>OTHER GUESTS</h5>
                 <div class="guests_row">
-                        @foreach($order->orderCustomers as $key => $ordersCustomer)
-                            <div class="guest_colm1">
-                                <p><span>Guest {{ $key+1 }}</span><span>{{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}</span></p>
-                                @if($ordersCustomer->customer->email_address)
-                                <p>
-                                    <span class="guest_eaddrs">Email address</span>
-                                    <span>{{ $ordersCustomer->customer->email_address ?? '-'}}</span>
-                                </p>
-                                @else
-                                    <livewire:customer.order-customer-email :orderCustomer="$ordersCustomer" />
-                                @endif
-                            </div>
-                        @endforeach
-                        <!-- <div class="guest_colm_email">
-                            <p><span>Guest 2</span><span>Matt Rath</span></p>
-                            <p class="guest_email"><input type="email"  name="email" placeholder="ENTER EMAIL ADDRESS" required></p>
+                    @foreach($order->orderCustomers->slice(1) as $key => $ordersCustomer)
+                        <div class="guest_colm1">
+                            <p><span>Guest {{ $key+1 }}</span><span>{{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}</span></p>
+                            @if($ordersCustomer->customer->email_address)
+                            <p>
+                                <span class="guest_eaddrs">Email address</span>
+                                <span>{{ $ordersCustomer->customer->email_address ?? '-'}}</span>
+                            </p>
+                            @else
+                                <livewire:customer.order-customer-email :orderCustomer="$ordersCustomer" />
+                            @endif
                         </div>
-                        <div class="guest_colm_email">
-                            <p><span>Guest 2</span><span>Ben Rath</span></p>
-                            <p class="guest_email"><input type="email"  name="email" placeholder="ENTER EMAIL ADDRESS" required></p>
-                        </div>
-                            -->
+                    @endforeach
                 </div>             
             </div>
             @endif
@@ -412,8 +402,77 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         <div class="trip_itinerary_row name_address_font">
             <div class="trip_text_btn">
                 <div><h2>Trip itinerary and inclusions</h2></div>
-            <div><div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" class="trip_itinerary_link" target="_blank"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="trip_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="trip_itinerary_wht_icn"/>DOWNLOAD ITINERARY</a></div></div>
-            </div>            
+                <div>
+                    <div class="common_btn">
+                            <a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" class="trip_itinerary_link" target="_blank">
+                                <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="trip_itinerary_org_icn"/>
+                                <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="trip_itinerary_wht_icn"/>DOWNLOAD ITINERARY
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- On-Site Contact Details Section -->
+                @php 
+                    $phoneIcon = asset('/images/icons-phone.png') ;
+                    $mailIcon = asset('/images/icons-email.png') ;
+                @endphp
+                @if(!empty($order->tour?->event?->onsite_name) || !empty($order->tour?->event?->onsite_email) || !empty($order->tour?->event?->onsite_phone))
+                <div class="trip_days">
+                    <div class="row">
+                        <div class="single-module mb-n15">
+                            <div class="heading-module"> <h5> On-Site Contact Details </h5></div>
+                            <div class="details-module">
+                                <table class="onsite-contact-detail-block">
+                                    <tbody>
+                                        @if(!empty($order->tour?->event?->onsite_name))
+                                            <tr>
+                                                <td class="left_label_column"><strong>Name:</strong></td>
+                                                <td class="item-detail">{{ $order->tour?->event->onsite_name }}</td>
+                                            </tr>
+                                        @endif
+
+                                        @if(!empty($order->tour?->event?->onsite_email))
+                                            <tr>
+                                                <td class="left_label_column"><strong>Email:</strong></td>
+                                                <td><img src="{{ $mailIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" /><a href="mailto:{{ $order->tour?->event->onsite_email }}">{{ $order->tour?->event->onsite_email }}</a></td>
+                                            </tr>
+                                        @endif
+                                        @if(!empty($order->tour?->event?->onsite_phone))
+                                            <tr>
+                                                <td class="left_label_column"><strong>Phone:</strong></td>
+                                                <td>
+                                                    @php
+                                                        $phones = preg_split('/[\;|]+/', $order->tour?->event->onsite_phone);
+                                                    @endphp
+                                                    <table class="onsite-contact-no">
+                                                    <tr>
+                                                        @foreach($phones as $phone)
+                                                            @php $trimmedPhone = trim($phone); @endphp
+                                                            @if($trimmedPhone)
+                                                                <td style="padding-right: 2px;">
+                                                                    <span style="display: inline-flex; align-items: center;">
+                                                                        <img src="{{ $phoneIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" />
+                                                                        <a href="tel:{{ preg_replace('/\D+/', '', $trimmedPhone) }}">{{ $trimmedPhone }}</a>
+                                                                        @unless($loop->last) &nbsp;&nbsp;|&nbsp; @endunless
+                                                                    </span>
+                                                                </td>
+                                                            @endif
+                                                        @endforeach
+                                                    </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                <!-- Endof of the On-Site Contact Details Section -->
+
+
             @php
                 $groupedByDate      = [];
                 $accommodationdata  = [];
@@ -585,6 +644,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
 
                 @if(!empty($itinerary->items['Transfers']))
                     @php $firstLoop = true; @endphp
+					<hr />
                     @foreach($itinerary->items['Transfers'] as $transport)
                         @if(isset($transport->details['Quantity']) && $transport->details['Quantity'] > 0)
                         <div class="single-module mb-n15">
@@ -600,7 +660,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <td class="item-header w-125"><strong> Service: </strong></td>
+                                            <td class="item-header left_label_column"><strong> Service: </strong></td>
                                             <td class="item-detail">{{ $transport->name }}</td>
                                         </tr>
                                         @php
@@ -612,7 +672,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                         @endphp
                                             @if (!in_array($key, $disable_items))
                                                 <tr>
-                                                    <td class="item-header w-125">
+                                                    <td class="item-header left_label_column">
                                                         <strong>{{ $key }}:</strong>
                                                     </td>
                                                     <td class="item-detail <?php echo $class_desc_pos;?>">
@@ -631,7 +691,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
 
                 @if(!empty($itinerary->items['Accommodation']))
                     @php $firstLoop = true; @endphp
-                    
+                    <hr />
                     @foreach($itinerary->items['Accommodation'] as $accommodation)
                         <div class="single-module mb-n15">
                             @if($firstLoop)
@@ -682,6 +742,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
 
                 @if(!empty($itinerary->items['Event'])) 
                     @php  $firstLoop = true; @endphp
+				<hr />
                     <div class="row">
                         @foreach($itinerary->items['Event'] as $item)
                             <div class="single-module mb-n15">
@@ -818,7 +879,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
             <hr />
         @endif
         <div class="notes_div">
-            <h3>Notes</h3>            
+            <h3>Special Requests</h3>            
             <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
                  @csrf
                 <div class="notes_row">
@@ -862,7 +923,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         <div class="tours_list">
             <div class="upcoming_tours">
                 @if($upcomingOrders->count() > 0)
-                    <h2>Upcoming Trips <span class="tours_count">{{ $upcomingOrders->count() }}</span></h2>
+                    <h2>Upcoming Trips {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span> --}}</h2>
                 @endif
                 @foreach($upcomingOrders as $kupcom => $vupcom)
                     <div class="event_list">
@@ -878,7 +939,6 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                 <div class="title_date">
                                     <h6 class="btn btn-warning">{{ $vupcom->status->description() }}</h6>
                                     <h4>{{ $vupcom->tour?->event?->name}}</h4>                            
-                                    <p>{{ $vupcom->tour->name }}</p>
                                     <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                     {{ Carbon::parse($vupcom->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vupcom->tour->date_to)->format('d M Y')}}</p>
                                     <p class="view_details"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}"> VIEW DETAILS <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a></p>
