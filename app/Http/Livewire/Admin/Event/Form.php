@@ -134,6 +134,7 @@ class Form extends Component
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:8192',
             'banner' => 'nullable|image|mimes:jpg,jpeg,png|max:8192',
             'event.booking_url' => 'nullable|string',
+            'event.is_download_itinerary' => 'nullable|boolean',
             'event.onsite_name' => 'nullable|string',
             'event.onsite_email' => 'nullable|string',
             'event.onsite_phone' => 'nullable|string',

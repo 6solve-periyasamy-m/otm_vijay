@@ -22,7 +22,7 @@
         })->values();
         $pastOrders = $orders->filter(function ($order) {
             return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isPast();
-        });
+        });        
     @endphp
     <div class="tours_list">
         <div class="upcoming_tours">
@@ -48,18 +48,13 @@
                                 <p class="view_details"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}"> VIEW DETAILS <img src="{{ asset('images/customer/images/arrow_right.svg') }}" /></a></p>
                             </div> 
                     </div>
-                    {{-- <div class="common_btn d-inline">
-                        <p><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
-                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY
-                        </a></p>
-                        <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
-                            <img src="{{ asset('images/customer/images/download_icon.svg') }}" />RESERVATION DOCUMENT
-                        </a></p>
-                    </div> --}}
+                    @php  $is_download_itinerary = $vupcom->tour->event?->is_download_itinerary; @endphp
                     <div class="common_btn d-inline">
+                        @if($is_download_itinerary)
                         <p><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" class="download_itinerary_link" target="_blank">
                             <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/>DOWNLOAD ITINERARY
                         </a></p>
+                        @endif
                         <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" class="reservation_doc_link" target="_blank">
                             <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="reservation_org_icn" /><img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="reservation_wht_icn"/>RESERVATION DOCUMENT
                         </a></p>
