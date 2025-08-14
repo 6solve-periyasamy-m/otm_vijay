@@ -132,7 +132,6 @@
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
-
 <body class="body" style="margin: 0px;">
     <section class="pdf-individual-block">
         <div class="row">
