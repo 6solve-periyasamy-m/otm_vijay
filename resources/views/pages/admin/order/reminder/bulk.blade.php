@@ -88,15 +88,17 @@
 
 @section('content')
     <x-admin.section.card>
-        <div class="block">
-            <div class="flex float-end w-100">
-                <div>
-                    <button onclick="selectAll()" class="btn btn-primary">Select All</button>
-                </div>
-                <div>
-                    <button onclick="sendReminders()" class="btn btn-warning">{{ Icon::email() }} Send Reminders </button>
-                </div>
+        <div class="flex float-end w-100">
+            <div>
+                <button onclick="selectAll()" class="btn btn-primary">Select All</button>
             </div>
+            <div>
+                <button onclick="sendReminders()" class="btn btn-warning">{{ Icon::email() }} Send Reminders </button>
+            </div>
+        </div>
+    </x-admin.section.card>
+    <x-admin.section.card>
+        <div class="block">
             <div class="block">
                 <table class="table table-striped order-table">
                     <thead>
