@@ -196,7 +196,7 @@
                 <div class="col-6">
                     <x-admin.section.otm-text class="ctc-updater">
                         <x-slot:header>{{ __('quotes.view.cards.quick.calculator.ctc') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                        {{ f_currency($costToCompany * $toRate, $quote->currency, $fromRate, Settings::currency()) }}
+                        {{ f_currency($costToCompany / $fromRate, $quote->currency, $fromRate, Settings::currency()) }}
                     </x-admin.section.otm-text>
                 </div>
                 <div class="col-6 row">
@@ -231,7 +231,7 @@
                                 @if($profit == null)
                                     Conversion Rate Not Set
                                 @else
-                                    {{ f_currency($profit * $toRate, $quote->currency, $fromRate, Settings::currency()) }}
+                                    {{ f_currency($profit / $fromRate, $quote->currency, $fromRate, Settings::currency()) }}
                                 @endif
                             </x-admin.section.otm-text>
                         </div>
