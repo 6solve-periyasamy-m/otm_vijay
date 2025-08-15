@@ -152,6 +152,9 @@ class QuoteController extends Controller
         if ($prospect->is_lead) {
             return back()->withErrors(['msg' => "You can't delete the lead traveller"]);
         }
+        if ($prospect->paying) { $quote->update(['paying' => $quote->paying - 1,]); }
+        else if ($prospect->travelling) { $quote->update(['travelling' => $quote->travelling - 1,]); }
+        $quote->save();
         $prospect->delete();
         return redirect()->route('quotes.view', ['quote' => $quote]);
     }
