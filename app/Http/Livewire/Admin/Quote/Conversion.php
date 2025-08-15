@@ -28,6 +28,8 @@ class Conversion extends Component
         foreach ($this->quote->travellers as $traveller) {
             if ($traveller->is_lead) { continue; }
             $this->travellers[] = ['id' => $traveller->customer_id, 'name' => $traveller->customer->full_name, 'paying' => $traveller->paying, 'travelling' => $traveller->travelling, 'items' => []];
+            if ($paying) { $paying--; }
+            else if ($travelling) { $travelling--; }
         }
         for ($x = 0; $x < $paying; $x++) {
             $this->travellers[] = ['id' => null, 'name' => null, 'paying' => true, 'travelling' => true, 'items' => []];
