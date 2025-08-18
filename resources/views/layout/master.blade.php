@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.css"/>
+    <link href="https://cdn.datatables.net/v/bs5/moment-2.29.4/dt-2.3.2/fh-4.0.3/sl-3.0.1/datatables.min.css" rel="stylesheet" integrity="sha384-AmSgplFI3JRSEGpYrka7tR7wlMgVcFUWqqtipvYrVZkv4Ic29T5N8w9oMGWM10gt" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Styles -->
     @if(!isset($tailwind) || $tailwind === true)
@@ -82,7 +82,7 @@
 </body>
 <footer>
     <script src="{{ asset('js/admin/functions.js')  }}"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.6.0/dt-1.11.2/fh-3.1.9/r-2.2.9/sl-1.3.3/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/moment-2.29.4/dt-2.3.2/fh-4.0.3/sl-3.0.1/datatables.min.js" integrity="sha384-mx6lJGUFQPlUlJs0IhcK4Iu7qgTmacW1fENC06Xzs7VYT6HQu7kM8yINPv3Gtqxl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <div aria-live="polite" aria-atomic="true" class="position-relative">

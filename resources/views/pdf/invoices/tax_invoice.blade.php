@@ -434,6 +434,7 @@
         .bank-details {padding-top:15px;}
         .terms-condition{ font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
         .bank-info-block td:first-child { font-family: 'Lato', sans-serif; font-weight: 400; font-size: 13px;}
+        .currency-symbol {font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important; font-size: 12px !important;}
     </style>
     <title>Invoice - {{ $invoice->booking_reference }}</title>
 </head>
@@ -542,12 +543,12 @@
                     @foreach ($invoice->payment_schedule as $key => $installment)
                         @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
                         <tr>
-                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
-                            <td>
+                            <td class="currency-symbol">{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                            <td class="currency-symbol">
                                 {{ fr_currency(min($installment->amount, $installment->received), $invoice->currency) }}
                                 @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
                             </td>
-                            <td>
+                            <td class="currency-symbol">
                             @if($installment->amount <= $installment->received)
                                 Paid
                             @else
@@ -559,8 +560,8 @@
                         @endif
                         @if ($installment->type === ItineraryScheduleType::DEPOSIT)
                         <tr>
-                            <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
-                            <td>
+                            <td class="currency-symbol">{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                            <td class="currency-symbol">
                             @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                             @if($amount <= 0)
                                 {{ fr_currency($installment->amount, $invoice->currency) }}
@@ -570,7 +571,7 @@
                                 @php $balance_received = $balance_received + $installment->received @endphp
                             @endif
                             </td>
-                            <td>
+                            <td class="currency-symbol">
                             @if($amount <= 0)
                                 Paid
                             @else
@@ -583,8 +584,8 @@
                         @if ($installment->type === ItineraryScheduleType::INSTALLMENT)
                             @php $amount = $installment->amount - $installment->received; @endphp
                             <tr>
-                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
-                                <td>
+                                <td class="currency-symbol">{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                                <td class="currency-symbol">
                                 @if($amount <= 0)
                                     {{ fr_currency($installment->amount, $invoice->currency) }}
                                     @php $balance_received = $balance_received + $installment->amount @endphp
@@ -593,7 +594,7 @@
                                     @php $balance_received = $balance_received + $installment->received @endphp
                                 @endif
                                 </td>
-                                <td>
+                                <td class="currency-symbol">
                                 @if($amount <= 0)
                                     Paid
                                 @else
@@ -609,12 +610,12 @@
                         @endif
                         @if ($installment->type === ItineraryScheduleType::REMAINING)
                             <tr>
-                                <td>{{ fr_currency($installment->amount, $invoice->currency) }}</td>
-                                <td>
+                                <td class="currency-symbol">{{ fr_currency($installment->amount, $invoice->currency) }}</td>
+                                <td class="currency-symbol">
                                 @php $balance_received_total = $installment->received - $balance_received; @endphp
                                 {{ fr_currency($balance_received_total, $invoice->currency) }}
                                 </td>
-                                <td>
+                                <td class="currency-symbol">
                                 @php $amount = min($installment->balance, $installment->amount); @endphp
                                 @if($amount <= 0)
                                     Paid
@@ -639,18 +640,18 @@
                     <tr>
                         <td>
                             <div class="full-btm-cls-mod" style="">
-                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency)}}</span></p>
+                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important; font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency)}}</span></p>
                                 @if($invoice->commission_amount > 0)
-                                    <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span>{{fr_currency($invoice->commission_amount, $invoice->currency)}}</span></p>
-                                    <p><span>Booking Total: </span> <span>{{fr_currency($invoice->total_cost, $invoice->currency)}}</span></p>
+                                    <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->commission_amount, $invoice->currency)}}</span></p>
+                                    <p><span>Booking Total: </span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->total_cost, $invoice->currency)}}</span></p>
                                 @endif
-                                <p><span>GST (included):</span> <span>{{fr_currency($invoice->tax_amount, $invoice->currency)}}</span></p>
-                                <p><span>Received:</span> <span>{{fr_currency($invoice->total_paid, $invoice->currency)}}</span></p>
+                                <p><span>GST (included):</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->tax_amount, $invoice->currency)}}</span></p>
+                                <p><span>Received:</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->total_paid, $invoice->currency)}}</span></p>
                                 @if($invoice->total_fees > 0)
-                                    <p><span>Fees Paid:</span> <span>{{fr_currency($invoice->total_fees, $invoice->currency)}}</span></p>
+                                    <p><span>Fees Paid:</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->total_fees, $invoice->currency)}}</span></p>
                                 @endif
                             </div>
-                            <h4><span>Balance Due:</span> <span>{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency)}}</span></h4>
+                            <h4><span>Balance Due:</span> <span class="currency-symbol">{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency)}}</span></h4>
                         </td>
                     </tr>
                 </table>

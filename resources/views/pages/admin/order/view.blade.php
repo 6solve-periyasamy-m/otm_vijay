@@ -387,16 +387,15 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 <td>{{ fr_currency($payment->amount, $payment->currency) }}</td>
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 @php
-                                    $rowspan = $payment->payment_fee ? 2 : 1;
                                     $internalNotes = $payment->internal_notes ?? " -Nil- ";
                                     $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
                                 @endphp
 
-                                <td class="w-15 align-top text-justify" rowspan="{{ $rowspan }}">
+                                <td class="w-15 align-top text-justify">
                                     {{ $internalNotes }}
                                 </td>
 
-                                <td class="actions align-middle" rowspan="{{ $rowspan }}">
+                                <td class="actions align-middle">
                                     @can('update', \App\Models\Order\Payment\Payment::class)
                                         <a href="{{ route('payments.edit', ['order' => $order, 'payment' => $payment,]) }}"
                                            class="btn btn-outline-primary btn-sm mb-1" title="Edit">{{ Icon::edit() }}</a>
@@ -426,6 +425,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     <td>{{ $payment->payer_name ?? "No Customer Found" }}</td>
                                     <td>{{ $fee }}</td>
                                     <td>{{ f_datetime($payment->paid_on) }}</td>
+                                    <td></td>
                                     <td></td>
                                     <td hidden></td>
                                 </tr>
@@ -653,6 +653,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                         </thead>
                             @if($order->commission !== null)
                                 <tr>
+                                    <td>N/A</td>
                                     <td>{{ fr_currency($order->commission_amount, $order->currency) }}</td>
                                     <td>-</td>
                                     <td>Commission: {{ $order->commission }}%</td>
