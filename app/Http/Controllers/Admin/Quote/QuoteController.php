@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\Quote\StartConversionRequest;
 use App\Http\Requests\Admin\TableRequest;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Quote\Quote;
+use App\Models\Quote\QuoteProspect;
 use App\Models\Quote\SentQuote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Quote\QuoteRepository;
@@ -71,7 +72,9 @@ class QuoteController extends Controller
  
     public function preview(StartConversionRequest $request, Quote $quote): StreamedResponse
     {
-        return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $request->paying, $request->travelling));
+        $paying = $request->paying;
+        $travelling = $request->travelling;
+        return $quote->repository->getResponseStream($quote->repository->makeSent($quote->leadTraveller->email, $paying, $travelling));
     }
 
     public function convert(ConversionRequest $request, Quote $quote): RedirectResponse
@@ -142,5 +145,17 @@ class QuoteController extends Controller
         }
         $quote->repository->forceDelete();
         return redirect()->route('quotes.all');
+    }
+
+    public function deleteProspect(Quote $quote, QuoteProspect $prospect): RedirectResponse
+    {
+        if ($prospect->is_lead) {
+            return back()->withErrors(['msg' => "You can't delete the lead traveller"]);
+        }
+        if ($prospect->paying) { $quote->update(['paying' => $quote->paying - 1,]); }
+        else if ($prospect->travelling) { $quote->update(['travelling' => $quote->travelling - 1,]); }
+        $quote->save();
+        $prospect->delete();
+        return redirect()->route('quotes.view', ['quote' => $quote]);
     }
 }
