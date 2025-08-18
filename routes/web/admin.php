@@ -104,6 +104,7 @@ Route::middleware('auth:web')->group(function () {
         });
         Route::get('/mail', [SettingsController::class, 'mail'])->name('settings.mail');
         Route::get('/import', [SettingsController::class, 'import'])->name('settings.import');
+        Route::get('/purge', [SettingsController::class, 'purge'])->name('settings.purge');
         Route::get('/template', [SettingsController::class, 'template'])->name('settings.template');
         Route::get('/template/edit/{template?}', [SettingsController::class, 'editTemplate'])->name('settings.template.form');
         Route::get('export/conversion-rates/{extension}', [SettingsController::class, 'exportConversionRates'])->name('export.conversion-rates');

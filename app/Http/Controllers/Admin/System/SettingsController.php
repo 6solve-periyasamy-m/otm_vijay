@@ -193,6 +193,11 @@ class SettingsController extends Controller
         return view('pages.admin.system.import');
     }
 
+    public function purge()
+    {
+        return view('pages.admin.system.purge');
+    }
+
     public function authorizeReminders(int $days): RedirectResponse
     {
         Settings::authorize('authorization.reminders', $days < 0 ? -1 : $days * 24 * 60 * 60);

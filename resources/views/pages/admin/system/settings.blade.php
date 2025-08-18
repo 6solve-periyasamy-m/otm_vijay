@@ -24,6 +24,9 @@
                 <a href="{{ route('settings.mail') }}" class="btn btn-info">{{ Icon::email() }} Email Templates</a>
             </div>
             <div>
+                <a href="{{ route('settings.purge') }}" class="btn btn-info">{{ Icon::delete() }} Purge Bookings</a>
+            </div>
+            <div>
                 <a href="{{ route('orders.reminders') }}" class="btn btn-info">{{ Icon::order() }} Order Reminders</a>
             </div>
         </div>

@@ -236,7 +236,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                 <div class="guests_row">
                     @foreach($order->orderCustomers->slice(1) as $key => $ordersCustomer)
                         <div class="guest_colm1">
-                            <p><span>Guest {{ $key+1 }}</span><span>{{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}</span></p>
+                            <p><span>Guest {{ $loop->iteration }}</span><span>{{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}</span></p>
                             @if($ordersCustomer->customer->email_address)
                             <p>
                                 <span class="guest_eaddrs">Email address</span>
