@@ -67,7 +67,7 @@ class ReportController extends Controller
 
     public function getFlightManifestReport() {
         return view('pages.reports.view', ['tableView' => 'partials.reports.tables.flight-manifest',
-            'data' => ReportRepository::getFlightManifestReport(),'title' => 'Flight Manifest',
+            'data' => ReportRepository::getFlightManifestReport(),'title' => 'Flight Details',
             'xlsxExport' => route('reports.flight-manifest.export', ['extension' => 'xlsx']),
             'csvExport' => route('reports.flight-manifest.export', ['extension' => 'csv']),]);
     }
