@@ -150,7 +150,7 @@
                 </table>
             </div>
             <div class="customer-details-block">
-                <div class="customer-details-image-block" style="position: relative; overflow: hidden;">
+                <div class="customer-details-image-block" style="position: relative; overflow: hidden; background:#555050">
                     @if ($bannerUrl)
                         @php $event_banner = svg_to_b64($bannerUrl);  @endphp
                         <img src="{{ $event_banner }}" alt="image-block" style="width: 100%; height: 300px; object-fit: cover; display: block;">
