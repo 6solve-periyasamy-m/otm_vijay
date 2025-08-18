@@ -105,7 +105,7 @@
         .no-padding {padding: 0 !important;}
         .customer-details-block h6 { font-family: "PPNeueMontreal-Medium"; font-size:14px; font-weight:500; line-height:16px; margin:0px; margin-bottom:8px; color: var(--text-head-color); text-transform:uppercase; }
         .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block { float:left; }
-        .customer-details-block .customer-details-image-block { width: 796px; height: 280px; }
+        .customer-details-block .customer-details-image-block { width: 796px; height: 240px;}
         .customer-details-block .customer-details-text-block { width: 388px; padding-left: 32px; }
         .customer-details-text-block h3 span { background-color: var(--text-head-color); display: block; height: 3px; margin-top: 4px; width: 44px; margin-bottom: 19px; }
         .customer-details-image-block {display:inline-block;}
@@ -153,7 +153,7 @@
                 <div class="customer-details-image-block" style="position: relative; overflow: hidden;">
                     @if ($bannerUrl)
                         @php $event_banner = svg_to_b64($bannerUrl);  @endphp
-                        <img src="{{ $event_banner }}" alt="image-block" style="width: 100%; height: 400px; object-fit: cover; display: block;">
+                        <img src="{{ $event_banner }}" alt="image-block" style="width: 100%; height: 300px; object-fit: cover; display: block;">
                     @endif
                     <div class="overlay"></div>
                     <div class="event-grp-info">
@@ -242,10 +242,11 @@
                                             @foreach($phones as $phone)
                                                 @php $trimmedPhone = trim($phone); @endphp
                                                 @if($trimmedPhone)
-                                                    <td style="padding-right: 15px;">
+                                                    <td style="padding-right: 5px;">
                                                         <span style="display: inline-flex; align-items: center;">
                                                             {{-- <img src="{{ $phoneIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" /> --}}
                                                             <a href="tel:{{ preg_replace('/\D+/', '', $trimmedPhone) }}">{{ $trimmedPhone }}</a>
+                                                            @unless($loop->last) &nbsp;&nbsp;|&nbsp; @endunless
                                                         </span>
                                                     </td>
                                                 @endif
