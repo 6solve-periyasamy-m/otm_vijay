@@ -105,11 +105,11 @@
                                         <span class="badge rounded-pill bg-danger lh-sm">{{ $order->status->description() }}</span>
                                     @endif --}}
                                 </p>
-                                @if($order->tour->city != '' && optional(Country::find($order->tour->country_id))->name != '' )
+                                {{-- @if($order->tour->city != '' && optional(Country::find($order->tour->country_id))->name != '' )
                                     <p class="event_location"><img src="{{ asset('images/customer/images/location.svg') }}" />
                                         {{ $order->tour->city }},{{ optional(Country::find($order->tour->country_id))->name }}
                                     </p>
-                                @endif
+                                @endif --}}
                                 <p class="pay_ment_due">                                    
                                     @if($order->next_installment !== null)
                                         Payment Due: {{ \Carbon\Carbon::parse($order->next_installment->due_on)->format('d M Y') }} - {{fr_currency($order->next_installment->remaining, $order->currency)}}
@@ -223,11 +223,11 @@
                                     <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                     {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}
                                     </p>
-                                    @if($vpast->tour->city != '' && optional(Country::find($vpast->tour->country_id))->name != '' )
+                                    {{-- @if($vpast->tour->city != '' && optional(Country::find($vpast->tour->country_id))->name != '' )
                                         <p class="event_location"><img src="{{ asset('images/customer/images/location.svg') }}" />
                                             {{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}
                                         </p>
-                                    @endif
+                                    @endif --}}
                                 </div> 
                             </div>
                             @php

@@ -952,12 +952,14 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         <div class="common_btn d-inline">
                             @php  $is_download_itinerary = $vupcom->tour?->event?->is_download_itinerary;  @endphp
                             @if($is_download_itinerary)
-                            <p><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
-                                <img src="{{ asset('images/customer/images/download_icon.svg') }}" />DOWNLOAD ITINERARY
+                            <p><a href="{{ route('customer.itinerary.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank" class="download_itinerary_link">
+                                <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
+                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/>DOWNLOAD ITINERARY
                             </a></p>
                             @endif
-                            <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
-                                <img src="{{ asset('images/customer/images/download_icon.svg') }}" />RESERVATION DOCUMENT
+                            <p><a href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank" class="download_itinerary_link">
+                                <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
+                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/>RESERVATION DOCUMENT
                             </a></p>
                         </div>
                     </div>
@@ -983,14 +985,16 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                         <h4>{{ $vpast->tour->name }}</h4>
                                         <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
                                         {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}</p>
-                                        <p class="event_location"><img src="{{ asset('/images/customer/images/location.svg')}}" />{{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}
-                                        </p>
+                                        {{-- <p class="event_location"><img src="{{ asset('/images/customer/images/location.svg')}}" />{{ $vpast->tour->city }},{{ optional(Country::find($vpast->tour->country_id))->name }}
+                                        </p> --}}
                                     </div> 
                                 </div>
                                 @php
                                     $hrefdata = url('/customer/finances/invoice/' .  $vpast->booking_reference);
                                 @endphp
-                                <div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank"> <img src="{{ asset('images/customer/images/download_icon.svg')}}" /> ITINERARY</a><a  href="{{ $hrefdata }}"  target="_blank" class="invoice_btn"> <img src="{{ asset('images/customer/images/download_icon.svg')}}" /> INVOICE</a></div>
+                                <div class="common_btn"><a href="{{ route('customer.itinerary.download', ['reference' => $vpast->booking_reference, 'customer' => $orderCustomer->customer_id]) }}" target="_blank" class="download_itinerary_link"> <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
+                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> ITINERARY</a><a  href="{{ $hrefdata }}"  target="_blank" class="invoice_btn download_itinerary_link"> <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
+                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> INVOICE</a></div>
                             </div>
                         @endforeach
                     </div>
