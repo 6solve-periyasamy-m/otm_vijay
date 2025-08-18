@@ -21,7 +21,7 @@
             flightTable = $('#flight-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
             transportTable = $('#transport-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
             merchandiseTable = $('#merchandise-table').DataTable({fixedHeader: true,select: { style: "multi+shift" }, });
-            updatePayingCount({{ $quote->paying + $quote->leadTraveller->paying }})
+            updatePayingCount({{ $quote->paying + $quote->travellers()->where('paying', '=', true)->count() }})
             window.addEventListener('travellersUpdated', (event) => {
                 updatePayingCount(event.detail.paying);
             });
@@ -122,10 +122,6 @@
             @endif
         </div>
     </x-admin.section.header>
-
-    <div class="heading pt-2 pb-md-3 pb-2">
-        <h2 class="fw-bold">{{ __('quotes.view.cards.quick.header') }}</h2>
-    </div>
 
     {{-- Calculator --}}
     <livewire:admin.quote.calculator :quote="$quote"/>

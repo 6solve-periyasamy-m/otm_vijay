@@ -24,6 +24,9 @@ Route::prefix('{quote}')->group(function () {
     Route::post('/send', [QuoteController::class, 'send'])->name('send')->middleware('bouncer:Quote\Quote,update');
     Route::post('/delete', [QuoteController::class, 'delete'])->name('delete')->middleware('bouncer:Quote\Quote,delete');
     Route::get('/delete/force', [QuoteController::class, 'forceDelete'])->name('delete.force')->middleware('bouncer:Quote\Quote,delete');
+    Route::prefix('prospect/{prospect}')->name('prospect.')->group(function () {
+       Route::get('/delete', [QuoteController::class, 'deleteProspect'])->name('delete')->middleware('bouncer:Quote\Quote,delete');
+    });
     Route::prefix('section')->name('section.')->group(function () {
         Route::get('/create', [QuoteSectionController::class, 'create'])->name('create')->middleware('bouncer:Quote\Quote,update');
         Route::post('/create', [QuoteSectionController::class, 'store'])->name('store')->middleware('bouncer:Quote\Quote,update');

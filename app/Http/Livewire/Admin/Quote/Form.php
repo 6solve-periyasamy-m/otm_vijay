@@ -6,11 +6,11 @@ use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\AdditionalCost;
 use App\Models\Customer\Agent;
+use App\Models\Customer\Organization;
 use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
-use App\Models\Customer\Organization;
 use Carbon\Carbon;
 use Livewire\Component;
 use Settings;
@@ -95,6 +95,8 @@ class Form extends Component
         $this->prospect->save();
         $this->quote->lead_traveller_id = $this->prospect->id;
         $this->quote->save();
+        $this->prospect->quote_id = $this->quote->id;
+        $this->prospect->save();
         $this->quote->reference = $this->quote->reference ?? $this->quote->repository->generateReference();
         $this->quote->invoice_footer = $this->quote->invoice_footer ?? "";
         if ($this->quote->id === null ||
