@@ -1039,7 +1039,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $totalTravellers = $this->order->orderCustomers->count();
             $maximumOccupancy = $component->transportInventory?->transportOccupancy?->maximum_occupancy;
             if (!is_null($maximumOccupancy) && $maximumOccupancy < $totalTravellers) {
-                continue;
+                // TODO: Fix. Should still show if it's been added as a component.
+                //continue;
             }
             $item = $component->repository->getItineraryItem($this->order);
             if (!empty($component->departs_at_time_override)){
