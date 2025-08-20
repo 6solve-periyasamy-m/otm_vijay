@@ -36,7 +36,8 @@ use Illuminate\Support\Carbon;
  * @property float|null $sales_price
  * @property string|null $internal_notes
  * @property string|null $external_notes
- * @property string|null $description
+ * @property string|null $description Description used on the booking form/eccommerce page
+ * @property string|null $inventory_description Description used on admin dashboard
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at

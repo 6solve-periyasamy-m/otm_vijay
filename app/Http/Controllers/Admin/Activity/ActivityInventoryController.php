@@ -30,6 +30,7 @@ class ActivityInventoryController extends Controller
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
             'description' => $request->input('description'),
+            'inventory_description' => $request->input('inventory_description'),
         ]);
         $activity->activityInventory()->save($activityInventory);
         return redirect()->route('activities.view', ['activity' => $activity,]);
@@ -64,6 +65,7 @@ class ActivityInventoryController extends Controller
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
             'description' => $request->input('description'),
+            'inventory_description' => $request->input('inventory_description'),
         ]);
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
