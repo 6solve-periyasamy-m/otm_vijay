@@ -7,13 +7,15 @@
     $type = setting('itinerary.heading') ?? 'Itinerary';
     $event_name = $itinerary->event;
     $headlogo = svg_to_b64($itinerary->brand->logo);
-    $headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse-Travel-Logo.png') ;
+    //$headlogo = svg_to_b64('images/pdf_assets/images/KeithProwse-Travel-Logo.png') ;
     $eveimg = $itinerary->image;
     $reference = $itinerary->reference;
     $all_customers = [];
     $travellers = collect($itinerary->travellers);
     $booker = collect([$itinerary->booker]);
     $all_customers = $booker->merge($travellers);
+    $bannerUrl = $itinerary->event?->banner_url;
+    $phoneIcon = asset('/images/pdf_assets/images/phone.png') ;
 @endphp
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -31,7 +33,7 @@
         @page { margin-top: 50px; margin-left: 0px; margin-right: 0px; margin-bottom: 0px; }
         
         .pdf-header {
-            background-color: var(--main-background-color);
+            background-color: var(--text-head-color);
             padding:20px 10px;
         }
         .pdf-individual-block {
@@ -101,137 +103,35 @@
         .event_contact_info_div table tbody td {font-family: "PPNeueMontreal-Regular";font-size: 14px;font-weight: 400;line-height: 0px;color: var(--text-color);margin: 0px 0px 0px 0px;vertical-align: top;}
         .line-height {line-height: 15px;}
         .no-padding {padding: 0 !important;}
-
-
-        .customer-details-block h6 {
-            font-family: "PPNeueMontreal-Medium";
-            font-size:14px;
-            font-weight:500;
-            line-height:16px;
-            margin:0px;
-            margin-bottom:8px;
-            color: var(--text-head-color);
-            text-transform:uppercase;
-        } 
-        .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block  {
-            float:left;  
-        }
-        .customer-details-block .customer-details-image-block {
-            width: 376px;
-            height: 252px;
-        }
-        .customer-details-block .customer-details-text-block {    
-            width: 388px;
-            padding-left: 32px;
-        }
-        .customer-details-text-block  h3 span {
-            background-color: var(--text-head-color);
-            display: block;
-            height: 3px;
-            margin-top: 4px;
-            width: 44px;
-            margin-bottom: 19px;
-        }
+        .customer-details-block h6 { font-family: "PPNeueMontreal-Medium"; font-size:14px; font-weight:500; line-height:16px; margin:0px; margin-bottom:8px; color: var(--text-head-color); text-transform:uppercase; }
+        .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block { float:left; }
+        .customer-details-block .customer-details-image-block { width: 796px; height: 240px;}
+        .customer-details-block .customer-details-text-block { width: 388px; padding-left: 32px; }
+        .customer-details-text-block h3 span { background-color: var(--text-head-color); display: block; height: 3px; margin-top: 4px; width: 44px; margin-bottom: 19px; }
         .customer-details-image-block {display:inline-block;}
         .customer-details-image-block img {width:100%;height:100%;object-fit:contain;}
-        .top-heading-section {
-            width: 400px;
-            position: relative;
-            margin-top: 10px;
-            display: block;
-            margin-bottom: 10px;
-            height: 44px;
-        }
-        .top-heading-section h1 {
-            float: left;
-            font-size: 28px;
-            width: 270px;
-        }
-        .top-heading-section h5 {
-            width: 194px;
-            margin-bottom: 0px !important;
-            margin-top: 10px;
-            margin-left: 2rem;
-            position: absolute;
-            right: 0;
-            top: 0px;
-            font-family: "PPNeueMontreal-Medium";
-            font-size: 12px;
-            font-weight: 500;
-            line-height: 14.4px;
-            margin-bottom: 6px;
-            color: var(--text-color);
-        }
-        .top-heading-section h5 span {
-            margin-top: 5px;
-            display: block;
-            height: 3px;
-            width: 44px;
-            background-color: var(--head-text-background);
-        }
-
-        h1 {
-            color: var(--text-color);
-            font-family: "PlayfairDisplay-Medium";
-            font-size: 30px;
-            font-weight: 500;
-            line-height: 36px;
-            margin-bottom: 0px;
-        }
+        .top-heading-section { width: 400px; position: relative; margin-top: 10px; display: block; margin-bottom: 10px; height: 44px; }
+        .top-heading-section h1 { float: left; font-size: 28px; width: 270px; }
+        .top-heading-section h5 { width: 194px; margin-bottom: 0px !important; margin-top: 10px; margin-left: 2rem; position: absolute; right: 0; top: 0px; font-family: "PPNeueMontreal-Medium"; font-size: 12px; font-weight: 500; line-height: 14.4px; margin-bottom: 6px; color: var(--text-color); }
+        .top-heading-section h5 span { margin-top: 5px; display: block; height: 3px; width: 44px; background-color: var(--head-text-background); }
+        h1 { color: var(--text-color); font-family: "PlayfairDisplay-Medium"; font-size: 30px; font-weight: 500; line-height: 36px; margin-bottom: 0px; }
         .customer-agent-details .customer-details {width:100%;}
-        .customer-agent-details .agent-details {
-            width:100%;    
-            margin-top: 16px;
-            margin-bottom: 16px;
-        }
-        .customer-agent-details p, .customer-agent-details div {
-            font-family: "PPNeueMontreal-Medium";
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 18px;
-            margin:0px;
-            margin-bottom: 0px ! Important;
-            color: var(--text-color);
-        }
-        .customer-agent-details div.phone_number_block {
-            padding-left: 40px;
-            font-family: "PPNeueMontreal-Regular";
-            font-weight: 400;
-            line-height: 21px;
-        }
-        
-        .information-block {
-            background-color: var(--main-background-color);
-            clear: both;
-            width: 100%;
-            display: inline-block;
-            padding-left:10px;
-        }
-        .information-block table {
-            padding: 0px 0px 0px 10px;
-        }
-        .information-block table td {
-            font-family: "PPNeueMontreal-Regular";
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 18px;
-            color: var(--text-color);
-            margin: 0;
-            width:100px;
-        }
+        .customer-agent-details .agent-details { width:100%; margin-top: 16px; margin-bottom: 16px; }
+        .customer-agent-details p, .customer-agent-details div { font-family: "PPNeueMontreal-Medium"; font-size: 14px; font-weight: 500; line-height: 18px; margin:0px; margin-bottom: 0px ! Important; color: var(--text-color); }
+        .customer-agent-details div.phone_number_block { padding-left: 40px; font-family: "PPNeueMontreal-Regular"; font-weight: 400; line-height: 21px; }
+        .information-block { background-color: var(--main-background-color); clear: both; width: 100%; display: inline-block; padding-left:10px; }
+        .information-block table { padding: 0px 0px 0px 10px; }
+        .information-block table td { font-family: "PPNeueMontreal-Regular"; font-size: 14px; font-weight: 400; line-height: 18px; color: var(--text-color); margin: 0; width:100px; }
         .information-block table td.tbl-td-no-text-wrap {width:300px;}
-        .information-block table td strong {
-            font-family: "PPNeueMontreal-Medium";
-            font-weight: 500;
-        }
-        .customer-agent-details p span, .information-block .column .single p.description {
-            font-family: "PPNeueMontreal-Regular";
-            font-weight: 400;
-        }
+        .information-block table td strong { font-family: "PPNeueMontreal-Medium"; font-weight: 500; }
+        .customer-agent-details p span, .information-block .column .single p.description { font-family: "PPNeueMontreal-Regular"; font-weight: 400; }
+        .overlay {  position: absolute;  top: 0;  left: 0;  width: 100%;  height: 100%;  background-color: rgba(0, 0, 0, 0.4); z-index: 1;}
+        .event-overlay-title {font-family: 'PlayfairDisplay-Medium'; font-size: 24px; font-weight: 500; margin-bottom: 8px; line-height: 1.2;}
+        .event-overlay-reference {font-family: 'PPNeueMontreal-Regular'; font-weight: 600; font-size: 17px; line-height: 1.2;}
+        .event-grp-info {z-index:1111; position: absolute; top: 30%; left: 32px; transform: translateY(-50%); color: white; padding: 15px; max-width: 60%;}
     </style>
     <title>{{ $itinerary->package }} | {{ $itinerary->reference }} | {{ $type }}</title>
 </head>
-
 <body class="body" style="margin: 0px;">
     <section class="pdf-individual-block">
         <div class="row">
@@ -239,50 +139,28 @@
                 <table width="100%" style="width: 100%;">
                     <tr>
                         <td style="text-align: left; vertical-align: middle;">
-                            <h3 style="padding-left: 20px; color: var(--text-color); font-family: 'PlayfairDisplay-Medium'; font-size: 24px; font-weight: 500; margin: 0;">
-                                {{ $event_name }}
-                            </h3>
+                            <img src="{{ $headlogo }}" alt="logo-ch" style="max-height: 60px;">
                         </td>
                         <td style="text-align: right; vertical-align: middle;">
-                            <img src="{{ $headlogo }}" alt="logo-ch" style="max-height: 60px;">
+                            <h3 style="padding-left: 20px; color: var(--table-header-text); font-family: 'PlayfairDisplay-Medium'; font-size: 30px; font-weight: 500; margin: 0; padding-right:20px;">
+                                {{ $type }}
+                            </h3>
                         </td>
                     </tr>
                 </table>
             </div>
             <div class="customer-details-block">
-                <div class="customer-details-text-block">            
-                    <div class="top-heading-section">
-                        <h1 style="margin-right: 100px;">{{ $type ?? "Quote" }}</h1>
-                        <h5 style="padding-left: 20rem !important; margin-bottom:12px;">REFERENCE: {{ $reference }} <span></span></h5>
+                <div class="customer-details-image-block" style="position: relative; overflow: hidden; background:#555050">
+                    @if ($bannerUrl)
+                        @php $event_banner = svg_to_b64($bannerUrl);  @endphp
+                        <img src="{{ $event_banner }}" alt="image-block" style="width: 100%; height: 300px; object-fit: cover; display: block;">
+                    @endif
+                    <div class="overlay"></div>
+                    <div class="event-grp-info">
+                        <div class="event-overlay-title">{{ $event_name }}</div>
+                        <div class="event-overlay-reference">Reference No: {{ $reference }}</div>
                     </div>
-                    <div class="customer-agent-details">
-                        <div class="customer-details">
-                            @if(!empty($itinerary->event->onsite_name) || !empty($itinerary->event->onsite_email) || !empty($itinerary->event->onsite_phone))
-                                <h6>On Ground Details</h6>
-                                @if(!empty($itinerary->event->onsite_name))
-                                    <p>Name: <span>{{ $itinerary->event->onsite_name }}</span></p>
-                                @endif
-                                @if(!empty($itinerary->event->onsite_email))
-                                    <p>Email: <span>{{ $itinerary->event->onsite_email }}</span></p>
-                                @endif
-                                @if(!empty($itinerary->event->onsite_phone))
-                                    <p>Phone: <span>
-                                        @php
-                                            $phoneString = $itinerary->event->onsite_phone ?? '';
-                                            $phones = preg_split('/\s*\|\s*|\s{2,}/', $phoneString, -1, PREG_SPLIT_NO_EMPTY);
-                                        @endphp
-                                        @foreach($phones as $phone)
-                                        <div class="phone_number_block"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}">{{ trim($phone) }}</a></div>
-                                        @endforeach
-                                    </span></p>
-                                @endif
-                            @endif                        
-                        </div>
-                    </div>  
                 </div>
-                <div class="customer-details-image-block">
-                    <img src="{!! $eveimg !!}" alt="image-block">
-                </div>       
             </div>
             <div class="information-block">
                 @if($all_customers->isNotEmpty())
@@ -326,6 +204,64 @@
                 <h2>Itinerary & inclusions</h2>
             </div>
         </div>
+
+        @if(!empty($itinerary->event?->onsite_name) || !empty($itinerary->event?->onsite_email) || !empty($itinerary->event?->onsite_phone))
+        <div class="row">
+            <div class="single-module mb-n15">
+                <div class="heading-module">
+                    <h3>
+                        <span class="mark"></span>
+                        <span class="text">On-Site Contact Details</span>
+                    </h3>
+                </div>
+                <div class="details-module">
+                    <table>
+                        <tbody>
+                            @if(!empty($itinerary->event?->onsite_name))
+                                <tr>
+                                    <td class="w-125"><strong>Name:</strong></td>
+                                    <td>{{ $itinerary->event->onsite_name }}</td>
+                                </tr>
+                            @endif
+
+                            @if(!empty($itinerary->event?->onsite_email))
+                                <tr>
+                                    <td class="w-125"><strong>Email:</strong></td>
+                                    <td>{{ $itinerary->event->onsite_email }}</td>
+                                </tr>
+                            @endif
+                            @if(!empty($itinerary->event?->onsite_phone))
+                                <tr>
+                                    <td class="w-125"><strong>Phone:</strong></td>
+                                    <td>
+                                         @php
+                                            $phones = preg_split('/[\;|]+/', $itinerary->event->onsite_phone);
+                                        @endphp
+                                        <table>
+                                        <tr>
+                                            @foreach($phones as $phone)
+                                                @php $trimmedPhone = trim($phone); @endphp
+                                                @if($trimmedPhone)
+                                                    <td style="padding-right: 5px;">
+                                                        <span style="display: inline-flex; align-items: center;">
+                                                            {{-- <img src="{{ $phoneIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" /> --}}
+                                                            <a href="tel:{{ preg_replace('/\D+/', '', $trimmedPhone) }}">{{ $trimmedPhone }}</a>
+                                                            @unless($loop->last) &nbsp;&nbsp;|&nbsp; @endunless
+                                                        </span>
+                                                    </td>
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @endif
 
         @if(!empty($itinerary->items['Flights']))
             @php $firstLoop = true; @endphp
