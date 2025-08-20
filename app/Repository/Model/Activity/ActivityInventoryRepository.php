@@ -210,7 +210,7 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
             'Venue' => $this->inventory->component->address->name,
             'Ticket' => $this->inventory->component->name,
             'Quantity' => $quantity,
-            'Description' => $this->inventory->component->description,
+            'Description' => $this->inventory->inventory_description ?: ($this->inventory->component->description ?? ''),
         ];
         if ($quantity === null) { unset($details['Quantity']); }
         return new ItineraryItem(
