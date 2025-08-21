@@ -33,7 +33,7 @@
 .contact_details a,.search_field input,.common_btn a,.calendar_date span,.view_details a,.save_changes{font-family: 'PP NeueMontreal Medium';font-size: 14px;font-weight: 500;}
 /*Body inner css*/
 .overview_top_bar{background-color: #F9F4EE;padding: 28px 32px;display: flex;justify-content: space-between;align-items: center;}
-.overview_top_bar p{margin-bottom: 0px;display: flex;align-items: center;}
+.overview_top_bar p{margin-bottom: 0px;display: flex;align-items: center; text-transform: uppercase;}
 .search_field input{color: #721111;border-radius: 50px;width: 100%;padding: 10px 24px;border: 0px;}
 .search_field input::placeholder{color: #721111;}
 .search_field{width: 40%;position: relative;}
@@ -1336,3 +1336,18 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .onsite-contact-no{margin-top: -10px;}
 .onsite-contact-no td:last-child span {padding-top: 10px;}
 .onsite-contact-detail-block a, .onsite-contact-no a { text-decoration: none;}
+.sample_notes{
+    font-family: 'PP Editorial New';
+    font-size: 24px;
+    line-height: 24px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 24px;
+}
+.notes_div p{
+    font-family: 'PP Editorial New';
+    font-size: 16px;
+    line-height: 24px;
+    color: #000000;
+    max-width: 80%;
+}

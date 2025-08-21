@@ -128,7 +128,7 @@
                             <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space"><img src="{{ asset('images/customer/images/download_icon.svg') }}" /> INVOICE</a> --}}
                             <a class="cta_space download_itinerary_link" href="{{ route('customer.preview.download', ['reference' => $vupcom->booking_reference, 'customer' =>$orderCustomer->customer_id]) }}" target="_blank">
                                 <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
-                                <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> RESERVATION DOCUMENT
+                                <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/> RESERVATION
                             </a>
                             <a href="{{ $hrefdata }}"  target="_blank" class="invoice_btn cta_space download_itinerary_link">
                                 <img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
