@@ -230,7 +230,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                 <div><span class="lead_guest_name">Name</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></div>
                 <div><span class="lead_guest_email">Email address</span><span>{{ $order->leadBooker->customer->email_address }}</span></div>
             </div>
-            @if(isset($order->orderCustomers))
+            @if(isset($order->orderCustomers) && $order->orderCustomers->count() > 1)
             <div class="other_guests name_address_font">
                 <h5>OTHER GUESTS</h5>
                 <div class="guests_row">

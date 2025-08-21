@@ -18,7 +18,7 @@
                             return $order->cache && ($order->cache->status->value != 0);
                         })->count();
                 @endphp
-                <h2>Upcoming Payments <span class="tours_count">{{ $activeOrderCount }}</span></h2>
+                <h2>Upcoming Payments</h2>
                  @foreach($orders as $k => $order)
                     <div class="finances_event">
                         <div class="event_payment_list">
