@@ -22,8 +22,8 @@ class Table extends LivewireDatatable
             ->leftJoin('addresses as departure', 'departure.id', '=', 'transports.departure_address_id')
             ->leftJoin('countries as departure_country', 'departure.country_id', '=', 'departure_country.id')
             ->leftJoin('addresses as arrival', 'arrival.id', '=', 'transports.arrival_address_id')
-            ->leftJoin('countries as arrival_country', 'arrival.country_id', '=', 'arrival_country.id');
-            //->leftJoin('currencies', 'currencies.id', '=', 'transports.currency_id');
+            ->leftJoin('countries as arrival_country', 'arrival.country_id', '=', 'arrival_country.id')
+            ->leftJoin('currencies', 'currencies.id', '=', 'transports.currency_id');
         if (!$this->archived) {
             $query = $query->where('archived', '=', false);
         }
@@ -58,10 +58,10 @@ class Table extends LivewireDatatable
                 ->label('Arrival')
                 ->sortable()
                 ->searchable(),
-            // Column::name('currencies.name')
-            //     ->label('Currency')
-            //     ->sortable()
-            //     ->searchable(),
+            Column::name('currencies.name')
+                ->label('Currency')
+                ->sortable()
+                ->searchable(),
             Column::name('internal_notes')
                 ->label('Notes')
                 ->sortable()
