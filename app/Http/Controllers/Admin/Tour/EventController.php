@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Tour;
 
+use App\Exports\BulkReminderExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TableRequest;
 use App\Http\Requests\Admin\Tour\EventRequest;
 use App\Models\Tour\Event;
 use App\Repository\Reporting\Manifest\OrderManifestRepository;
+use Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EventController extends Controller
@@ -39,7 +41,13 @@ class EventController extends Controller
 
     public function bulkRemind(Event $event)
     {
-        return view('pages.admin.order.reminder.bulk', ['orders' => $event->orders,]);
+        return view('pages.admin.order.reminder.bulk', ['orders' => $event->orders, 'export' => route('events.reminder.bulk.export', ['event' => $event, 'extension' => 'xlsx'])]);
+    }
+
+    public function bulkRemindExport(Event $event, string $extension = 'xslx'): BinaryFileResponse
+    {
+        $filename = 'bulk-reminders-' . sanitize(strtolower($event->name)) . '.' . $extension;
+        return Excel::download(new BulkReminderExport($event->orders->all()), $filename);
     }
 
     public function view(TableRequest $request, Event $event)
