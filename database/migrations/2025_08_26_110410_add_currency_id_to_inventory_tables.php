@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('accommodation_inventories', static function (Blueprint $table) {
-            $table->foreignId('currency_id')->constrained()->nullOnDelete();
+            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
         });
         Schema::table('activity_inventories', static function (Blueprint $table) {
-            $table->foreignId('currency_id')->constrained()->nullOnDelete();
+            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
         });
         Schema::table('flight_inventories', static function (Blueprint $table) {
-            $table->foreignId('currency_id')->constrained()->nullOnDelete();
+            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
         });
         Schema::table('transport_inventories', static function (Blueprint $table) {
-            $table->foreignId('currency_id')->constrained()->nullOnDelete();
+            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
         });
     }
 
