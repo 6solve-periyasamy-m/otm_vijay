@@ -2,6 +2,7 @@
 
 namespace App\Models\Transport;
 
+use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderTransport;
 use App\Models\Quote\Component\QuoteTransport;
 use App\Models\Supplier\SupplierContractComponent;
@@ -35,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $arrives_at
  * @property bool $fit_selectable
  * @property int $stock
+ * @property int|null $currency_id
  * @property float $purchase_price
  * @property float $sales_price
  * @property string|null $transport_number
@@ -48,6 +50,7 @@ use Illuminate\Support\Carbon;
  * @property-read int $contracted Amount of contracted stock
  * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Transport $component
+ * @property-read Currency|null $currency
  * @property-read string $transport_for_tour
  * @property-read int $used_on_tour_count
  * @property-read Collection|SupplierContractComponent[] $contractComponents
@@ -124,6 +127,11 @@ class TransportInventory extends Model
     public function transport(): BelongsTo
     {
         return $this->belongsTo(Transport::class, 'transport_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function component(): BelongsTo

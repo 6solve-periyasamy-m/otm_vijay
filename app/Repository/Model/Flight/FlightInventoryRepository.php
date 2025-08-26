@@ -166,7 +166,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
 
     public function getCurrency(): Currency
     {
-        return $this->inventory->component->currency ?? Settings::currency();
+        return $this->inventory->currency ?? $this->inventory->component->currency ?? Settings::currency();
     }
 
     public function getSalesPrice(): ?float

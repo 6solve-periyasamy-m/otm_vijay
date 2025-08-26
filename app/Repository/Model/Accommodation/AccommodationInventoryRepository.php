@@ -209,7 +209,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
 
     public function getCurrency(): Currency
     {
-        return $this->inventory->component->currency ?? Settings::currency();
+        return $this->inventory->currency ?? $this->inventory->component->currency ?? Settings::currency();
     }
 
     public function getRoomingList(): Collection|array

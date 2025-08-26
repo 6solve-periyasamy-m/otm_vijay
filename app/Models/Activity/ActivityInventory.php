@@ -2,6 +2,7 @@
 
 namespace App\Models\Activity;
 
+use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Supplier\SupplierContractComponent;
@@ -32,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @property bool|null $fit_selectable
  * @property int $ticket_type_id
  * @property int $stock
+ * @property int|null $currency_id
  * @property float|null $purchase_price
  * @property float|null $sales_price
  * @property string|null $internal_notes
@@ -45,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Activity $activity
  * @property-read Activity $component
+ * @property-read Currency|null $currency
  * @property-read string $activity_for_tour
  * @property-read int $used_on_tour_count
  * @property-read int $used_stock How much stock is sold
@@ -115,6 +118,11 @@ class ActivityInventory extends Model
     public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class, 'activity_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function component(): BelongsTo
