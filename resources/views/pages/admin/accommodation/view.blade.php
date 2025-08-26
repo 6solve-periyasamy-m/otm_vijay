@@ -193,7 +193,7 @@
                         <span>{{ $inventory->stockChildren()->count() === 1 ? '1 Child' : $inventory->stockChildren()->count() . ' Children' }}</span>
                     </td>
                     <td>{{ $inventory->contracted }}</td>
-                    <td>{{ f_currency($inventory->purchase_price, $accommodation->currency) }}</td>
+                    <td>{{ f_currency($inventory->purchase_price, $inventory->repository->getCurrency()) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>

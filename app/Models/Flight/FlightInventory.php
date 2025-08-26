@@ -212,6 +212,6 @@ class FlightInventory extends Model
 
     public function getLocalPurchasePriceAttribute(): float|null
     {
-        return fx_convert($this->purchase_price, $this->component->currency);
+        return fx_convert($this->purchase_price, $this->repository->getCurrency());
     }
 }
