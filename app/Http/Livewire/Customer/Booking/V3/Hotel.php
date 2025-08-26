@@ -10,7 +10,7 @@ use App\Models\Booking\BookingTraveller;
 
 class Hotel extends V3BookingComponent
 {    
-    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advance'];
+    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advance', 'advanceWithRecaptcha' => 'advanceWithRecaptcha'];
     protected $messages = [
         'rooms.*.room.required' => "This field is required",
         'rooms.*.travellers.required' => "This field is required",
@@ -29,6 +29,11 @@ class Hotel extends V3BookingComponent
         $this->setRoomDescriptions($this->selectedHotel);
         $this->setupCategories();
         $this->reselectConfigMessage = '';
+    }
+
+    public function advanceWithRecaptcha(string $token)
+    {
+        return $this->advance();
     }
 
     private function setupCategories()

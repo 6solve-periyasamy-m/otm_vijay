@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class Details extends V3BookingComponent
 {
-    public $listeners = ['currencyUpdated' => 'updateCurrency'];
+    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advanceWithRecaptcha' => 'advanceWithRecaptcha'];
     protected array $messages = [
         'payer.email_address.required' => 'Email is required.',
         'payer.email_address.email' => 'Please enter a valid email address.',
@@ -53,6 +53,11 @@ class Details extends V3BookingComponent
             $this->lead_date_of_birth_formatted = optional($this->lead->date_of_birth)->format('d-m-Y');
             $this->leadAddress = $this->lead->homeAddress ?? new Address();
         }
+    }
+
+    public function advanceWithRecaptcha(string $token)
+    {
+        return $this->advance();
     }
 
     public function back()

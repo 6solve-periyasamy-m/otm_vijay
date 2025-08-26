@@ -106,6 +106,18 @@
             </div>
         </x-admin.section.card>
     </div>
+    <div class="col-xl-12">
+        <x-admin.section.card>
+            <x-slot:title>
+                Recaptcha
+            </x-slot:title>
+            <div class="row">
+                @include('partials.fields.text', ['name' => "Site Key", 'field' => 'captcha_site_key', 'value' => setting('booking.captcha.key', ''), 'width' => 12, ])
+                @include('partials.fields.text', ['name' => 'Secret Key', 'field' => 'captcha_secret_key', 'value' => setting('booking.captcha.secret', ''), 'width' => 12,])
+                @include('partials.fields.text', ['name' => 'Min Score', 'field' => 'captcha_min_score', 'value' => setting('booking.captcha.minscore', ''), 'width' => 12,])                
+            </div>
+        </x-admin.section.card>
+    </div>
     <div class="col-xl-4">
         <x-admin.section.card>
             <x-slot:title>

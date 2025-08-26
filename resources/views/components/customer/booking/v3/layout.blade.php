@@ -1,6 +1,7 @@
 @php
     $location = collect([$tour->city, $tour->country?->name])->filter()->implode(',  ');
     $selectedCurrency = $this->booking->currency?->code ?? setting('system.currency');
+    $captchaEnabled = setting('booking.captcha.key') && setting('booking.captcha.secret');
 @endphp
 <div>
     <header>
@@ -255,7 +256,11 @@
                            @endif
                         </div>
                         @if($stage < 5)
-                            <button type="button" class="next-button" wire:click="advance">
+                            @if($captchaEnabled)
+                                <button type="button" class="next-button" onclick="handleNext()">
+                            @else
+                                <button type="button" class="next-button" wire:click="advance">
+                            @endif
                             <span>
                                 <span>NEXT</span>
                                 <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
@@ -305,10 +310,30 @@
             <div class="view-details">
                 View package details
             </div>
-            <div class="{{ $stage < 5 ? 'Go-next' : 'disable-next' }}"  @if($stage < 5) wire:click="advance" @endif>NEXT </div>
+                @if($stage < 5)
+                    <div class="Go-next"
+                        @if($captchaEnabled)
+                            onclick="handleNext()"
+                        @else
+                            wire:click="advance"
+                        @endif
+                    >
+                        NEXT
+                    </div>
+                @else
+                    <div class="disable-next">NEXT</div>
+                @endif
         </div>
     </footer>
 </div>
+
+<script>
+function handleNext() {
+    runRecaptcha('booking_advance', function(token) {
+        Livewire.emit('advanceWithRecaptcha', token);
+    });
+}
+</script>
 
 <!-- Package Popup more information -->
 <div class="more-package-info-popup">

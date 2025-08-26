@@ -7,11 +7,16 @@ use App\Http\Livewire\Abstract\V3BookingComponent;
 class Ticket extends V3BookingComponent
 {
     public array $ticketUpgrades = [];
-
+    public $listeners = ['advanceWithRecaptcha' => 'advanceWithRecaptcha'];
     public function mount($tour = null, $booking = null, $quote = null)
     {
         parent::mount($tour, $booking, $quote);
         $this->setupTicketUpgrades();
+    }
+
+    public function advanceWithRecaptcha(string $token)
+    {
+        return $this->advance();
     }
 
     public function setupTicketUpgrades(): void

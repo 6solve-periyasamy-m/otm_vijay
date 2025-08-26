@@ -11,6 +11,7 @@ use App\Repository\Model\Booking\BookingTravellerRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Http;
 
 class Guest extends V3BookingComponent
 {
@@ -22,6 +23,8 @@ class Guest extends V3BookingComponent
         //'lead.last_name.required' => 'Last name is required.',
     ];
     public BookingTraveller|null $lead = null;
+
+    public $listeners = ['advanceWithRecaptcha' => 'advanceWithRecaptcha'];
 
     public function mount($tour = null, $booking = null, $quote = null)
     {        
@@ -36,6 +39,34 @@ class Guest extends V3BookingComponent
             $booking->save();
             $this->addTraveller();
         }        
+    }
+
+    public function advanceWithRecaptcha(string $token)
+    {
+        //dd($token, $this->verifyRecaptcha($token));
+        if (!$this->verifyRecaptcha($token)) {
+            session()->flash('error', 'ReCAPTCHA verification failed. Please try again.');
+            return;
+        }
+
+        return $this->advance();
+    }
+
+    protected function verifyRecaptcha(string $token): bool
+    {
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret'   => setting('booking.captcha.secret'),
+            'response' => $token,
+            'remoteip' => request()->ip(),
+        ]);
+
+        if (!$response->ok()) {
+            return false;
+        }
+
+        $data = $response->json();
+        \Log::info('reCAPTCHA v3 score: ', $data);
+        return ($data['success'] ?? false) && ($data['score'] ?? 0) >= 0.5;
     }
 
     public function getCanSendQuoteProperty(): bool
@@ -68,7 +99,7 @@ class Guest extends V3BookingComponent
             $this->booking->quote_id = $quote->id;
             $this->booking->save();
         } catch (\Throwable $e) {
-            Log::error('Quote email failed', ['booking_id' => $this->booking->id, 'error' => $e->getMessage()]);
+            //Log::error('Quote email failed', ['booking_id' => $this->booking->id, 'error' => $e->getMessage()]);
             session()->flash('error', 'Failed to send quote. Please try again later.');
         }
     }
