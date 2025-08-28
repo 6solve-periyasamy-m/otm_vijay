@@ -71,7 +71,7 @@ class ActivityInventoryTour extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected array $cascadeDeletes = ['orders', 'upgrades', 'upgradeParents'];
-    protected $fillable = ['tour_id', 'activity_inventory_id', 'tour_component_type', 'tour_sales_price', 'stock_control_active'];
+    protected $guarded = [];
     protected $casts = ['tour_sales_price' => 'double', 'is_bookable' => 'boolean', 'stock_control_active' => 'boolean',];
     private ActivityInventoryTourRepository $internal_repository;
 

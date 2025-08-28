@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin\Transport;
 
 use App\Http\Livewire\Abstract\ActionColumn;
-use App\Http\Livewire\Abstract\AddressColumn;
+use App\Http\Livewire\Abstract\TruncatedAddressColumn;
 use App\Models\Transport\Operator;
 use App\Models\Transport\Transport;
 use App\Models\Transport\TransportType;
@@ -50,11 +50,11 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->searchable()
                 ->filterable(Operator::pluck('name')),
-            AddressColumn::table('departure', 'departure_country')
+            TruncatedAddressColumn::table('departure', 'departure_country')
                 ->label('Departure')
                 ->sortable()
                 ->searchable(),
-            AddressColumn::table('arrival', 'arrival_country')
+            TruncatedAddressColumn::table('arrival', 'arrival_country')
                 ->label('Arrival')
                 ->sortable()
                 ->searchable(),
