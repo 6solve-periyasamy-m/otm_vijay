@@ -46,9 +46,13 @@
                         </a>
                     @endcan
                     @can('create', \App\Models\Accommodation\Accommodation::class)
-                        <a class="btn btn-info" title="Duplicate Accommodation" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation,])}}">
+                        <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation,])}}">
                             {{ Icon::copy() }}
-                            <span>Duplicate Accommodation</span>
+                            <span>Duplicate With Inventory</span>
+                        </a>
+                        <a class="btn btn-info" title="Duplicate Without Inventory" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation, 'inventory' => false,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Without Inventory</span>
                         </a>
                     @endcan
                     <a class="btn btn-secondary" title="View Rooming List" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
