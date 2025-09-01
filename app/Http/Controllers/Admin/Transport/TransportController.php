@@ -99,10 +99,10 @@ class TransportController extends Controller
         return redirect()->route('transports.edit', ['transport' => $return,]);
     }
 
-    public function duplicate(Transport $transport): RedirectResponse
+    public function duplicate(Request $request, Transport $transport): RedirectResponse
     {
-        $duplicate = $transport->repository->duplicate(true);
-        return redirect()->route('transports.view', ['transport' => $duplicate,]);
+        $duplicate = $transport->repository->duplicate($request->inventory ?? true);
+        return redirect()->route('transports.edit', ['transport' => $duplicate,]);
     }
 
     public function archive(Transport $transport): RedirectResponse

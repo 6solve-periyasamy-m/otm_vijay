@@ -125,10 +125,10 @@ class ActivityController extends Controller
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
-    public function duplicate(Activity $activity): RedirectResponse
+    public function duplicate(Request $request, Activity $activity): RedirectResponse
     {
-        $duplicate = $activity->repository->duplicate(true);
-        return redirect()->route('activities.view', ['activity' => $duplicate,]);
+        $duplicate = $activity->repository->duplicate($request->inventory ?? true);
+        return redirect()->route('activities.edit', ['activity' => $duplicate,]);
     }
 
     public function archive(Activity $activity): RedirectResponse

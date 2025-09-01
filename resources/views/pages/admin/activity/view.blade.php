@@ -42,9 +42,13 @@
                         </a>
                     @endcan
                     @can('create', \App\Models\Activity\Activity::class)
-                        <a class="btn btn-info" title="Duplicate Activity" href="{{route('activities.duplicate', ['activity' => $activity,])}}">
+                        <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('activities.duplicate', ['activity' => $activity,])}}">
                             {{ Icon::copy() }}
-                            <span>Duplicate Activity</span>
+                            <span>Duplicate With Inventory</span>
+                        </a>
+                        <a class="btn btn-info" title="Duplicate Without Inventory" href="{{route('activities.duplicate', ['activity' => $activity, 'inventory' => false,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Without Inventory</span>
                         </a>
                     @endcan
                     <a class="btn btn-secondary" href="{{route('activities.manifest.view', ['activity' => $activity,])}}">

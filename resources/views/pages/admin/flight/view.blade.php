@@ -47,9 +47,13 @@
                         </a>
                     @endcan
                     @can('create', \App\Models\Flight\Flight::class)
-                        <a class="btn btn-info" title="Duplicate Flight" href="{{route('flights.duplicate', ['flight' => $flight,])}}">
+                        <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('flights.duplicate', ['flight' => $flight,])}}">
                             {{ Icon::copy() }}
-                            <span>Duplicate Flight</span>
+                            <span>Duplicate With Inventory</span>
+                        </a>
+                        <a class="btn btn-info" title="Duplicate Without Inventory" href="{{route('flights.duplicate', ['flight' => $flight, 'inventory' => false,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Without Inventory</span>
                         </a>
                     @endcan
                     <a class="btn btn-secondary" href="{{route('flights.manifest.view', ['flight' => $flight,])}}">
