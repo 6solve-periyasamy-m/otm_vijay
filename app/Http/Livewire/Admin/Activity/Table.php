@@ -81,6 +81,10 @@ class Table extends LivewireDatatable
         if ($activity === null) {
             $this->toast('Cannot Delete Activity', 'The requested activity was not found.', 'danger');
         }
+        if (! auth()->user()->can('self-child-access', [$activity, \App\Models\Activity\ActivityInventory::class])) {
+            $this->toast('Unauthorized', 'You do not have permission to delete this activity.', 'danger');
+            return;
+        }
         try {
             DeleteActivity::run(Activity::find($id));
             $this->toast('Activity Deleted Successfully', 'Successfully deleted the requested activity.', 'success');

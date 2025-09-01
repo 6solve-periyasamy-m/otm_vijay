@@ -10,7 +10,13 @@
         @include('partials.users.permissions.form.values', ['class' => $field, 'action' => 'update', 'value' => $data['update']])
     </td>
     <td>
+        @include('partials.users.permissions.form.values', ['class' => $field, 'action' => 'self-update', 'value' => $data['self-update'] ?? false])
+    </td>
+    <td>
         @include('partials.users.permissions.form.values', ['class' => $field, 'action' => 'delete', 'value' => $data['delete']])
+    </td>
+    <td>
+        @include('partials.users.permissions.form.values', ['class' => $field, 'action' => 'self-delete', 'value' => $data['self-delete'] ?? false])
     </td>
     <td>
         @if(array_key_exists('costing', $data))

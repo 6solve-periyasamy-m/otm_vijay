@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use App\Models\User;
 
 
 /**
@@ -188,5 +189,19 @@ class ActivityInventory extends Model
     public function getLocalPurchasePriceAttribute(): float|null
     {
         return fx_convert($this->purchase_price, $this->component->currency);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (ActivityInventory $activityInventory) {
+            if (auth()->check() && !$activityInventory->created_by) {
+                $activityInventory->created_by = auth()->id();
+            }
+        });
     }
 }

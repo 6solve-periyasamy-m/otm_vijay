@@ -251,6 +251,8 @@ class PermissionsRepository
                 'read' => isset($role) && self::getPermissionStatus($role, 'read', $class),
                 'update' => isset($role) && self::getPermissionStatus($role, 'update', $class),
                 'delete' => isset($role) && self::getPermissionStatus($role, 'delete', $class),
+                'self-update' => isset($role) && self::getPermissionStatus($role, 'self-update', $class),
+                'self-delete' => isset($role) && self::getPermissionStatus($role, 'self-delete', $class),
             ];
             if (array_key_exists('costing', $values)) {
                 $permissions[$values['group']][$class]['costing'] = isset($role) && self::getPermissionStatus($role, 'costing', $class);
