@@ -54,9 +54,13 @@
                         </a>
                     @endcan
                     @can('create', \App\Models\Transport\Transport::class)
-                        <a class="btn btn-info" title="Duplicate Transport" href="{{route('transports.duplicate', ['transport' => $transport,])}}">
+                        <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('transports.duplicate', ['transport' => $transport,])}}">
                             {{ Icon::copy() }}
-                            <span>Duplicate Transport</span>
+                            <span>Duplicate With Inventory</span>
+                        </a>
+                        <a class="btn btn-info" title="Duplicate Without Inventory" href="{{route('transports.duplicate', ['transport' => $transport, 'inventory' => false,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Without Inventory</span>
                         </a>
                     @endcan
                     <a class="btn btn-secondary" href="{{route('transports.manifest.view', ['transport' => $transport,])}}">
