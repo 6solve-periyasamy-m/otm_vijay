@@ -65,11 +65,11 @@ class Table extends LivewireDatatable
 
     public function delete($id): void
     {
-        $activity = Accommodation::find($id);
-        if ($activity === null) {
+        $accommodation = Accommodation::find($id);
+        if ($accommodation === null) {
             $this->toast('Cannot Delete Accommodation', 'The requested accommodation was not found.', 'danger');
         }
-        if (! auth()->user()->can('self-child-access', [$activity, \App\Models\Accommodation\AccommodationInventory::class])) {
+        if (! auth()->user()->can('self-child-access', [$accommodation, \App\Models\Accommodation\AccommodationInventory::class])) {
             $this->toast('Unauthorized', 'You do not have permission to delete this accommodation.', 'danger');
             return;
         }

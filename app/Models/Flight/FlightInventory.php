@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use App\Models\User;
 
 /**
  * App\Models\Flight\FlightInventory
@@ -213,5 +214,19 @@ class FlightInventory extends Model
     public function getLocalPurchasePriceAttribute(): float|null
     {
         return fx_convert($this->purchase_price, $this->component->currency);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (FlightInventory $flightInventory) {
+            if (auth()->check() && !$flightInventory->created_by) {
+                $flightInventory->created_by = auth()->id();
+            }
+        });
     }
 }
