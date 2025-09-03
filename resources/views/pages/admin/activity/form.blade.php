@@ -26,6 +26,7 @@
     @include('partials.fields.prefab.addresses.switcher', ['address' => $activity?->address,])
     <x-livewire.ckeditor name="description" value="{{ $activity?->description }}" label="Description" />
 	@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $activity?->internal_notes])
+    <h6 class="fs-5 fw-bold">e-Commerce</h6>
     <x-livewire.input name="field1" value="{{ $activity?->field1 }}" label="Label 1" width="6" />
     <x-livewire.input name="field2" value="{{ $activity?->field2 }}" label="Label 2" width="6" />
 	@include('partials.fields.file', ['name' => 'Image', 'field' => 'image', 'width' => 3, 'value' => $activity?->image_url,])

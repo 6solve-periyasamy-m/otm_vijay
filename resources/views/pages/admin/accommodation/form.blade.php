@@ -22,7 +22,7 @@
 	@include('partials.fields.prefab.addresses.switcher', ['address' => $accommodation?->address,])
     @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $accommodation?->description,])
 	@include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'notes', 'value' => $accommodation?->internal_notes])
-    
+    <h6 class="fs-5 fw-bold">e-Commerce</h6>
 	<div class="form-group col-xl-8">
         @can('create', \App\Models\Accommodation\AccommodationType::class)
             @include('partials.fields.selector.adder',
