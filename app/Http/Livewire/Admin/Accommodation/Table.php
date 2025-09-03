@@ -67,13 +67,17 @@ class Table extends LivewireDatatable
     {
         $activity = Accommodation::find($id);
         if ($activity === null) {
-            $this->toast('Cannot Delete Activity', 'The requested activity was not found.', 'danger');
+            $this->toast('Cannot Delete Accommodation', 'The requested accommodation was not found.', 'danger');
+        }
+        if (! auth()->user()->can('self-child-access', [$activity, \App\Models\Accommodation\AccommodationInventory::class])) {
+            $this->toast('Unauthorized', 'You do not have permission to delete this accommodation.', 'danger');
+            return;
         }
         try {
             DeleteAccommodation::run(Accommodation::find($id));
-            $this->toast('Activity Deleted Successfully', 'Successfully deleted the requested activity.', 'success');
+            $this->toast('accommodation Deleted Successfully', 'Successfully deleted the requested accommodation.', 'success');
         } catch (CannotDeleteException $e) {
-            $this->toast('Cannot Delete Activity', $e->getMessage(), 'danger');
+            $this->toast('Cannot Delete accommodation', $e->getMessage(), 'danger');
         }
     }
 }
