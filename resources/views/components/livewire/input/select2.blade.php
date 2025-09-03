@@ -20,9 +20,14 @@
         $create = "openModal('$createForm');";
     }
     $create = $create ?? $attributes->get('create');
+    
+    // Get the field name for error checking
+    $fieldName = $attributes->get('name');
+    $hasError = $errors->has($fieldName);
+
 @endphp
 <div style="padding-left: 5px;" class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
-    <label for="{{ $id }}">
+    <label for="{{ $id }}" class="{{ $hasError ? 'text-danger' : '' }}">
         {{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif
         @error($attributes->get('name')) <span class="text-danger">({{ $message }})</span> @enderror
     </label>
