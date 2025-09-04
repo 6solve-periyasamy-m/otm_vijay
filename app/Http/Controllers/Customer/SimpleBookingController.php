@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Booking\Booking;
 use App\Models\Tour\Tour;
 
 class SimpleBookingController extends Controller
@@ -14,6 +13,7 @@ class SimpleBookingController extends Controller
         if ($token !== null) {
             $booking = $tour->bookings()->where('token', '=', $token)->firstOrFail();
         }
+        if ($tour->repository->getAvailableStock() <= ($booking?->traveller_count ?? 1)) { abort(404); }
         return view('customer.booking.simple.index', ['tour' => $tour, 'booking' => $booking ?? null]);
     }
 
@@ -21,6 +21,7 @@ class SimpleBookingController extends Controller
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $booking = $tour->bookings()->where('token', '=', $token)->firstOrFail();
+        if ($tour->repository->getAvailableStock() < ($booking?->traveller_count ?? 1)) { abort(404); }
         return view('customer.booking.simple.checkout', ['tour' => $tour, 'booking' => $booking,]);
     }
 }

@@ -80,7 +80,7 @@ class Rooming extends Component
 
     public function addTraveller(): void
     {
-        if ($this->booking->travellers()->count() >= self::MAX_TRAVELLERS) { return; }
+        if ($this->booking->travellers()->count() >= min($this->tour->repository->getAvailableStock(), self::MAX_TRAVELLERS)) { return; }
         $this->booking->repository->addUnknownTraveller();
         $this->validateRoomCount();
         $this->renew();
