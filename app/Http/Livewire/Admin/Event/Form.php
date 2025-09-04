@@ -104,6 +104,9 @@ class Form extends Component
     public function save()
     {
         $this->validate();
+
+        $this->event->is_download_itinerary = (bool) $this->event->is_download_itinerary;
+
         if ($this->image !== null) {
             $this->event->image_url = store_file($this->image, $this->event->image_url);
         }
