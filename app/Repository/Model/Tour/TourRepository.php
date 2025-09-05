@@ -171,8 +171,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
     public function duplicateToDate(Carbon $newStart): Tour
     {
         $newEnd = $newStart->copy()->addDays(diff_in_nights($this->tour->date_from, $this->tour->date_to));
-        $diffInDays = diff_in_nights($this->tour->date_from, $newStart);
+        $diffInDays = $this->tour->date_from->diffInDays($newStart);
         $duplicate = $this->duplicate();
+        if ($newStart->isBefore($duplicate->date_from)) { $diffInDays *= -1; }
         $duplicate->name .= " (Shifted to " . f_date($newStart). ")";
         $duplicate->date_from = $newStart;
         $duplicate->date_to = $newEnd;
