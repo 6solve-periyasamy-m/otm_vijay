@@ -116,6 +116,9 @@ class Rooming extends Component
         if ($travellerExcess < 0) {
            return $this->addError('common', 'More travellers have been added to rooms than are travelling');
         }
+        if (!$this->booking->repository->validateStock()) {
+            return $this->addError('common', 'Some components in this package are out-of-stock');
+        }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
             'tour' => $this->tour->booking_form_url,

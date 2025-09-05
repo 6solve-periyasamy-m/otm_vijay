@@ -98,6 +98,9 @@ class Checkout extends Component
 
     public function checkout()
     {
+        if (!$this->booking->repository->validateStock()) {
+            return $this->addError('common', 'Some components in this package are out-of-stock');
+        }
         if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
         $this->preCheckout();
         $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();

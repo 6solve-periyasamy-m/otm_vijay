@@ -967,4 +967,68 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     {
         return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
+
+    public function validateStock(): bool
+    {
+        if ($this->booking->tour->repository->hasEnoughStock($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count())) {
+            return false;
+        }
+        $keys = [];
+        foreach ($this->booking->travellers as $traveller) {
+            if ($traveller->role === BookingTravellerRole::NOT_TRAVELLING) { continue; }
+            foreach ($traveller->activities as $component) {
+                if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
+                $key = 'activity-' . $component->activity_inventory_tour_id;
+                if (!array_key_exists($key, $keys)) {
+                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                } else {
+                    $keys[$key]['count'] += 1;
+                }
+            }
+            foreach ($traveller->flights as $component) {
+                if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
+                $key = 'flight-' . $component->flight_inventory_tour_id;
+                if (!array_key_exists($key, $keys)) {
+                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                } else {
+                    ++$keys[$key]['count'];
+                }
+            }
+            foreach ($traveller->transport as $component) {
+                if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
+                $key = 'transport-' . $component->transport_inventory_tour_id;
+                if (!array_key_exists($key, $keys)) {
+                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                } else {
+                    ++$keys[$key]['count'];
+                }
+            }
+            foreach ($traveller->merchandise as $component) {
+                if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
+                $key = 'merchandise-' . $component->merchandise_inventory_tour_id;
+                if (!array_key_exists($key, $keys)) {
+                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                } else {
+                    ++$keys[$key]['count'];
+                }
+            }
+        }
+        foreach ($this->booking->groups as $group) {
+            if ($group->travellers->count() <= 0) { continue; }
+            foreach ($group->accommodation as $component) {
+                if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
+                $key = 'accommodation-' . $component->accommodation_inventory_tour_id;
+                $travellers = $group->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
+                if (!array_key_exists($key, $keys)) {
+                    $keys[$key] = ['component' => $component, 'count' => $travellers,];
+                } else {
+                    $keys[$key]['count'] += $travellers;
+                }
+            }
+        }
+        foreach ($keys as $data) {
+            if (!$data['component']->repository->hasEnoughStock($data['count'])) { return false; }
+        }
+        return true;
+    }
 }
