@@ -143,6 +143,10 @@
                         {{ __('quotes.view.cards.quick.calculator.costing') }}
                     </button>
                 @endcan
+                <button wire:click="openEmailModal" class="btn btn-primary" wire:loading.attr="disabled" wire:target="openEmailModal">
+                    <span wire:loading.remove wire:target="openEmailModal">{{ Icon::mail() }} Send Quote custom </span>
+                    <span wire:loading wire:target="openEmailModal">Preparing...</span>
+                </button>
             </x-admin.section.otm-text>
         </x-admin.section.card>
         {{-- Component Costs --}}
@@ -283,6 +287,9 @@
                     </div>
                 </div>
             </div>
+
+            <livewire:admin.quote.send-popup-mail :quote="$quote" />
+            
         </x-admin.section.card>
         @php
             $isEmpty = $quote->sentQuotes->isEmpty();

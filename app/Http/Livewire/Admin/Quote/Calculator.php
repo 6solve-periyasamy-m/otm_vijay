@@ -57,6 +57,21 @@ class Calculator extends Component
         $this->calculate(false);
     }
 
+
+    public function openEmailModal()
+    {
+        $this->validate([
+            'paying' => 'required|integer|min:0',
+            'travelling' => 'required|integer|min:0',
+        ]);
+
+        $this->emitTo('admin.quote.send-popup-mail', 'openEmailModal', 
+            $this->quote->id, 
+            $this->paying, 
+            $this->travelling
+        );
+    }
+
     public function calculate(bool $validate = true): void
     {
         if ($validate) {
