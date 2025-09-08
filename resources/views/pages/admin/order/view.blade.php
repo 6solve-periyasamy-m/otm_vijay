@@ -388,7 +388,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 <td>{{ f_datetime($payment->paid_on) }}</td>
                                 @php
                                     $internalNotes = $payment->internal_notes ?? " -Nil- ";
-                                    $fee = $payment->payment_fee ? f_currency($payment->payment_fee) : null;
+                                    $fee = $payment->payment_fee ? fr_currency($payment->payment_fee, $payment->currency) : null;
                                 @endphp
 
                                 <td class="w-15 align-top text-justify">
