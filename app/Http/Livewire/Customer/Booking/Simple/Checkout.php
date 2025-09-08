@@ -99,7 +99,8 @@ class Checkout extends Component
     public function checkout()
     {
         if (!$this->booking->repository->validateStock()) {
-            return $this->addError('common', 'Some components in this package are out-of-stock');
+            $bEmail = $this->booking->tour->brand->email;
+            return $this->addError('common', "Some components in this package are out-of-stock. Please contact us at {$bEmail} for more information and to purchase this package.");
         }
         if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
         $this->preCheckout();
