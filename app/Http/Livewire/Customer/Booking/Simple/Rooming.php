@@ -118,7 +118,7 @@ class Rooming extends Component
         }
         if (!$this->booking->repository->validateStock()) {
             $bEmail = $this->booking->tour->brand->email;
-            return $this->addError('common', "Some components in this package are out-of-stock. Please contact us at {$bEmail} for more information and to purchase this package.");
+            return $this->addError('common', "Some components in this package are out-of-stock. Please contact us at {$bEmail} for alternative options.");
         }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
