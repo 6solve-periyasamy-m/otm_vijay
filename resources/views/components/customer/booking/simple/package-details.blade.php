@@ -82,6 +82,57 @@
     }
     .psg-det { padding-top: 20px !important;}
 
+    .contact-block {
+        background: #F9F4EE;
+        padding: 24px;
+        border-radius: 16px;
+    }
+
+    .contact-block p.description {
+        padding-left: 26px;
+        color: #333 !important;
+        margin: 0 0 1px 0 !important;
+    }
+
+    .contact-block p.getintouch {
+        padding-left: 26px;
+        color: #333 !important;
+        margin: 0 0 1px 0 !important;
+    }
+
+    .contact-block p {
+        padding-bottom: 16px;
+        margin: 0;
+    }
+    .contact-block p {
+        font-size: 16px;
+        line-height: 19px;
+        color: #000000;
+        position: relative;
+    }
+
+    .contact-block p a, .booking-dates a { 
+        color: var(--primary-color);
+        text-decoration: none;
+        padding: 0 0 0 4px;
+        cursor: pointer;
+    }
+
+    .booking-dates {
+        margin: 0px 0px 24px 0px;
+        font-size: 16px;
+        line-height: 24px;
+        color: #7a7a7a !important;
+    }
+
+    .subheading { font-size: 15px !important;}
+    
+    @media only screen and (max-width: 1278px) {
+        .sub-heading-3 {
+            line-height: 40px !important;
+        }
+    }
+
 </style>
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
