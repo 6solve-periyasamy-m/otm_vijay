@@ -13,7 +13,8 @@
         <x-livewire.input.checkbox wire:model="inventory.check_out_time_confirmed" width="1" label="Confirmed?" />
         <x-livewire.input wire:model="inventory.stock" width="11" label="Stock" />
         <x-livewire.input.checkbox wire:model="inventory.fit_selectable" width="1" label="FIT Selectable" />
-        <x-livewire.input wire:model="inventory.purchase_price" width="6" label="Purchase Price" type="number" step="0.01" />
+        <x-livewire.input wire:model="inventory.purchase_price" width="3" label="Purchase Price" type="number" step="0.01" />
+        <x-livewire.input.select.currency name="inventory.currency_id" width="3" label="Currency Override" value="{{ $inventory->currency_id }}" clearable />
         <x-livewire.input wire:model="inventory.sales_price" width="6" label="Sales Price" type="number" step="0.01" />
         <x-livewire.input.text-area wire:model="inventory.internal_notes" width="6" label="Internal Notes" />
         <x-livewire.input.text-area wire:model="inventory.external_notes" width="6" label="External Notes" />

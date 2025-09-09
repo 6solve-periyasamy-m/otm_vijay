@@ -66,7 +66,7 @@
                 {{$inventory->stock - $inventory->used_stock}}/{{ $inventory->stock }}<br/>
                 ({{$inventory->used_stock}} Sold)
             </td>
-            <td>{{ f_currency($inventory->purchase_price) }}</td>
+            <td>{{ fr_currency($inventory->purchase_price, $inventory->repository->getCurrency()) }}</td>
             <td>{{ f_currency($inventory->sales_price) }}</td>
             <td>{{ $inventory->internal_notes }}</td>
         </tr>
