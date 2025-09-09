@@ -1,14 +1,22 @@
+@php
+    $location = collect([$tour->city, $tour->country?->name])->filter()->implode(',  ');
+    //dd($tour);
+@endphp
 <div class="row">
     <div class="left-col">
         <div class="contain">
-            <!-- The event name mobile update -->
-            <!-- <div class="evnt-name">
-            </div> -->
-            <!-- The event name mobile update -->
-            <h3 class="ytd_bold_class">Your trip details</h3>
-            <h3 class="head-evnt event_color_class">{{ $tour->event?->name }}</h3>
+            <div class="tour-details">
+                <h2 class="sub-heading-2">{{ $tour->package_name }}</h2>
+                <h3 class="sub-heading-3">{{ $tour->event?->name }}</h3>
+                <div class="location-dollar-value">
+                    @if($location)
+                        <p class="location">{{ $location }}</p>
+                        <span></span>
+                    @endif
+                    <p class="dollar">From {{ f_currency($tour->base_price_per_person) }} / person twin share</p>
+                </div>
+            </div>
             <p class="psg-det">PASSENGER DETAILS</p>
-
             <div class="top-form-contain">
                 <div class="form-field">
                     <input type="email" wire:model="lead.email_address" placeholder="Email*" required>
@@ -196,8 +204,6 @@
                     }
                 }
             </style>
-
-
 
             <div class="second-block date-details">
                 <p>DATE</p>

@@ -21,6 +21,67 @@
     .payable_fulltext{
         margin-top:8px;
     }
+
+    .sub-heading-2 {
+        font-family: "PP Neue Montreal Medium";
+        font-weight: 500;
+        font-size: 36px;
+        line-height: 42px;
+        color: var(--primary-color);
+        letter-spacing: 2.24px;
+        margin: 0 0 16px 0px;
+        text-transform: uppercase;
+    }
+    .sub-heading-3 {
+        font-family: "PP Neue Montreal Medium";
+        font-weight: 500;
+        font-size: 32px !important;
+        line-height: 32px;
+        color: var(--text-dark);
+        margin: 0 0 16px 0px;
+    }
+    .location-dollar-value {
+        display: flex;
+        column-gap: 8px;
+        align-items: center;
+        padding-bottom: 0px;
+        border-bottom: 1px solid #D1D5DB;
+        margin-top:12px;
+    }
+    .location-dollar-value p {
+        font-size: 16px;
+        line-height: 24px;
+        padding-left: 24px;
+        position: relative;
+        margin: 0;
+        color: #333 !important;
+    }
+    .location-dollar-value > span {
+        display: inline-block;
+        width: 2px;
+        height: 20px;
+        background: #D1D5DB;
+        margin-top: -20px;
+    }
+    .location-dollar-value p.dollar::before {
+        background: url('/css/booking/icon/dollar.svg') no-repeat;
+    }
+
+    .location-dollar-value p::before {
+        content: "";
+        background: url('/css/booking/icon/location.svg') no-repeat;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        left: 0px;
+    }
+    .location, .dollar{
+        padding-left: 20px !important;
+    }
+    .psg-det { padding-top: 20px !important;}
+
 </style>
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
