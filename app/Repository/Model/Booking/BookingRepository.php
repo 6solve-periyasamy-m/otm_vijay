@@ -970,7 +970,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function validateStock(): bool
     {
-        if ($this->booking->tour->repository->hasEnoughStock($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count())) {
+        if (!$this->booking->tour->repository->hasEnoughStock($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count())) {
             return false;
         }
         $keys = [];
@@ -980,7 +980,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
                 $key = 'activity-' . $component->activity_inventory_tour_id;
                 if (!array_key_exists($key, $keys)) {
-                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                    $keys[$key] = ['component' => $component->tourComponent, 'count' => 1,];
                 } else {
                     $keys[$key]['count'] += 1;
                 }
@@ -989,27 +989,27 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
                 $key = 'flight-' . $component->flight_inventory_tour_id;
                 if (!array_key_exists($key, $keys)) {
-                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                    $keys[$key] = ['component' => $component->tourComponent, 'count' => 1,];
                 } else {
-                    ++$keys[$key]['count'];
+                    $keys[$key]['count'] += 1;
                 }
             }
             foreach ($traveller->transport as $component) {
                 if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
                 $key = 'transport-' . $component->transport_inventory_tour_id;
                 if (!array_key_exists($key, $keys)) {
-                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                    $keys[$key] = ['component' => $component->tourComponent, 'count' => 1,];
                 } else {
-                    ++$keys[$key]['count'];
+                    $keys[$key]['count'] += 1;
                 }
             }
             foreach ($traveller->merchandise as $component) {
                 if (!$component->tourComponent->repository->isStockControlActive()) { continue; }
                 $key = 'merchandise-' . $component->merchandise_inventory_tour_id;
                 if (!array_key_exists($key, $keys)) {
-                    $keys[$key] = ['component' => $component, 'count' => 1,];
+                    $keys[$key] = ['component' => $component->tourComponent, 'count' => 1,];
                 } else {
-                    ++$keys[$key]['count'];
+                    $keys[$key]['count'] += 1;
                 }
             }
         }
@@ -1020,14 +1020,17 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 $key = 'accommodation-' . $component->accommodation_inventory_tour_id;
                 $travellers = $group->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count();
                 if (!array_key_exists($key, $keys)) {
-                    $keys[$key] = ['component' => $component, 'count' => $travellers,];
+                    $keys[$key] = ['component' => $component->tourComponent, 'count' => $travellers,];
                 } else {
                     $keys[$key]['count'] += $travellers;
                 }
             }
         }
-        foreach ($keys as $data) {
-            if (!$data['component']->repository->hasEnoughStock($data['count'])) { return false; }
+        foreach ($keys as $key => $data) {
+            if (!($data['component']->repository->hasEnoughStock($data['count']))) {
+                \Log::info($key . ' is out of stock for ' . $data['count']);
+                return false;
+            }
         }
         return true;
     }
