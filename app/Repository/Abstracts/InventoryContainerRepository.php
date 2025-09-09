@@ -2,9 +2,11 @@
 
 namespace App\Repository\Abstracts;
 
+use App\Models\Location\Currency;
 use App\Repository\Abstracts\Interfaces\BelongsOnItinerary;
 use App\Repository\Interfaces\HasComponentType;
 use Carbon\Carbon;
+use Settings;
 
 abstract class InventoryContainerRepository extends ModelRepository implements HasComponentType, BelongsOnItinerary
 {
@@ -20,6 +22,11 @@ abstract class InventoryContainerRepository extends ModelRepository implements H
     public function getPurchasePrice(): ?float
     {
         return $this->getInventory()?->getPurchasePrice();
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->getInventory()?->getCurrency() ?? Settings::currency();
     }
 
     public function getLocalPurchasePrice(): ?float
