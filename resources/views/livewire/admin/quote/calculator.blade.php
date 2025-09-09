@@ -129,9 +129,13 @@
                     {{ Icon::view() }}
                     {{ __('quotes.view.cards.quick.calculator.preview') }}
                 </button>
-                <button onclick="confirmAndSend()" class="btn btn-success">
+                {{-- <button onclick="confirmAndSend()" class="btn btn-success">
                     {{ Icon::email() }}
                     {{ __('quotes.view.cards.quick.calculator.send') }}
+                </button> --}}
+                <button wire:click="openEmailModal" class="btn btn-success" wire:loading.attr="disabled" wire:target="openEmailModal">
+                    <span wire:loading.remove wire:target="openEmailModal">{{ Icon::email() }} {{ __('quotes.view.cards.quick.calculator.send') }} </span>
+                    <span wire:loading wire:target="openEmailModal">Preparing...</span>
                 </button>
                 <button wire:click="convert" class="btn btn-warning">
                     {{ Icon::convert() }}
@@ -142,11 +146,7 @@
                         {{ Icon::wallet() }}
                         {{ __('quotes.view.cards.quick.calculator.costing') }}
                     </button>
-                @endcan
-                <button wire:click="openEmailModal" class="btn btn-primary" wire:loading.attr="disabled" wire:target="openEmailModal">
-                    <span wire:loading.remove wire:target="openEmailModal">{{ Icon::mail() }} Send Quote custom </span>
-                    <span wire:loading wire:target="openEmailModal">Preparing...</span>
-                </button>
+                @endcan                
             </x-admin.section.otm-text>
         </x-admin.section.card>
         {{-- Component Costs --}}
