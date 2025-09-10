@@ -25,6 +25,7 @@ class Rooming extends Component
     public Booking|int|null $booking;
     public BookingTraveller|null $lead = null;
     public array $rooms = [];
+    public int $maxTravellers;
 
     public function mount(Tour|int $tour, Booking|int|null $booking = null): void
     {
@@ -32,6 +33,8 @@ class Rooming extends Component
         $this->booking = Booking::getForMount($booking);
 
         if ($this->booking->tour_id !== null && $this->booking->tour_id !== $this->tour->id) { abort(404); }
+
+        $this->maxTravellers = $this->tour->stock_control_active ? min($this->tour->repository->getAvailableStock(), self::MAX_TRAVELLERS) : self::MAX_TRAVELLERS;
 
         if ($this->booking->id === null) {
             $this->booking = BookingRepository::make($this->tour);
@@ -80,7 +83,7 @@ class Rooming extends Component
 
     public function addTraveller(): void
     {
-        if ($this->booking->travellers()->count() >= min($this->tour->repository->getAvailableStock(), self::MAX_TRAVELLERS)) { return; }
+        if ($this->booking->travellers()->count() >= $this->maxTravellers) { return; }
         $this->booking->repository->addUnknownTraveller();
         $this->validateRoomCount();
         $this->renew();
