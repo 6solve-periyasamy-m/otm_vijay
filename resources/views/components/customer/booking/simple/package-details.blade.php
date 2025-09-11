@@ -140,11 +140,11 @@
 </div>
 <div class="snd-sec">
     @if(isset($tour->event?->image_url))
-        <div class="left-col">
+        <div class="left-col package_details_img">
             <img class="package-image" src="{{ asset($tour->event?->image_url) }}" alt="featured-img">
         </div>
     @endif
-    <div class="right-col">
+    <div class="right-col package_details_right">
         <h4 class="hide-event" style="display:none!important;">{{ $tour->event?->name }}</h4>
         <div class="name_price_div">
             <h4>{{$tour->name}}</h4>
@@ -169,6 +169,10 @@
             <p class="txt">Package Price</p>
             <p class="price pkg-price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
         </li>
+        <!-- <li>
+            <p class="txt">Number of packages - {{ $this->getTravellerCount() }}</p>
+            <p class="price pkg-price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
+        </li> -->
         <!-- @if($tour->booking_fee !== 0)
             <li>
                 <p class="txt">Booking Fee</p>
@@ -231,13 +235,16 @@
     <div class="popup-inner-two">
         <div class="convco-two">
             <div class="whole-block-two">
+                <div class="close-button">
+                    <img src="/css/booking/icon/Close-Button.svg" alt="close-btn">
+                </div>
                 <div class="package-details-heading-block">
                 <h3> Package details </h3>
-                <div class="close-button">
-                    <img src="/css/booking/icon/x-circle.svg" alt="close-btn">
+                <!-- <div class="close-button">
+                    <img src="/css/booking/icon/Close-Button.svg" alt="close-btn">
+                </div> -->
                 </div>
-                </div>
-                <div class="full-top-blcls-two">
+                <div class="full-top-blcls-two package_popup">
                     <div class="upp-block-two">
                         <div class="snd-sec">
                             <div class="left-col">
@@ -248,7 +255,7 @@
                                 <!--<p class="location">Sydney, Australia</p>-->
                                 <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                                 <h6>Description</h6>
-                                <p>{{ $tour->description }}</p>                               
+                                <p>{!! $tour->description !!}</p>                               
                                 <h6>Inclusions</h6>
                                 <!-- <p class="inclusion">Mens and womens final ticket</p>                                                         
                                 <p class="inclusion">3 nights, 5 star accommodation</p>
