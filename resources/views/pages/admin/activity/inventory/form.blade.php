@@ -23,24 +23,29 @@
         @include('partials.fields.selector.default',
                 ['name' => 'Ticket Type', 'field' => 'ticket_type_id', 'value' => $inventory?->ticket_type_id, 'route' => 'ticket-types',])
     @endcan
+    @include('partials.fields.text',
+        ['name' => 'Stock', 'field' => 'stock', 'value' => $inventory?->stock,])
+
     @include('partials.fields.datetime',
                 ['name' => 'Starts At', 'field' => 'starts_at', 'value' => $inventory?->starts_at,
                  'onChange' => 'changeDate($(\'#starts_at-input\'), $(\'#ends_at-input\'))', 'width' => 6, ])
     @include('partials.fields.datetime',
                 ['name' => 'Ends At', 'field' => 'ends_at', 'value' => $inventory?->ends_at,
                  'onChange' => 'removeAutoset($(\'#starts_at-input\'), $(\'#ends_at-input\'));', 'classes' => 'autoset', 'width' => 6,])
-    @include('partials.fields.checkbox',
-        ['name' => 'FIT Selectable', 'field' => 'fit_selectable', 'value' => $inventory?->fit_selectable,])
+    {{-- @include('partials.fields.checkbox',
+        ['name' => 'FIT Selectable', 'field' => 'fit_selectable', 'value' => $inventory?->fit_selectable,]) --}}
+    
+    <x-livewire.input.select.currency name="currency_id" width="4" label="Currency Override" value="{{ $inventory->currency_id ?? null }}" clearable />
     @include('partials.fields.text',
-        ['name' => 'Stock', 'field' => 'stock', 'value' => $inventory?->stock,])
+        ['name' => 'Purchase Price', 'field' => 'purchase_price', 'value' => $inventory?->purchase_price, 'width' => 4, ])    
     @include('partials.fields.text',
-        ['name' => 'Purchase Price', 'field' => 'purchase_price', 'value' => $inventory?->purchase_price, 'width' => 3, ])
-    <x-livewire.input.select.currency name="currency_id" width="3" label="Currency Override" value="{{ $inventory->currency_id ?? null }}" clearable />
-    @include('partials.fields.text',
-        ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $inventory?->sales_price, 'width' => 6, ])
+        ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $inventory?->sales_price, 'width' => 4, ])
+
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $inventory?->internal_notes,])
     @include('partials.fields.textarea', ['name' => 'External Notes', 'field' => 'external_notes', 'value' => $inventory?->external_notes,])
-    @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $inventory?->description, 'width' => 12])
     @include('partials.fields.ckeditor', ['name' => 'Itinerary Description', 'field' => 'inventory_description', 'value' => $inventory?->inventory_description, 'width' => 12])
+    <h6 class="fs-5 fw-bold">e-Commerce</h6>  
+    @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $inventory?->description, 'width' => 12])
+    
     @include('partials.fields.submit')
 @endsection

@@ -22,10 +22,10 @@ $prefix = $prefix ?? "";
 @endpush
 <hr class="splitter"/>
 <div class="form-group col-xl-6">
-    <input type="checkbox" name="{{ $prefix }}use_existing" class="form-check-input"
+    <input type="checkbox" name="{{ $prefix }}use_existing" class="form-check-input border-success"
            @if(isset($address_id)) checked @endif
     id="{{ $prefix }}use_existing-input" onchange="{{ $prefix }}switchView();">
-    <label for="{{ $prefix }}use_existing-input" class="form-check-label">Use Pre-Existing Address</label>
+    <label for="{{ $prefix }}use_existing-input" class="form-check-label fw-bold text-success">Use Pre-Existing Address</label>
 </div>
 <hr class="splitter"/>
 <div class="{{ $prefix }}switcher-existing">
