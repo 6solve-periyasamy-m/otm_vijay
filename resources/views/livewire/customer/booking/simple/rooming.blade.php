@@ -358,9 +358,9 @@
                 </div> -->
             </div>
             <div class="third-block">
+                <p>Choose your preferred bedding configuration for each room</p>
                 @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
-                    <div class="first-bl" wire:key="{{Str::random()}}">
-                        <p>Choose your preferred bedding configuration for each room</p>
+                    <div class="first-bl" wire:key="{{Str::random()}}">                        
                         <div class="inn">
                             <h6>Room {{ $x + 1 }}</h6>
                             <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
@@ -416,7 +416,7 @@
     </div>
 
     <div class="right-col">
-        <h3 class="ytd_bold_class">Your trip details</h3>
+        <!-- <h3 class="ytd_bold_class">Your trip details</h3> -->
         <h3 class="event-name event_color_class">{{ $tour->event?->name }}</h3>
         <div class="contain">
             <x-customer.booking.simple.package-details :booking="$booking" :tour="$tour">

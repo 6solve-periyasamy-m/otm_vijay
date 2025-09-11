@@ -184,38 +184,6 @@
     </div>
 </div>
 
-<style>
-.additional-inclusions > div {
-    border-top: 1px solid rgba(243,91,21,.2);
-    border-bottom: 1px solid rgba(243,91,21,.2);
-    padding: 32px 0;
-}
-.additional-inclusions > div .single {
-  display: flex;
-  justify-content: space-between;
-}
-
-
-.select-currency .single:nth-child(2) p {
-  color: #000000;
-}
-
-.additional-inclusions > div .single p {
-  font-size: 16px;
-  line-height: 24px;
-  color: #808080;
-  margin: 0;
-}
-
-.total .single:first-child p {
-  font-family: "PP Neue Montreal Bold";
-  font-weight: 700;
-  color: #000000;
-  font-size: 18px;
-  line-height: 24px;
-}
-</style>
-
 <div class="additional-inclusions">
     <div class="select-currency">
         <div class="single">
@@ -239,79 +207,34 @@
             <p>Total</p>
             <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
         </div>
+        <div class="single">
+            <p>Base Package Price</p>
+            <p>{{ f_currency($booking->repository->getBasePrice()) }}</p>
+        </div>
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         @if($singleOccupancy > 0 || $singleOccupancy < 0)
         <div class="single">
-            <p>Single Occupancy</p>
+            <p>Single Occupancy - {{ $booking->repository->getSingleOccupancyCount() }}</p>
             <p>{{ f_currency($singleOccupancy) }}</p>
         </div>
         @endif
-        <div class="single">
-            <p>Base Package Price</p>
-            <p>AUD A$3,785</p>
-        </div>
-        <div class="single">
-            <p>Single Occupancy - 1</p>
-            <p>AUD A$545</p>
-        </div>
-        <div class="single">
-            <p>AU GST  (Included)</p>
-            <p>AUD A$344</p>
-        </div>
-    </div>
-</div>
-
-
-
-
-<div class="third-col">
-        <div class="pkage_price_total">
-            <div class="pkage_price">
-                <p class="txt">Package Price</p>
-                <p class="price pkg-price"></p>
-            </div>         
-            @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
-            @if($singleOccupancy > 0 || $singleOccupancy < 0)
-            <div class="single_occupancy_charge">
-                <p class="txt">Single occupancy surcharge</p>
-                <div class="single_occ_div">
-                    <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
-                </div>
-                <!-- <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s -->
-            </div>
-            @endif   
-        </div>
-
-        <div class="package_prc_total">
-            <p class="total">Total</p>
-            <p class="price tot-price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
-        </div>
-
-        @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
-        @if($singleOccupancy > 0 || $singleOccupancy < 0)
-        <div class="single_occupancy_charge">
-            <p class="txt">Single occupancy surcharge</p>
-            <div class="single_occ_div">
-                <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
-            </div>
-            <!-- <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s -->
-        </div>
-        @endif
-
         @if($booking->repository->getTaxes() !== null)
-        <div class="gst_included">
-                <p class="txt">{{ $tour->taxBracket()->name }} (Included)</p>
-                <p class="price tax-price">{{ f_currency($booking->repository->getTaxes()) }}</p>
-        </div>
-         @endif
+            <div class="single">
+                <p>{{ $tour->taxBracket()->name }} (Included)</p>
+                <p>{{ f_currency($booking->repository->getTaxes()) }}</p>
+            </div>
+        @endif
         @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
         @if($upgradePrice > 0 || $upgradePrice < 0)
-            <div class="upgraded_price_div">
-                <p class="txt">Upgrades Price</p>
-                <p class="price">{{ f_currency($upgradePrice) }}</p>
+            <div class="single">
+                <p>Upgrades Price</p>
+                <p>{{ f_currency($upgradePrice) }}</p>
             </div>
         @endif
+    </div>
+</div> 
 
+<div class="third-col">
     <div class="payable_dflex">
     <div class="payable_txt">Payable now </div>
     <div class="payable_num">{{ f_currency($booking->repository->getDueTodayAmount()) }}</div>

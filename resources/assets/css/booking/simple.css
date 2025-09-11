@@ -372,7 +372,7 @@ body {
 }
 
 .ma-block .row .right-col {
-    width: 45%;
+    width: 40%;
 }
 
 .ma-block .row .left-col h3, .ma-block .row .left-col h4, .ma-block .row .left-col h6, .ma-block .row .left-col p {
@@ -647,8 +647,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 .ma-block .row .right-col .contain .snd-sec {
     display: block;
     margin-bottom: 8px;
-    padding-bottom:22px;
-    border-bottom:1px solid #FAE8D3;
+    /* padding-bottom:22px;
+    border-bottom:1px solid #FAE8D3; */
 }
 
 .ma-block .row .right-col .contain .snd-sec .left-col {
@@ -2477,7 +2477,7 @@ input::-webkit-inner-spin-button {
     .ma-block .row .right-col .contain {margin-top:32px;margin-bottom:35px;}
     .ma-block .row .right-col .contain .snd-sec .left-col {margin-bottom:0px!important;}
     .ma-block .row .right-col .contain .snd-sec {border-bottom:0px!important;padding-bottom:0px!important;}
-    .ma-block .row .right-col .contain .third-col {display:none!important;}
+    /* .ma-block .row .right-col .contain .third-col {display:none!important;} */
     .top-head .row .col-two .cont-details .single-div a.phone:before {
         top: 8px;
         left: 8px;
@@ -2961,3 +2961,11 @@ input::-webkit-inner-spin-button {
     margin-right: -10px;
 }
 .see-more-popup .close-button{ display: flex; justify-content: flex-end;}
+
+
+.additional-inclusions > div { border-top: 1px solid rgba(243,91,21,.2); border-bottom: 1px solid rgba(243,91,21,.2); padding: 32px 0; }
+.additional-inclusions > div .single { display: flex; justify-content: space-between; }
+.select-currency .single:nth-child(2) p {   color: #000000; }  
+.additional-inclusions > div .single p {   font-size: 16px;   line-height: 24px;   color: #808080;   margin: 0; }  
+.total .single:first-child p {   font-family: "PP Neue Montreal Bold";   font-weight: 700;   color: #000000;   font-size: 18px;   line-height: 24px; } 
+.total .single:nth-child(2) {   margin-top: 32px; }
