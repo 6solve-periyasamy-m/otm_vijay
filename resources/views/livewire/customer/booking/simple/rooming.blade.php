@@ -292,46 +292,35 @@
                 </div>
             </div>
 
+            <style>
+            </style>
             <!-- <- Rooming -->
             <div class="second-block rme-det">
-
-                <p>ACCOMMODATION</p>
-                @foreach($tour->repository->getHotels() as $hotelData)
-                    @php $hotel = $hotelData['hotel']; @endphp
-                    <div wire:ignore class="hotel-details">
-                        <h6 class="hover-h-cls">{{ $hotel->name }} @if($hotelData['type'] !== null) - {{ $hotelData['type'] }} @endif</h6>
-                        <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">
-                            <img src="{{ asset('css/booking/icon/Icon.svg') }}" alt="tip-img">
-                        </div>
-                        <div class="accommodation-details-hover accommodation-{{$hotel->id}}">
-                            <div class="contain">
-                                <div class="first-block">
-                                    <h6>Hotel details</h6>
-                                    <div class="full">
-                                        <div class="left-col">
-                                            <img class="package-image" src="{{ asset($hotel->image_url) }}"
-                                                alt="featured-img">
-                                        </div>
-                                        <div class="right-col">
-                                            <p>{!! $hotel->description !!}</p>
-                                        </div>
-                                    </div>
+                <div class="accommodation-detail">
+                    <p>ACCOMMODATION</p>
+                    @php //dd($tour->repository->getHotels()); @endphp
+                    @foreach($tour->repository->getHotels() as $hotelData)
+                        @php $hotel = $hotelData['hotel']; @endphp
+                        <div class="locate">
+                            @php $imagePath = asset($hotel->image_url ?? $hotel->gallery()->first()?->file_path ?? ''); @endphp
+                            @if(!empty($imagePath))
+                                <div class="image">
+                                    <img src="{{ asset($imagePath) }}" alt="{{ $hotel->name }}" title="{{ $hotel->name }}" class="default-hotel-trigger-popup">
                                 </div>
-                            </div>
+                            @endif
+                            <div class="text-block">
+                                <h5 class="hotel-info">{{ $hotel->name }}</h5>
+                                <p class="hotel-info">{{ $hotel->accommodationtype?->name }}</p>
+                                <p class="hotel-info">{{ $hotelData['type'] ?? '' }} </p>
+                                <p class="hotel-info">{{ $hotelData['board'] ?? '' }} </p>
+                                <p class="default-hotel-more-info">
+                                    <a href="#" class="default-hotel-moreinfo-href" data-action="popup" data-target="default-hotel-more-popup-info">More information</a>
+                                </p>
+                            </div>                    
                         </div>
-                    </div>
-                   <div class="hotel-board">{{ $hotelData['board'] }}</div>
-                @endforeach
-                {{-- Hidden For Future Use --}}
-                {{--
-                <div class="form-field">
-                    <select wire:model="selectedHotel" name="rooming_configuration">
-                        @foreach($this->tour->repository->getHotels() as $id => $name)
-                            <option value="{{$id}}">{{ $name }}</option>
-                        @endforeach
-                    </select>
+                    @endforeach    
                 </div>
-                --}}
+                <p class="pt20">Choose your preferred bedding configuration for each room</p>
                 <div class="inner-block">
                     <div class="left-col">
                         <h6>Number of rooms</h6>
@@ -347,18 +336,8 @@
                         </div>
                     </div>
                 </div>
-
-
-                <!-- <div class="contain">
-                    <p>
-                        Can't find what you're looking for?
-                        <a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in touch</a>
-                        for a custom package.
-                    </p>
-                </div> -->
             </div>
-            <div class="third-block">
-                <p>Choose your preferred bedding configuration for each room</p>
+            <div class="third-block">                
                 @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
                     <div class="first-bl" wire:key="{{Str::random()}}">                        
                         <div class="inn">
