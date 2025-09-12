@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-
+                {{--
                 <div class="contact-block">
                     <p class="description">If you are a concession card holder, or booking with children under 12, <a href="https://www.kpt.com.au/contact-us/" target="_blank">get in touch</a> for a tailor-made package</p>
                 </div> </br>
@@ -51,6 +51,7 @@
                             touch</a>
                         for a custom package.</p>
                 </div> -->
+                 --}}
             </div>
             <style>
                 .ma-block .row .right-col .contain .third-col ul li p.price.tot-price {
