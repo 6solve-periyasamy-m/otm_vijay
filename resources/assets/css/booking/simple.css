@@ -2975,14 +2975,14 @@ input::-webkit-inner-spin-button {
 .accommodation-detail .text-block {  padding: 24px;}
 .accommodation-detail .locate h5 {  margin: 0 0 6px 0;  /* font-family: "PP Neue Montreal Bold"; */  font-weight: 700;  font-size: 14px;  line-height: 18px;  color: #f35815;}
 .accommodation-detail .locate p {  margin: 0;  font-size: 12px;  line-height: 22px;  color: #f35815;}
-.default-hotel-more-info {  position: relative;  top: 12px;}
+.hotel-more-info {  position: relative;  top: 12px;}
 .accommodation-detail .image img {  width: 100%;  height: 100%;  object-fit: cover;  border-top-left-radius: 24px;  border-bottom-left-radius: 24px;}
 img.default-hotel-trigger-popup {  cursor: pointer;}
 img {  vertical-align: middle;}
 img {  border: 0;}
-p.hotel-info, p.default-hotel-more-info {    margin: 0 !important;    font-size: 12px !important;    line-height: 22px !important;    color: var(--primary-color);    letter-spacing: normal;}
-.default-hotel-more-info a {  color: #f35b15;  text-decoration: underline;}
-.default-hotel-more-info a::after {  content: url('icon/arrow-left-org.svg');  display: block;  position: absolute;  right: -11px;  top: -4px;  transform: rotate(180deg);}
-.default-hotel-more-info {position: relative; top: 12px;}
-.default-hotel-more-info a {  position: relative;}
+p.hotel-info, p.hotel-more-info {    margin: 0 !important;    font-size: 12px !important;    line-height: 22px !important;    color: var(--primary-color);    letter-spacing: normal;}
+.hotel-more-info a {  color: #f35b15;  text-decoration: underline;}
+.hotel-more-info a::after {  content: url('icon/arrow-left-org.svg');  display: block;  position: absolute;  right: -11px;  top: -4px;  transform: rotate(180deg);}
+.hotel-more-info {position: relative; top: 12px;}
+.hotel-more-info a {  position: relative;}
 .pt20 {padding-top: 20px;}

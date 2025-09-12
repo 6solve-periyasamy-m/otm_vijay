@@ -313,12 +313,10 @@
                                 <p class="hotel-info">{{ $hotel->accommodationtype?->name }}</p>
                                 <p class="hotel-info">{{ $hotelData['type'] ?? '' }} </p>
                                 <p class="hotel-info">{{ $hotelData['board'] ?? '' }} </p>
-                                <p class="default-hotel-more-info">
-                                    <a href="#" class="default-hotel-moreinfo-href" data-action="popup" data-target="default-hotel-more-popup-info">More information</a>
-                                </p>
+                                <p class="hotel-more-info"><a>More information</a></p>
                             </div>                    
                         </div>
-                    @endforeach    
+                    @endforeach
                 </div>
                 <p class="pt20">Choose your preferred bedding configuration for each room</p>
                 <div class="inner-block">
