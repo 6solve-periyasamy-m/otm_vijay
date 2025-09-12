@@ -5,6 +5,7 @@ namespace App\Repository\Abstracts;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Activity\ActivityInventory;
 use App\Models\Flight\FlightInventory;
+use App\Models\Location\Currency;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
@@ -30,6 +31,8 @@ abstract class InventoryRepository extends ModelRepository implements HasStockCo
     abstract public function getPurchasePrice(): float;
 
     abstract public function getSalesPrice(): ?float;
+
+    abstract public function getCurrency(): Currency;
 
     abstract public function getPurchasePriceString(): string;
 

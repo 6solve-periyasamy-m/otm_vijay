@@ -5,6 +5,7 @@ namespace App\Repository\Model\Accommodation;
 use App\Exceptions\CannotDeleteException;
 use App\Models\Accommodation\AccommodationInventory;
 use App\Models\Accommodation\AccommodationInventoryTour;
+use App\Models\Location\Currency;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Event;
@@ -206,6 +207,11 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return $this->inventory->purchase_price ?? 0.0;
     }
 
+    public function getCurrency(): Currency
+    {
+        return $this->inventory->currency ?? $this->inventory->component->currency ?? Settings::currency();
+    }
+
     public function getRoomingList(): Collection|array
     {
         return $this->inventory->orderComponents()->with(
@@ -246,12 +252,12 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
 
     public function getLocalPurchasePrice(): ?float
     {
-        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice() ?? 0;
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->getCurrency()) ?? $this->getPurchasePrice() ?? 0;
     }
 
     public function getPurchasePriceString(): string
     {
-        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
+        return f_currency($this->getPurchasePrice(), $this->getCurrency());
     }
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
