@@ -18,6 +18,23 @@ jQuery(document).ready(function () {
         }
     });
 
+
+    jQuery('.hotel-image-popup-block').slick({
+      dots: false,
+      infinite: true,
+      speed: 500,
+      arrows: true,
+      fade: true,
+      cssEase: 'linear'
+    });
+
+    
+    jQuery('.hotel-more-info a').on('click', function(e) {
+      setTimeout(function() {
+        jQuery('.hotel-image-popup-block').slick('setPosition');
+      }, 100);
+    });
+
     // ACTIONS
     document.emojiSource = './tam-emoji/img/';
 

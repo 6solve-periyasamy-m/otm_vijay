@@ -294,6 +294,95 @@
             </div>
 
             <style>
+                 .hotel-more-info-popup {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: #000000BF;
+                    width: 100%;
+                    height: 100%;
+                    padding: 0rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1111 !important;
+                }
+                .hotel-more-info-popup .hotel-more-info-contain {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                }
+                .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block {
+                    max-width: 740px;
+                    width: 86%;
+                    padding: 58px 32px;
+                    background: #ffffff;
+                    position: relative;
+                    box-sizing: border-box;
+                    border-radius: 16px;
+                }
+                .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block .info-body {
+                    max-height: 600px !important;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    padding-top: 20px;
+                }
+                .hotel-more-info-popup .hotel-more-info-contain .hotel-more-info-block .info-body .hotel-close-button {
+                    position: absolute;
+                    top: 25px;
+                    right: 25px;
+                    cursor: pointer;
+                }
+                .hotel-more-info-popup .info-body h4 {
+                    font-family: "Begum-Medium";
+                    text-transform: uppercase;
+                    font-weight: 500;
+                    font-size: 32px;
+                    line-height: 40px;
+                    color: #f35b15;
+                    margin: 0px 0px 20px 0px;
+                }
+                .hotel-more-info-popup .info-body p {
+                    font-family: "PP NeueMontreal Medium";
+                    font-weight: 500;
+                    color: #000;
+                    font-size: 16px;
+                    line-height: 24px;
+                } 
+
+                .hotel-more-info-contain h4 {
+    line-height: 34px;
+}
+
+.ma-block .row .left-col .hotel-more-info-popup h4 {
+    font-family: Begum-Medium;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 44px;
+    color: var(--primary-color);
+    margin: 0 0 20px 0;
+}
+
+.ma-block .row .left-col .hotel-more-info-popup .info-body p, .ma-block .row .left-col .hotel-more-info-popup .info-body ul li {
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 500;
+    color: #000;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.hotel-more-info-popup .hotel-more-info-contain .amenities-container, .hotel-more-info-popup .hotel-more-info-contain {
+    margin-top: 20px;
+}
+
+
+
             </style>
             <!-- <- Rooming -->
             <div class="second-block rme-det">
@@ -302,7 +391,7 @@
                     @php //dd($tour->repository->getHotels()); @endphp
                     @foreach($tour->repository->getHotels() as $hotelData)
                         @php $hotel = $hotelData['hotel']; @endphp
-                        <div class="locate">
+                        <div class="locate" x-data="{ open: false }">
                             @php $imagePath = asset($hotel->image_url ?? $hotel->gallery()->first()?->file_path ?? ''); @endphp
                             @if(!empty($imagePath))
                                 <div class="image">
@@ -314,8 +403,51 @@
                                 <p class="hotel-info">{{ $hotel->accommodationtype?->name }}</p>
                                 <p class="hotel-info">{{ $hotelData['type'] ?? '' }} </p>
                                 <p class="hotel-info">{{ $hotelData['board'] ?? '' }} </p>
-                                <p class="hotel-more-info"><a>More information</a></p>
-                            </div>                    
+                                <p class="hotel-more-info"><a href="#" @click.prevent="open = true">More information</a></p>
+                            </div>
+
+                            <div class="hotel-more-info-popup" x-show="open" x-cloak x-transition @click.self="open = false">
+                                <div class="hotel-more-info-contain">
+                                    <div class="hotel-more-info-block">
+                                        <div class="info-body">
+                                            <div class="hotel-close-button" @click="open = false">
+                                                    <img src="{{ asset('css/booking/icon/Close-Button.svg') }}" alt="Close">
+                                                </div>
+                                            <h4 class="hotel-info">{{ $hotel->name }}</h4>
+                                            <p class="hotel-info">{{ $hotel->address }}</p>
+                                            <div wire:ignore>
+                                                @if(!empty($hotel->gallery) && count($hotel->gallery))
+                                                    <div class="hotel-image-popup-block">
+                                                        @foreach($hotel->gallery as $photo)
+                                                            <div><img class="hotel-zoomable-image" src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy">
+                                                            <div class="zoom__img_icon"><img src="{{ asset('css/booking/icon/zoom-in-fixed-svgrepo-com.svg') }}" alt="zoom icon"></div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div wire:ignore class="amenities-container">
+                                                @if(!empty($hotel->amenities) && count($hotel->amenities))
+                                                    <div class="row">
+                                                        @foreach($hotel->amenities as $item)
+                                                            <div class="col-md-3 col-sm-4 col-6 mb-3">
+                                                                <div class="amenity-icon d-flex align-items-center border rounded overflow-hidden p-3">
+                                                                    @if($item->image_url && !empty($item->image_url))
+                                                                        <img src="{{ asset($item->image_url) }}" class="img-fluid rounded me-3" style="max-width: 24px; max-height: 24px;" alt="{{ $item->name }}">
+                                                                    @endif
+                                                                    <h5 class="mb-0">{{ $item->name }}</h5>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="hotel-description"><p>{!! $hotel->description !!}</p></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -368,13 +500,6 @@
                             </select>
                             @error("rooms.$x.room") <label class="error-label">{{ $message }}</label> @enderror
                         </div>
-                        <!-- <div class="form-field">
-                            <select class="travellers-select" wire:model.live="rooms.{{$x}}.travellers" name="pax_number">
-                                <option value="1">1 Traveller</option>
-                                <option value="2">2 Travellers</option>
-                            </select>
-                            @error("rooms.$x.travellers") <label class="error-label">{{ $message }}</label> @enderror
-                        </div> -->
                     </div>
                 @endfor
             </div>
@@ -408,122 +533,13 @@
     </div>
 </div>
 
-<!-- <div class="mob-trip-summary-block">
-  <div class="block-container">
-      <div class="Inner-container">
-        <div class="mob-static-tip-sum">
-         <h4>Trip Summary</h4>
-         <div class="mob-static-see-more"><p>SEE MORE<p></div>     
-        </div>
-        <div class="static-mobile-description">
-              <h3>British & Irish Lions Tour 2025 Single Game Package - Brisbane</h3>
-              <p class="date">18 July, 2025 - 20 July, 2025</p>
-              <p class="points">Capri by Fraser Brisbane - 2 nights</p>
-              <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
-              <p class="points">Capri by Fraser Brisbane - 2 nights</p>
-              <p class="points">Category 3 Tickets — Test 1 - Wallabies v Lions</p>
-        </div>
-        <div class="mob-no.of-passengers-list">
-           <p>2 Passengers</p>
-        </div>
-        <div class="price-details-block">
-            <ul>
-                <li>
-                <p class="txt">Package Price</p>
-                <p class="price">A$2,000</p>
-                </li>
-                <li>
-                <p class="txt">Single Supplement</p>
-                <p class="price">A$0</p>
-                </li>
-                <li>
-                <p class="txt">GST</p>
-                <p class="price">A$200</p>
-                </li>
-            </ul>
-        </div>
-        <div class="total-block">
-            <ul>
-                <li>
-                <p class="txt">Total</p>
-                <p class="price">A$2000</p>
-                </li>
-            </ul>
-        </div>
-        <div class="submit-btn-cls">
-            <div class="inner">
-                <input class="submit-btn" wire:click="checkout" type="submit" value="Checkout">
-            </div>
-        </div>
-      </div>
-  </div>
-</div> -->
-
-{{--<div class="mob-trip-summary-block_outerdiv" wire:key="{{Str::random()}}">
-    <div class="mob-trip-summary-block">
-        <div class="block-container">
-            <div class="Inner-container">
-                <div class="mob-static-tip-sum">
-                    <h4>Trip Summary</h4>
-                    <p class="price" wire:key="{{Str::random()}}">{{ f_currency($booking->repository->getTotalCost()) }}</p>
-                    <div class="mob-static-see-more mobile_seemore">
-                        <p>SEE MORE
-                        <p>
-                    </div>
-                </div>
-                <div class="static-mobile-description click_popup_div">
-                    <h3 class="event_name">{{ $tour->name }}</h3>
-                    <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
-                    @foreach($tour->repository->getInclusions(4) as $inclusion)
-                        <p class="points">{{ $inclusion }}</p>
-                    @endforeach
-                </div>
-                <div class="mob-no-of-passengers-list">
-                    <p>{{ $this->getTravellerCount() }} Passengers</p>
-                </div>
-                <div class="price-details-block">
-                    <ul>
-                        <li>
-                            <p class="txt">Package Price</p>
-                            <p class="price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
-                        </li>
-                        <li>
-                            @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
-                            <p class="txt">Single Supplement</p>
-                            <p class="price">{{ f_currency($singleOccupancy) }}</p>
-                        </li>
-
-                        @if($booking->repository->getTaxes() !== null)
-                            <li>
-                                <p class="txt">{{ $tour->taxBracket()->name }}</p>
-                                <p class="price">{{ f_currency($booking->repository->getTaxes()) }}</p>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
-                <div class="total-block">
-                    <ul>
-                        <li>
-                            <p class="txt">Total</p>
-                            <p class="price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="mob-static-see-more desktop_seemore">
-                    <p>SEE MORE
-                    <p>
-                </div>
-                <div class="submit-btn-cls">
-                    <div class="inner">
-                        <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>--}}
 <script>
+
+    jQuery(document).on('click', '.hotel-more-info-popup .hotel-close-button,.hotel-more-info-popup .cancel', function () {
+        jQuery(this).closest('.text-block').find('.hotel-more-info-popup').css('visibility', 'hidden')
+    })
+
+
     jQuery('.mob-trip-summary-block .submit-btn-cls .submit-btn').click(function () {
         jQuery('.third-col .submit-btn-cls .submit-btn').trigger('click')
     })
