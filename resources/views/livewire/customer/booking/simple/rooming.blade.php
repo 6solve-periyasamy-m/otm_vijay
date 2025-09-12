@@ -347,12 +347,13 @@
                     color: #f35b15;
                     margin: 0px 0px 20px 0px;
                 }
-                .hotel-more-info-popup .info-body p {
-                    font-family: "PP NeueMontreal Medium";
+                .ma-block .row .left-col .accommodation-detail .hotel-more-info-popup .info-body p.hotel-info {
+                    font-family: "PP Neue Montreal Medium";
                     font-weight: 500;
                     color: #000;
-                    font-size: 16px;
-                    line-height: 24px;
+                    font-size: 16px !important;
+                    line-height: 24px !important;
+                    margin-bottom: 10px;
                 } 
 
                 .hotel-more-info-contain h4 {
@@ -375,15 +376,40 @@
     color: #000;
     font-size: 16px;
     line-height: 24px;
+    letter-spacing: 0px;
 }
 
 .hotel-more-info-popup .hotel-more-info-contain .amenities-container, .hotel-more-info-popup .hotel-more-info-contain {
     margin-top: 20px;
 }
-
-
-
-            </style>
+.default-close-zoom img{cursor: pointer;}
+.hotel-zoom-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+.default-close-zoom{
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    font-size: 30px;
+    color: var(--primary-color) !important;
+    cursor: pointer;
+    font-size: 60px !important;
+    width: 50px !important;
+}
+.default-zoom-slider {width: 80%;}
+.default-zoom-slider .slick-list { max-height: 96vh;}
+.hotel-zoom-overlay .default-zoom-slider .slick-slide > div > div{height: 600px;}
+.hotel-zoom-overlay .default-zoom-slider img{width: 100%;height: 100%;object-fit: cover;}
+</style>
             <!-- <- Rooming -->
             <div class="second-block rme-det">
                 <div class="accommodation-detail">
@@ -426,8 +452,15 @@
                                                     </div>
                                                 @endif
                                             </div>
-
-                                            <div wire:ignore class="amenities-container">
+                                            <div class="hotel-zoom-overlay">
+                                                <div class="default-zoom-slider">
+                                                    @foreach($hotel->gallery as $photo)
+                                                        <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
+                                                    @endforeach
+                                                </div>
+                                                <span class="default-close-zoom"><img src="{{ asset('/icons/Close-Button.svg') }}" alt="zoom icon"></span>
+                                            </div>
+                                            <div wire:ignore class="default-amenities-container">
                                                 @if(!empty($hotel->amenities) && count($hotel->amenities))
                                                     <div class="row">
                                                         @foreach($hotel->amenities as $item)

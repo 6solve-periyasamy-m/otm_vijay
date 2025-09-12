@@ -35,6 +35,21 @@ jQuery(document).ready(function () {
       }, 100);
     });
 
+     // On image click, open zoom view
+    jQuery('.hotel-image-popup-block .zoom__img_icon').on('click', function() {
+        console.log("YESSS");
+      const index = $(this).closest('.slick-slide').attr('data-slick-index');
+      jQuery('.hotel-zoom-overlay').fadeIn().css({display:'flex'});
+      jQuery('.hotel-zoom-slider').slick('slickGoTo', index);
+    });
+    jQuery('.default-close-zoom').on('click', function() {
+      $('.hotel-zoom-overlay').fadeOut();
+    });
+    jQuery('.default-zoom-slider').slick({
+        arrows: true,
+        slidesToShow: 1,
+        infinite: false
+        });
     // ACTIONS
     document.emojiSource = './tam-emoji/img/';
 

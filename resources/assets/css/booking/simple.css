@@ -21,7 +21,10 @@
     font-family: "PlayfairDisplay-Regular";
     src: url(./font/PlayfairDisplay-Regular.ttf);
 }
-
+@font-face {
+    font-family: "PP Neue Montreal Bold";
+    src: url(./font/ppneuemontreal-bold.otf);
+}
 .third-block .form-field.sng-cls::before{
 content: " ";
 background: url('../booking/icon/single_bed.svg');
@@ -372,7 +375,7 @@ body {
 }
 
 .ma-block .row .right-col {
-    width: 40%;
+    width: 45%;
 }
 
 .ma-block .row .left-col h3, .ma-block .row .left-col h4, .ma-block .row .left-col h6, .ma-block .row .left-col p {
@@ -646,9 +649,8 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
 
 .ma-block .row .right-col .contain .snd-sec {
     display: block;
-    margin-bottom: 8px;
-    /* padding-bottom:22px;
-    border-bottom:1px solid #FAE8D3; */
+    padding-bottom:22px;
+    border-bottom:1px solid #FAE8D3;
 }
 
 .ma-block .row .right-col .contain .snd-sec .left-col {
@@ -792,14 +794,15 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     width:100%;
     height:100%;
 }
-.submit-btn-cls input:hover {
+/* .submit-btn-cls input:hover {
     color: var(--primary-color);
     background: transparent;
     transition: 0.5s;
-}
+} 
 .submit-btn-cls:hover .inner:after {
     background: url(icon/arrow-down.svg) no-repeat;
 }
+*/
 .ma-block .row .right-col .contain .top-sec .upgrade-cls:hover {
     background: var(--primary-color);
     color: var(--white);
@@ -865,13 +868,13 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     display: inline-block;
 }
 
-.ma-block .row .left-col .contain .accommodation-details-hover {
+/* .ma-block .row .left-col .contain .accommodation-details-hover {
     position: absolute;
     top: 41px;
     left: 0;
     max-width: 425px;
     z-index: 999;
-}
+} */
 
 .ma-block .row .left-col .contain .accommodation-details-hover .contain {
     background: var(--white);
@@ -918,9 +921,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin-bottom: 20px;
 }
 
-.ma-block .row .left-col .contain .accommodation-details-hover, .ma-block .information-hover:after {
+/* .ma-block .row .left-col .contain .accommodation-details-hover, .ma-block .information-hover:after {
     display: none;
-}
+} */
 
 .ma-block .second-block .hotel-details .information-hover {
     margin-left: 5.33px;
@@ -2477,7 +2480,7 @@ input::-webkit-inner-spin-button {
     .ma-block .row .right-col .contain {margin-top:32px;margin-bottom:35px;}
     .ma-block .row .right-col .contain .snd-sec .left-col {margin-bottom:0px!important;}
     .ma-block .row .right-col .contain .snd-sec {border-bottom:0px!important;padding-bottom:0px!important;}
-    /* .ma-block .row .right-col .contain .third-col {display:none!important;} */
+    .ma-block .row .right-col .contain .third-col {display:none!important;}
     .top-head .row .col-two .cont-details .single-div a.phone:before {
         top: 8px;
         left: 8px;
@@ -2698,6 +2701,7 @@ input::-webkit-inner-spin-button {
     top:16px;
     right:40%;
 }
+/* 
 .submit-btn-cls:hover {
     background: transparent;
     border: 1px solid var(--primary-color);
@@ -2706,7 +2710,7 @@ input::-webkit-inner-spin-button {
     background: transparent;
     border: 0;
     color: var(--primary-color);
-}
+} */
 .submit-btn-cls input {
     background:transparent!important;
     transition:0s!important;
@@ -2989,3 +2993,72 @@ p.hotel-info, p.hotel-more-info {    margin: 0 !important;    font-size: 12px !i
 .hotel-more-info {position: relative; top: 12px;}
 .hotel-more-info a {  position: relative;}
 .pt20 {padding-top: 20px;}
+.hotel-image-popup-block > div > div > div > div{height: 320px;}
+.hotel-image-popup-block .slick-next {
+    right: 20px;
+    z-index: 9;
+}
+ .hotel-image-popup-block .slick-prev {
+    left: 20px;
+    z-index: 9;
+}
+.hotel-image-popup-block .slick-prev:before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 20px;
+    background: url(/icons/Left-Arrow-Slick.svg) no-repeat center center / cover;
+    position: relative;
+    cursor: pointer;
+    opacity: 1;
+}
+.hotel-image-popup-block .slick-next:before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 20px;
+    background: url(/icons/Slick-Right-Arrow.svg) no-repeat center center / cover;
+    position: relative;
+    cursor: pointer;
+    opacity: 1;
+}
+.hotel-image-popup-block img{width: 100%; height: 100%; object-fit: cover;}
+.zoom__img_icon{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 4px;
+    right: 0px;
+    cursor: pointer;
+}
+.zoom__img_icon img{
+    width: 40px;
+    height: 40px;
+}
+.hotel-info{
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 500;
+    color: #000;
+    font-size: 16px;
+    line-height: 24px;
+}
+.amenity_row{display: flex;margin-right: -15px;margin-left: -15px;}
+.amenity-icon{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.default-amenities-container .amenity_row .amenity-icon h5{
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 500;
+    color: #000;
+    font-size: 16px;
+    line-height: 24px;
+    margin: 10px 0px;
+}
+
+.hotel-image-popup-block > div > div > div > div > div{height: 320px;}
+@media only screen and (max-width: 767px) {
+.amenity_row{flex-flow: column;}
+}
+ 
