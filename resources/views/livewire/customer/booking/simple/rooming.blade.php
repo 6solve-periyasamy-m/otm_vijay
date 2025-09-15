@@ -353,7 +353,7 @@
                     color: #000;
                     font-size: 16px !important;
                     line-height: 24px !important;
-                    margin-bottom: 10px;
+                    margin-bottom: 10px !important;
                 } 
 
                 .hotel-more-info-contain h4 {
@@ -409,6 +409,12 @@
 .default-zoom-slider .slick-list { max-height: 96vh;}
 .hotel-zoom-overlay .default-zoom-slider .slick-slide > div > div{height: 600px;}
 .hotel-zoom-overlay .default-zoom-slider img{width: 100%;height: 100%;object-fit: cover;}
+.hotel-image-popup-block > div > div > div > div > div{height: 320px;}
+.hotel-zoom-overlay .default-zoom-slider .slick-next:before,.hotel-zoom-overlay .default-zoom-slider .slick-prev:before{font-size:30px;}
+.hotel-zoom-overlay .default-zoom-slider .slick-prev{left: -35px;}
+@media only screen and (max-width: 767px) {
+.amenity_row{flex-flow: column;}
+}
 </style>
             <!-- <- Rooming -->
             <div class="second-block rme-det">
@@ -458,11 +464,11 @@
                                                         <div><img src="{{ asset($photo->file_path) }}" alt="{{ $hotel->name }}" loading="lazy"></div>
                                                     @endforeach
                                                 </div>
-                                                <span class="default-close-zoom"><img src="{{ asset('/icons/Close-Button.svg') }}" alt="zoom icon"></span>
+                                                <span class="default-close-zoom"><img src="{{ asset('css/booking/icon/Close-Button.svg') }}" alt="zoom icon"></span>
                                             </div>
                                             <div wire:ignore class="default-amenities-container">
                                                 @if(!empty($hotel->amenities) && count($hotel->amenities))
-                                                    <div class="row">
+                                                    <div class="amenity_row">
                                                         @foreach($hotel->amenities as $item)
                                                             <div class="col-md-3 col-sm-4 col-6 mb-3">
                                                                 <div class="amenity-icon d-flex align-items-center border rounded overflow-hidden p-3">
@@ -473,10 +479,10 @@
                                                                 </div>
                                                             </div>
                                                         @endforeach
-                                                    </div>
+                                                        </div>
                                                 @endif
                                             </div>
-                                            <div class="hotel-description"><p>{!! $hotel->description !!}</p></div>
+                                            <div class="hotel-description"><div>{!! $hotel->description !!}</div></div>
                                         </div>
                                     </div>
                                 </div>
