@@ -69,12 +69,14 @@ class SendPopupMail extends Component
         $this->quoteId = $quoteId;
         $this->paying = (int)$paying;
         $this->travelling = (int)$travelling;
-        $leadTraveller = $this->quote?->leadTraveller?->customer->first_name;
+        $leadTraveller = $this->quote?->leadTraveller?->customer?->last_name;
         $this->fromEmail = $this->quote->consultant?->email ?? config('mail.from.address');
         $this->fromName = $this->quote->consultant?->name ?? config('mail.from.name');
         $this->to = $this->quote->agent?->email ?? $this->quote->organization?->contact_email ?? $this->quote->leadTraveller->customer->email_address;
         $eventName = $this->quote?->event?->name;
-        $this->subject = "Quote: {$this->quote->reference}" . ($eventName ? " - {$eventName}" : '') . ($leadTraveller ? " - {$leadTraveller}" : '');
+        //$this->subject = "Quote: {$this->quote->reference}" . ($eventName ? " - {$eventName}" : '') . ($leadTraveller ? " - {$leadTraveller}" : '');
+        $this->subject = "Quote: " . ($eventName ? " - {$eventName}" : '') . $this->quote->reference. ($leadTraveller ? " - {$leadTraveller}" : '');
+        
 
         // If email body is empty, use the default template
         $this->emailBody = setting("email.quote.template", '');    
