@@ -140,10 +140,6 @@ return [
                 'header' => 'Sent Versions',
                 'when' => 'When',
                 'email' => 'Sent to',
-                'from_email' => 'Sent From',
-                'from_name' => 'Sent From Name',
-                'subject' => 'Subject',
-                'bcc' => 'Bcc',
                 'paying' => 'Paying Travellers',
                 'travelling' => 'Non-Paying Travellers',
                 'reference' => 'Reference'
