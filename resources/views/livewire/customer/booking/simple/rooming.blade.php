@@ -410,11 +410,13 @@
 .hotel-zoom-overlay .default-zoom-slider .slick-slide > div > div{height: 600px;}
 .hotel-zoom-overlay .default-zoom-slider img{width: 100%;height: 100%;object-fit: cover;}
 .hotel-image-popup-block > div > div > div > div > div{height: 320px;}
-.hotel-zoom-overlay .default-zoom-slider .slick-next:before,.hotel-zoom-overlay .default-zoom-slider .slick-prev:before{font-size:30px;}
-.hotel-zoom-overlay .default-zoom-slider .slick-prev{left: -35px;}
-@media only screen and (max-width: 767px) {
-.amenity_row{flex-flow: column;}
-}
+.hotel-zoom-overlay .default-zoom-slider .slick-next:before,.hotel-zoom-overlay .default-zoom-slider .slick-prev:before{font-size:50px;}
+.hotel-zoom-overlay .default-zoom-slider .slick-prev{left: -55px;}
+@media only screen and (max-width: 1024px) {
+    .hotel-zoom-overlay .default-zoom-slider .slick-next:before,.hotel-zoom-overlay .default-zoom-slider .slick-prev:before{font-size:30px;}
+    .hotel-zoom-overlay .default-zoom-slider .slick-prev{left: -35px;}
+}@media only screen and (max-width: 767px) {.amenity_row{flex-flow: column;}}
+.ma-block .row .left-col .contain .accommodation-details-hover{ position: absolute; top: 41px; left: 0; max-width: 425px; z-index: 999;}
 </style>
             <!-- <- Rooming -->
             <div class="second-block rme-det">

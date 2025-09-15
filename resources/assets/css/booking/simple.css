@@ -868,13 +868,13 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     display: inline-block;
 }
 
-/* .ma-block .row .left-col .contain .accommodation-details-hover {
+.ma-block .row .left-col .contain .accommodation-details-hover {
     position: absolute;
     top: 41px;
     left: 0;
     max-width: 425px;
     z-index: 999;
-} */
+}
 
 .ma-block .row .left-col .contain .accommodation-details-hover .contain {
     background: var(--white);
@@ -921,9 +921,9 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin-bottom: 20px;
 }
 
-/* .ma-block .row .left-col .contain .accommodation-details-hover, .ma-block .information-hover:after {
+.ma-block .row .left-col .contain .accommodation-details-hover, .ma-block .information-hover:after {
     display: none;
-} */
+}
 
 .ma-block .second-block .hotel-details .information-hover {
     margin-left: 5.33px;

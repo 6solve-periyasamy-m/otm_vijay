@@ -40,7 +40,7 @@ jQuery(document).ready(function () {
         console.log("YESSS");
       const index = $(this).closest('.slick-slide').attr('data-slick-index');
       jQuery('.hotel-zoom-overlay').fadeIn().css({display:'flex'});
-      jQuery('.hotel-zoom-slider').slick('slickGoTo', index);
+      jQuery('.default-zoom-slider').slick('slickGoTo', index);
     });
     jQuery('.default-close-zoom').on('click', function() {
       $('.hotel-zoom-overlay').fadeOut();
@@ -52,6 +52,13 @@ jQuery(document).ready(function () {
         });
     // ACTIONS
     document.emojiSource = './tam-emoji/img/';
+
+    jQuery('.hotel-image-popup-block').slick({
+      arrows: true,
+      infinite: false,
+      slidesToShow: 1,
+      cssEase: 'linear',
+    });
 
     //dynamic rooms
 
@@ -294,7 +301,7 @@ jQuery(document).ready(function () {
         }
     });*/
 
-    //hover details
+   //hover details
     jQuery(document).on('mouseover', '.second-block .hotel-details .information-hover', function () {
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
