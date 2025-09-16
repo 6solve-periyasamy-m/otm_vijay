@@ -36,11 +36,20 @@ jQuery(document).ready(function () {
 
 
     
-    jQuery('.hotel-more-info a').on('click', function(e) {
-      setTimeout(function() {
-        jQuery('.hotel-image-popup-block').slick('setPosition');
-      }, 100);
-    });
+     jQuery('.hotel-more-info a').on('click', function(e) {
+    setTimeout(function() {
+        if (!jQuery('.hotel-image-popup-block').hasClass('slick-initialized')) {
+            jQuery('.hotel-image-popup-block').slick({
+                arrows: true,
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1
+            });
+        } else {
+            jQuery('.hotel-image-popup-block').slick('setPosition');
+        }
+    }, 100);
+});
 
      // On image click, open zoom view
     jQuery('.hotel-image-popup-block .zoom__img_icon').on('click', function() {
@@ -62,12 +71,12 @@ jQuery(document).ready(function () {
     // ACTIONS
     document.emojiSource = './tam-emoji/img/';
 
-    jQuery('.hotel-image-popup-block').slick({
-      arrows: true,
-      infinite: false,
-      slidesToShow: 1,
-      cssEase: 'linear',
-    });
+    // jQuery('.hotel-image-popup-block').slick({
+    //   arrows: true,
+    //   infinite: false,
+    //   slidesToShow: 1,
+    //   cssEase: 'linear',
+    // });
 
     //dynamic rooms
 
