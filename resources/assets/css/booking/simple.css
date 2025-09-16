@@ -3007,7 +3007,7 @@ p.hotel-info, p.hotel-more-info {    margin: 0 !important;    font-size: 12px !i
     display: inline-block;
     width: 12px;
     height: 20px;
-    background: url(/icons/Left-Arrow-Slick.svg) no-repeat center center / cover;
+    background: url('../booking/icon/Left-Arrow-Slick.svg') no-repeat center center / cover;
     position: relative;
     cursor: pointer;
     opacity: 1;
@@ -3017,7 +3017,7 @@ p.hotel-info, p.hotel-more-info {    margin: 0 !important;    font-size: 12px !i
     display: inline-block;
     width: 12px;
     height: 20px;
-    background: url(/icons/Slick-Right-Arrow.svg) no-repeat center center / cover;
+    background: url('../booking/icon/Slick-Right-Arrow.svg') no-repeat center center / cover;
     position: relative;
     cursor: pointer;
     opacity: 1;
