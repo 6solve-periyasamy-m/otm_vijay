@@ -417,6 +417,8 @@
     .hotel-zoom-overlay .default-zoom-slider .slick-prev{left: -35px;}
 }@media only screen and (max-width: 767px) {.amenity_row{flex-flow: column;}}
 .ma-block .row .left-col .contain .accommodation-details-hover{ position: absolute; top: 41px; left: 0; max-width: 425px; z-index: 999;}
+.hotel-image-popup-block .slick-slide{position: relative;}
+
 </style>
             <!-- <- Rooming -->
             <div class="second-block rme-det">

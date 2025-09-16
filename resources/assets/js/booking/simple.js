@@ -19,15 +19,6 @@ jQuery(document).ready(function () {
     });
 
 
-    jQuery('.hotel-image-popup-block').slick({
-      dots: false,
-      infinite: true,
-      speed: 500,
-      arrows: true,
-      fade: true,
-      cssEase: 'linear'
-    });
-
     
     jQuery('.hotel-more-info a').on('click', function(e) {
       setTimeout(function() {
@@ -37,7 +28,6 @@ jQuery(document).ready(function () {
 
      // On image click, open zoom view
     jQuery('.hotel-image-popup-block .zoom__img_icon').on('click', function() {
-        console.log("YESSS");
       const index = $(this).closest('.slick-slide').attr('data-slick-index');
       jQuery('.hotel-zoom-overlay').fadeIn().css({display:'flex'});
       jQuery('.default-zoom-slider').slick('slickGoTo', index);
@@ -48,7 +38,8 @@ jQuery(document).ready(function () {
     jQuery('.default-zoom-slider').slick({
         arrows: true,
         slidesToShow: 1,
-        infinite: false
+        infinite: false,
+        cssEase: 'linear'
         });
     // ACTIONS
     document.emojiSource = './tam-emoji/img/';
