@@ -299,7 +299,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        $item = $this->getInventory()?->getItineraryItem($quantity);
+        $item = $this->getInventory()?->getItineraryItem($quantity, $this->tourComponent->order);
         if ($this->tourComponent->flight_type === 'Outbound') { $item->type = 'Outbound Flight'; }
         elseif ($this->tourComponent->flight_type === 'Inbound') { $item->type = 'Inbound Flight'; }
         else { $item->type = 'Mid-Package Flight'; }

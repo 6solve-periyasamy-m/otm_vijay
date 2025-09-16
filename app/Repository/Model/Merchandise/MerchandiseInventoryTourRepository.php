@@ -241,7 +241,7 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        return $this->getInventory()?->getItineraryItem($quantity);
+        return $this->getInventory()?->getItineraryItem($quantity, $this->tourComponent->order);
     }
 
     public function getOverview(): string

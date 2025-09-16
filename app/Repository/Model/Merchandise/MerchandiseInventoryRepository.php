@@ -246,7 +246,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
         return f_currency($this->getPurchasePrice());
     }
 
-    public function getItineraryItem(int|null $quantity = null): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null, int|null $order = 0): ItineraryItem
     {
         $details = [
             'Type' => $this->inventory->component->type?->name,
@@ -259,6 +259,7 @@ class MerchandiseInventoryRepository extends InventoryRepository
             $this->inventory->component->name,
             'Merchandise',
             1,
+            $order,
             $details
         );
     }

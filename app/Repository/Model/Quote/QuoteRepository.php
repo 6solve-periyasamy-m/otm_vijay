@@ -1202,7 +1202,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $items[$heading][] = $item;
         }
         foreach ($items as $key => $data) {
-            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->sortKey >= $b->sortKey ? 1 : -1; });
+            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->compare($b); });
             $items[$key] = $data;
         }
         if (isset($this->quote->sections) && !empty($this->quote->sections)){
