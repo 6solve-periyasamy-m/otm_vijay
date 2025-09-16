@@ -319,7 +319,7 @@
                     @foreach($quote->sentQuotes as $sent)
                         <tr>
                             <td data-order="{{ $sent->sent->unix() }}">{{ f_datetime($sent->sent) }}</td>
-                            <td>{{ $sent->from_email }} {{$sent->id}}</td>
+                            <td>{{ $sent->from_email }}</td>
                             <td>{{ $sent->recipient }}</td>                            
                             <td>{{ $sent->bcc }}</td>
                             <td>{{ $sent->built->ref }}</td> 
