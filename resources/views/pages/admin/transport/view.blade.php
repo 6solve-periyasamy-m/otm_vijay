@@ -103,12 +103,18 @@
                 <th scope="col">Contracted Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
+                <th scope="col">Occupancy</th>                
                 <th scope="col">Internal Notes</th>
                 <th scope="col">External Notes</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             @foreach($transport->transportInventory as $inventory)
+                @php
+                    $occupancy = $inventory->transportOccupancy;
+                    $name = $occupancy?->name;
+                    $maxOccupancy = $occupancy?->maximum_occupancy;
+                @endphp
                 <tr>
                     <td>{{ $inventory->travelClass->name }}</td>
                     <td>{{ $inventory->transport_number ?? 'Not Set' }}</td>
@@ -133,6 +139,11 @@
                     <td>{{ $inventory->contracted }}</td>
                     <td>{{ f_currency($inventory->purchase_price, $inventory->repository->getCurrency()) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
+                    <td>
+                        @if ($name)
+                            {{ $name }}@if ($maxOccupancy) ({{ $maxOccupancy }}) @endif
+                        @endif
+                    </td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>
                     <td class="actions-4">
