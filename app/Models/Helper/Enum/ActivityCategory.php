@@ -15,8 +15,8 @@ enum ActivityCategory: int
     public function label(): string
     {
         return match ($this) {
-            self::NORMAL => "Normal Activity",
-            self::MAIN => "Main Activity",
+            self::NORMAL => "Additional Inclusions",
+            self::MAIN => "Main Event",
         };
     }
 

@@ -17,6 +17,7 @@ class Form extends Component
     public Accommodation|int $accommodation;
     public AccommodationInventory|int|null $inventory;
     public $minEndDate;
+    public bool $checkOutUpdated = false;
 
     public function mount(Accommodation|int $accommodation, AccommodationInventory|int|null $inventory = null): void
     {
@@ -31,15 +32,19 @@ class Form extends Component
     {
         if ($key === 'inventory.check_in') {
             $this->handleCheckInChange($value);
+        } else if ($key === 'inventory.check_out') {
+            $this->checkOutUpdated = true;
         }
     }
 
     private function handleCheckInChange($value)
     {
-        if ($value) {
+        if ($value && !$this->checkOutUpdated) {
             $startDateTime = Carbon::parse($value);
             $this->minEndDate = $startDateTime->toDateTimeString();
-            $this->inventory->check_out = $startDateTime->copy()->addHour()->toDateTimeString();
+            if ($this->inventory->check_out->lt($this->minEndDate)) {
+                $this->inventory->check_out = $startDateTime->copy()->addHour()->toDateTimeString();
+            }
         }
     }
 
@@ -76,7 +81,7 @@ class Form extends Component
             'inventory.stock_parent_id' => 'nullable|integer|exists:accommodation_inventories,id',
             'inventory.check_in' => 'required|date',
             'inventory.check_in_time_confirmed' => 'nullable|boolean',
-            'inventory.check_out' => 'required|date',
+            'inventory.check_out' => 'required|date|after:inventory.check_in',
             'inventory.check_out_time_confirmed' => 'nullable|boolean',
             'inventory.fit_selectable' => 'nullable|boolean',
             'inventory.stock' => 'nullable|integer',
