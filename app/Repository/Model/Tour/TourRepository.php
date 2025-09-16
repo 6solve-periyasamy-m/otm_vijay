@@ -672,18 +672,25 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         $seen = [];
         foreach ($this->tour->accommodationInventoryTours as $component) {
             $key = 'accommodation-' .  $component->inventory->component->id;
-            if (in_array($key, $seen)) { continue; }
-            $seen[] = $key;
+
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                if (in_array($key, $seen)) {
+                    $found = $components[$key];
+                    if ($found->getStartTime()?->gt($component->repository->getStartTime()) ?? true) {
+                        $components[$key] = $component;
+                    }
+                } else {
+                    $components[$key] = $component->inventory->repository;
+                }
             }
+            $seen[] = $key;
         }
         foreach ($this->tour->activityInventoryTours as $component) {
             $key = "activity-{$component->activity_inventory_id}";
             if (in_array($key, $seen)) { continue; }
             $seen[] = $key;
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                $components[$key] = $component->inventory->repository;
             }
         }
         foreach ($this->tour->merchandise as $component) {
@@ -691,7 +698,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             if (in_array($key, $seen)) { continue; }
             $seen[] = $key;
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                $components[$key] = $component->inventory->repository;
             }
         }
         foreach ($this->tour->transportInventoryTours as $component) {
@@ -699,7 +706,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             if (in_array($key, $seen)) { continue; }
             $seen[] = $key;
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                $components[$key] = $component->inventory->repository;
             }
         }
         usort($components, static function (InventoryRepository $a, InventoryRepository $b) {
