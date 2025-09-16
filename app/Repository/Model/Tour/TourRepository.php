@@ -677,7 +677,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 if (in_array($key, $seen)) {
                     $found = $components[$key];
                     if ($found->getStartTime()?->gt($component->repository->getStartTime()) ?? true) {
-                        $components[$key] = $component;
+                        $components[$key] = $component->inventory->repository;
                     }
                 } else {
                     $components[$key] = $component->inventory->repository;
