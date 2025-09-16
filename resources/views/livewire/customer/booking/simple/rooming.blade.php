@@ -202,12 +202,6 @@
                     padding-bottom: 180px;
                 }
 
-                @media only screen and (min-width:768px) {
-                    .bottom-foot {
-                        position: relative;
-                        bottom: 164px;
-                    }
-                }
                 .second-block.date-details .date_outer_div{
                         border: 1.5px solid var(--primary-color);
                         display: flex;
