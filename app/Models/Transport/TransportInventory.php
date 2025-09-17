@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use App\Models\Transport\TransportOccupancy;
+use App\Models\User;
 
 /**
  * App\Models\Transport\TransportInventory
@@ -224,6 +226,20 @@ class TransportInventory extends Model
         $maxOccupancy = $this->transportOccupancy?->maximum_occupancy;
 
         return is_null($maxOccupancy) || $maxOccupancy >= $passengerCount;
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (TransportInventory $transportInventory) {
+            if (auth()->check() && !$transportInventory->created_by) {
+                $transportInventory->created_by = auth()->id();
+            }
+        });
     }
 
 }

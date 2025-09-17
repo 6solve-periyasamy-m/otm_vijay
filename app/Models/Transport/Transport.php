@@ -22,6 +22,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use App\Models\User;
 
 /**
  * App\Models\Transport\Transport
@@ -150,5 +151,19 @@ class Transport extends Model
     public function __toString(): string
     {
         return "{$this->name} ({$this->transportType}) ({$this->departureAddress->name} to {$this->arrivalAddress->name}) ({$this->operator})";
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($transport) {
+            if (auth()->check() && empty($transport->created_by)) {
+                $transport->created_by = auth()->id();
+            }
+        });
     }
 }
