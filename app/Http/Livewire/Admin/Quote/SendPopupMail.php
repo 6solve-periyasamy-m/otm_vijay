@@ -2,18 +2,13 @@
 
 namespace App\Http\Livewire\Admin\Quote;
 
+use App\Mail\QuoteCustomMail;
 use App\Models\Quote\Quote;
-use App\Models\Quote\SentQuote;
+use Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Mail\Storage\QuoteMail;
-use App\Mail\Storage\Attachment;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use App\Mail\QuoteCustomMail;
-use Auth;
-use Illuminate\Support\Facades\Validator;
-use Exception;
 
 class SendPopupMail extends Component
 {
@@ -79,7 +74,9 @@ class SendPopupMail extends Component
         
 
         // If email body is empty, use the default template
-        $this->emailBody = setting("email.quote.template", '');    
+        if (empty($this->emailBody)) {
+            $this->emailBody = setting("email.quote.template", '');
+        }
         $this->successMessage = '';
         $this->errorMessage = '';    
         $this->showModal = true;
