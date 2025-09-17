@@ -83,4 +83,12 @@ class EventRepository extends ModelRepository implements HasOrderManifest
     {
         return $this->event->orders()->with(OrderManifestRepository::getEagerLoads())->get();
     }
+
+    public function duplicate(): Event|null
+    {
+        $event = $this->event->replicate(['id',]);
+        $event->name .= ' (Duplicate)';
+        $event->save();
+        return $event;
+    }
 }

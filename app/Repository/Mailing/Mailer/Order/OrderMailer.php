@@ -9,8 +9,8 @@ use App\Mail\Storage\OrderMail;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Repository\Model\Order\InvoiceRepository;
-use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Log;
 
 class OrderMailer
@@ -154,7 +154,7 @@ class OrderMailer
         $invoice->organization = $order->organization ?? null;
         $invoice->agent = $order->agent ?? null;
 
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email. ";" . (setting('system.bcc.mail') ?? "") : "";
+        //$bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email. ";" . (setting('system.bcc.mail') ?? "") : "";
 
         try {
             (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))
