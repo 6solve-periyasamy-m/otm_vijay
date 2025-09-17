@@ -12,12 +12,12 @@ Route::get('/', [AccommodationController::class, 'index'])->name('accommodations
 Route::get('/create', [AccommodationController::class, 'create'])->name('accommodations.create')->middleware('bouncer:Accommodation\Accommodation,create');
 Route::post('/create', [AccommodationController::class, 'store'])->name('accommodations.store')->middleware('bouncer:Accommodation\Accommodation,create');
 Route::get('/identifiers', [AccommodationInventoryController::class, 'exportIdentifier'])->name('accommodation-inventories.identifiers')->middleware('bouncer:Accommodation\Accommodation,read');
-Route::post('/delete', DeleteAccommodation::class)->name('accommodations.delete');
+Route::post('/delete', DeleteAccommodation::class)->name('accommodations.delete|self-delete');
 Route::prefix('{accommodation}')->group(function () {
     Route::get('/', [AccommodationController::class, 'view'])->name('accommodations.view')->middleware('bouncer:Accommodation\Accommodation,read');
     Route::get('/duplicate', [AccommodationController::class, 'duplicate'])->name('accommodations.duplicate')->middleware('bouncer:Accommodation\Accommodation,create');
-    Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('bouncer:Accommodation\Accommodation,update');
-    Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('bouncer:Accommodation\Accommodation,update');
+    Route::get('/update', [AccommodationController::class, 'edit'])->name('accommodations.edit')->middleware('bouncer:Accommodation\Accommodation,update|self-update');
+    Route::post('/update', [AccommodationController::class, 'update'])->name('accommodations.update')->middleware('bouncer:Accommodation\Accommodation,update|self-update');
     Route::get('/archive', [AccommodationController::class, 'archive'])->name('accommodations.archive')->middleware('bouncer:Accommodation\Accommodation,delete');
     Route::get('/duplicate', [AccommodationController::class, 'duplicate'])->name('accommodations.duplicate')->middleware('bouncer:Accommodation\Accommodation,create');
     Route::get('/export', [AccommodationController::class, 'exportInventory'])->name('accommodations.inventory.export')->middleware('bouncer:Accommodation\AccommodationInventory,update');
@@ -29,9 +29,9 @@ Route::prefix('{accommodation}')->group(function () {
         Route::get('/create', [AccommodationInventoryController::class, 'create'])->name('accommodation-inventories.create')->middleware('bouncer:Accommodation\AccommodationInventory,create');
         Route::post('/create', [AccommodationInventoryController::class, 'store'])->name('accommodation-inventories.store')->middleware('bouncer:Accommodation\AccommodationInventory,create');
         Route::prefix('{inventory}')->group(function () {
-            Route::get('/update', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit')->middleware('bouncer:Accommodation\AccommodationInventory,update');
-            Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('bouncer:Accommodation\AccommodationInventory,update');
-            Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('bouncer:Accommodation\AccommodationInventory,delete');
+            Route::get('/update', [AccommodationInventoryController::class, 'edit'])->name('accommodation-inventories.edit')->middleware('bouncer:Accommodation\AccommodationInventory,update|self-update');
+            Route::post('/update', [AccommodationInventoryController::class, 'update'])->name('accommodation-inventories.update')->middleware('bouncer:Accommodation\AccommodationInventory,update|self-update');
+            Route::post('/delete', [AccommodationInventoryController::class, 'destroy'])->name('accommodation-inventories.delete')->middleware('bouncer:Accommodation\AccommodationInventory,delete|self-delete');
             Route::get('/duplicate', [AccommodationInventoryController::class, 'duplicate'])->name('accommodation-inventories.duplicate')->middleware('bouncer:Accommodation\AccommodationInventory,create');
             Route::get('/rooming', [AccommodationInventoryController::class, 'rooming'])->name('accommodation-inventories.rooming')->middleware('bouncer:Accommodation\AccommodationInventory,read');
             Route::get('/rooming/{extension}', [AccommodationInventoryController::class, 'exportRooming'])->name('accommodation-inventories.rooming.export')->middleware('bouncer:Accommodation\AccommodationInventory,read');

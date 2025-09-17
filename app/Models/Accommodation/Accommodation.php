@@ -22,6 +22,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use App\Models\User;
 
 /**
  * App\Models\Accommodation\Accommodation
@@ -146,5 +147,19 @@ class Accommodation extends Model
     public function amenities()
     {
         return $this->belongsToMany(Amenity::class, 'accommodation_amenities');
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($accommodation) {
+            if (auth()->check() && empty($accommodation->created_by)) {
+                $accommodation->created_by = auth()->id();
+            }
+        });
     }
 }

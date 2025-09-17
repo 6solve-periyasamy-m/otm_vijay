@@ -40,13 +40,13 @@
                 </div>
 
                 <div class="col-12">
-                    @can('update', \App\Models\Flight\Flight::class)
+                    @can('self-update', \App\Models\Flight\Flight::class)
                         <a class="btn btn-success" href="{{route('flights.edit', ['flight' => $flight,])}}">
                             {{ Icon::edit() }}
                             <span>Edit Flight</span>
                         </a>
                     @endcan
-                    @can('create', \App\Models\Flight\Flight::class)
+                    @can('update', \App\Models\Flight\Flight::class)
                         <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('flights.duplicate', ['flight' => $flight,])}}">
                             {{ Icon::copy() }}
                             <span>Duplicate With Inventory</span>
@@ -73,7 +73,7 @@
 @endsection
 
 @section('inventory')
-    @can('create', \App\Models\Flight\FlightInventory::class)
+    @can('self-child-access', [$flight, \App\Models\Flight\FlightInventory::class])
         <x-admin.section.card>
             <a href="{{ route('flight-inventories.create', ['flight' => $flight, ]) }}"
                class="btn btn-primary float-end me-1">
@@ -131,7 +131,7 @@
                                 {{ Icon::list() }}
                             </span>
                         @endcan
-                        @can('create', \App\Models\Flight\FlightInventory::class)
+                        @can('self-child-access', [$flight, \App\Models\Flight\FlightInventory::class])
                             <a href="{{route('flight-inventories.duplicate', ['flight' => $flight, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-blue btn-sm mb-1" title="Copy">
                                 {{ Icon::copy() }}
@@ -141,7 +141,7 @@
                                 {{ Icon::copy() }}
                             </span>
                         @endcan
-                        @can('update', \App\Models\Flight\FlightInventory::class)
+                        @can('self-update', \App\Models\Flight\FlightInventory::class)
                             <a href="{{route('flight-inventories.edit', ['flight' => $flight, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
@@ -151,7 +151,7 @@
                                 {{ Icon::edit() }}
                             </span>
                         @endcan
-                        @can('delete', \App\Models\Flight\FlightInventory::class)
+                        @can('self-delete', \App\Models\Flight\FlightInventory::class)
                             <a href="#" title="Delete" class="btn btn-outline-danger btn-sm mb-1"
                                onclick="event.preventDefault();document.getElementById('flightInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}
