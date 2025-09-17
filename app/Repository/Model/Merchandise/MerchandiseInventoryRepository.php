@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Merchandise;
 
 use App\Exceptions\CannotDeleteException;
+use App\Models\Location\Currency;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Merchandise\MerchandiseInventory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
@@ -20,6 +21,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Settings;
 
 class MerchandiseInventoryRepository extends InventoryRepository
 {
@@ -207,6 +209,11 @@ class MerchandiseInventoryRepository extends InventoryRepository
     public function getPurchasePrice(): float
     {
         return $this->inventory->purchase_price ?? 0.0;
+    }
+
+    public function getCurrency(): Currency
+    {
+        return Settings::currency();
     }
 
     public function isStockControlActive(): bool

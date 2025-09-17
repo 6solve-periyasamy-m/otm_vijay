@@ -1,14 +1,22 @@
+@php
+    $location = collect([$tour->city, $tour->country?->name])->filter()->implode(',  ');
+    //dd($tour);
+@endphp
 <div class="row">
     <div class="left-col">
         <div class="contain">
-            <!-- The event name mobile update -->
-            <!-- <div class="evnt-name">
-            </div> -->
-            <!-- The event name mobile update -->
-            <h3 class="ytd_bold_class">Your trip details</h3>
-            <h3 class="head-evnt event_color_class">{{ $tour->event?->name }}</h3>
+            <div class="tour-details">
+                <h2 class="sub-heading-2">{{ $tour->package_name }}</h2>
+                <h3 class="sub-heading-3">{{ $tour->event?->name }}</h3>
+                <div class="location-dollar-value">
+                    @if($location)
+                        <p class="location">{{ $location }}</p>
+                        <span></span>
+                    @endif
+                    <p class="dollar">From {{ f_currency($tour->base_price_per_person) }} / person twin share</p>
+                </div>
+            </div>
             <p class="psg-det">PASSENGER DETAILS</p>
-
             <div class="top-form-contain">
                 <div class="form-field">
                     <input type="email" wire:model="lead.email_address" placeholder="Email*" required>
@@ -20,7 +28,7 @@
                 <p>TRAVELLER/S</p>
                 <div class="inner-block">
                     <div class="left-col">
-                        <h6>Adults</h6>
+                        <h6 class="subheading">Adults</h6>
                         <p class="age_limit">Ages 13 or above</p>
                     </div>
                     <div class="right">
@@ -34,11 +42,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="contain">
-                    <p>Travelling with children?<a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in
+                {{--
+                <div class="contact-block">
+                    <p class="description">If you are a concession card holder, or booking with children under 12, <a href="https://www.kpt.com.au/contact-us/" target="_blank">get in touch</a> for a tailor-made package</p>
+                </div> </br>
+                <!-- <div class="contact-block">
+                    <p class="getintouch">Travelling with children?<a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in
                             touch</a>
                         for a custom package.</p>
-                </div>
+                </div> -->
+                 --}}
             </div>
             <style>
                 .ma-block .row .right-col .contain .third-col ul li p.price.tot-price {
@@ -195,14 +208,79 @@
                         bottom: 164px;
                     }
                 }
+                .second-block.date-details .date_outer_div{
+                        border: 1.5px solid var(--primary-color);
+                        display: flex;
+                        max-width: 369px;
+                        border-radius: 999px;
+                        padding: 8px 24px;
+                        justify-content: space-between;
+                        align-items: center;
+                        color: var(--primary-color);
+                        font-size: 20px;
+                }
+                .second-block.date-details .date_outer_div .first, .second-block.date-details .date_outer_div .second {
+                    display: flex;
+                    align-items: center;
+                    width: 134px;
+                    justify-content: space-between;
+                }
+                .second-block.date-details .date_outer_div .first .image-module, .second-block.date-details .date_outer_div .second .image-module {
+                    position: relative;
+                    width: 20px;
+                    height: 20px;
+                    cursor: pointer;
+                }
+                .second-block.date-details .date_outer_div .image-module input {
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    left: 0;
+                    opacity: 0;
+                }
+                .second-block.date-details .date_outer_div .text-block p:first-child {
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: var(--primary-color);
+                    margin: 0;
+                    text-align: center;
+                }
+                .second-block.date-details .date_outer_div .text-block p:last-child {
+                    font-size: 16px;
+                    line-height: 20px;
+                    margin: 0;
+                    color: #808080;
+                }
             </style>
-
-
 
             <div class="second-block date-details">
                 <p>DATE</p>
+                <p class="booking-dates">If you would like to extend your stay, please contact our Sales team at <a href="mailto:travel@keithprowsetravel.com">travel@keithprowsetravel.com</a></p>
                 <div class="date_outer_div">
-                    <div class="check_text_dflex check_text_div">
+                    <div class="first">
+                        <div class="image-module">
+                            <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon" style="display: none;">
+                            <input type="text" id="dateRange-hidden" placeholder="Select Date Range">
+                        </div>
+                        <div class="text-block">
+                            <p>Check-in</p>
+                            <p>{{ \Carbon\Carbon::parse($tour->date_from)->format('d M y') }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        -
+                    </div>
+                    <div class="second">
+                        <div class="text-block">
+                            <p>Check-out</p>
+                            <p>{{ \Carbon\Carbon::parse($tour->date_to)->format('d M y') }}</p>
+                        </div>
+                        <div class="image-module">
+                            <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon"  style="display: none;"> 
+                        </div>
+                    </div>
+
+                    <!-- <div class="check_text_dflex check_text_div">
                         <div class="checkintext">Check-in</div>
                         <div class="checkouttext">Check-out</div>
                     </div>
@@ -210,7 +288,7 @@
                         <div class="checkindate">{{ \Carbon\Carbon::parse($tour->date_from)->format('D, d M y') }}</div>
                         <div class="dateslash">-</div>
                         <div class="checkoutdate">{{ \Carbon\Carbon::parse($tour->date_to)->format('D, d M y') }}</div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
@@ -218,7 +296,7 @@
             <!-- <- Rooming -->
             <div class="second-block rme-det">
 
-                <p>ROOMS</p>
+                <p>ACCOMMODATION</p>
                 @foreach($tour->repository->getHotels() as $hotelData)
                     @php $hotel = $hotelData['hotel']; @endphp
                     <div wire:ignore class="hotel-details">
@@ -270,17 +348,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="contain">
+
+
+                <!-- <div class="contain">
                     <p>
                         Can't find what you're looking for?
                         <a href="https://www.kpt.com.au/contact-us/" target="_blank">Get in touch</a>
                         for a custom package.
                     </p>
-                </div>
+                </div> -->
             </div>
             <div class="third-block">
                 @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
                     <div class="first-bl" wire:key="{{Str::random()}}">
+                        <p>Choose your preferred bedding configuration for each room</p>
                         <div class="inn">
                             <h6>Room {{ $x + 1 }}</h6>
                             <div class="information-hover" data-action="hover" data-target="accommodation-{{$hotel->id}}">

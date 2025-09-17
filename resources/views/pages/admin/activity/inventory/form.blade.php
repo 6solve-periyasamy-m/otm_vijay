@@ -34,7 +34,8 @@
     @include('partials.fields.text',
         ['name' => 'Stock', 'field' => 'stock', 'value' => $inventory?->stock,])
     @include('partials.fields.text',
-        ['name' => 'Purchase Price', 'field' => 'purchase_price', 'value' => $inventory?->purchase_price, 'width' => 6, ])
+        ['name' => 'Purchase Price', 'field' => 'purchase_price', 'value' => $inventory?->purchase_price, 'width' => 3, ])
+    <x-livewire.input.select.currency name="currency_id" width="3" label="Currency Override" value="{{ $inventory->currency_id ?? null }}" clearable />
     @include('partials.fields.text',
         ['name' => 'Sales Price', 'field' => 'sales_price', 'value' => $inventory?->sales_price, 'width' => 6, ])
     @include('partials.fields.textarea', ['name' => 'Internal Notes', 'field' => 'internal_notes', 'value' => $inventory?->internal_notes,])

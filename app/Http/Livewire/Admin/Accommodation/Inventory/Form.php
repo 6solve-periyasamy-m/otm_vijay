@@ -6,8 +6,8 @@ use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventory;
-use Livewire\Component;
 use Carbon\Carbon;
+use Livewire\Component;
 
 class Form extends Component
 {
@@ -17,6 +17,7 @@ class Form extends Component
     public Accommodation|int $accommodation;
     public AccommodationInventory|int|null $inventory;
     public $minEndDate;
+    public bool $checkOutUpdated = false;
 
     public function mount(Accommodation|int $accommodation, AccommodationInventory|int|null $inventory = null): void
     {
@@ -31,15 +32,19 @@ class Form extends Component
     {
         if ($key === 'inventory.check_in') {
             $this->handleCheckInChange($value);
+        } else if ($key === 'inventory.check_out') {
+            $this->checkOutUpdated = true;
         }
     }
 
     private function handleCheckInChange($value)
     {
-        if ($value) {
+        if ($value && !$this->checkOutUpdated) {
             $startDateTime = Carbon::parse($value);
             $this->minEndDate = $startDateTime->toDateTimeString();
-            $this->inventory->check_out = $startDateTime->copy()->addHour()->toDateTimeString();
+            if ($this->inventory->check_out->lt($this->minEndDate)) {
+                $this->inventory->check_out = $startDateTime->copy()->addHour()->toDateTimeString();
+            }
         }
     }
 
@@ -71,11 +76,12 @@ class Form extends Component
         return [
             'inventory.room_type_id' => 'required|integer|exists:room_types,id',
             'inventory.board_type_id' => 'required|integer|exists:board_types,id',
+            'inventory.currency_id' => 'nullable|integer|exists:currencies,id',
             'inventory.room_category_id' => 'nullable|integer|exists:room_categories,id',
             'inventory.stock_parent_id' => 'nullable|integer|exists:accommodation_inventories,id',
             'inventory.check_in' => 'nullable|date',
             'inventory.check_in_time_confirmed' => 'nullable|boolean',
-            'inventory.check_out' => 'nullable|date',
+            'inventory.check_out' => 'nullable|date|after:inventory.check_in',
             'inventory.check_out_time_confirmed' => 'nullable|boolean',
             'inventory.fit_selectable' => 'nullable|boolean',
             'inventory.stock' => 'nullable|integer',
