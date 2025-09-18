@@ -230,6 +230,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             'tour_component_type' => $this->tourComponent->tour_component_type,
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
             'flight_type' => $this->tourComponent->flight_type,
+            'document_order' => $this->tourComponent->document_order,
         ]);
         return $component->repository;
     }

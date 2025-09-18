@@ -106,6 +106,7 @@ class QuoteTransportRepository extends QuoteComponentRepository
             'tour_component_type' => $this->quoteComponent->tour_component_type,
             'tour_sales_price' => $this->quoteComponent->tour_sales_price,
             'transport_inventory_id' => $this->quoteComponent->transport_inventory_id,
+            'document_order' => $this->quoteComponent->document_order,
         ]);
         return $tourComponent->repository;
     }
