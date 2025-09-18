@@ -25,10 +25,10 @@
             </div>
             <!-- <- Additional Travellers -->
             <div class="second-block tra-det">
-                <p>TRAVELLER/S</p>
+                <!-- <p>TRAVELLER/S</p> -->
                 <div class="inner-block">
                     <div class="left-col">
-                        <h6 class="subheading">Adults</h6>
+                        <h6 class="subheading">Number of Travellers</h6>
                         <p class="age_limit">Ages 13 or above</p>
                     </div>
                     <div class="right">

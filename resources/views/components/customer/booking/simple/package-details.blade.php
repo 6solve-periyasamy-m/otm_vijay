@@ -126,7 +126,7 @@
         color: #7a7a7a !important;
     }
 
-    .subheading { font-size: 15px !important;}
+    .subheading { font-size: 24px !important;}
     .sub-text-color { margin-top: 8px; color: #808080; font-size: 16px; line-height: 24px;}
     @media only screen and (max-width: 1278px) {
         .sub-heading-3 {
@@ -179,7 +179,7 @@
             <p class="inclusion">{{ $inclusion }}</p>
         @endforeach
         <p class="see-more">
-            <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">See more</a>
+            <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">MORE INFORMATION</a>
         </p>
     </div>
 </div>
