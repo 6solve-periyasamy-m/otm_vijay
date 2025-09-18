@@ -137,7 +137,8 @@ class SendPopupMail extends Component
                 $this->emailBody,
                 $this->quoteData,
                 $fullPath,
-                $bccEmails
+                $bccEmails,
+		$this->fromEmail
             );
             Mail::to($this->to)->send($mail);
 
