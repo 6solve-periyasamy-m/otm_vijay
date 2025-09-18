@@ -22,6 +22,6 @@
     @include('partials.fields.text', ['name' => 'Tour Sales Price', 'field' => 'tour_sales_price', 'value' => $inventoryTour?->tour_sales_price ?? null, 'width' => 3, ])
     @include('partials.fields.checkbox', ['name' => 'Stock Control Active', 'field' => 'stock_control_active', 'value' => $inventoryTour?->stock_control_active ?? false, 'width' => 3, 'divClasses' => 'my-auto'])
     @include('partials.fields.checkbox', ['name' => 'Bookable', 'field' => 'is_bookable', 'value' => $inventoryTour?->is_bookable ?? false, 'divClasses' => 'my-auto', 'width' => 3])
-    @include('partials.fields.text', ['name' => 'document_order', 'field' => 'order', 'value' => $inventoryTour->document_order, 'width' => 3])
+    @include('partials.fields.text', ['name' => 'Document Order', 'field' => 'order', 'value' => $inventoryTour->document_order, 'width' => 3])
     @include('partials.fields.submit')
 @endsection

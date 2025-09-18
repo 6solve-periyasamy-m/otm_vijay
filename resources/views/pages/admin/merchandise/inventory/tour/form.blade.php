@@ -27,6 +27,6 @@
         ['name' => 'Bookable?', 'field' => 'is_bookable', 'value' => $inventoryTour?->is_bookable ?? false, 'width' => 4,])
     @include('partials.fields.checkbox',
         ['name' => 'Stock Controlled?', 'field' => 'stock_control_active', 'value' => $inventoryTour?->stock_control_active ?? false, 'width' => 4,])
-    @include('partials.fields.text', ['name' => 'document_order', 'field' => 'order', 'value' => $inventoryTour->document_order, 'width' => 4])
+    @include('partials.fields.text', ['name' => 'Document Order', 'field' => 'order', 'value' => $inventoryTour->document_order, 'width' => 4])
     @include('partials.fields.submit')
 @endsection
