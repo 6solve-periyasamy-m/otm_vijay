@@ -20,8 +20,9 @@ class QuoteCustomMail extends Mailable
     public $sentData;
     public $documentPath;
     public $bccEmails;
+    public $fromEmail;
 
-    public function __construct($user, Quote $quote, $subjectLine, $htmlBody, $sentData, $documentPath, $bccEmails=[])
+    public function __construct($user, Quote $quote, $subjectLine, $htmlBody, $sentData, $documentPath, $bccEmails=[], $fromEmail)
     {
         $this->user = $user;
         $this->quote = $quote;
@@ -30,12 +31,14 @@ class QuoteCustomMail extends Mailable
         $this->sentData = $sentData;
         $this->documentPath = $documentPath;
         $this->bccEmails = $bccEmails;
+        $this->fromEmail = $fromEmail;
     }
 
     public function build()
     {
+        $customFromEmail = !empty($this->fromEmail) ? $this->fromEmail : $user->email;
         $body = $this->replaceShortcodes($this->htmlBody, $this->getShortcodes());
-        $mail = $this->from(config('mail.from.address'))
+        $mail = $this->from($customFromEmail)
             ->subject($this->subjectLine)
             ->view('mail.quote-template')
             ->with([
