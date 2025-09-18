@@ -69,9 +69,8 @@ class SendPopupMail extends Component
         $this->fromName = $this->quote->consultant?->name ?? config('mail.from.name');
         $this->to = $this->quote->agent?->email ?? $this->quote->organization?->contact_email ?? $this->quote->leadTraveller->customer->email_address;
         $eventName = $this->quote?->event?->name;
-        //$this->subject = "Quote: {$this->quote->reference}" . ($eventName ? " - {$eventName}" : '') . ($leadTraveller ? " - {$leadTraveller}" : '');
-        $this->subject = "Quote: " . ($eventName ? " - {$eventName}" : '') . $this->quote->reference. ($leadTraveller ? " - {$leadTraveller}" : '');
-        
+        $this->subject = "Quote: " . ($eventName ? "{$eventName}" : '') . ' - '. $this->quote->reference. ($leadTraveller ? " - {$leadTraveller}" : '');
+        $this->bccInput = setting('system.bcc.mail', '');
 
         // If email body is empty, use the default template
         if (empty($this->emailBody)) {
@@ -90,7 +89,7 @@ class SendPopupMail extends Component
     public function closeModal()
     {
         $this->showModal = false;
-        $this->reset(['additionalAttachment', 'ccInput', 'bccInput', 'successMessage', 'errorMessage']);
+        $this->reset(['additionalAttachment', 'successMessage', 'errorMessage']);
         $this->resetErrorBag();
         $this->isSending = false;
     }
@@ -144,7 +143,7 @@ class SendPopupMail extends Component
 
             $sentQuote->mail_status = 'sent';
             $sentQuote->save();
-            //sleep(2);
+
             $this->successMessage = 'The quote document has been successfully sent to the recipient ' . $this->to;
             // if ($fullPath && file_exists($fullPath)) {
             //     @unlink($fullPath);
