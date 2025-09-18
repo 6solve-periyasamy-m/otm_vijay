@@ -298,6 +298,8 @@
                 </table>
             </x-admin.section.card>
         </div>
+        @php //dd($quote->sentQuotes); @endphp
+        <livewire:admin.quote.quote-sent-version />
         <div class="col-xl-12">
             <x-admin.section.card>
                 <x-slot:title>{{ __('quotes.view.cards.sent.header') }}</x-slot:title>
@@ -305,10 +307,11 @@
                     <thead>
                     <tr>
                         <th scope="col">{{ __('quotes.view.cards.sent.when') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sent.from_email') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sent.email') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sent.bcc') }}</th>
                         <th scope="col">{{ __('quotes.view.cards.sent.reference') }}</th>
-                        <th scope="col">{{ __('quotes.view.cards.sent.paying') }}</th>
-                        <th scope="col">{{ __('quotes.view.cards.sent.travelling') }}</th>
+                        <th scope="col">{{ __('quotes.view.cards.sent.subject') }}</th>                        
                         <th scope="col">{{ __('custom.table.actions') }}</th>
                     </tr>
                     </thead>
@@ -316,19 +319,21 @@
                     @foreach($quote->sentQuotes as $sent)
                         <tr>
                             <td data-order="{{ $sent->sent->unix() }}">{{ f_datetime($sent->sent) }}</td>
-                            <td>{{ $sent->recipient }}</td>
-                            <td>{{ $sent->built->ref }}</td>
-                            <td>{{ $sent->paid }}</td>
-                            <td>{{ $sent->free }}</td>
-                            <td class="actions-3">
+                            <td>{{ $sent->from_email }}</td>
+                            <td>{{ $sent->recipient }}</td>                            
+                            <td>{{ $sent->bcc }}</td>
+                            <td>{{ $sent->built->ref }}</td> 
+                            <td>{{ $sent->subject }}</td>
+                            <td class="actions-3">                                
+                                <a href="javascript:void(0);" class="btn btn-outline-success btn-sm mb-1" title="View sent version details" onclick="Livewire.emit('showSentQuoteInfo', {{ $sent->id }})">{{ Icon::list() }}</a>
                                 <a href="{{ route('quotes.sent.view', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-info btn-sm mb-1" title="View">
                                     {{ Icon::eye() }}
                                 </a>
-                                <a href="{{ route('quotes.sent.resend', ['quote' => $quote, 'sent' => $sent,]) }}"
+                                {{-- <a href="{{ route('quotes.sent.resend', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-success btn-sm mb-1" title="Resend">
                                     {{ Icon::email() }}
-                                </a>
+                                </a> --}}
                                 <a href="{{ route('quotes.sent.rebuild', ['quote' => $quote, 'sent' => $sent,]) }}"
                                    class="btn btn-outline-danger btn-sm mb-1" title="Rebuild">
                                     {{ Icon::rebuild() }}

@@ -20,6 +20,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use App\Models\User;
 
 
 /**
@@ -151,5 +152,19 @@ class Flight extends Model
     public function __toString(): string
     {
         return "{$this->airline} ({$this->departureAirport} to {$this->arrivalAirport})";
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($flight) {
+            if (auth()->check() && empty($flight->created_by)) {
+                $flight->created_by = auth()->id();
+            }
+        });
     }
 }

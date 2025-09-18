@@ -3,9 +3,9 @@
 @section('title', 'View Event')
 
 @php
-    /**
-     * @var \App\Models\Tour\Event $event
-     */
+/**
+ * @var \App\Models\Tour\Event $event
+ */
 $hideNoCategory = $hideNoCategory ?? false;
 @endphp
 
@@ -68,6 +68,12 @@ $hideNoCategory = $hideNoCategory ?? false;
                         <a class="btn btn-success" href="{{route('events.edit', ['event' => $event,])}}">
                             {{ Icon::edit() }}
                             <span>Edit Event</span>
+                        </a>
+                    @endcan
+                    @can('create', \App\Models\Tour\Event::class)
+                        <a class="btn btn-secondary" href="{{route('events.duplicate', ['event' => $event,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Event</span>
                         </a>
                     @endcan
                     <a class="btn btn-warning" href="{{ route('events.reminder.bulk', ['event' => $event,]) }}">

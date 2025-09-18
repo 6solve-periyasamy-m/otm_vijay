@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use App\Models\User;
 
 /**
  * App\Models\Accommodation\AccommodationInventory
@@ -229,5 +230,19 @@ class AccommodationInventory extends Model
     public function getLocalPurchasePriceAttribute(): float|null
     {
         return fx_convert($this->purchase_price, $this->repository->getCurrency());
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (AccommodationInventory $accommodationInventory) {
+            if (auth()->check() && !$accommodationInventory->created_by) {
+                $accommodationInventory->created_by = auth()->id();
+            }
+        });
     }
 }
