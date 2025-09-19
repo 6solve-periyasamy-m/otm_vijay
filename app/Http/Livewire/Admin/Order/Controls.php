@@ -251,6 +251,7 @@ class Controls extends ModalComponent
         $this->subject = "Order: " . ($eventName ? "{$eventName}" : '') . " - " .$this->order->booking_reference. ($leadBooker ? " - {$leadBooker}" : '');
         $this->emailBody = ($this->order?->tour?->event?->itinerary_email_template !== null) ? $this->order?->tour?->event?->itinerary_email_template : setting("email.itinerary-document.template", '');
         $this->bccInput = setting('system.bcc.mail', '');
+        $this->ccInput = setting('system.cc.mail', '');
         $this->showModal = true;
         $this->successMessage = '';
         $this->errorMessage = '';
@@ -270,20 +271,13 @@ class Controls extends ModalComponent
         $this->isSending = true;
         $this->successMessage = '';
         $this->errorMessage = '';
-        $bccEmails = collect(explode(';', $this->bccInput))
-            ->map(fn($email) => trim($email))
-            ->filter()
-            ->unique()
-            ->toArray();
 
-        $validator = Validator::make(['bcc' => $bccEmails], [
-            'bcc.*' => 'nullable|email'
-        ]);
+        $ccEmails = $this->parseEmails($this->ccInput);
+        $bccEmails = $this->parseEmails($this->bccInput);
 
-        if ($validator->fails()) {
-            $this->addError('bccInput', 'One or more BCC emails are invalid.');
-            return;
-        }
+        if (!$this->validateEmailList($ccEmails, 'ccInput', 'cc')) return;
+        if (!$this->validateEmailList($bccEmails, 'bccInput', 'bcc')) return;
+
         $fullPath = null;
         try {
             $this->orderData = dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),]), false);
@@ -298,8 +292,10 @@ class Controls extends ModalComponent
                 $this->emailBody,
                 $this->orderData,
                 $fullPath,
+                $ccEmails,
                 $bccEmails,
-                $this->fromEmail
+                $this->fromEmail,
+                $this->fromName
             );
             Mail::to($this->to)->send($mail);
             $this->successMessage = 'The itinerary document has been successfully sent to the recipient ' . $this->to;
@@ -316,4 +312,30 @@ class Controls extends ModalComponent
     {
         return view('livewire.admin.order.controls');
     }
+
+    private function parseEmails(?string $input): array
+    {
+        return collect(explode(';', $input ?? ''))
+            ->map(fn($email) => trim($email))
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
+    }
+
+    private function validateEmailList(array $emails, string $inputName, string $fieldAlias): bool
+    {
+        $validator = Validator::make([$inputName => $emails], [
+            "{$inputName}.*" => 'nullable|email',
+        ]);
+
+        if ($validator->fails()) {
+            $this->addError($inputName, "One or more " . strtoupper($fieldAlias) . " emails are invalid.");
+            $this->isSending = false;
+            return false;
+        }
+
+        return true;
+    }
+
 }

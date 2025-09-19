@@ -20,9 +20,11 @@ class OrderCustomMail extends Mailable
     public $sentData;
     public $documentPath;
     public $bccEmails;
+    public $ccEmails;
     public $fromEmail;
+    public $fromName;
 
-    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPath, $bccEmails=[], $fromEmail)
+    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPath, $ccEmails=[], $bccEmails=[], $fromEmail, $fromName)
     {
         $this->user = $user;
         $this->order = $order;
@@ -30,15 +32,18 @@ class OrderCustomMail extends Mailable
         $this->htmlBody = $htmlBody;
         $this->sentData = $sentData;
         $this->documentPath = $documentPath;
+        $this->ccEmails = $ccEmails;
         $this->bccEmails = $bccEmails;
         $this->fromEmail = $fromEmail;
+        $this->fromName = $fromName;
     }
 
     public function build()
     {
         $customFromEmail = !empty($this->fromEmail) ? $this->fromEmail : $this->user->email;
+        $customFromName = !empty($this->fromName) ? $this->fromName : $this->user->name;
         $body = $this->replaceShortcodes($this->htmlBody, $this->getShortcodes());
-        $mail = $this->from($customFromEmail)
+        $mail = $this->from($customFromEmail, $customFromName)
             ->subject($this->subjectLine)
             ->view('mail.order-template')
             ->with([
@@ -50,6 +55,10 @@ class OrderCustomMail extends Mailable
 
         if (!empty($this->documentPath) && file_exists($this->documentPath) && is_readable($this->documentPath)) {
             $mail->attach($this->documentPath);
+        }
+
+        if (!empty($this->ccEmails)) {
+            $mail->cc($this->ccEmails);
         }
 
         if (!empty($this->bccEmails)) {
