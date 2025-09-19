@@ -223,7 +223,6 @@
                     position: relative;
                     width: 20px;
                     height: 20px;
-                    cursor: pointer;
                 }
                 .second-block.date-details .date_outer_div .image-module input {
                     width: 20px;
@@ -248,12 +247,12 @@
             </style>
 
             <div class="second-block date-details">
-                <p>DATE</p>
+                <p class="date_tle">DATE</p>
                 <p class="booking-dates">If you would like to extend your stay, please contact our Sales team at <a href="mailto:travel@keithprowsetravel.com">travel@keithprowsetravel.com</a></p>
                 <div class="date_outer_div">
                     <div class="first">
                         <div class="image-module">
-                            <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon" style="display: none;">
+                            <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon">
                             <input type="text" id="dateRange-hidden" placeholder="Select Date Range">
                         </div>
                         <div class="text-block">
@@ -270,7 +269,7 @@
                             <p>{{ \Carbon\Carbon::parse($tour->date_to)->format('d M y') }}</p>
                         </div>
                         <div class="image-module">
-                            <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon"  style="display: none;"> 
+                            <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon"> 
                         </div>
                     </div>
 
@@ -417,7 +416,7 @@
             <!-- <- Rooming -->
             <div class="second-block rme-det">
                 <div class="accommodation-detail">
-                    <p>ACCOMMODATION</p>
+                    <p class="acm_title">ACCOMMODATION</p>
                     @php //dd($tour->repository->getHotels()); @endphp
                     @foreach($tour->repository->getHotels() as $hotelData)
                         @php $hotel = $hotelData['hotel']; @endphp

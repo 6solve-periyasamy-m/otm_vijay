@@ -401,9 +401,14 @@ body {
 .ma-block .row .left-col .contain p {
     margin: 0 0 24px 0;
     color: var(--primary-color);
-    font-size: 16px;
+    font-size: 14px;
     line-height: 16.8px;
+}
+.ma-block .row .left-col .contain p.location,.ma-block .row .left-col .contain p.dollar{
+    font-size: 16px;
     letter-spacing: 0px;
+    margin: 0px;
+    padding-bottom: 40px;
 }
 
 .ma-block .row .left-col .contain .top-form-contain {
@@ -767,7 +772,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     font-weight: 500;
     color: var(--white);
     background:transparent;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 16.8px;
     letter-spacing: 2.24px;
     display: inline-block;
@@ -3065,4 +3070,6 @@ p.hotel-info, p.hotel-more-info {    margin: 0 !important;    font-size: 12px !i
 @media only screen and (max-width: 767px) {
 .amenity_row{flex-flow: column;}
 }
- 
+.acm_title{letter-spacing: 2.24px;}
+.ma-block .row .left-col .contain p.booking-dates{font-size: 16px;line-height: 24px;}
+.ma-block .row .left-col .contain p.traveller_tle,.ma-block .row .left-col .contain p.date_tle{letter-spacing: 2.24px;}

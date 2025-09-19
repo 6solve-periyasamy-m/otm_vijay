@@ -62,7 +62,7 @@
         width: 2px;
         height: 20px;
         background: #D1D5DB;
-        margin-top: -20px;
+        margin-top: -40px;
     }
     .location-dollar-value p.dollar::before {
         background: url('/css/booking/icon/dollar.svg') no-repeat;
@@ -81,7 +81,7 @@
     .location, .dollar{
         padding-left: 20px !important;
     }
-    .psg-det { padding-top: 20px !important;}
+    .psg-det { letter-spacing: 2.24px;padding-top: 40px !important;}
 
     .contact-block {
         background: #F9F4EE;
