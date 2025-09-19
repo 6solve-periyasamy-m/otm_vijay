@@ -11,8 +11,12 @@ use App\Models\Order\Payment\Payment;
 use Exception;
 use LivewireUI\Modal\ModalComponent;
 use Log;
+use Auth;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Livewire\WithFileUploads;
+use App\Mail\OrderCustomMail;
 
 /**
  * Popup menu used on the order screen
@@ -21,7 +25,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class Controls extends ModalComponent
 {
-    use SendsEvents;
+    use SendsEvents, WithFileUploads;
 
     public $listeners = [
         'sendBookingConfirmation' => 'sendBookingConfirmation',
@@ -32,6 +36,23 @@ class Controls extends ModalComponent
     ];
 
     public Order|int $order;
+
+    // Form fields
+    public $fromEmail;
+    public $fromName;
+    public $to;
+    public $ccInput = '';
+    public $bccInput = '';
+    public $subject;
+    public $emailBody;
+    public $additionalAttachment;
+    public $orderData;
+
+    // UI state
+    public $showModal = false;
+    public $isSending = false;
+    public $successMessage = '';
+    public $errorMessage = '';
 
     /**
      * Mount the component and setup data
@@ -200,6 +221,95 @@ class Controls extends ModalComponent
         $payment = $payment ?? $this->order->payments()->orderBy('paid_on', 'desc')->first();
         if ($payment === null) { return null; }
         return $payment->amount >= 0 ? 'Payment' : 'Refund';
+    }
+
+
+
+
+    protected $rules = [
+        'fromEmail' => 'required|email',
+        'fromName' => 'required|string',
+        'to' => 'required|email',
+        'ccInput' => 'nullable|string',
+        'bccInput' => 'nullable|string',
+        'subject' => 'required|string|max:255',
+        'emailBody' => 'required|string',
+        'additionalAttachment' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
+    ];
+
+    public function openPopupEmailForm(): void
+    {
+        $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
+        $defaultName = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
+
+        $user = Auth::user();
+        $leadBooker = $this->order?->leadBooker?->customer?->last_name;
+        $this->fromEmail = $this->order->consultant?->email ?? $user->email ?? $defaultEmail;
+        $this->fromName = $this->order->consultant?->name ?? $user->name ?? $defaultName;
+        $this->to = $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address;
+        $eventName = $this->order?->tour?->event?->name;
+        $this->subject = "Order: " . ($eventName ? "{$eventName}" : '') . " - " .$this->order->booking_reference. ($leadBooker ? " - {$leadBooker}" : '');
+        $this->emailBody = ($this->order?->tour?->event?->itinerary_email_template !== null) ? $this->order?->tour?->event?->itinerary_email_template : setting("email.itinerary-document.template", '');
+        $this->bccInput = setting('system.bcc.mail', '');
+        $this->showModal = true;
+        $this->successMessage = '';
+        $this->errorMessage = '';
+    }
+
+    public function closeModal(): void
+    {
+        $this->showModal = false;
+        $this->reset(['additionalAttachment', 'ccInput', 'bccInput', 'successMessage', 'errorMessage']);
+        $this->resetErrorBag();
+        $this->isSending = false;
+    }
+
+    public function sendEmail(): void
+    {
+        $this->validate();
+        $this->isSending = true;
+        $this->successMessage = '';
+        $this->errorMessage = '';
+        $bccEmails = collect(explode(';', $this->bccInput))
+            ->map(fn($email) => trim($email))
+            ->filter()
+            ->unique()
+            ->toArray();
+
+        $validator = Validator::make(['bcc' => $bccEmails], [
+            'bcc.*' => 'nullable|email'
+        ]);
+
+        if ($validator->fails()) {
+            $this->addError('bccInput', 'One or more BCC emails are invalid.');
+            return;
+        }
+        $fullPath = null;
+        try {
+            $this->orderData = dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),]), false);
+            if ($this->additionalAttachment) {
+                $fullPath = $this->additionalAttachment->getRealPath();
+            }
+
+            $mail = new OrderCustomMail(
+                Auth::user(),
+                $this->order,
+                $this->subject,
+                $this->emailBody,
+                $this->orderData,
+                $fullPath,
+                $bccEmails,
+                $this->fromEmail
+            );
+            Mail::to($this->to)->send($mail);
+            $this->successMessage = 'The itinerary document has been successfully sent to the recipient ' . $this->to;
+        } catch (\Exception $e) {
+            $this->errorMessage = 'Failed to send email: ' . $e->getMessage();
+            $this->isSending = false;
+        } finally {
+            $this->isSending = false;
+        }
+        $this->isSending = false;
     }
 
     public function render()
