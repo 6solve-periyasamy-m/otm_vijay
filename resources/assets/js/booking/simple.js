@@ -1,5 +1,21 @@
 jQuery(document).ready(function () {
 
+    function initZoomSlider() {
+        var $slider = jQuery('.default-zoom-slider');
+ 
+        // If already initialized, destroy it first
+        if ($slider.hasClass('slick-initialized')) {
+            $slider.slick('unslick');
+        }
+ 
+        // Initialize again
+        $slider.slick({
+            arrows: true,
+            slidesToShow: 1,
+            infinite: false
+        });
+    }
+
     // Close popup on click
     jQuery('#liveToast .btn-close').click(function () {
         jQuery('#liveToast').hide();
@@ -18,8 +34,49 @@ jQuery(document).ready(function () {
         }
     });
 
+
+    
+     jQuery('.hotel-more-info a').on('click', function(e) {
+    setTimeout(function() {
+        if (!jQuery('.hotel-image-popup-block').hasClass('slick-initialized')) {
+            jQuery('.hotel-image-popup-block').slick({
+                arrows: true,
+                infinite: true,
+                slidesToShow: 1,
+                slidesToScroll: 1
+            });
+        } else {
+            jQuery('.hotel-image-popup-block').slick('setPosition');
+        }
+    }, 100);
+});
+
+     // On image click, open zoom view
+    jQuery('.hotel-image-popup-block .zoom__img_icon').on('click', function() {
+        initZoomSlider()
+      const index = $(this).closest('.slick-slide').attr('data-slick-index');
+      jQuery('.hotel-zoom-overlay').fadeIn().css({display:'flex'});
+      jQuery('.default-zoom-slider').slick('slickGoTo', index);
+    });
+    jQuery('.default-close-zoom').on('click', function() {
+      $('.hotel-zoom-overlay').fadeOut();
+    });
+    // jQuery('.default-zoom-slider').slick({
+    //     arrows: true,
+    //     slidesToShow: 1,
+    //     infinite: false,
+    //     cssEase: 'linear'
+    //     });
+    
     // ACTIONS
     document.emojiSource = './tam-emoji/img/';
+
+    // jQuery('.hotel-image-popup-block').slick({
+    //   arrows: true,
+    //   infinite: false,
+    //   slidesToShow: 1,
+    //   cssEase: 'linear',
+    // });
 
     //dynamic rooms
 
@@ -262,7 +319,7 @@ jQuery(document).ready(function () {
         }
     });*/
 
-    //hover details
+   //hover details
     jQuery(document).on('mouseover', '.second-block .hotel-details .information-hover', function () {
         jQuery('.accommodation-details-hover').css('display', 'none');
         jQuery('.information-hover').removeClass('hovor');
