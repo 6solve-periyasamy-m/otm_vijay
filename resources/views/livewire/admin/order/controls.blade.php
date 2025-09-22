@@ -28,7 +28,8 @@
                 @endif
                 {{-- Email Sending --}}
                 @if((config('app.features.kpt', false) || config('app.features.bleeding-edge')) && flag('reservation.invoice.mail.enabled', false))
-                    <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the Reservation document to email?')) { Livewire.emit('sendReservationToEmail'); }" class="color-mint row-4">
+                        <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the Reservation document to email?')) { Livewire.emit('sendReservationToEmail'); }" class="color-mint row-4">
+                        {{-- <x-admin.popup-button href="#" wire:click.prevent="openPopupEmailForm('reservation')" class="color-mint row-4">--}}
                         <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
                         Send Reservation Document
                     </x-admin.popup-button>
@@ -47,7 +48,7 @@
                 @endif
 
                 @if((config('app.features.kpt', false) || config('app.features.bleeding-edge')) && flag('itinerary.document.mail.enabled', false))
-                    <x-admin.popup-button href="#" wire:click.prevent="openPopupEmailForm" class="color-mint row-4">
+                    <x-admin.popup-button href="#" wire:click.prevent="openPopupEmailForm('itinerary')" class="color-mint row-4">
                         <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
                         Send Itinerary Document
                     </x-admin.popup-button>
@@ -96,7 +97,17 @@
                 <div class="modal-content">
                     <!-- Header Section -->
                     <div class="modal-header">
-                        <h5 class="modal-title">Send Itinerary Document</h5>
+                        <h5 class="modal-title">
+                            @php
+                                $headingTitle = match ($this->sendType) {
+                                    'itinerary' => 'Send Itinerary Document',
+                                    'reservation' => 'Send Reservation Document',
+                                    'booiing' => 'Send Booking Confirmation',
+                                    default => '',
+                                };
+                            @endphp
+                            {{ $headingTitle }}
+                        </h5>
                         <button type="button" class="close ms-auto" wire:click="closeModal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

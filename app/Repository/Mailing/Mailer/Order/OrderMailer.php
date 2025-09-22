@@ -159,7 +159,7 @@ class OrderMailer
 
         try {
             (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))
-                    ->send($email, $this->order, [$this->getReservationAttachment(), $this->getInvoiceAttachment()], $bcc, true, $this->order->consultant?->email);
+                    ->send('prajanbalaji.a@gmail.com', $this->order, [$this->getReservationAttachment(), $this->getInvoiceAttachment()], $bcc, true, $this->order->consultant?->email);
             return true;
         } catch (MailDisabledException) {
             return false;
