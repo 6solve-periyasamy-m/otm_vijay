@@ -53,6 +53,7 @@ class Controls extends ModalComponent
     public $isSending = false;
     public $successMessage = '';
     public $errorMessage = '';
+    public $sendType = '';
 
     /**
      * Mount the component and setup data
@@ -223,9 +224,6 @@ class Controls extends ModalComponent
         return $payment->amount >= 0 ? 'Payment' : 'Refund';
     }
 
-
-
-
     protected $rules = [
         'fromEmail' => 'required|email',
         'fromName' => 'required|string',
@@ -237,19 +235,31 @@ class Controls extends ModalComponent
         'additionalAttachment' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
     ];
 
-    public function openPopupEmailForm(): void
+    public function openPopupEmailForm(string $type = null): void
     {
+        $this->sendType = $type;
         $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
         $defaultName = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
 
         $user = Auth::user();
         $leadBooker = $this->order?->leadBooker?->customer?->last_name;
-        $this->fromEmail = $this->order->consultant?->email ?? $user->email ?? $defaultEmail;
-        $this->fromName = $this->order->consultant?->name ?? $user->name ?? $defaultName;
+        $this->fromEmail = $user->email ?? $defaultEmail;
+        $this->fromName = $user->name ?? $defaultName;
         $this->to = $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address;
         $eventName = $this->order?->tour?->event?->name;
-        $this->subject = "Order: " . ($eventName ? "{$eventName}" : '') . " - " .$this->order->booking_reference. ($leadBooker ? " - {$leadBooker}" : '');
-        $this->emailBody = ($this->order?->tour?->event?->itinerary_email_template !== null) ? $this->order?->tour?->event?->itinerary_email_template : setting("email.itinerary-document.template", '');
+        //$this->subject = "Order: " . ($eventName ? "{$eventName}" : '') . " - " .$this->order->booking_reference. ($leadBooker ? " - {$leadBooker}" : '');
+        if ($this->sendType == 'itinerary'){
+            $defaultSubject = setting("email.itinerary-document.subject", '');
+            $defaultTemplate = setting("email.itinerary-document.template", '');
+        } elseif ($this->sendType == 'reservation'){
+            $defaultSubject = setting("email.reservation-invoice-document.subject", '');
+            $defaultTemplate = setting("email.reservation-invoice-document.template", '');
+        } elseif ($this->sendType == 'booiing'){
+            $defaultSubject = '';
+            $defaultTemplate = '';
+        }
+        $this->subject = ($this->order?->tour?->event?->itinerary_email_subject !== null) ? $this->order?->tour?->event?->itinerary_email_subject : $defaultSubject;
+        $this->emailBody = ($this->order?->tour?->event?->itinerary_email_template !== null) ? $this->order?->tour?->event?->itinerary_email_template : $defaultTemplate;
         $this->bccInput = setting('system.bcc.mail', '');
         $this->ccInput = setting('system.cc.mail', '');
         $this->showModal = true;
@@ -279,10 +289,15 @@ class Controls extends ModalComponent
         if (!$this->validateEmailList($bccEmails, 'bccInput', 'bcc')) return;
 
         $fullPath = null;
+        $originalFilename = null;
         try {
-            $this->orderData = dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),]), false);
+            if ($this->sendType == 'itinerary'){
+                $this->orderData = dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),]), false);
+            }
+
             if ($this->additionalAttachment) {
                 $fullPath = $this->additionalAttachment->getRealPath();
+                $originalFilename = $this->additionalAttachment->getClientOriginalName(); // ← THIS
             }
 
             $mail = new OrderCustomMail(
@@ -295,7 +310,8 @@ class Controls extends ModalComponent
                 $ccEmails,
                 $bccEmails,
                 $this->fromEmail,
-                $this->fromName
+                $this->fromName,
+                $originalFilename
             );
             Mail::to($this->to)->send($mail);
             $this->successMessage = 'The itinerary document has been successfully sent to the recipient ' . $this->to;

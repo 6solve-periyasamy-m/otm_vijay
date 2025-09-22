@@ -23,8 +23,9 @@ class OrderCustomMail extends Mailable
     public $ccEmails;
     public $fromEmail;
     public $fromName;
+    public $documentName;
 
-    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPath, $ccEmails=[], $bccEmails=[], $fromEmail, $fromName)
+    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPath, $ccEmails=[], $bccEmails=[], $fromEmail, $fromName, $documentName=null)
     {
         $this->user = $user;
         $this->order = $order;
@@ -35,7 +36,7 @@ class OrderCustomMail extends Mailable
         $this->ccEmails = $ccEmails;
         $this->bccEmails = $bccEmails;
         $this->fromEmail = $fromEmail;
-        $this->fromName = $fromName;
+        $this->documentName = $documentName;
     }
 
     public function build()
@@ -43,8 +44,9 @@ class OrderCustomMail extends Mailable
         $customFromEmail = !empty($this->fromEmail) ? $this->fromEmail : $this->user->email;
         $customFromName = !empty($this->fromName) ? $this->fromName : $this->user->name;
         $body = $this->replaceShortcodes($this->htmlBody, $this->getShortcodes());
+        $subject = $this->replaceShortcodes($this->subjectLine, $this->getShortcodes());
         $mail = $this->from($customFromEmail, $customFromName)
-            ->subject($this->subjectLine)
+            ->subject($subject)
             ->view('mail.order-template')
             ->with([
                 'user' => $this->user,
@@ -54,7 +56,10 @@ class OrderCustomMail extends Mailable
             ->attachData($this->sentData, "Itinerary-{$this->order->booking_reference}.pdf");
 
         if (!empty($this->documentPath) && file_exists($this->documentPath) && is_readable($this->documentPath)) {
-            $mail->attach($this->documentPath);
+            $mail->attach($this->documentPath, [
+                'as' => $this->documentName ?? basename($this->documentPath), // ← Use original name
+                'mime' => mime_content_type($this->documentPath),
+            ]);
         }
 
         if (!empty($this->ccEmails)) {
