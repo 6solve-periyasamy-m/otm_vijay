@@ -23,8 +23,9 @@ class OrderCustomMail extends Mailable
     public $ccEmails;
     public $fromEmail;
     public $fromName;
+    public $documentName;
 
-    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPath, $ccEmails=[], $bccEmails=[], $fromEmail, $fromName)
+    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPath, $ccEmails=[], $bccEmails=[], $fromEmail, $fromName, $documentName=null)
     {
         $this->user = $user;
         $this->order = $order;
@@ -35,7 +36,7 @@ class OrderCustomMail extends Mailable
         $this->ccEmails = $ccEmails;
         $this->bccEmails = $bccEmails;
         $this->fromEmail = $fromEmail;
-        $this->fromName = $fromName;
+        $this->documentName = $documentName;
     }
 
     public function build()
@@ -43,8 +44,9 @@ class OrderCustomMail extends Mailable
         $customFromEmail = !empty($this->fromEmail) ? $this->fromEmail : $this->user->email;
         $customFromName = !empty($this->fromName) ? $this->fromName : $this->user->name;
         $body = $this->replaceShortcodes($this->htmlBody, $this->getShortcodes());
+        $subject = $this->replaceShortcodes($this->subjectLine, $this->getShortcodes());
         $mail = $this->from($customFromEmail, $customFromName)
-            ->subject($this->subjectLine)
+            ->subject($subject)
             ->view('mail.order-template')
             ->with([
                 'user' => $this->user,
@@ -54,7 +56,10 @@ class OrderCustomMail extends Mailable
             ->attachData($this->sentData, "Itinerary-{$this->order->booking_reference}.pdf");
 
         if (!empty($this->documentPath) && file_exists($this->documentPath) && is_readable($this->documentPath)) {
-            $mail->attach($this->documentPath);
+            $mail->attach($this->documentPath, [
+                'as' => $this->documentName ?? basename($this->documentPath),
+                'mime' => mime_content_type($this->documentPath),
+            ]);
         }
 
         if (!empty($this->ccEmails)) {
@@ -69,7 +74,6 @@ class OrderCustomMail extends Mailable
 
     protected function getShortcodes(): array
     {
-
         $customer = $this->order?->leadBooker->customer;
         $nextPayment = $this->order?->next_installment;
         $finalPayment = $this->order?->repository->generateRemainingOrderInstallment();
@@ -81,20 +85,20 @@ class OrderCustomMail extends Mailable
             'LEAD_MIDDLE_NAMES' => $customer->middle_names ?? '',
             'LEAD_LAST_NAME' => $customer->last_name ?? '',
             'LEAD_PASSPORT_EXPIRY_DATE' => f_date($customer->passport_expiry_date ?? ''),
-            'LEAD_CONTACT_NAME' => $order?->agent?->first_name ?? $order?->leadBooker?->customer?->first_name ??  '',
-            'BOOKING_REFERENCE' => $order?->booking_reference ?? '',
-            'ORDERED_ON' => f_date($order?->ordered_on ?? ''),
-            'ORDER_COST' => f_currency($order?->cost ?? 0),
-            'TOTAL_OWED' => f_currency($order?->total ?? 0),
-            'DEPOSIT' => f_currency($order?->calculated_deposit ?? 0),
-            'TOTAL_PAID' => f_currency($order?->paid ?? 0),
-            'TOTAL_REMAINING' => f_currency($order?->remaining ?? 0),
-            'DUE_PAYMENT_TOTAL' => f_currency(isset($order) ? $nextPayment?->calculated_amount : 0),
-            'DUE_PAYMENT_REMAINING' => f_currency(isset($order) ? $nextPayment?->remaining : 0),
-            'DUE_PAYMENT_DATE' => f_date(isset($order) ? $nextPayment?->due_on : ''),
-            'FINAL_PAYMENT_TOTAL' => f_currency(isset($order) ? $finalPayment?->calculated_amount : 0),
-            'FINAL_PAYMENT_REMAINING' => f_currency(isset($order) ? $finalPayment?->remaining : 0),
-            'FINAL_PAYMENT_DATE' => f_date(isset($order) ? $finalPayment?->due_on : ''),
+            'LEAD_CONTACT_NAME' => $this->order?->agent?->first_name ?? $order?->leadBooker?->customer?->first_name ??  '',
+            'BOOKING_REFERENCE' => $this->order?->booking_reference ?? '',
+            'ORDERED_ON' => f_date($this->order?->ordered_on ?? ''),
+            'ORDER_COST' => f_currency($this->order?->cost ?? 0),
+            'TOTAL_OWED' => f_currency($this->order?->total ?? 0),
+            'DEPOSIT' => f_currency($this->order?->calculated_deposit ?? 0),
+            'TOTAL_PAID' => f_currency($this->order?->paid ?? 0),
+            'TOTAL_REMAINING' => f_currency($this->order?->remaining ?? 0),
+            'DUE_PAYMENT_TOTAL' => f_currency(isset($this->order) ? $nextPayment?->calculated_amount : 0),
+            'DUE_PAYMENT_REMAINING' => f_currency(isset($this->order) ? $nextPayment?->remaining : 0),
+            'DUE_PAYMENT_DATE' => f_date(isset($this->order) ? $nextPayment?->due_on : ''),
+            'FINAL_PAYMENT_TOTAL' => f_currency(isset($this->order) ? $finalPayment?->calculated_amount : 0),
+            'FINAL_PAYMENT_REMAINING' => f_currency(isset($this->order) ? $finalPayment?->remaining : 0),
+            'FINAL_PAYMENT_DATE' => f_date(isset($this->order) ? $finalPayment?->due_on : ''),
             'TOUR_NAME' => $tour?->name ?? '',
             'EVENT_NAME' => isset($tour) ? $tour->event?->name : '',
             'EVENT_TYPE' => $tour && $tour->event && $tour->event->event_category ? ($tour->event->event_category->name === 'NORMAL' ? 'Child Event' : 'Parent Event'): '',
