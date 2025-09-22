@@ -297,7 +297,7 @@ class Controls extends ModalComponent
 
             if ($this->additionalAttachment) {
                 $fullPath = $this->additionalAttachment->getRealPath();
-                $originalFilename = $this->additionalAttachment->getClientOriginalName(); // ← THIS
+                $originalFilename = $this->additionalAttachment->getClientOriginalName();
             }
 
             $mail = new OrderCustomMail(
