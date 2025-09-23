@@ -143,12 +143,11 @@ class OrderMailer
         $invoice->organization = $order->organization ?? null;
         $invoice->agent = $order->agent ?? null;
 
-        //$bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
-        $bcc = "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
 
         try {
             (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))
-                    ->send('prajanbalaji.a@gmail.com', $this->order, [$this->getReservationAttachment(), $this->getInvoiceAttachment()], $bcc, true, $this->order->consultant?->email);
+                    ->send($email, $this->order, [$this->getReservationAttachment(), $this->getInvoiceAttachment()], $bcc, true, $this->order->consultant?->email);
             return true;
         } catch (MailDisabledException) {
             return false;
@@ -167,7 +166,7 @@ class OrderMailer
         $customFromEmail = $user->email;
         $customFromName = $user->name ?? $user->email;
         $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
-        $bcc = ""; //flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
         try {
             $mail = (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null, $customFromEmail, $customFromName));
             if ($this->order?->tour?->event?->itinerary_email_template !== null) { $mail->setBody($this->order?->tour?->event?->itinerary_email_template); }
