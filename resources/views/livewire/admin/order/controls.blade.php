@@ -177,13 +177,13 @@
                             <div class="form-group">
                                 <label>Additional Attachment (PDF or DOC only)</label>
                                 <input type="file" class="form-control" wire:model="additionalAttachments" multiple accept=".pdf,.doc,.docx">
-                                <small class="form-text text-muted">Maximum file size: 1MB. Allowed types: PDF, DOC, DOCX, Maximum 5 allowed. 
+                                <small class="form-text text-muted">Maximum file size: 2MB. Allowed types: PDF, DOC, DOCX, Maximum 5 Attachment allowed. 
                                     @if($additionalAttachments)
-                                    - Total size: {{ number_format($this->getTotalAttachmentsSize() / 1024, 1) }} KB / 1024 KB
+                                    - <b>Total size:</b> {{ number_format($this->getTotalAttachmentsSize() / 1024, 2) }} KB / 2048 KB
                                     @endif
                                 </small>
                                 @error('additionalAttachments') <span class="text-danger d-block">{{ $message }}</span> @enderror
-
+                                @error('additionalAttachments.*') <span class="text-danger d-block">{{ $message }}</span> @enderror
                                 @if($additionalAttachments)
                                     <div class="mt-2">
                                         <h6>Selected file:</h6>

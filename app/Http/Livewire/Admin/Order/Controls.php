@@ -235,7 +235,7 @@ class Controls extends ModalComponent
         'subject' => 'required|string|max:255',
         'emailBody' => 'required|string',
         'additionalAttachments' => 'array|max:5',
-        'additionalAttachments.*' => 'nullable|file|max:1024|mimes:pdf,doc,docx',
+        'additionalAttachments.*' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
     ];
 
     protected $messages = [
