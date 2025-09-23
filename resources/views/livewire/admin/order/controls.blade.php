@@ -176,16 +176,30 @@
 
                             <div class="form-group">
                                 <label>Additional Attachment (PDF or DOC only)</label>
-                                <input type="file" class="form-control" wire:model="additionalAttachment" accept=".pdf,.doc,.docx">
-                                <small class="form-text text-muted">Maximum file size: 2MB. Allowed types: PDF, DOC, DOCX</small>
-                                @error('additionalAttachment') <span class="text-danger">{{ $message }}</span> @enderror
-                                @if($additionalAttachment)
+                                <input type="file" class="form-control" wire:model="additionalAttachments" multiple accept=".pdf,.doc,.docx">
+                                <small class="form-text text-muted">Maximum file size: 1MB. Allowed types: PDF, DOC, DOCX, Maximum 5 allowed. 
+                                    @if($additionalAttachments)
+                                    - Total size: {{ number_format($this->getTotalAttachmentsSize() / 1024, 1) }} KB / 1024 KB
+                                    @endif
+                                </small>
+                                @error('additionalAttachments') <span class="text-danger d-block">{{ $message }}</span> @enderror
+
+                                @if($additionalAttachments)
                                     <div class="mt-2">
                                         <h6>Selected file:</h6>
-                                        <div class="alert alert-info d-flex justify-content-between align-items-center">
-                                            <span>{{ $additionalAttachment->getClientOriginalName() }}</span>
-                                            <span class="badge badge-light">{{ round($additionalAttachment->getSize() / 1024, 2) }} KB</span>
-                                        </div>
+                                        @foreach ($additionalAttachments as $index => $file)
+                                            <div class="alert alert-info d-flex justify-content-between align-items-center mb-2">
+                                                <span>{{ $file->getClientOriginalName() }}</span>
+                                                <div>
+                                                    <span class="badge badge-light mr-2">{{ round($file->getSize() / 1024, 2) }} KB</span>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            wire:click="removeAttachment({{ $index }})"
+                                                            wire:loading.attr="disabled">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 @endif
                             </div>

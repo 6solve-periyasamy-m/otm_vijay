@@ -18,25 +18,23 @@ class OrderCustomMail extends Mailable
     public $subjectLine;
     public $htmlBody;
     public $sentData;
-    public $documentPath;
+    public $documentPaths;
     public $bccEmails;
     public $ccEmails;
     public $fromEmail;
     public $fromName;
-    public $documentName;
 
-    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPath, $ccEmails=[], $bccEmails=[], $fromEmail, $fromName, $documentName=null)
+    public function __construct($user, Order $order, $subjectLine, $htmlBody, $sentData, $documentPaths, $ccEmails=[], $bccEmails=[], $fromEmail, $fromName)
     {
         $this->user = $user;
         $this->order = $order;
         $this->subjectLine = $subjectLine;
         $this->htmlBody = $htmlBody;
         $this->sentData = $sentData;
-        $this->documentPath = $documentPath;
+        $this->documentPaths = $documentPaths;
         $this->ccEmails = $ccEmails;
         $this->bccEmails = $bccEmails;
         $this->fromEmail = $fromEmail;
-        $this->documentName = $documentName;
     }
 
     public function build()
@@ -55,11 +53,8 @@ class OrderCustomMail extends Mailable
             ])
             ->attachData($this->sentData, "Itinerary-{$this->order->booking_reference}.pdf");
 
-        if (!empty($this->documentPath) && file_exists($this->documentPath) && is_readable($this->documentPath)) {
-            $mail->attach($this->documentPath, [
-                'as' => $this->documentName ?? basename($this->documentPath),
-                'mime' => mime_content_type($this->documentPath),
-            ]);
+        foreach ($this->documentPaths as $filePath) {
+            $mail->attach($filePath);
         }
 
         if (!empty($this->ccEmails)) {
