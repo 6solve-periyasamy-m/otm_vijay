@@ -1061,7 +1061,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $items[$header][] = $item;
         }
         foreach ($items as $header => $data) {
-            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return ($a->sortKey <=> $b->sortKey); });
+            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->compare($b); });
             $items[$header] = $data;
         }
         return $items;
