@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Livewire\WithFileUploads;
 use App\Mail\OrderCustomMail;
+use Storage;
 
 /**
  * Popup menu used on the order screen
@@ -45,7 +46,7 @@ class Controls extends ModalComponent
     public $bccInput = '';
     public $subject;
     public $emailBody;
-    public $additionalAttachment;
+    public $additionalAttachments = [];
     public $orderData;
 
     // UI state
@@ -54,6 +55,7 @@ class Controls extends ModalComponent
     public $successMessage = '';
     public $errorMessage = '';
     public $sendType = '';
+    public $totalSizeInMB = 0;
 
     /**
      * Mount the component and setup data
@@ -232,7 +234,13 @@ class Controls extends ModalComponent
         'bccInput' => 'nullable|string',
         'subject' => 'required|string|max:255',
         'emailBody' => 'required|string',
-        'additionalAttachment' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
+        'additionalAttachments' => 'array|max:5',
+        'additionalAttachments.*' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
+    ];
+
+    protected $messages = [
+        'additionalAttachments.max' => 'You can upload a maximum of 5 files.',
+        'additionalAttachments.*.mimes' => 'Only PDF, DOC, and DOCX files are allowed.',
     ];
 
     public function openPopupEmailForm(string $type = null): void
@@ -270,13 +278,30 @@ class Controls extends ModalComponent
     public function closeModal(): void
     {
         $this->showModal = false;
-        $this->reset(['additionalAttachment', 'ccInput', 'bccInput', 'successMessage', 'errorMessage']);
+        $this->reset(['additionalAttachments', 'ccInput', 'bccInput', 'successMessage', 'errorMessage']);
         $this->resetErrorBag();
         $this->isSending = false;
     }
 
+
+    public function removeAttachment($index)
+    {
+        unset($this->additionalAttachments[$index]);
+        $this->additionalAttachments = array_values($this->additionalAttachments);
+    }
+
+    protected function getTotalAttachmentsSize(): int
+    {
+        return collect($this->additionalAttachments)
+            ->sum(fn($file) => $file->getSize());
+    }
+
     public function sendEmail(): void
     {
+        $directory = 'attachments';
+        if (!Storage::exists($directory)) {
+            Storage::makeDirectory($directory, 0777, true);
+        }
         $this->validate();
         $this->isSending = true;
         $this->successMessage = '';
@@ -290,14 +315,18 @@ class Controls extends ModalComponent
 
         $fullPath = null;
         $originalFilename = null;
+        $attachmentPaths  = [];
         try {
             if ($this->sendType == 'itinerary'){
                 $this->orderData = dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),]), false);
             }
 
-            if ($this->additionalAttachment) {
-                $fullPath = $this->additionalAttachment->getRealPath();
-                $originalFilename = $this->additionalAttachment->getClientOriginalName();
+            if (!empty($this->additionalAttachments)) {
+                foreach ($this->additionalAttachments as $file) {
+                    $originalName = $file->getClientOriginalName();
+                    $storedPath = $file->storeAs($directory, $originalName);
+                    $attachmentPaths[] = storage_path('app/' . $storedPath);
+                }
             }
 
             $mail = new OrderCustomMail(
@@ -306,12 +335,11 @@ class Controls extends ModalComponent
                 $this->subject,
                 $this->emailBody,
                 $this->orderData,
-                $fullPath,
+                $attachmentPaths,
                 $ccEmails,
                 $bccEmails,
                 $this->fromEmail,
-                $this->fromName,
-                $originalFilename
+                $this->fromName
             );
             Mail::to($this->to)->send($mail);
             $this->successMessage = 'The itinerary document has been successfully sent to the recipient ' . $this->to;
