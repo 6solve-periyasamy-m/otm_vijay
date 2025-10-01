@@ -9,8 +9,9 @@
        <!-- <x-livewire.input.checkbox wire:model="inventory.check_out_time_confirmed" width="2" label="Confirmed?" />-->
         <x-livewire.input wire:model="inventory.stock" width="12" label="Stock" />
 		<x-livewire.input.select.accommodation-inventory width="12" label="Stock Parent" name="inventory.stock_parent_id" value="{{ $inventory?->stock_parent_id }}" clear />
-        <x-livewire.input wire:model="inventory.purchase_price" width="6" label="Purchase Price" type="number" step="0.01" />
-        <x-livewire.input wire:model="inventory.sales_price" width="6" label="Sales Price" type="number" step="0.01" />
+        <x-livewire.input wire:model="inventory.purchase_price" width="4" label="Purchase Price" type="number" step="0.01" />
+        <x-livewire.input wire:model="inventory.sales_price" width="4" label="Sales Price" type="number" step="0.01" />.
+        <x-livewire.input.select.currency name="inventory.currency_id" width="4" label="Currency Override" value="{{ $inventory->currency_id ?? null }}" clearable />
         <x-livewire.input.text-area wire:model="inventory.internal_notes" width="6" label="Internal Notes" />
         <x-livewire.input.text-area wire:model="inventory.external_notes" width="6" label="External Notes" />
         <h6 class="fs-5 fw-bold">e-Commerce</h6>

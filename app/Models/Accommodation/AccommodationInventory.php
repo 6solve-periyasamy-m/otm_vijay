@@ -3,6 +3,7 @@
 namespace App\Models\Accommodation;
 
 use App\Models\Helper\Model;
+use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderAccommodation;
 use App\Models\Quote\Component\QuoteAccommodation;
 use App\Models\Supplier\SupplierContractComponent;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use App\Models\User;
 
 /**
  * App\Models\Accommodation\AccommodationInventory
@@ -37,6 +39,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property bool $check_out_time_confirmed
  * @property bool $fit_selectable
  * @property int $stock The available stock for this inventory
+ * @property int|null $currency_id
  * @property float|null $purchase_price
  * @property float|null $sales_price
  * @property string|null $internal_notes
@@ -53,6 +56,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
  * @property-read Accommodation $component
  * @property-read AccommodationInventory|null $stockParent
  * @property-read AccommodationInventory[] $stockChildren
+ * @property-read Currency|null $currency
  * @property-read string $accommodation_for_tour
  * @property-read string $customer_display Display string to show to customers
  * @property-read int $used_on_tour_count How many tours this inventory is used on
@@ -127,6 +131,11 @@ class AccommodationInventory extends Model
     public function stockChildren(): HasMany
     {
         return $this->hasMany(AccommodationInventory::class, 'stock_parent_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function component(): BelongsTo
@@ -220,6 +229,20 @@ class AccommodationInventory extends Model
 
     public function getLocalPurchasePriceAttribute(): float|null
     {
-        return fx_convert($this->purchase_price, $this->component->currency);
+        return fx_convert($this->purchase_price, $this->repository->getCurrency());
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (AccommodationInventory $accommodationInventory) {
+            if (auth()->check() && !$accommodationInventory->created_by) {
+                $accommodationInventory->created_by = auth()->id();
+            }
+        });
     }
 }

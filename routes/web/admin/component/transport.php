@@ -11,14 +11,14 @@ use App\Http\Controllers\Admin\Transport\TransportOccupancyController;
 Route::get('/', [TransportController::class, 'index'])->name('transports.all')->middleware('bouncer:Transport\Transport,read');
 Route::get('/create', [TransportController::class, 'create'])->name('transports.create')->middleware('bouncer:Transport\Transport,create');
 Route::post('/create', [TransportController::class, 'store'])->name('transports.store')->middleware('bouncer:Transport\Transport,create');
-Route::post('/delete', DeleteTransport::class)->name('transports.delete');
+Route::post('/delete', DeleteTransport::class)->name('transports.delete|self-delete');
 Route::prefix('{transport}')->group(function () {
     Route::get('/', [TransportController::class, 'view'])->name('transports.view')->middleware('bouncer:Transport\Transport,read');
     Route::get('/manifest', [TransportController::class, 'manifest'])->name('transports.manifest.view')->middleware('bouncer:Transport\Transport,read');
     Route::get('/manifest/export/{extension?}', [TransportController::class, 'export'])->name('transports.manifest.export')->middleware('bouncer:Transport\Transport,read');
     Route::get('/update', [TransportController::class, 'duplicate'])->name('transports.duplicate')->middleware('bouncer:Transport\Transport,create');
-    Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport\Transport,update');
-    Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update');
+    Route::get('/update', [TransportController::class, 'edit'])->name('transports.edit')->middleware('bouncer:Transport\Transport,update|self-update');
+    Route::post('/update', [TransportController::class, 'update'])->name('transports.update')->middleware('bouncer:Transport\Transport,update|self-update');
     Route::get('/archive', [TransportController::class, 'archive'])->name('transports.archive')->middleware('bouncer:Transport\Transport,delete');
     Route::get('/replicate', [TransportController::class, 'createReturn'])->name('transports.return');
     Route::get('/duplicate', [TransportController::class, 'duplicate'])->name('transports.duplicate')->middleware('bouncer:Transport\Transport,create');
@@ -28,9 +28,9 @@ Route::prefix('{transport}')->group(function () {
         Route::prefix('{inventory}')->group(function () {
             Route::get('/manifest', [TransportInventoryController::class, 'manifest'])->name('transport-inventories.manifest.view')->middleware('bouncer:Transport\TransportInventory,read');
             Route::get('/manifest/export/{extension?}', [TransportInventoryController::class, 'export'])->name('transport-inventories.manifest.export')->middleware('bouncer:Transport\TransportInventory,read');
-            Route::get('/update', [TransportInventoryController::class, 'edit'])->name('transport-inventories.edit')->middleware('bouncer:Transport\TransportInventory,update');
-            Route::post('/update', [TransportInventoryController::class, 'update'])->name('transport-inventories.update')->middleware('bouncer:Transport\TransportInventory,update');
-            Route::post('/delete', [TransportInventoryController::class, 'destroy'])->name('transport-inventories.delete')->middleware('bouncer:Transport\TransportInventory,delete');
+            Route::get('/update', [TransportInventoryController::class, 'edit'])->name('transport-inventories.edit')->middleware('bouncer:Transport\TransportInventory,update|self-update');
+            Route::post('/update', [TransportInventoryController::class, 'update'])->name('transport-inventories.update')->middleware('bouncer:Transport\TransportInventory,update|self-update');
+            Route::post('/delete', [TransportInventoryController::class, 'destroy'])->name('transport-inventories.delete')->middleware('bouncer:Transport\TransportInventory,delete|self-delete');
             Route::get('/duplicate', [TransportInventoryController::class, 'duplicate'])->name('transport-inventories.duplicate')->middleware('bouncer:Transport\TransportInventory,create');
         });
     });

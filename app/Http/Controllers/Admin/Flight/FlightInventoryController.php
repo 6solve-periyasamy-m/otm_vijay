@@ -13,11 +13,13 @@ class FlightInventoryController extends Controller
 {
     public function create(Flight $flight)
     {
+        $this->authorize('self-child-access', [$flight, FlightInventory::class]);
         return view('pages.admin.flight.inventory.form', ['flight' => $flight,]);
     }
 
     public function store(Request $request, Flight $flight)
     {
+        $this->authorize('self-child-access', [$flight, FlightInventory::class]);
         $request->validate(FlightInventory::getValidationRules());
         $inventory = FlightInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
@@ -28,6 +30,7 @@ class FlightInventoryController extends Controller
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
+            'currency_id' => $request->input('currency_id'),
             'sales_price' => $request->input('sales_price') ?? 0,
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
@@ -63,6 +66,7 @@ class FlightInventoryController extends Controller
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
+            'currency_id' => $request->input('currency_id'),
             'sales_price' => $request->input('sales_price') ?? 0,
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),

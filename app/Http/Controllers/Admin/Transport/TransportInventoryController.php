@@ -14,11 +14,13 @@ class TransportInventoryController extends Controller
 
     public function create(Transport $transport)
     {
+        $this->authorize('self-child-access', [$transport, TransportInventory::class]);
         return view('pages.admin.transport.inventory.form', ['transport' => $transport,]);
     }
 
     public function store(Request $request, Transport $transport)
     {
+        $this->authorize('self-child-access', [$transport, TransportInventory::class]);
         $request->validate(TransportInventory::getValidationRules());
         $inventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),
@@ -31,6 +33,7 @@ class TransportInventoryController extends Controller
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
             'sales_price' => $request->input('sales_price') ?? 0,
+            'currency_id' => $request->input('currency_id'),
             'transport_number' => $request->input('transport_number'),
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
@@ -67,6 +70,7 @@ class TransportInventoryController extends Controller
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
+            'currency_id' => $request->input('currency_id'),
             'sales_price' => $request->input('sales_price') ?? 0,
             'transport_number' => $request->input('transport_number'),
             'internal_notes' => $request->input('internal_notes'),

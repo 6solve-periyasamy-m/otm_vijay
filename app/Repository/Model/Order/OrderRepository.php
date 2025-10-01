@@ -1018,8 +1018,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $items[$header][] = $item;
         }
 
-        foreach ($this->order->orderFlights()->groupBy('flight_inventory_tour_id')->get() as  $component) {
-            $key = "flight-{$component->flight_inventory_tour_id}";
+        foreach ($this->order->orderFlights()->get() as  $component) {
+            $key = "flight-{$component->flight_inventory_tour_id}-{$component->flight_number_override}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
             $item = $component->repository->getItineraryItem($this->order);

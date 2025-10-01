@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Admin\Flight;
 
+use App\Actions\Flight\DeleteFlight;
+use App\Exceptions\CannotDeleteException;
 use App\Http\Livewire\Abstract\ActionColumn;
 use App\Models\Flight\Airline;
 use App\Models\Flight\Flight;
@@ -9,9 +11,12 @@ use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
+use App\Http\Livewire\SendsEvents;
 
 class Table extends LivewireDatatable
 {
+    use SendsEvents;
+
     public $name = 'flight-table';
     public bool $archived = false;
     public function builder()
@@ -59,5 +64,23 @@ class Table extends LivewireDatatable
             $archiveColumn,
             ActionColumn::view('flight', 'flights.edit', 'flights.view'),
         ];
+    }
+
+    public function delete($id): void
+    {
+        $flight = Flight::find($id);
+        if ($flight === null) {
+            $this->toast('Cannot Delete Flight', 'The requested flight was not found.', 'danger');
+        }
+        if (! auth()->user()->can('self-child-access', [$flight, \App\Models\Flight\FlightInventory::class])) {
+            $this->toast('Unauthorized', 'You do not have permission to delete this Flight.', 'danger');
+            return;
+        }
+        try {
+            DeleteFlight::run(Flight::find($id));
+            $this->toast('flight Deleted Successfully', 'Successfully deleted the requested flight.', 'success');
+        } catch (CannotDeleteException $e) {
+            $this->toast('Cannot Delete flight', $e->getMessage(), 'danger');
+        }
     }
 }

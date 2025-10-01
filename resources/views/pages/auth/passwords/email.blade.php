@@ -16,7 +16,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ $action ?? route('password.email') }}">
+                    <form method="POST" action="{{ $action ?? route('password.send-reset') }}">
                         @csrf
 
                         <div class="form-group row">

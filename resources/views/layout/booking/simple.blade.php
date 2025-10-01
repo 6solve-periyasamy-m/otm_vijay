@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Simple Booking Form')</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
@@ -74,6 +75,7 @@
     @stack('scripts')
 </head>
 <body>
+    @php //dd($brand); @endphp
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6TKNMN" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
@@ -83,7 +85,11 @@
             <div class="row">
                 <div class="col-one">
                     <div class="img-contain">
-                        <img style="width: 300px; height: 32px;" src="{{ $brand->alt_image }}" alt="logo">
+                        @if(isset($brand))
+                            <a href="https://www.keithprowsetravel.com/" target="_blank">
+                                <img style="width: 300px; height: 32px;" src="{{ $brand->alt_image }}" alt="lo{{ $brand->name }}go" title="{{ $brand->name }}">
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <div class="col-two">
