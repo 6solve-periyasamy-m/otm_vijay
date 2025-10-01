@@ -71,6 +71,7 @@ class EventRepository extends ModelRepository implements HasOrderManifest
         // Fetch the inventory specifically between the start and the end of the current day. Add a day to make sure that all are captured
         /** @var Activity $activity */
         foreach ($parent->activities()->get() as $activity) {
+
             $data[] = $activity->repository->getEventActivityReportRow($this->event->starts_at, $this->event->ends_at);
         }
         return $data;

@@ -90,7 +90,7 @@ $hideNoCategory = $hideNoCategory ?? false;
     </div>
     <hr class="splitter" />
     <div class="row">
-        <div class="col-xl-6">
+        <div class="col-xl-{{ $event->event_category === \App\Models\Helper\Enum\EventType::MAIN ? 12 : 6 }}">
             <div class="heading pt-2 pb-md-3 pb-2">
                 <h2 class="fw-bold">Tours</h2>
             </div>
@@ -167,6 +167,7 @@ $hideNoCategory = $hideNoCategory ?? false;
                 </table>
             </x-admin.section.card>
         </div>
+        @if($event->event_category !== \App\Models\Helper\Enum\EventType::MAIN)
         <div class="col-xl-6">
             {{-- Linked Activities --}}
             <div class="heading pt-2 pb-md-3 pb-2">
@@ -177,6 +178,7 @@ $hideNoCategory = $hideNoCategory ?? false;
                     <thead>
                         <tr>
                             <th scope="col">Activity</th>
+                            <th scope="col">Category</th>
                             <th scope="col">Type</th>
                             <th scope="col">Total Stock</th>
                             <th scope="col">Used Stock</th>
@@ -189,6 +191,7 @@ $hideNoCategory = $hideNoCategory ?? false;
                                 <th scope="row">
                                     <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
                                 </th>
+                                <td>{{ $row->category }}</td>
                                 <td>{{ $row->type }}</td>
                                 <td>{{ $row->totalStock }}</td>
                                 <td>{{ $row->usedStock }}</td>
@@ -199,5 +202,6 @@ $hideNoCategory = $hideNoCategory ?? false;
                 </table>
             </x-admin.section.card>
         </div>
+        @endif
     </div>
 @endsection
