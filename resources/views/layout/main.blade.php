@@ -35,15 +35,13 @@
     @include('partials.sidebar')
     <p></p>
     <div class="container" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; min-width: calc(100vw - 298px); min-height: calc(100vh - 49px);">
-        @if ($errors->any())
+        @if (($showErrors ?? true) && $errors->any())
             @foreach ($errors->all() as $error)
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ $error }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <ion-icon name="close"></ion-icon>
-                    </button>
-                </div>
+                <x-admin.banner :content="$error" color="danger" />
             @endforeach
+        @endif
+        @if(\Session::has('success'))
+            <x-admin.banner content="{!! \Session::get('success') !!}" color="success" />
         @endif
         <div class="bg-light text-dark" style="padding: 1% 100px; border: 5px solid black; border-radius: 25px;">
             @yield('content')

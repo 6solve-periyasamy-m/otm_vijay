@@ -167,6 +167,7 @@ Route::middleware('auth:web')->group(function () {
            Route::get('/{user?}', [UserProfileController::class, 'profile'])->name('profile');
            Route::post('/avatar/{user?}', [UserProfileController::class, 'avatar'])->name('avatar');
            Route::post('/update/{user?}', [UserProfileController::class, 'update'])->name('update');
+           Route::post('/reset/{user?}', [UserProfileController::class, 'sendReset'])->name('reset');
            Route::post('/password/{user?}', [UserProfileController::class, 'password'])->name('password');
            Route::prefix('2fa')->name('2fa.')->group(function () {
                Route::post('/enable/{user?}', [UserProfileController::class, 'enable2fa'])->name('enable');

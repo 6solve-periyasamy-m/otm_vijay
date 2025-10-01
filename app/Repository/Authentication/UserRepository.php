@@ -26,8 +26,8 @@ class UserRepository
 
     public function requestReset(): bool
     {
-        $token = PasswordResetRepository::createResetRequest($this->user->email);
         try {
+            $token = PasswordResetRepository::createResetRequest($this->user->email);
             Mail::to($this->user->email)->send(new PasswordResetMailable($this->user->email, $token));
             return true;
         } catch (Exception $exception) {
@@ -42,6 +42,7 @@ class UserRepository
             EventLogger::simple($this->user, ModelEventType::PASSWORD_RESET);
             $this->user->password = Hash::make($password);
             $this->user->save();
+            PasswordResetRepository::invalidateResetRequest($token);
             return true;
         }
         return false;
