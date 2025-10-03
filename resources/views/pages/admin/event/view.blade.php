@@ -14,6 +14,7 @@ $hideNoCategory = $hideNoCategory ?? false;
         $(document).ready(function () {
             $('#orders').DataTable({fixedHeader: true, order: [[0, 'desc']],});
             $('#tours').DataTable({fixedHeader: true, order: [[2, 'desc']],});
+            $('#linked-activities').DataTable({fixedHeader: true, order: [[3, 'asc']],});
         });
     </script>
 @endpush
@@ -174,7 +175,7 @@ $hideNoCategory = $hideNoCategory ?? false;
                 <h2 class="fw-bold">Linked Activities</h2>
             </div>
             <x-admin.section.card>
-                <table class="table table-striped datatable">
+                <table class="table table-striped" id="linked-activities">
                     <thead>
                         <tr>
                             <th scope="col">Activity</th>
