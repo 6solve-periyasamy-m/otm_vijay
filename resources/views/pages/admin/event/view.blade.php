@@ -106,7 +106,7 @@ $hideNoCategory = $hideNoCategory ?? false;
                         <th scope="col">Name</th>
                         <th scope="col">Category</th>
                         <th scope="col">Orders</th>
-                        <th scope="col">Booking URL</th>
+                        <th scope="col" style="width: 5em;">Booking URL</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -117,7 +117,7 @@ $hideNoCategory = $hideNoCategory ?? false;
                             </td>
                             <td>{{ $tour->category === null ? 'None' : $tour->category->getDisplay() }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
-                            <td>
+                            <td style="width: 5em;">
                                 @if(!empty($tour->getBookingFormUrl()))
                                     <a href="{{$tour->getBookingFormUrl()}}" class="link link-primary">{{ $tour->getBookingFormUrl() }}</a>
                                 @else
@@ -134,38 +134,34 @@ $hideNoCategory = $hideNoCategory ?? false;
                     @endforeach
                 </table>
             </x-admin.section.card>
-            <div class="heading pt-2 pb-md-3 pb-2">
-                <h2 class="fw-bold">Orders</h2>
-            </div>
-            <x-admin.section.card>
-                <table id="orders" class="table table-striped">
-                    <thead>
+            <x-admin.section.accordion>
+                <x-slot:title>Orders</x-slot:title>
+                <x-admin.section.card>
+                    <table id="orders" class="table table-striped">
+                        <thead>
                         <tr>
                             <th scope="col">Ordered On</th>
                             <th scope="col">Booking Reference</th>
-                            <th scope="col">Tour</th>
                             <th scope="col">Travelling</th>
                             <th scope="col">Order Status</th>
                         </tr>
-                    </thead>
-                    @foreach($event->orders as $order)
-                        @php $count = $order->orderCustomers()->count() - 1; @endphp
-                        <tr>
-                            <td data-sort="{{$order->ordered_on->unix()}}">{{ f_datetime($order->ordered_on) }}</td>
-                            <td>
-                                <a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a>
-                            </td>
-                            <td>
-                                <a href="{{route('tours.view', ['tour' => $order->tour,])}}" class="link link-primary">{{ $order->tour->name }}</a>
-                            </td>
-                            <td>{{ $order->leadBooker?->customer_name }}{{ $count > 0 ? " + $count" : '' }}</td>
-                            <td>
-                                <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
-                            </td>
-                        </tr>
-                    @endforeach
-                </table>
-            </x-admin.section.card>
+                        </thead>
+                        @foreach($event->orders as $order)
+                            @php $count = $order->orderCustomers()->count() - 1; @endphp
+                            <tr>
+                                <td data-sort="{{$order->ordered_on->unix()}}">{{ f_datetime($order->ordered_on) }}</td>
+                                <td>
+                                    <a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a>
+                                </td>
+                                <td>{{ $order->leadBooker?->customer_name }}{{ $count > 0 ? " + $count" : '' }}</td>
+                                <td>
+                                    <h6 class="badge badge-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </x-admin.section.card>
+            </x-admin.section.accordion>
         </div>
         <div class="col-xl-6">
             {{-- Linked Activities --}}

@@ -53,7 +53,7 @@ class EventController extends Controller
 
     public function view(TableRequest $request, Event $event)
     {
-        return view('pages.admin.event.view', ['event' => $event, 'hideNoCategory' => $request->hideNoCategory ?? false,]);
+        return view('pages.admin.event.view', ['event' => $event, 'hideNoCategory' => $request->hideNoCategory ?? flag('tour.category.hide', false),]);
     }
 
     public function edit(Event $event)
