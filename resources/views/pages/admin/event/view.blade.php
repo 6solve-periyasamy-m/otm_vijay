@@ -147,7 +147,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                     @endforeach
                 </table>
             </x-admin.section.card>
-            <x-admin.section.accordion>
+            <x-admin.section.accordion closed color="#a3caee">
                 <x-slot:title>Orders</x-slot:title>
                 <x-admin.section.card>
                     <table id="orders" class="table table-striped">
