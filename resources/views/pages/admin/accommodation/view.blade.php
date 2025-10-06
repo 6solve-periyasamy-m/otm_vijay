@@ -134,13 +134,13 @@
                 @endcan
             </div>
             <div class="col-2">
-                @can('self-child-access', [$accommodation, \App\Models\Accommodation\AccommodationInventory::class])
+                @if(Gate::check('self-child-access', [$accommodation, \App\Models\Accommodation\AccommodationInventory::class]) || Gate::check('create', AccommodationInventory::class))
                     <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}"
                        class="btn btn-primary">
                         {{ Icon::create() }}
                         <span>Add Inventory</span>
                     </a>
-                @endcan
+                @endif
             </div>
         </div>
     </x-admin.section.card>
