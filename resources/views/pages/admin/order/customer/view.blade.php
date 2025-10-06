@@ -399,7 +399,6 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
-                                <th scope="col">Price at time of order</th>
                                 <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
@@ -421,7 +420,10 @@
                                         @endif
                                     </td>
                                     <td>{{ $orderAccommodation->tourComponent->inventory->repository->getPurchasePriceString() }}</td>
-                                    <td>{{ f_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>
+                                        {{ fr_currency($orderAccommodation->tourComponent->inventory->purchase_price, $orderAccommodation->tourComponent->inventory->repository->getCurrency()) }}
+                                        ({{ fr_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
+                                    </td>
                                     <td>{{ f_date($orderAccommodation->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderAccommodation->tourComponent->tour_component_type == 'Add-on')
@@ -483,7 +485,6 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
-                                <th scope="col">Price at time of order</th>
                                 <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
@@ -503,8 +504,10 @@
                                             {{ f_currency($orderActivity->cost) }}
                                         @endif
                                     </td>
-                                    <td>{{ $orderActivity->tourComponent->inventory->repository->getPurchasePriceString() }}</td>
-                                    <td>{{ f_currency($orderActivity->purchase_price) }} @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>
+                                        {{ fr_currency($orderActivity->tourComponent->inventory->purchase_price, $orderActivity->tourComponent->inventory->repository->getCurrency()) }}
+                                        ({{ fr_currency($orderActivity->purchase_price) }} @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
+                                    </td>
                                     <td>{{ f_date($orderActivity->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderActivity->tourComponent->tour_component_type == 'Add-on')
@@ -566,7 +569,6 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
-                                <th scope="col">Price at time of order</th>
                                 <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
@@ -586,8 +588,10 @@
                                             {{ f_currency($orderFlight->cost) }}
                                         @endif
                                     </td>
-                                    <td>{{ $orderFlight->tourComponent->inventory->repository->getPurchasePriceString() }}</td>
-                                    <td>{{ f_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>
+                                        {{ fr_currency($orderFlight->tourComponent->inventory->purchase_price, $orderFlight->tourComponent->inventory->repository->getCurrency()) }}
+                                        ({{ fr_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
+                                    </td>
                                     <td>{{ f_date($orderFlight->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderFlight->tourComponent->tour_component_type == 'Add-on')
@@ -650,7 +654,6 @@
                                 <th scope="col">Component Type</th>
                                 <th scope="col">Cost</th>
                                 <th scope="col">Purchase Price</th>
-                                <th scope="col">Price at time of order</th>
                                 <th scope="col">Updated Date</th>
                                 <th scope="col">Upgrades</th>
                                 <th scope="col">Actions</th>
@@ -674,8 +677,10 @@
                                             {{ f_currency($orderTransport->cost) }}
                                         @endif
                                     </td>
-                                    <td>{{ $orderTransport->tourComponent->inventory->repository->getPurchasePriceString() }}</td>
-                                    <td>{{ f_currency($orderTransport->purchase_price) }} @includeWhen($orderTransport->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                                    <td>
+                                        {{ fr_currency($orderFlight->tourComponent->inventory->purchase_price, $orderFlight->tourComponent->inventory->repository->getCurrency()) }}
+                                        ({{ fr_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
+                                    </td>
                                     <td>{{ f_date($orderTransport->updated_at) }}</td>
                                     <td style="width: 20%">
                                         @if($orderTransport->tourComponent->tour_component_type == 'Add-on')
