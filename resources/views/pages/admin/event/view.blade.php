@@ -200,6 +200,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                     </thead>
                     <tbody>
                     @foreach($event->repository->getActivityReport($activityFilter) as $row)
+                        @continue($row === null)
                         <tr>
                             <th scope="row">
                                 <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
