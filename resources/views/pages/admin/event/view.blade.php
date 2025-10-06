@@ -1,3 +1,4 @@
+@php use App\Helpers\ActivitySortFilter; @endphp
 @extends('layout.master')
 
 @section('title', 'View Event')
@@ -7,6 +8,9 @@
  * @var \App\Models\Tour\Event $event
  */
 $hideNoCategory = $hideNoCategory ?? false;
+if (!($activityFilter instanceof ActivitySortFilter)) {
+    $activityFilter = ActivitySortFilter::from($activityFilter);
+}
 @endphp
 
 @push('footer-stack')
@@ -15,14 +19,20 @@ $hideNoCategory = $hideNoCategory ?? false;
             $('#orders').DataTable({fixedHeader: true, order: [[0, 'desc']],});
             $('#tours').DataTable({fixedHeader: true, order: [[2, 'desc']],});
         });
+
+        function change_filter(obj) {
+            let url = "{{ route('events.view', ['event' => $event,]) }}?activityFilter=";
+            window.location.href = url + obj.value;
+        }
     </script>
 @endpush
 
 @section('content')
     @if($event->banner_url !== null)
-    <div class="d-block" style="padding: 1rem;">
-        <img src="{{ asset($event->banner_url) }}" height="100" style="max-height: 100px; min-width: 100%;" alt="Event Banner" />
-    </div>
+        <div class="d-block" style="padding: 1rem;">
+            <img src="{{ asset($event->banner_url) }}" height="100" style="max-height: 100px; min-width: 100%;"
+                 alt="Event Banner"/>
+        </div>
     @endif
     <div class="otm-callout">
         <div class="row">
@@ -88,7 +98,7 @@ $hideNoCategory = $hideNoCategory ?? false;
             </div>
         </div>
     </div>
-    <hr class="splitter" />
+    <hr class="splitter"/>
     <div class="row">
         <div class="col-xl-6">
             <div class="heading pt-2 pb-md-3 pb-2">
@@ -96,7 +106,8 @@ $hideNoCategory = $hideNoCategory ?? false;
             </div>
             <x-admin.section.card>
                 <div class="flex justify-end mb-2">
-                    <a class="btn btn-primary" href="{{ route('events.view', ['event' => $event, 'hideNoCategory' => !($hideNoCategory)]) }}">
+                    <a class="btn btn-primary"
+                       href="{{ route('events.view', ['event' => $event, 'hideNoCategory' => !($hideNoCategory)]) }}">
                         {{ Icon::eye() }} {{ $hideNoCategory ? 'Show' : 'Hide' }} Tours Without Category
                     </a>
                 </div>
@@ -113,13 +124,15 @@ $hideNoCategory = $hideNoCategory ?? false;
                     @foreach($event->getTours($hideNoCategory) as $tour)
                         <tr>
                             <td>
-                                <a href="{{route('tours.view', ['tour' => $tour,])}}" class="link link-primary">{{ $tour->name }}</a>
+                                <a href="{{route('tours.view', ['tour' => $tour,])}}"
+                                   class="link link-primary">{{ $tour->name }}</a>
                             </td>
                             <td>{{ $tour->category === null ? 'None' : $tour->category->getDisplay() }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
                             <td style="width: 5em;">
                                 @if(!empty($tour->getBookingFormUrl()))
-                                    <a href="{{$tour->getBookingFormUrl()}}" class="link link-primary">{{ $tour->getBookingFormUrl() }}</a>
+                                    <a href="{{$tour->getBookingFormUrl()}}"
+                                       class="link link-primary">{{ $tour->getBookingFormUrl() }}</a>
                                 @else
                                     No Booking URL Set
                                 @endif
@@ -151,7 +164,8 @@ $hideNoCategory = $hideNoCategory ?? false;
                             <tr>
                                 <td data-sort="{{$order->ordered_on->unix()}}">{{ f_datetime($order->ordered_on) }}</td>
                                 <td>
-                                    <a href="{{route('orders.view', ['order' => $order,])}}" class="link link-primary">{{ $order->booking_reference }}</a>
+                                    <a href="{{route('orders.view', ['order' => $order,])}}"
+                                       class="link link-primary">{{ $order->booking_reference }}</a>
                                 </td>
                                 <td>{{ $order->leadBooker?->customer_name }}{{ $count > 0 ? " + $count" : '' }}</td>
                                 <td>
@@ -169,28 +183,33 @@ $hideNoCategory = $hideNoCategory ?? false;
                 <h2 class="fw-bold">Linked Activities</h2>
             </div>
             <x-admin.section.card>
+                <div class="row">
+                    <div class="col-12">
+                        <x-livewire.input.dropdown name="filter" :items="ActivitySortFilter::toArray()" value="{{$activityFilter->value}}" label="Filter" onchange="change_filter(this)"/>
+                    </div>
+                </div>
                 <table class="table table-striped datatable">
                     <thead>
-                        <tr>
-                            <th scope="col">Activity</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Total Stock</th>
-                            <th scope="col">Used Stock</th>
-                            <th scope="col">Available Stock</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Activity</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Total Stock</th>
+                        <th scope="col">Used Stock</th>
+                        <th scope="col">Available Stock</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach($event->repository->getActivityReport() as $row)
-                            <tr>
-                                <th scope="row">
-                                    <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
-                                </th>
-                                <td>{{ $row->type }}</td>
-                                <td>{{ $row->totalStock }}</td>
-                                <td>{{ $row->usedStock }}</td>
-                                <td>{{ $row->totalStock - $row->usedStock }}</td>
-                            </tr>
-                        @endforeach
+                    @foreach($event->repository->getActivityReport($activityFilter) as $row)
+                        <tr>
+                            <th scope="row">
+                                <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
+                            </th>
+                            <td>{{ $row->type }}</td>
+                            <td>{{ $row->totalStock }}</td>
+                            <td>{{ $row->usedStock }}</td>
+                            <td>{{ $row->totalStock - $row->usedStock }}</td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </x-admin.section.card>
