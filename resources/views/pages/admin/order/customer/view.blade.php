@@ -419,7 +419,6 @@
                                             {{ f_currency($orderAccommodation->cost) }}
                                         @endif
                                     </td>
-                                    <td>{{ $orderAccommodation->tourComponent->inventory->repository->getPurchasePriceString() }}</td>
                                     <td>
                                         {{ fr_currency($orderAccommodation->tourComponent->inventory->purchase_price, $orderAccommodation->tourComponent->inventory->repository->getCurrency()) }}
                                         ({{ fr_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
