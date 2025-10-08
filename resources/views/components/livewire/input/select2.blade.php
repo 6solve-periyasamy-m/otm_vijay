@@ -60,7 +60,6 @@
                 @endisset
                 window.addEventListener('updateValue', function (event) {
                     if (event.detail.key === '{{ $attributes->get('name') }}') {
-                        console.log(event.detail.value);
                         $.ajax({
                             url: '{{ $updateRoute }}'.replace('%id%', event.detail.value),
                             type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', _token: "{{csrf_token()}}" },
