@@ -80,7 +80,7 @@
 @endsection
 
 @section('inventory')
-    @can('self-child-access', [$transport, \App\Models\Transport\TransportInventory::class])
+    @if(Gate::check('self-child-access', [$transport, \App\Models\Transport\TransportInventory::class]) || Gate::check('create', \App\Models\Transport\TransportInventory::class))
         <x-admin.section.card>
             <a href="{{ route('transport-inventories.create', ['transport' => $transport, ]) }}"
                class="btn btn-primary float-end me-1">
@@ -88,7 +88,7 @@
                 <span>Add Inventory</span>
             </a>
         </x-admin.section.card>
-    @endcan
+    @endif
     <x-admin.section.card>
         <table id="transportInventory" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">
