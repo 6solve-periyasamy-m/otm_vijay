@@ -5,10 +5,7 @@
     $value = $attributes->get('value');
     $value = empty($value) ? null : $value;
     $clear = $attributes->get('clear', false);
-    $updateRoute = null;
-    if ($value !== null) {
-        $updateRoute = route("api.{$route}.selected", ['id' => '%id%', ]);
-    }
+    $updateRoute = route("api.{$route}.selected", ['id' => '%id%', ]);
 
     $createRoute = $attributes->get('createRoute');
     $createForm = $attributes->get('createForm');
@@ -63,9 +60,10 @@
                 @endisset
                 window.addEventListener('updateValue', function (event) {
                     if (event.detail.key === '{{ $attributes->get('name') }}') {
+                        console.log(event.detail.value);
                         $.ajax({
                             url: '{{ $updateRoute }}'.replace('%id%', event.detail.value),
-                            type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
+                            type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', _token: "{{csrf_token()}}" },
                         }).then(function (data) {
                             selector.append(new Option(data.text, data.id, true, true)).trigger('change');
 
