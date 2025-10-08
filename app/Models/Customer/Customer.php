@@ -55,6 +55,7 @@ use Laravel\Cashier\Subscription;
  * @property Carbon|null $date_of_birth
  * @property string|null $mobile_number
  * @property string|null $other_phone_number
+ * @property string|null $nationality
  * @property int $home_address_id
  * @property int $billing_address_id
  * @property string|null $emergency_contact_name
