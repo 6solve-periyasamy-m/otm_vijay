@@ -182,8 +182,17 @@
                                 @endif
                                 <div class="total">
                                     <div class="single">
+                                        @php
+                                            $rawAmount = $booking->repository->getTotalCost() + $estimateSingleOccupancy;
+                                            $convertedAmount = $rawAmount * $this->getFXRate();
+                                            $currencyCode = $this->getCurrency()->code;
+                                        @endphp
                                         <p>Total</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</p>
+                                        <p style="display:none">
+                                            <span class="currency-code">{{ $currencyCode }} </span>
+                                            <span class="total-cost">{{ $convertedAmount }} </span>
+                                        </p>
                                     </div>
                                     <div class="single">
                                         <p>Base Package Price</p>
