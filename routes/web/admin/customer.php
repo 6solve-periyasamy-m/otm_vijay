@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Customer\CustomerController;
 use App\Http\Controllers\Admin\Customer\HatSizeController;
+use App\Http\Controllers\Admin\Customer\LoyaltyNumberTypeController;
 use App\Http\Controllers\Admin\Customer\TShirtSizeController;
 
 Route::get('/', [CustomerController::class, 'index'])->name('customers.all')->middleware('bouncer:Customer\Customer,read');
@@ -36,4 +37,9 @@ Route::prefix('hat-sizes')->group(function () {
         Route::post('/update', [HatSizeController::class, 'update'])->name('hat-sizes.update')->middleware('bouncer:Customer\HatSize,update');
         Route::post('/delete', [HatSizeController::class, 'destroy'])->name('hat-sizes.delete')->middleware('bouncer:Customer\HatSize,delete');
     });
+});
+Route::prefix('loyalty-number-types')->name('loyalty-number-type.')->group(function () {
+    Route::get('/create', [LoyaltyNumberTypeController::class, 'create'])->name('create');
+    Route::get('/{type}/update', [LoyaltyNumberTypeController::class, 'edit'])->name('edit');
+    Route::post('/{type}/delete', [LoyaltyNumberTypeController::class, 'delete'])->name('delete');
 });

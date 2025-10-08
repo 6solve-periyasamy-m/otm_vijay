@@ -172,6 +172,9 @@
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\TShirtSizeRepository::class])
         </div>
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\LoyaltyNumberTypeRepository::class])
+        </div>
     </div>
     <div class="card">
         <div class="card-body" data-target="#quote" onclick="toggleAccordion(this)">
