@@ -564,9 +564,10 @@ figure.table {
   @php
     $sections = collect($itinerary->items['Sections'] ?? [])->filter(fn($item) => data_get($item->details, 'Type') === 'Flights');
     $flights = collect($itinerary->items['Flights'] ?? []);
-    $section_flights = $sections->merge($flights)->sortBy(function ($item) {
+    /*$section_flights = $sections->merge($flights)->sortBy(function ($item) {
       return $item->sortKey;
-    });
+    }); */
+    $section_flights = $flights->concat($sections);
   @endphp
 
   @if(!empty($section_flights))
