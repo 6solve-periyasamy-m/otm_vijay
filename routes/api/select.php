@@ -94,6 +94,21 @@ Route::prefix('customers')->name('customers.')->group(function () {
     Route::post('/{id}', [Customer::class, 'getOne'])->name('selected');
 });
 
+Route::prefix('loyalty-number-type')->name('hat-size.')->group(function () {
+    Route::post('/', [LoyaltyNumberType::class, 'getAll'])->name('select');
+    Route::post('/{id}', [LoyaltyNumberType::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('hat-size')->name('hat-size.')->group(function () {
+    Route::post('/', [HatSize::class, 'getAll'])->name('select');
+    Route::post('/{id}', [HatSize::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('t-shirt-size')->name('t-shirt-size.')->group(function () {
+    Route::post('/', [TShirtSize::class, 'getAll'])->name('select');
+    Route::post('/{id}', [TShirtSize::class, 'getOne'])->name('selected');
+});
+
 Route::prefix('brands')->name('brands.')->group(function () {
     Route::post('/', [Brand::class, 'getAll'])->name('select');
     Route::post('/{id}', [Brand::class, 'getOne'])->name('selected');

@@ -5,7 +5,7 @@
     }
     $fieldName = $attributes->get('name');
     $hasError = $errors->has($fieldName);
-    $id = $attributes->get('id', Str::random());
+    $id = $attributes->get('id', div_id());
 @endphp
 <div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px;">
     @if($attributes->get('label') !== null)
@@ -25,13 +25,14 @@
                 <input id="{{$id}}" {{ ($disabled ?? false) ? 'disabled' : '' }} wire:change="inputChanged('{{$attributes->get("wire:model", $attributes->get("key", null))}}')" {{ $attributes->class(['form-control', ...($classes ?? [])])->except(['id', 'width', 'label', 'prepend', 'append','disabled']) }} />
             </div>
             <script type="text/javascript">
-                window.intlTelInput(document.getElementById("{{$id}}"), {
+                let {{$id}}TelField = window.intlTelInput(document.getElementById("{{$id}}"), {
                     loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.11.2/build/js/utils.js"),
                     separateDialCode: true,
+                    nationalMode: false,
                 })
                 @isset($_instance)
                 jQuery(document.getElementById("{{$id}}")).on('change', function (event) {
-                    @this.set('{{ $attributes->get('wire:model', $attributes->get('name')) }}', iti.getNumber());
+                    @this.set('{{ $attributes->get('wire:model', $attributes->get('name')) }}', {{$id}}TelField.getNumber());
                 });
                 @endisset
             </script>

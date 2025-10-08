@@ -1,5 +1,5 @@
 @php
-    $id = $attributes->get('id', Str::random());
+    $id = $attributes->get('id', div_id());
     $route = $attributes->get('route');
     $allRoute = route('api.' . $route . '.select');
     $value = $attributes->get('value');

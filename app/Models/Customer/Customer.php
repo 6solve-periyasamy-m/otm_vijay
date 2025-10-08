@@ -4,6 +4,7 @@ namespace App\Models\Customer;
 
 use App\Models\Helper\NotificationSubject;
 use App\Models\Helper\Traits\HasNotifications;
+use App\Models\Helper\Traits\MountsLivewire;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -167,6 +168,7 @@ class Customer extends Authenticatable implements NotificationSubject
     use CascadeSoftDeletes;
     use HasRepository;
     use HasNotifications;
+    use MountsLivewire;
 
     protected string $guard = 'customer';
 
