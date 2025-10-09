@@ -14,7 +14,7 @@ class Form extends ModalComponent
 
     public LoyaltyNumberType|null $type = null;
 
-    public function mount(LoyaltyNumberType|int|null $type): void
+    public function mount(LoyaltyNumberType|int|null $type = null): void
     {
         $this->type = LoyaltyNumberType::getForMount($type);
     }
@@ -24,7 +24,7 @@ class Form extends ModalComponent
         $this->validate();
         $this->type->save();
         $this->closeModal();
-        $this->redirect(route('attributes.edit'));
+        //$this->redirect(route('attributes.edit'));
     }
 
     public function rules(): array

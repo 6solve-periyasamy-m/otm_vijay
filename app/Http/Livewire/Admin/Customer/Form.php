@@ -7,6 +7,7 @@ use App\Events\Customer\CustomerEditedEvent;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Customer\Customer;
+use App\Models\Customer\LoyaltyNumber;
 use App\Models\Location\Address;
 use Hash;
 use Illuminate\Http\UploadedFile;
@@ -24,12 +25,34 @@ class Form extends Component
     public string $password = "";
     public UploadedFile|null $image = null;
     public bool $accordion = false;
+    public array $loyalty = [];
+    public array $loyaltyToDelete = [];
 
     public function mount(Customer|int|null $customer)
     {
         $this->customer = Customer::getForMount($customer);
         $this->home = Address::getForMount($this->customer->homeAddress);
         $this->billing = Address::getForMount($this->customer->billingAddress);
+        foreach ($this->customer->loyaltyNumbers as $loyaltyNumber) {
+            $this->loyalty[] = ['id' => $loyaltyNumber->id, 'type' => $loyaltyNumber->loyalty_number_type_id, 'name' => $loyaltyNumber->loyalty_number];
+        }
+        //dd($this->loyalty);
+    }
+
+    public function addLoyaltyNumber(): void
+    {
+        $this->loyalty[] = ['id' => null, 'type' => null, 'name' => null];
+    }
+
+    public function removeLoyaltyNumber(int $key): void
+    {
+        if (array_key_exists($key, $this->loyalty)) {
+            if ($this->loyalty[$key]['id'] !== null) {
+                $this->loyaltyToDelete[] = $key;
+            }
+            unset($this->loyalty[$key]);
+        }
+        $this->render();
     }
 
     public function save(): void
@@ -51,6 +74,20 @@ class Form extends Component
             event(new CustomerCreatedEvent($this->customer));
         } else {
             event(new CustomerEditedEvent($this->customer));
+        }
+        foreach ($this->loyaltyToDelete as $id) {
+            LoyaltyNumber::find($id)?->delete();
+        }
+        foreach ($this->loyalty as $data) {
+            if ($data['id'] !== null) {
+                $loyalty = LoyaltyNumber::find($data['id']);
+            } else {
+                $loyalty = new LoyaltyNumber();
+            }
+            $loyalty->loyalty_number_type_id = $data['type'];
+            $loyalty->loyalty_number = $data['name'];
+            $loyalty->customer_id = $this->customer->id;
+            $loyalty->save();
         }
         $this->closeModal();
         $this->redirect(route('customers.view', ['customer' => $this->customer,]));
@@ -125,6 +162,8 @@ class Form extends Component
             'customer.external_notes' => 'nullable|string',
             'customer.dietary_notes' => 'nullable|string',
             'customer.mobility_notes' => 'nullable|string',
+            'loyalty.*.type' => 'required|int|exists:loyalty_number_types,id',
+            'loyalty.*.name' => 'required|string',
         ];
     }
 }

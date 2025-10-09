@@ -28,8 +28,13 @@ class LoyaltyNumberTypeRepository extends AttributeRepository
 
     public static function getCreateUrl(): string|null
     {
+        return null;
+    }
+
+    public static function getCreateModal(): string|null
+    {
         if (PermissionsRepository::canCurrentUser('create', LoyaltyNumberType::class)) {
-            return route('loyalty-number-type.create');
+            return 'admin.customer.loyalty-number-type.form';
         }
         return null;
     }

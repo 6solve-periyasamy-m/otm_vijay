@@ -99,6 +99,7 @@ use Laravel\Cashier\Subscription;
  * @property-read int|null $notifications_count Amount of system notifications for customer
  * @property-read Collection|OrderCustomer[] $orderCustomers OrderCustomers for this customer
  * @property-read Collection|QuoteProspect[] $quoteProspects
+ * @property-read Collection|LoyaltyNumber[] $loyaltyNumbers
  * @property-read int|null $order_customers_count Amount of OrderCustomers for this customer
  * @property-read Collection|Order[] $orders Orders for this customer
  * @property-read int|null $orders_count Amount of orders for this customer
@@ -220,6 +221,11 @@ class Customer extends Authenticatable implements NotificationSubject
     public function getCustomerFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function loyaltyNumbers(): HasMany
+    {
+        return $this->hasMany(LoyaltyNumber::class, 'customer_id');
     }
 
     public function getFullNameAttribute(): string

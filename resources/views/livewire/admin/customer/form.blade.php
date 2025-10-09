@@ -74,6 +74,31 @@
     </x-admin.section.card>
     <x-admin.section.card>
         <div class="row">
+            <div class="col-12 col-xl-10">
+                <span class="font-bold fw-bold">Loyalty Numbers</span>
+            </div>
+            <div class="col-12 col-xl-2 form-group">
+                <button wire:click="addLoyaltyNumber" class="btn btn-primary">{{Icon::plus()}} Add Loyalty Number</button>
+            </div>
+        </div>
+    </x-admin.section.card>
+    <div class="row">
+        @foreach($this->loyalty as $key => $loyalty)
+            <div class="col-l-4 col-md-6 col-12">
+                <x-admin.section.card>
+                    <div class="row">
+                        <x-livewire.input.select.customer.loyalty-number-type required name="loyalty.{{$key}}.type" value="{{$loyalty['type']}}" label="Type" width="5" />
+                        <x-livewire.input required wire:model="loyalty.{{$key}}.name" label="Loyalty Number" width="5" />
+                        <div class="col-2">
+                            <button wire:click="removeLoyaltyNumber({{$key}})" class="btn btn-outline-danger mb-0">{{Icon::delete()}}</button>
+                        </div>
+                    </div>
+                </x-admin.section.card>
+            </div>
+        @endforeach
+    </div>
+    <x-admin.section.card>
+        <div class="row">
             <x-livewire.input.select.customer.hat-size name="customer.hat_size_id" value="{{$customer->hat_size_id}}" label="Hat Size" width="6" />
             <x-livewire.input.select.customer.t-shirt-size name="customer.t_shirt_size_id" value="{{$customer->t_shirt_size_id}}" label="T-Shirt Size" width="6" />
         </div>

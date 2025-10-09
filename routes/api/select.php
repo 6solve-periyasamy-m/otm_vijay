@@ -94,7 +94,7 @@ Route::prefix('customers')->name('customers.')->group(function () {
     Route::post('/{id}', [Customer::class, 'getOne'])->name('selected');
 });
 
-Route::prefix('loyalty-number-type')->name('hat-size.')->group(function () {
+Route::prefix('loyalty-number-type')->name('loyalty-number-type.')->group(function () {
     Route::post('/', [LoyaltyNumberType::class, 'getAll'])->name('select');
     Route::post('/{id}', [LoyaltyNumberType::class, 'getOne'])->name('selected');
 });

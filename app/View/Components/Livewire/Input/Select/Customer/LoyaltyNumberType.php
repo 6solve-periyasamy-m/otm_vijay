@@ -19,7 +19,7 @@ class LoyaltyNumberType extends AbstractSelectComponent
      */
     public function render()
     {
-        return view('components.livewire.input.select.generic', ['route' => 'loyalty-number-type',]);
+        return view('components.livewire.input.select.customer.loyalty-number-type', ['route' => 'loyalty-number-type',]);
     }
 
     protected function getModels(?int $id = null): Collection
