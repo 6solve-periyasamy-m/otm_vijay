@@ -654,6 +654,7 @@
         .seating-map-wrapper-img-block{display:flex;align-items:center;justify-content:center;background-color:var(--secondary-color);border:1px solid #d9d9d9;border-radius:50%;width:28px;height:28px}
         .seating-map-wrapper-img-block img{width:18px}
         .grecaptcha-badge { bottom:400px !important;}
+        .select-currency .single:first-child>.custom-currency-display { appearance: none;  -webkit-appearance: none; -moz-appearance: none; background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 16px; cursor: default; font-size: 16px; line-height: 24px; padding: 4px 12px; border: 1px solid var(--primary-color); border-radius: 999px; width: 82px; font-family: "PP Neue Montreal Medium"; font-weight: 500; outline: 0;}
     </style>
 </head>
 <body>

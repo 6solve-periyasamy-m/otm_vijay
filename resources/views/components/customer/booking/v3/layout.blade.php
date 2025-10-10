@@ -104,7 +104,7 @@
                                     @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                     <div class="single">
                                         <p>Package price</p>
-                                        <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
+                                        <p>{{ $this->formatCurrency($this->tour->base_price_per_person) }}</p>
                                     </div>
                                     <div class="single">
                                         <p>Number of packages - {{ $this->getTravellerCount() }}</p>
@@ -238,7 +238,7 @@
                                 <div class="payable-now">
                                     <div class="single">
                                         <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
-                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount(), 2)  }}</p>
+                                        <p>{{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount())  }}</p>
                                     </div>
                                     @if(!$payFull)
                                     <p>

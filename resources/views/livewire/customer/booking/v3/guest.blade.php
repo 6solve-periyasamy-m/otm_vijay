@@ -46,10 +46,8 @@
             </div>
         </div>
         <div class="contact-block">
-            <p class="description">If you are booking with children under 12, get
-                in touch for a tailor-made package:</p>
-            <p class="phone">Domestic <a href="tel:1300 730 023">+1300 730 023</a></p>
-            <p class="phone">International <a href="tel:+61 2 7201 9353"> +61 2 7201 9353</a></p>
+            <p class="description">Get in touch for a tailor-made package:</p>
+            <p class="phone">Phone <a href="tel:+61 2 7201 9353"> +61 2 7201 9353</a></p>
             <p class="email">Email <a href="mailto:travel@keithprowsetravel.com">travel@keithprowsetravel.com</a></p>
         </div>
     </x-slot:left>
