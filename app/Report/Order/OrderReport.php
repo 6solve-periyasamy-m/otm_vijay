@@ -280,6 +280,11 @@ class OrderReport extends TourReport
                     'reports.order.column.lead_booker.mobile_number',
                     Column::name('lead.mobile_number')
                 ),
+            'order_lead_nationality' =>
+                new ColumnDefinition(
+                    'reports.order.column.lead_booker.nationality',
+                    Column::name('lead.nationality')
+                ),
             'order_consultant_name' =>
                 new ColumnDefinition(
                     'reports.order.column.consultant.name',

@@ -51,7 +51,7 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->searchable(),
             Column::name('customers.mobile_number')
-                ->label('Mobile Number')
+                ->label('Primary Phone')
                 ->sortable()
                 ->searchable(),
             DateColumn::name('customers.passport_expiry_date')

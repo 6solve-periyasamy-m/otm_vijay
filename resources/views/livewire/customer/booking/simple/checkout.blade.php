@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-field mobile_field">
                         <div wire:ignore>
-                            <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->payer->mobile_number }}" placeholder="Mobile number*" required>
+                            <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->payer->mobile_number }}" placeholder="Primary Phone*" required>
                             <script type="text/javascript">
                                 jQuery(document).ready(function () {
                                     let input = document.querySelector('#mobile_number');
@@ -159,7 +159,7 @@
                                     @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <div class="form-field mobile_field">
-                                    <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1" --}} placeholder="Mobile number" >
+                                    <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1" --}} placeholder="Primary Phone" >
                                     @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
                                     <script type="text/javascript">
                                     jQuery(document).ready(function () {

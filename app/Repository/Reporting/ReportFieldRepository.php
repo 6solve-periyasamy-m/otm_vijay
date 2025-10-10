@@ -412,7 +412,7 @@ class ReportFieldRepository
                         'format' => 'date',
                     ],
                     'mobile_number' => [
-                        'name' => 'Mobile Number',
+                        'name' => 'Primary Phone',
                         'method' => 'mobile_number',
                     ],
                     'other_phone_number' => [
