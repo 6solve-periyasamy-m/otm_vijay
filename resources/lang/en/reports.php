@@ -268,8 +268,12 @@ return [
                     'description' => 'Email address of the lead booker'
                 ],
                 'mobile_number' => [
-                    'name' => 'Lead Booker Mobile Number',
-                    'description' => 'Mobile number of the lead booker'
+                    'name' => 'Lead Booker Primary Phone',
+                    'description' => 'Primary phone number of the lead booker'
+                ],
+                'nationality' => [
+                    'name' => 'Lead Booker Nationality',
+                    'description' => 'Nationality of the lead booker'
                 ],
             ],
             'consultant' => [
