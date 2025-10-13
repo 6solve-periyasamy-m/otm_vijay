@@ -60,6 +60,12 @@ Route::prefix('manifest')->name('reports.manifest.')->group(function () {
         Route::get('/export/{extension}', [ManifestController::class, 'exportMerchandise'])->name('export');
     });
 });
+
+Route::prefix('payment-intentions')->name('reports.payment-intentions.')->group(function () {
+    Route::get('/', [ReportController::class, 'getPaymentIntentionReport'])->name('view');
+    Route::get('/export/{extension}', [ReportController::class, 'exportPaymentIntentionReport'])->name('export');
+});
+
 Route::prefix('atol')->name('reports.atol.')->group(function () {
     Route::get('/ordered/{year}/{quarter}', [AtolController::class, 'getOrderedInQuarterReport'])->name('ordered');
     Route::get('/departed-in/{year}/{quarter}', [AtolController::class, 'getDepartingInQuarterReport'])->name('departed-in');
