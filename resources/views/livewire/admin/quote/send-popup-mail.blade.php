@@ -76,7 +76,7 @@
                             <div class="form-group">
                                 <label>Additional Attachment (PDF or DOC only)</label>
                                 <input type="file" class="form-control" wire:model="additionalAttachment" accept=".pdf,.doc,.docx">
-                                <small class="form-text text-muted">Maximum file size: 2MB. Allowed types: PDF, DOC, DOCX</small>
+                                <small class="form-text text-muted">Maximum file size: <b>2MB</b>. Allowed types: PDF, DOC, DOCX</small>
                                 @error('additionalAttachment') <span class="text-danger">{{ $message }}</span> @enderror                                
                                 @if($additionalAttachment)
                                     <div class="mt-2">
