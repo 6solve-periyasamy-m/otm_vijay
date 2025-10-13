@@ -42,6 +42,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
             'currency' => $currency,
             'metadata' => [
                 'intention_id' => $intention->id,
+                'booking_reference' => $intention->getReference(),
             ],
             'success_url' => $success ?? $this->success,
             'cancel_url' => $this->cancelled,

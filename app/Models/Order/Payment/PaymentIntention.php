@@ -102,6 +102,19 @@ class PaymentIntention extends Model
             ?? Booking::where('token', '=', $this->reference)->first();
     }
 
+    public function getReference(): string|null
+    {
+        if ($this->getRelatedModel() instanceof Order) {
+            return $this->getRelatedModel()->booking_reference;
+        }
+
+        if ($this->getRelatedModel() instanceof Booking) {
+            return $this->getRelatedModel()->token;
+        }
+
+        return null;
+    }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'customer_id');
