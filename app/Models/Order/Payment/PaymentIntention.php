@@ -44,9 +44,9 @@ class PaymentIntention extends Model
     protected $keyType = 'string';
     protected $fillable = ['id', 'customer_id', 'reference', 'data', 'type'];
     protected $casts = ['data' => 'array', 'amount' => 'float'];
+    protected $with = ['customer', 'order', 'booking'];
 
     private PaymentIntentionRepository $repo;
-    private Order|Booking|null $related = null;
 
     public static function build(?Customer $customer, string $reference, string $type, ?array $data = null): PaymentIntention
     {
@@ -86,6 +86,15 @@ class PaymentIntention extends Model
         return $this->repository->process();
     }
 
+    public function booking(): BelongsTo
+    {
+        return $this->belongsTo(Booking::class, 'reference', 'token');
+    }
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'reference', 'booking_reference');
+    }
+
     public function getRepositoryAttribute(): PaymentIntentionRepository
     {
         $this->repo = $this->repo ?? new PaymentIntentionRepository($this);
@@ -99,12 +108,7 @@ class PaymentIntention extends Model
 
     public function getRelatedModel(bool $force = false): Order|Booking|null
     {
-        if ($this->related !== null && !$force) {
-            return $this->related;
-        }
-        $this->related = Order::where('booking_reference', '=', $this->reference)->first()
-            ?? Booking::where('token', '=', $this->reference)->first();
-        return $this->related;
+        return $this->booking ?? $this->order;
     }
 
     public function getReference(): string|null

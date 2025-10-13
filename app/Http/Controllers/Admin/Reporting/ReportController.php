@@ -13,6 +13,7 @@ use App\Exports\OrderReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
 use App\Http\Controllers\Controller;
+use App\Models\Order\Payment\PaymentIntention;
 use App\Repository\Reporting\Manifest\RoomingReportRepository;
 use App\Repository\Reporting\ReportRepository;
 use Excel;
@@ -167,6 +168,18 @@ class ReportController extends Controller
     public function exportInstallmentRevenueReport(string $extension = 'xlsx')
     {
         return Excel::download(new InstallmentRevenueReportExport(), 'installment-revenue.' . $extension);
+    }
+
+    public function getPaymentIntentionReport() {
+        return view('pages.reports.view', ['tableView' => 'partials.reports.tables.payment-intentions',
+            'data' => PaymentIntention::all(),'title' => 'Intention Report',
+            'xlsxExport' => route('reports.payment-intentions.export', ['extension' => 'xlsx']),
+            'csvExport' => route('reports.payment-intentions.export', ['extension' => 'csv']),]);
+    }
+
+    public function exportPaymentIntentionReport(string $extension = 'xlsx')
+    {
+        return Excel::download(new InstallmentRevenueReportExport(), 'payment-intentions.' . $extension);
     }
 
 }
