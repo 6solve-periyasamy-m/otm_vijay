@@ -20,10 +20,9 @@
     </x-admin.section.card>
     <x-admin.section.card>
         <div class="row">
-            <x-livewire.input.select.organization width="3" name="customer.organization_id" value="{{$customer->organization_id}}" clear label="Organization" />
-            <x-livewire.input wire:model="image" type="file" label="Picture" width="3" />
-            <x-livewire.input wire:model="customer.nationality" width="3" label="Nationality" />
-            <x-livewire.input wire:model="customer.loyalty_number" width="3" label="Loyalty Number" />
+            <x-livewire.input.select.organization width="4" name="customer.organization_id" value="{{$customer->organization_id}}" clear label="Organization" />
+            <x-livewire.input wire:model="image" type="file" label="Picture" width="4" />
+            <x-livewire.input wire:model="customer.loyalty_number" width="4" label="Loyalty Number" />
             <x-livewire.input wire:model="customer.emergency_contact_name" width="3" label="Emergency Contact Name" />
             <x-livewire.input wire:model="customer.emergency_contact_relationship" width="3" label="Emergency Contact Relation" />
             <x-livewire.input.telephone name="customer.emergency_contact_telephone" value="{{$customer->emergency_contact_telephone}}" width="3" label="Emergency Contact Phone" />
