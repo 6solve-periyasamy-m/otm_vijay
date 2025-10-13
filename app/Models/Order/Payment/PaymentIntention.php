@@ -46,6 +46,7 @@ class PaymentIntention extends Model
     protected $casts = ['data' => 'array', 'amount' => 'float'];
 
     private PaymentIntentionRepository $repo;
+    private Order|Booking|null $related = null;
 
     public static function build(?Customer $customer, string $reference, string $type, ?array $data = null): PaymentIntention
     {
@@ -96,10 +97,14 @@ class PaymentIntention extends Model
         return $this->getRelatedModel()?->tour?->brand ?? Brand::getSystemBrand();
     }
 
-    public function getRelatedModel(): Order|Booking|null
+    public function getRelatedModel(bool $force = false): Order|Booking|null
     {
-        return Order::where('booking_reference', '=', $this->reference)->first()
+        if ($this->related !== null && !$force) {
+            return $this->related;
+        }
+        $this->related = Order::where('booking_reference', '=', $this->reference)->first()
             ?? Booking::where('token', '=', $this->reference)->first();
+        return $this->related;
     }
 
     public function getReference(): string|null
