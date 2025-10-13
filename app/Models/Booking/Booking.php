@@ -9,6 +9,7 @@ use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Helper\Model;
 use App\Models\Location\Currency;
+use App\Models\Order\Order;
 use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
 use App\Models\Voucher\VoucherCode;
@@ -143,6 +144,11 @@ class Booking extends Model
     public function merchandise(): HasManyThrough
     {
         return $this->hasManyThrough(BookingMerchandise::class, BookingTraveller::class, 'booking_id', 'booking_traveller_id');
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
     public function felloh(): MorphOne

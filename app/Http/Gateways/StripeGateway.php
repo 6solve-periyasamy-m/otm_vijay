@@ -52,6 +52,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
             'customer_email' => $customer?->email_address,
             'metadata' => [
                 'intention_id' => $intention->id,
+                'booking_reference' => $intention->reference,
             ],
             'ui_mode' => $ui,
         ];
