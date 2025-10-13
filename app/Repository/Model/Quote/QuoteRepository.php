@@ -184,6 +184,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemainingInstallment(int $paying = 1, float|null $price = null): float|null
     {
+        if ($this->quote->getDepositPercentage() >= 100) { return 0.0; }
         $ppp = ($price ?? sigfig($this->getTotalCost($paying) / $paying) ?? 0);
         $price = ($ppp * $paying);
         foreach ($this->quote->installments as $installment) {
@@ -545,6 +546,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemaining(int $paying = 1): float
     {
+        if ($this->quote->getDepositPercentage() >= 100) { return 0.0; }
         $cost = $this->getTotalCost($paying);
         $cost -= $this->quote->getDepositAmount($paying);
         foreach ($this->quote->installments as $installment) {
