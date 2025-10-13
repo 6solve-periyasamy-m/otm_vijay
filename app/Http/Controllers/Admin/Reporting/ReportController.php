@@ -10,6 +10,7 @@ use App\Exports\InstallmentRevenueReportExport;
 use App\Exports\OrderMerchandiseExport;
 use App\Exports\OrderReminderReportExport;
 use App\Exports\OrderReportExport;
+use App\Exports\PaymentIntentionReportExport;
 use App\Exports\PaymentReportExport;
 use App\Exports\TourStockReportExport;
 use App\Http\Controllers\Controller;
@@ -179,7 +180,7 @@ class ReportController extends Controller
 
     public function exportPaymentIntentionReport(string $extension = 'xlsx')
     {
-        return Excel::download(new InstallmentRevenueReportExport(), 'payment-intentions.' . $extension);
+        return Excel::download(new PaymentIntentionReportExport(), 'payment-intentions.' . $extension);
     }
 
 }
