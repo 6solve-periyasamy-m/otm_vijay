@@ -57,7 +57,7 @@
 
                             <div class="form-group">
                                 <label>BCC (Separate with semicolon ;)</label>
-                                <input type="text" class="form-control" wire:model="bccInput" placeholder="email1@example.com; email2@example.com">
+                                <input type="text" class="form-control" wire:model="bccInput" placeholder="email1@example.com;email2@example.com">
                                 @error('bccInput') <span class="text-danger">{{ $message }}</span> @enderror
                                 <small class="form-text text-muted">Separate multiple emails with semicolons (;)</small>
                             </div>

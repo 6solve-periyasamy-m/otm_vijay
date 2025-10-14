@@ -86,6 +86,20 @@ class UserProfileController
         }
     }
 
+    public function sendReset(User|null $user = null)
+    {
+        $user = $this->validateUser($user);
+        if ($user !== null) {
+            $success = $user->repository->requestReset();
+            if (!$success) {
+                return back()->withErrors(['msg' => 'Failed to send password reset request, please try again later.']);
+            }
+            return back()->with(['success' => 'Successfully sent password reset request']);
+        } else {
+            return back()->withErrors(['msg' => 'You do not have permission to perform this action.']);
+        }
+    }
+
     public function enable2fa(Enable2faRequest $request, User|null $user = null)
     {
         $user = $user ?? auth()->user();

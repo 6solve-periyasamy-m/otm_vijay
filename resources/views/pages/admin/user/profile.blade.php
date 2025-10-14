@@ -136,15 +136,24 @@ $canForce = is_otm() && !$user->isOtm();
                 </x-admin.section.card>
             @endif
         </x-admin.section.accordion>
-    @elseif($canForce && $user->otp_secret !== null)
+    @elseif($canForce)
         <x-admin.section.accordion id="security">
             <x-slot:title>Account Security</x-slot:title>
+            <x-admin.section.card>
+                <x-slot:title>Reset password</x-slot:title>
+                <form action="{{route('users.reset', ['user' => $user,])}}" method="POST" onsubmit="return confirm('Are you sure you wish to send a password reset for this account?')">
+                    @csrf
+                    <input class="btn btn-danger" type="submit" value="Send Password Reset" />
+                </form>
+            </x-admin.section.card>
+            @if($user->otp_secret !== null)
             <x-admin.section.card>
                 <x-slot:title>Two Factor Authentication</x-slot:title>
                 <form action="{{ route('users.2fa.disable.force', ['user' => $user,]) }}" method="post" onsubmit="return confirm('Are you sure you wish to disable 2FA on this account?')">
                     <input class="btn btn-danger`" type="submit" value="Force remove 2FA" />
                 </form>
             </x-admin.section.card>
+            @endif
         </x-admin.section.accordion>
     @endif
     <x-admin.section.accordion id="consultancy">
