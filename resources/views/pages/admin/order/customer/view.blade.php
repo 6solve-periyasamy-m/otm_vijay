@@ -168,19 +168,20 @@
 
     <div class="d-flex justify-content-between align-items-center pt-2 pb-md-3 pb-2 heading mb-3">
         <h2 class="fw-bold mb-0"><i class="fas fa-user me-2 text-primary"></i>Customer</h2>
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 justify-content-between">
             @if ($prevCustomer)
                 <a href="{{ route('order-customers.view', ['order' => $orderCustomer->order, 'orderCustomer' => $prevCustomer]) }}"
-                class="btn btn-link text-decoration-none text-primary fw-semibold px-2"
+                class="btn btn-primary text-white rounded-2 d-flex align-items-center"
                 title="The previous customer - {{ $prevCustomerName }}">
-                    <i class="fas fa-arrow-left me-1"></i> Previous
+                    <i class="fas fa-angle-left"></i> &nbsp;Previous
                 </a>
             @endif
+
             @if ($nextCustomer)
                 <a href="{{ route('order-customers.view', ['order' => $orderCustomer->order, 'orderCustomer' => $nextCustomer]) }}"
-                class="btn btn-link text-decoration-none text-primary fw-semibold px-2"
+                class="btn btn-primary text-white rounded-2 d-flex align-items-center"
                 title="Next customer - {{ $nextCustomerName }}">
-                    Next <i class="fas fa-arrow-right ms-1"></i>
+                    Next &nbsp;<i class="fas fa-angle-right"></i>
                 </a>
             @endif
         </div>
