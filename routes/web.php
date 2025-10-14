@@ -58,7 +58,7 @@ Route::prefix('/booking/v3/{tour}')->group(function () {
     Route::get('/inclusions/{booking?}', [BookingV3Controller::class, 'inclusion'])->name('booking.v3.inclusions');
     Route::get('/details/{booking?}', [BookingV3Controller::class, 'details'])->name('booking.v3.details');
     Route::get('/confirmation/{booking?}', [BookingV3Controller::class, 'confirmation'])->name('booking.v3.confirmation');
-    Route::get('/reset/{booking?}', [BookingV3Controller::class, 'confirmation'])->name('booking.v3.reset');
+    Route::get('/reset/{booking?}', [BookingV3Controller::class, 'reset'])->name('booking.v3.reset');
 });
 
 
