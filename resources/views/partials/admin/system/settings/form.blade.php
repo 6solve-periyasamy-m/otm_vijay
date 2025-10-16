@@ -190,6 +190,7 @@
                     @include('partials.fields.checkbox', ['name' => 'Enable sending itinerary document emails.', 'field' => 'itinerary_document_mail_enabled', 'value' => flag('itinerary.document.mail.enabled', false),])
                 @endif
                 @include('partials.fields.checkbox', ['name' => 'Show Currency Code Before Symbol', 'field' => 'show_currency_code', 'value' => flag('currency.code.show', false),])
+                @include('partials.fields.checkbox', ['name' => 'Hide tours without category by default', 'field' => 'hide_no_category', 'value' => flag('tour.category.hide', false),])
             </div>
     </x-admin.section.card>
     </div>
