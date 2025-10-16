@@ -16,7 +16,7 @@ class TourController extends Controller
 {
     public function index(TableRequest $request)
     {
-        return view('pages.admin.tour.table', ['hideNoCategory' => ($request->hideNoCategory ?? false)]);
+        return view('pages.admin.tour.table', ['hideNoCategory' => ($request->hideNoCategory ?? flag('tour.category.hide', false))]);
     }
 
     public function create()
