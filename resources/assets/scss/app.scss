@@ -46,3 +46,11 @@ npm run dev creates the files in public that the website can use
 .icon-height {
   height: 33px !important;
 }
+
+.sticky-header {
+  position: fixed;
+  top: 5rem;
+  right: 3rem;
+  width: 93%;
+  z-index: 3000;
+}
