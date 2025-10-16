@@ -10,7 +10,7 @@
             <x-livewire.input wire:model="customer.first_name" label="First Name" required width="3" />
             <x-livewire.input wire:model="customer.middle_names" label="Middle Names" width="3" />
             <x-livewire.input wire:model="customer.last_name" label="Last Name" required width="3" />
-            <x-livewire.input wire:model="customer.date_of_birth" type="date" label="Date of Birth" required width="2" />
+            <x-livewire.input wire:model="customer.date_of_birth" type="date" label="Date of Birth" width="2" />
             <x-livewire.input wire:model="customer.gender" width="2" label="Gender" />
             <x-livewire.input.telephone name="customer.mobile_number" value="{{$customer->mobile_number}}" width="2" label="Primary Phone" />
             <x-livewire.input.telephone name="customer.other_phone_number" value="{{$customer->other_phone_number}}" width="2" label="Secondary Phone" />
@@ -86,9 +86,10 @@
             <div class="col-l-4 col-md-6 col-12">
                 <x-admin.section.card>
                     <div class="row">
-                        <x-livewire.input.select.customer.loyalty-number-type required name="loyalty.{{$key}}.type" value="{{$loyalty['type']}}" label="Type" width="5" />
-                        <x-livewire.input required wire:model="loyalty.{{$key}}.name" label="Loyalty Number" width="5" />
-                        <div class="col-2">
+                        <x-livewire.input.select.customer.loyalty-number-type required name="loyalty.{{$key}}.type" value="{{$loyalty['type']}}" label="Type" width="4" />
+                        <x-livewire.input required wire:model="loyalty.{{$key}}.name" label="Loyalty Number" width="3" />
+                        <x-livewire.input wire:model="loyalty.{{$key}}.notes" label="Notes" width="3" />
+                        <div class="col-2" style="display: flex;align-content: center;justify-content: center;margin: 1rem 0;">
                             <button wire:click="removeLoyaltyNumber({{$key}})" class="btn btn-outline-danger mb-0">{{Icon::delete()}}</button>
                         </div>
                     </div>

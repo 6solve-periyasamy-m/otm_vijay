@@ -164,6 +164,7 @@ class Form extends Component
             'customer.mobility_notes' => 'nullable|string',
             'loyalty.*.type' => 'required|int|exists:loyalty_number_types,id',
             'loyalty.*.name' => 'required|string',
+            'loyalty.*.notes' => 'nullable|string',
         ];
     }
 }
