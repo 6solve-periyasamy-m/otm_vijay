@@ -54,7 +54,7 @@ class PermissionBouncer
 
         // Check if user has same role as creator
         $creator = User::find($instance->created_by);
-        if ($creator && $this->hasSameRole($user, $creator)) {
+        if ($creator && $this->hasEqualOrHigherRoleLevel($user, $creator)) {
             return true;
         }
         return false;
@@ -67,14 +67,11 @@ class PermissionBouncer
                 && get_class($param) === "App\\Models\\{$model}");
     }
 
-    /**
-     * Check if two users have the same role
-     */
-    private function hasSameRole(User $user, User $creator): bool
+    private function hasEqualOrHigherRoleLevel(User $currentUser, User $creatorUser): bool
     {
-        $userRoles = $user->getRoles()->pluck('name')->toArray();
-        $creatorRoles = $creator->getRoles()->pluck('name')->toArray();
-        return !empty(array_intersect($userRoles, $creatorRoles));
+        $currentUserRoleLevel = $currentUser->getHighestRoleLevel();
+        $creatorRoleLevel = $creatorUser->getHighestRoleLevel();
+        return $currentUserRoleLevel >= $creatorRoleLevel;
     }
 
 }
