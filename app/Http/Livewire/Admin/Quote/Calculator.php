@@ -167,6 +167,7 @@ class Calculator extends Component
             'paying' => $this->paying + $this->quote->travellers()->where('paying', '=', true)->count(),
             'travelling' => $this->travelling + $this->quote->travellers()->where('travelling', '=', true)->count(),
         ]);
+        $this->quote->repository->recache();
         $this->render();
     }
 
@@ -204,7 +205,6 @@ class Calculator extends Component
                 $point->save();
             }
         }
-        $this->quote->repository->recache();
         $this->refresh();
     }
 
