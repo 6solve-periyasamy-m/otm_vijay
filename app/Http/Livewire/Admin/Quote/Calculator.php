@@ -50,6 +50,7 @@ class Calculator extends Component
     public function mount(Quote $quote)
     {
         $this->quote = $quote;
+        $this->quote->repository->recache();
         $this->paying = $this->quote->paying ?? 0;
         $this->travelling = $this->quote->travelling ?? 0;
         $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
@@ -203,6 +204,7 @@ class Calculator extends Component
                 $point->save();
             }
         }
+        $this->quote->repository->recache();
         $this->refresh();
     }
 
