@@ -191,9 +191,10 @@ class Order extends Model implements NotificationSubject
         ];
     }
 
-    public static function generateBookingReference(Order $order): string
+    public static function generateBookingReference(Order $order, string|null $prefix = null): string
     {
-        return setting('booking.prefix')
+        $prefix = $prefix ?? setting('booking.prefix');
+        return $prefix
             . str_pad(strtoupper(dechex($order->tour->id)), 3, '0', STR_PAD_LEFT)
             . str_pad(strtoupper(dechex($order->id)), 3, '0', STR_PAD_LEFT)
             . substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(1 / strlen($x)))), 1, 1);

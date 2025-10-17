@@ -41,11 +41,12 @@
                 <div class="row">
                     @include('partials.fields.text', ['name' => 'Order Prefix ', 'field' => 'booking_prefix', 'value' => setting('booking.prefix', 'OTM'), 'width' => 3])
                     @include('partials.fields.text', ['name' => 'Quote Prefix', 'field' => 'quote_prefix', 'value' => setting('quote.prefix', 'OTMQ'), 'width' => 3])
+                    <x-livewire.input name="converted_booking_prefix" label="Converted Booking Prefix" value="{{setting('booking.converted.prefix', setting('booking.prefix', 'OTM'))}}" width="3" />
                     <x-livewire.input.select.currency name="currency_id" label="System Currency" value="{{\App\Repository\LocationsRepository::getCurrencyIdByCode(setting('system.currency', '')) ?? null}}" width="3" />
                     @include('partials.fields.text', ['name' => 'Itinerary Heading', 'field' => 'itinerary_heading', 'value' => setting('itinerary.heading', ''), 'width' => 3])
-                    @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 4])
-                    @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 4])
-                    @include('partials.fields.text', ['name' => 'Round Base Price To', 'field' => 'round_base_price', 'value' => setting('round.base_price', null), 'width' => 4])
+                    @include('partials.fields.text', ['name' => 'ATOL Issuer', 'field' => 'atol_issuer', 'value' => setting('atol.issuer', ''), 'width' => 3])
+                    @include('partials.fields.text', ['name' => 'ATOL Number', 'field' => 'atol_number', 'value' => setting('atol.number', ''), 'width' => 3])
+                    @include('partials.fields.text', ['name' => 'Round Base Price To', 'field' => 'round_base_price', 'value' => setting('round.base_price', null), 'width' => 3])
                     @include('partials.fields.dropdown', [
                         'name' => 'Invoice Format',
                         'field' => 'invoice_format',

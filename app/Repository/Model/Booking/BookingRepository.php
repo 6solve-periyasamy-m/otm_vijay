@@ -290,7 +290,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 $order->save();
             }
         }
-        $order->booking_reference = Order::generateBookingReference($order);
+        $order->booking_reference = Order::generateBookingReference($order, setting('booking.converted.prefix', null));
         $order->saveQuietly();
         $this->booking->order_id = $order->id;
         $this->booking->save();
