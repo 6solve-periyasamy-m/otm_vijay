@@ -46,8 +46,18 @@ class PermissionBouncer
         if (!$instance) {
             return false;
         }
+
         // For other self permissions, check ownership
-        return $instance->created_by === $user->id;
+        if ($instance->created_by === $user->id) {
+            return true;
+        }
+
+        // Check if user has same role as creator
+        $creator = User::find($instance->created_by);
+        if ($creator && $this->hasSameRole($user, $creator)) {
+            return true;
+        }
+        return false;
     }
 
     protected function getModelInstanceFromRoute(Request $request, string $model)
@@ -55,6 +65,16 @@ class PermissionBouncer
         return collect($request->route()->parameters())
             ->first(fn($param) => $param instanceof \Illuminate\Database\Eloquent\Model
                 && get_class($param) === "App\\Models\\{$model}");
+    }
+
+    /**
+     * Check if two users have the same role
+     */
+    private function hasSameRole(User $user, User $creator): bool
+    {
+        $userRoles = $user->getRoles()->pluck('name')->toArray();
+        $creatorRoles = $creator->getRoles()->pluck('name')->toArray();
+        return !empty(array_intersect($userRoles, $creatorRoles));
     }
 
 }
