@@ -73,7 +73,7 @@
 @endsection
 
 @section('inventory')
-    @can('self-child-access', [$flight, \App\Models\Flight\FlightInventory::class])
+    @if(Gate::check('self-child-access', [$flight, \App\Models\Flight\FlightInventory::class]) || Gate::check('create', \App\Models\Flight\FlightInventory::class)))
         <x-admin.section.card>
             <a href="{{ route('flight-inventories.create', ['flight' => $flight, ]) }}"
                class="btn btn-primary float-end me-1">
@@ -81,7 +81,7 @@
                 <span>Add Inventory</span>
             </a>
         </x-admin.section.card>
-    @endcan
+    @endif
     <x-admin.section.card>
         <table id="flightInventory" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">

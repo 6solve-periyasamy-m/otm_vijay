@@ -42,7 +42,10 @@
                             {{ f_currency($orderAccommodation->cost) }}
                         @endif
                     </td>
-                    <td>{{ f_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                    <td>
+                        {{ fr_currency($orderAccommodation->tourComponent->inventory->purchase_price, $orderAccommodation->tourComponent->inventory->repository->getCurrency()) }}
+                        ({{ fr_currency($orderAccommodation->purchase_price) }} @includeWhen($orderAccommodation->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
+                    </td>
                     <td>{{ f_date($orderAccommodation->updated_at) }}</td>
                     <td>
                         @can('update', \App\Models\Order\Component\OrderAccommodation::class)
