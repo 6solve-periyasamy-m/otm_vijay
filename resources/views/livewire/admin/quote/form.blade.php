@@ -1,5 +1,5 @@
 <div>
-    <x-admin.section.card>
+    <x-admin.section.card cardClass="card-blue">
         <div class="float-end">
             <button wire:click="save" class="btn btn-success">{{ Icon::save() }} Save Quote</button>
         </div>
