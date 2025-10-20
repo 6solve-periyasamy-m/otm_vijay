@@ -34,7 +34,7 @@ class Form extends Component
         $this->home = Address::getForMount($this->customer->homeAddress);
         $this->billing = Address::getForMount($this->customer->billingAddress);
         foreach ($this->customer->loyaltyNumbers as $loyaltyNumber) {
-            $this->loyalty[] = ['id' => $loyaltyNumber->id, 'type' => $loyaltyNumber->loyalty_number_type_id, 'name' => $loyaltyNumber->loyalty_number];
+            $this->loyalty[] = ['id' => $loyaltyNumber->id, 'type' => $loyaltyNumber->loyalty_number_type_id, 'name' => $loyaltyNumber->loyalty_number, 'notes' => $loyaltyNumber->notes];
         }
         //dd($this->loyalty);
     }
@@ -79,6 +79,7 @@ class Form extends Component
             LoyaltyNumber::find($id)?->delete();
         }
         foreach ($this->loyalty as $data) {
+            if (empty($data['type']) && empty($data['name'])) { continue; }
             if ($data['id'] !== null) {
                 $loyalty = LoyaltyNumber::find($data['id']);
             } else {
@@ -86,6 +87,7 @@ class Form extends Component
             }
             $loyalty->loyalty_number_type_id = $data['type'];
             $loyalty->loyalty_number = $data['name'];
+            $loyalty->notes = $data['notes'];
             $loyalty->customer_id = $this->customer->id;
             $loyalty->save();
         }
@@ -162,8 +164,8 @@ class Form extends Component
             'customer.external_notes' => 'nullable|string',
             'customer.dietary_notes' => 'nullable|string',
             'customer.mobility_notes' => 'nullable|string',
-            'loyalty.*.type' => 'required|int|exists:loyalty_number_types,id',
-            'loyalty.*.name' => 'required|string',
+            'loyalty.*.type' => 'nullable|int|exists:loyalty_number_types,id',
+            'loyalty.*.name' => 'nullable|string',
             'loyalty.*.notes' => 'nullable|string',
         ];
     }
