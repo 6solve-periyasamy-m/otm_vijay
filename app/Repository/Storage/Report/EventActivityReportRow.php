@@ -10,6 +10,7 @@ class EventActivityReportRow
     public function __construct(
         public readonly string $activity,
         public readonly string $type,
+        public readonly string $category,
         public readonly int    $totalStock,
         public readonly int    $usedStock,
         public readonly Activity|null $component
