@@ -129,10 +129,10 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                             </td>
                             <td>{{ $tour->category === null ? 'None' : $tour->category->getDisplay() }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
-                            <td style="width: 5em; overflow-wrap: break-word; display: block;">
+                            <td class="text-break" style="word-break: break-word; max-width: 180px;">
                                 @if(!empty($tour->getBookingFormUrl()))
                                     <a href="{{$tour->getBookingFormUrl()}}"
-                                       class="link link-primary">{{ $tour->getBookingFormUrl() }}</a>
+                                       class="link link-primary d-inline-block text-break">{{ $tour->getBookingFormUrl() }}</a>
                                 @else
                                     No Booking URL Set
                                 @endif
