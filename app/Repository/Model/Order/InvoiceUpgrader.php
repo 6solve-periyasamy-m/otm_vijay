@@ -81,9 +81,9 @@ class InvoiceUpgrader
     public static function version_3_to_4(Invoice $invoice): Invoice
     {
         if ($invoice->generator_version !== 3) return $invoice;
-        $invoice->currency_id = $invoice->order->currency_id ?? Settings::currency()->id;
-        $invoice->agent_id = $invoice->order->agent_id;
-        $invoice->organization_id = $invoice->order->organization_id;
+        $invoice->currency_id = $invoice->order?->currency_id ?? Settings::currency()->id;
+        $invoice->agent_id = $invoice->order?->agent_id;
+        $invoice->organization_id = $invoice->order?->organization_id;
         $invoice->generator_version = 4;
         $invoice->save();
         return $invoice;

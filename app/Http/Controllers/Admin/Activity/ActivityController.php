@@ -74,6 +74,7 @@ class ActivityController extends Controller
 
     public function importInventory(Request $request, Activity $activity): RedirectResponse
     {
+        $request->validate(['import' => 'required|file']);
         return $this->import((new ActivityOverrideImport($activity)), $request->file('import'));
     }
 
