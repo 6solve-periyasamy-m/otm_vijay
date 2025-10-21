@@ -41,7 +41,7 @@ class Form extends Component
 
     public function addLoyaltyNumber(): void
     {
-        $this->loyalty[] = ['id' => null, 'type' => null, 'name' => null];
+        $this->loyalty[] = ['id' => null, 'type' => null, 'name' => null, 'notes' => null,];
     }
 
     public function removeLoyaltyNumber(int $key): void

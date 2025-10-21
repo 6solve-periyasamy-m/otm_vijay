@@ -87,9 +87,9 @@
                 <div class="col-l-4 col-md-6 col-12">
                     <x-admin.section.card>
                         <div class="row">
-                            <x-livewire.input.select.customer.loyalty-number-type required name="loyalty.{{$key}}.type" value="{{$loyalty['type']}}" label="Type" width="4" />
+                            <x-livewire.input.select.customer.loyalty-number-type name="loyalty.{{$key}}.type" value="{{$loyalty['type']}}" label="Type" width="4" />
                             <x-livewire.input wire:model="loyalty.{{$key}}.notes" label="Details" width="3" />
-                            <x-livewire.input required wire:model="loyalty.{{$key}}.name" label="Loyalty Number" width="3" />
+                            <x-livewire.input wire:model="loyalty.{{$key}}.name" label="Loyalty Number" width="3" />
                             <div class="col-2" style="display: flex;align-content: center;justify-content: center;margin: 1rem 0;">
                                 <button wire:click="removeLoyaltyNumber({{$key}})" class="btn btn-outline-danger mb-0">{{Icon::delete()}}</button>
                             </div>
