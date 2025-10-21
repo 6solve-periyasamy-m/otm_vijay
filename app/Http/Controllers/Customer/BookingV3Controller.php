@@ -35,6 +35,10 @@ class BookingV3Controller extends Controller
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
         }
         $this->setupCookie($tour, $booking);
+        if ($tour->accommodationInventoryTours()->count() === 0) {
+            return redirect()->route('booking.v3.tickets', ['tour' => $tour->booking_form_url, 'booking' => $booking->token]);
+        }
+
         return view('pages.customer.booking.v3.hotel', ['tour' => $tour, 'booking' => $booking]);
     }
 

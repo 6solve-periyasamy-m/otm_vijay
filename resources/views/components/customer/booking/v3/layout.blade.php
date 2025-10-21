@@ -150,7 +150,8 @@
                                     @endforeach
                                 </div>
                                 @endif
-                                @php $default = $this->getDefaultHotel()->component; @endphp
+                                @php $default = $this->getDefaultHotel()?->component; @endphp
+                                @if ($default !== null)
                                 <div class="Hotel" style="display:none;">
                                     <h5>Hotel</h5>
                                     <div class="single">
@@ -158,6 +159,7 @@
                                         <p>Price included</p>
                                     </div>
                                 </div>
+                                @endif
                                 @if(count($upgrades['tickets']) > 0)
                                 <div class="ticket-upgrades @if($stage === 3) txt-org @endif">
                                     <h5>Ticket upgrades</h5>

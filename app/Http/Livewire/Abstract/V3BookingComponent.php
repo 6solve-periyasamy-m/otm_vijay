@@ -111,7 +111,7 @@ abstract class V3BookingComponent extends Component
                 $maxOccupancy = $tourComponent->inventory->roomType->maximum_occupancy;
             }
         }
-        return (int)ceil($this->getTravellerCount() / $maxOccupancy);
+        return (int)ceil($this->getTravellerCount() / (max(1, $maxOccupancy)));
     }
 
     public function getMaximumRooms(): int
