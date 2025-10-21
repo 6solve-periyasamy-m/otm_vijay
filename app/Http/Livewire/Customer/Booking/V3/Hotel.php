@@ -217,6 +217,7 @@ class Hotel extends V3BookingComponent
 
     private function setRoomDescriptions($hotelId)
     {
+        if ($hotelId === null) { return; }
         $bookingRooms = $this->tour->repository->getBookingRooms($hotelId);
         foreach ($this->rooms as $index => $room) {
             $roomId = $room['room'] ?? array_key_first($bookingRooms);

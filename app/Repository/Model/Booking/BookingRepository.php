@@ -722,12 +722,13 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     /**
      * Setup rooming with a specific hotel and room type
-     * @param int $hotel The ID number of the hotel
+     * @param int|null $hotel The ID number of the hotel
      * @param array<array{room: int, travellers: int}> $rooming
      * @return void
      */
-    public function setupSimpleRooming(int $hotel, array $rooming): void
+    public function setupSimpleRooming(int|null $hotel, array $rooming): void
     {
+        if ($hotel === null) { return; }
         foreach ($rooming as $room) {
             if ($room['room'] === null || $room['travellers'] === null) { return; }
         }
