@@ -58,10 +58,6 @@ class Table extends LivewireDatatable
                 ->searchable()
                 ->sortable()
                 ->filterable(TourCategory::pluck('name')),
-            Column::name('description')
-                ->label('Description')
-                ->searchable()
-                ->sortable(),
             DateColumn::name('tours.date_from')
                 ->label('From')
                 ->sortable()

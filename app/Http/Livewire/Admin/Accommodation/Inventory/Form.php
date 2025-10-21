@@ -42,7 +42,7 @@ class Form extends Component
         if ($value && !$this->checkOutUpdated) {
             $startDateTime = Carbon::parse($value);
             $this->minEndDate = $startDateTime->toDateTimeString();
-            if ($this->inventory->check_out->lt($this->minEndDate)) {
+            if ($this->inventory->check_out === null || $this->inventory->check_out?->lt($this->minEndDate)) {
                 $this->inventory->check_out = $startDateTime->copy()->addHour()->toDateTimeString();
             }
         }

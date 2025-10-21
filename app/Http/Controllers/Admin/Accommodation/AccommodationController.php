@@ -86,6 +86,7 @@ class AccommodationController extends Controller
 
     public function importInventory(Request $request, Accommodation $accommodation): RedirectResponse
     {
+        $request->validate(['import' => 'required|file']);
         return $this->import((new AccommodationOverrideImport($accommodation)), $request->file('import'));
     }
 
