@@ -1,6 +1,6 @@
 <style>
     .permissions-table-wrapper { max-height: 600px; overflow-y: auto; }
-    .permissions-table thead th {position: sticky; top: 0;background-color: #ced4da; color: #212529; z-index: 2; box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); }
+    .permissions-table thead th {position: sticky; font-weight: 650; top: 0;background-color: #ced4da; color: #212529; z-index: 2; box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); }
 </style>
 
 
