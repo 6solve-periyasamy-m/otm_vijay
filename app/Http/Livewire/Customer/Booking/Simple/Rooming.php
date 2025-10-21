@@ -21,7 +21,7 @@ class Rooming extends Component
     ];
 
     public Tour|int $tour;
-    public int|null $selectedHotel;
+    public int|null $selectedHotel = null;
     public Booking|int|null $booking;
     public BookingTraveller|null $lead = null;
     public array $rooms = [];
