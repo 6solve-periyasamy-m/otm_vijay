@@ -186,6 +186,11 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
             </div>
             <x-admin.section.card>
                 <div class="row">
+                    @if($event->parent === null)
+                        <div class="col-12">
+                            <span style="color: red">Warning: No event parent is set, so cannot locate connected activities</span>
+                        </div>
+                    @endif
                     <div class="col-12">
                         <x-livewire.input.dropdown name="filter" :items="ActivitySortFilter::toArray()" value="{{$activityFilter->value}}" label="Filter" onchange="change_filter(this)"/>
                     </div>
