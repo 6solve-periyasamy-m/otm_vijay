@@ -186,7 +186,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
 
     public function hasEnoughStock(int $amount = 1): bool
     {
-        return true;
+        return $this->getAvailableStock() >= $amount;
     }
 
     public static function find($id): FlightInventory|null
