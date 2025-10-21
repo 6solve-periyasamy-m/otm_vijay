@@ -209,7 +209,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                     <tbody>
                     @foreach($event->repository->getActivityReport($activityFilter) as $row)
                         @continue($row === null)
-                        <tr>
+                        <tr class="{{ ($row->totalStock - $row->usedStock) <= 0 ? 'tr-red' : '' }}">
                             <th scope="row">
                                 <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
                             </th>
