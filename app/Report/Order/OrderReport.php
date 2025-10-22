@@ -285,6 +285,11 @@ class OrderReport extends TourReport
                     'reports.order.column.lead_booker.nationality',
                     Column::name('lead.nationality')
                 ),
+            'order_lead_loyalty_numbers' =>
+                new ColumnDefinition(
+                    'reports.order.column.lead_booker.loyalty_numbers',
+                    Column::raw("(SELECT GROUP_CONCAT(CONCAT(loyalty_numbers.notes,'-',loyalty_numbers.loyalty_number) SEPARATOR ', ') FROM loyalty_numbers WHERE loyalty_numbers.customer_id = lead.id)")
+                ),
             'order_consultant_name' =>
                 new ColumnDefinition(
                     'reports.order.column.consultant.name',

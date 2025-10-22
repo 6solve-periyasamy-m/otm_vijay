@@ -275,6 +275,10 @@ return [
                     'name' => 'Lead Booker Nationality',
                     'description' => 'Nationality of the lead booker'
                 ],
+                'loyalty_numbers' => [
+                    'name' => 'Lead Booker Loyalty Numbers',
+                    'description' => 'Loyalty Numbers of the lead booker'
+                ],
             ],
             'consultant' => [
                 'name' => [
