@@ -85,9 +85,9 @@ class Form extends Component
             } else {
                 $loyalty = new LoyaltyNumber();
             }
-            $loyalty->loyalty_number_type_id = $data['type'];
-            $loyalty->loyalty_number = $data['name'];
-            $loyalty->notes = $data['notes'];
+            $loyalty->loyalty_number_type_id = $data['type'] ?? null;
+            $loyalty->loyalty_number = $data['name'] ?? null;
+            $loyalty->notes = $data['notes'] ?? null;
             $loyalty->customer_id = $this->customer->id;
             $loyalty->save();
         }
