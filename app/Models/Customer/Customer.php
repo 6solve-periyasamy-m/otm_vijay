@@ -94,6 +94,7 @@ use Laravel\Cashier\Subscription;
  * @property-read Collection|Order[] $leadingOrders Orders where they are the lead booker
  * @property-read Organization|null $organization
  * @property-read CustomerRepository $repository
+ * @property-read string $loyalty_numbers_for_report A list of loyalty numbers, ordered for the report
  * @property-read int|null $leading_orders_count Amount of orders where they are the lead booker
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications System notifications for customer
  * @property-read int|null $notifications_count Amount of system notifications for customer
@@ -173,16 +174,13 @@ class Customer extends Authenticatable implements NotificationSubject
 
     protected string $guard = 'customer';
 
-    protected $fillable = ['title', 'first_name', 'middle_names', 'last_name', 'date_of_birth', 'mobile_number', 'other_phone_number',
-        'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone',
-        'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date',
-        'passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id',
-        'billing_address_id', 'internal_notes', 'external_notes', 'dietary_notes', 'mobility_notes', 'organization_id'];
+    protected $guarded = [];
 
     protected $casts = ['date_of_birth' => 'date:Y-m-d', 'passport_issue_date' => 'date:Y-m-d', 'passport_expiry_date' => 'date:Y-m-d',];
 
     protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
     protected array $cascadeDeletes = ['quoteProspects',];
+    protected $with = ['loyaltyNumbers',];
 
     public static function getValidationRules(): array
     {
@@ -332,5 +330,14 @@ class Customer extends Authenticatable implements NotificationSubject
     {
         $route = route('customers.view', ['customer' => $this,]);
         return "<a href='$route'>{$this->full_name}</a>";
+    }
+
+    public function getLoyaltyNumbersForReportAttribute(): string
+    {
+        $str = "";
+        foreach ($this->loyaltyNumbers as $loyaltyNumber) {
+            $str .= "{$loyaltyNumber->type->name} - {$loyaltyNumber->notes} - {$loyaltyNumber->loyalty_number}\n";
+        }
+        return $str;
     }
 }
