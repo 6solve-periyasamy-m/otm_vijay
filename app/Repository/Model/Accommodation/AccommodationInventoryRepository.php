@@ -243,7 +243,7 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
 
     public function hasEnoughStock(int $amount = 1): bool
     {
-        return true;
+        return $this->getAvailableStock() >= $amount;
     }
 
     public static function find($id): AccommodationInventory|null

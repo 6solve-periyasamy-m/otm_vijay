@@ -58,9 +58,10 @@
                             $inventory = $componentRepository->getInventory();
                             $maximumOccupancy = $inventory->get()?->transportOccupancy?->maximum_occupancy;
                         }
+                        $hasStock = $componentRepository->hasEnoughStock($quote->travelling + $quote->leadTraveller->travelling)
                     @endphp
                     @if($componentType !== 'transport' || is_null($maximumOccupancy) || $maximumOccupancy >= $payingCount)
-                        <tr component_id="{{$componentRepository->get()->id}}" component_type="{{$componentRepository->getComponentType()}}">
+                        <tr component_id="{{$componentRepository->get()->id}}" component_type="{{$componentRepository->getComponentType()}}" @if(!$hasStock) class="tr-red" @endif>
                             <td>
                                 {{ ucwords($componentRepository->getComponentType()) }}
                             </td>
@@ -137,7 +138,8 @@
                 </thead>
                 <tbody>
                 @foreach($quote->accommodation()->with('inventory')->get() as $component)
-                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
+                    @php $hasStock = $component->repository->hasEnoughStock($quote->travelling + $quote->leadTraveller->travelling); @endphp
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}" @if(!$hasStock) class="tr-red" @endif>
                         <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
@@ -206,7 +208,8 @@
                 </thead>
                 <tbody>
                 @foreach($quote->activities()->with('inventory')->get() as $component)
-                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
+                    @php $hasStock = $component->repository->hasEnoughStock($quote->travelling + $quote->leadTraveller->travelling); @endphp
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}" @if(!$hasStock) class="tr-red" @endif>
                         <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
@@ -275,7 +278,8 @@
                 </thead>
                 <tbody>
                 @foreach($quote->flights()->with('inventory')->get() as $component)
-                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
+                    @php $hasStock = $component->repository->hasEnoughStock($quote->travelling + $quote->leadTraveller->travelling); @endphp
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}" @if(!$hasStock) class="tr-red" @endif>
                         <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
@@ -344,11 +348,12 @@
                 </thead>
                 <tbody>
                 @foreach($quote->transport()->with('inventory')->get() as $component)
+                    @php $hasStock = $component->repository->hasEnoughStock($quote->travelling + $quote->leadTraveller->travelling); @endphp
                     @php
                         $maximumOccupancy = $component->inventory->transportOccupancy?->maximum_occupancy;
                     @endphp
                     @if(is_null($maximumOccupancy) || $maximumOccupancy >= $payingCount)
-                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}" @if(!$hasStock) class="tr-red" @endif>
                         <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ f_datetime($component->repository->getInventory()?->getStartTime()) }}
                             to
@@ -417,7 +422,8 @@
                 </thead>
                 <tbody>
                 @foreach($quote->merchandise()->with('inventory')->get() as $component)
-                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}">
+                    <tr component_id="{{$component->id}}" component_type="{{$component->repository->getComponentType()}}" @if(!$hasStock) class="tr-red" @endif>
+                        @php $hasStock = $component->repository->hasEnoughStock($quote->travelling + $quote->leadTraveller->travelling); @endphp
                         <td data-sort="{{ $component->repository->getStartTime()?->unix() }}">
                             {{ $component->repository->__toString() }}
                         </td>
