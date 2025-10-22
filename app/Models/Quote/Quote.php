@@ -47,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $brand_id
  * @property int|null $agent_id
  * @property int $revision
+ * @property bool $archived
  * @property string|null $reference
  * @property string $name
  * @property string|null $description
@@ -152,6 +153,7 @@ class Quote extends Model
         'quote_status' => QuoteStatus::class,
         'from_rate' => 'float',
         'to_rate' => 'float',
+        'archived' => 'bool',
     ];
     private QuoteRepository $internal_repository;
     protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise', 'costs'];
