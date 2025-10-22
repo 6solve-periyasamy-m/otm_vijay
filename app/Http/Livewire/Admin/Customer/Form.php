@@ -27,6 +27,11 @@ class Form extends Component
     public bool $accordion = false;
     public array $loyalty = [];
     public array $loyaltyToDelete = [];
+    protected $messages = [
+        'loyalty.*.type.required_with' => 'All fields are required',
+        'loyalty.*.name.required_with' => 'All fields are required',
+        'loyalty.*.notes.required_with' => 'All fields are required',
+    ];
 
     public function mount(Customer|int|null $customer)
     {
@@ -164,9 +169,9 @@ class Form extends Component
             'customer.external_notes' => 'nullable|string',
             'customer.dietary_notes' => 'nullable|string',
             'customer.mobility_notes' => 'nullable|string',
-            'loyalty.*.type' => 'nullable|int|exists:loyalty_number_types,id',
-            'loyalty.*.name' => 'nullable|string',
-            'loyalty.*.notes' => 'nullable|string',
+            'loyalty.*.type' => 'nullable|required_with:loyalty.*.name,loyalty.*.notes|int|exists:loyalty_number_types,id',
+            'loyalty.*.name' => 'nullable|required_with:loyalty.*.notes,loyalty.*.type|string',
+            'loyalty.*.notes' => 'nullable|required_with:loyalty.*.name,loyalty.*.type|string',
         ];
     }
 }
