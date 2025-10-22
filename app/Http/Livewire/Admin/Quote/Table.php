@@ -80,6 +80,10 @@ class Table extends LivewireDatatable
 
     public function archive($id)
     {
-        Quote::find($id)?->update(['archived' => 1]);
+        $quote = Quote::find($id);
+        if ($quote !== null) {
+            $quote->archived = !$quote->archived;
+            $quote->save();
+        }
     }
 }
