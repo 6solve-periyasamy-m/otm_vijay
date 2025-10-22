@@ -21,6 +21,10 @@ class Table extends LivewireDatatable
     public function columns()
     {
         return [
+            Column::name('notes')
+                ->label('Details')
+                ->searchable()
+                ->editable(),
             Column::name('loyalty_number')
                 ->label('Loyalty Number')
                 ->searchable()
