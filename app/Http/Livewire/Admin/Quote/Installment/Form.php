@@ -28,6 +28,7 @@ class Form extends ModalComponent
     {
         $this->validate();
         $this->installment->quote_id = $this->quote->id;
+        $this->installment->percentage = $this->installment->percentage ?? false;
         $this->installment->save();
         $this->refreshPage();
         $this->emit('closeModal');
