@@ -30,6 +30,7 @@ Route::get('/rooming/{extension}', [ReportController::class, 'exportRoomingRepor
 Route::get('/installment-revenue', [ReportController::class, 'getInstallmentRevenueReport'])->name('reports.installment-revenue');
 Route::get('/installment-revenue/{extension}', [ReportController::class, 'exportInstallmentRevenueReport'])->name('reports.installment-revenue.export');
 Route::get('/booking-orders/{extension}', [ReportController::class, 'exportdBookingOrdersReport'])->name('reports.booking-orders.export');
+Route::get('/quote-finances', [ReportController::class, 'getQuoteFinancesReport'])->name('reports.quote-finances');
 Route::prefix('/order/cost')->name('reports.component.cost.')->group(function () {
     Route::get('/activity', [OrderComponentCostReportController::class, 'getOrderActivityReport'])->name('activity');
     Route::get('/activity/{extension}', [OrderComponentCostReportController::class, 'exportOrderActivityReport'])->name('activity.export');

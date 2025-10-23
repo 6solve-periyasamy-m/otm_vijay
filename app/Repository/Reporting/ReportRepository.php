@@ -162,6 +162,11 @@ class ReportRepository
                 'view' => 'reports.payment-intentions.view',
                 'export' => 'reports.payment-intentions.export',
             ],
+            [
+                'name' => 'Quote Finances',
+                'details' => 'Report containing details of quotes and finances',
+                'view' => 'reports.quote-finances',
+            ],
         ];
     }
 
