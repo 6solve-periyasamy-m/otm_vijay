@@ -111,10 +111,18 @@
                     <td>{{ $report['details'] }}</td>
                     <td>System</td>
                     <td>
+                        <a href="{{ route($report['view'], ($report['params'] ?? [])) }}" class="btn btn-outline-secondary btn-sm mb-1" title="View">
+                            {{ Icon::eye() }}
+                        </a>
+                        @if(array_key_exists('export', $report) && $report['export'] !== null)
                         <a href="{{ route($report['export'], ['extension' => 'csv', ...($report['params'] ?? [])]) }}"
                            class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</a>
                         <a href="{{ route($report['export'], ['extension' => 'xlsx', ...($report['params'] ?? [])]) }}"
                            class="btn btn-outline-info btn-sm mb-1" title="Export as XLSX">{{ Icon::excel() }}</a>
+                        @else
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</span>
+                            <span class="btn btn-outline-dark btn-sm mb-1" title="Export as XLSX">{{ Icon::excel() }}</span>
+                        @endif
                         <span class="btn btn-outline-dark btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
                             </span>
@@ -132,6 +140,9 @@
                     <td>{{ $report->description }}</td>
                     <td>Custom</td>
                     <td>
+                        <a href="{{ route('reports.bespoke.show', ['report' => $report,]) }}" class="btn btn-outline-secondary btn-sm mb-1" title="View">
+                            {{ Icon::eye() }}
+                        </a>
                         <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'csv']) }}"
                            class="btn btn-outline-primary btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</a>
                         <a href="{{ route('reports.bespoke.export', ['report' => $report, 'extension' => 'xlsx']) }}"
@@ -170,6 +181,9 @@
                     <td>{{ $report->description }}</td>
                     <td>Advanced</td>
                     <td>
+                        <a href="{{ route('reports.advanced.view', ['report' => $report,]) }}" class="btn btn-outline-secondary btn-sm mb-1" title="View">
+                            {{ Icon::eye() }}
+                        </a>
                         <span class="btn btn-outline-dark btn-sm mb-1" title="Export as CSV">{{ Icon::csv() }}</span>
                         <span class="btn btn-outline-dark btn-sm mb-1" title="Export as XLSX">{{ Icon::excel() }}</span>
                         @can('update', \App\Models\System\Report::class)
