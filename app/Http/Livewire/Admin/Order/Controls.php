@@ -11,8 +11,13 @@ use App\Models\Order\Payment\Payment;
 use Exception;
 use LivewireUI\Modal\ModalComponent;
 use Log;
+use Auth;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Livewire\WithFileUploads;
+use App\Mail\OrderCustomMail;
+use Storage;
 
 /**
  * Popup menu used on the order screen
@@ -21,7 +26,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class Controls extends ModalComponent
 {
-    use SendsEvents;
+    use SendsEvents, WithFileUploads;
 
     public $listeners = [
         'sendBookingConfirmation' => 'sendBookingConfirmation',
@@ -32,6 +37,25 @@ class Controls extends ModalComponent
     ];
 
     public Order|int $order;
+
+    // Form fields
+    public $fromEmail;
+    public $fromName;
+    public $to;
+    public $ccInput = '';
+    public $bccInput = '';
+    public $subject;
+    public $emailBody;
+    public $additionalAttachments = [];
+    public $orderData;
+
+    // UI state
+    public $showModal = false;
+    public $isSending = false;
+    public $successMessage = '';
+    public $errorMessage = '';
+    public $sendType = '';
+    public $totalSizeInMB = 0;
 
     /**
      * Mount the component and setup data
@@ -202,8 +226,160 @@ class Controls extends ModalComponent
         return $payment->amount >= 0 ? 'Payment' : 'Refund';
     }
 
+    protected $rules = [
+        'fromEmail' => 'required|email',
+        'fromName' => 'required|string',
+        'to' => 'required|email',
+        'ccInput' => 'nullable|string',
+        'bccInput' => 'nullable|string',
+        'subject' => 'required|string|max:255',
+        'emailBody' => 'required|string',
+        'additionalAttachments' => 'array|max:5',
+        'additionalAttachments.*' => 'nullable|file|max:2048|mimes:pdf,doc,docx',
+    ];
+
+    protected $messages = [
+        'additionalAttachments.max' => 'You can upload a maximum of 5 files.',
+        'additionalAttachments.*.mimes' => 'Only PDF, DOC, and DOCX files are allowed.',
+    ];
+
+    public function openPopupEmailForm(string $type = null): void
+    {
+        $this->sendType = $type;
+        $defaultEmail = config('mail.from.address', config('mail.mailers.smtp.username', 'info@octopustravelmatrix.com'));
+        $defaultName = config('mail.from.name', setting('company.name', 'Octopus Travel Matrix'));
+
+        $user = Auth::user();
+        $leadBooker = $this->order?->leadBooker?->customer?->last_name;
+        $this->fromEmail = $user->email ?? $defaultEmail;
+        $this->fromName = $user->name ?? $defaultName;
+        $this->to = $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address;
+        $eventName = $this->order?->tour?->event?->name;
+        //$this->subject = "Order: " . ($eventName ? "{$eventName}" : '') . " - " .$this->order->booking_reference. ($leadBooker ? " - {$leadBooker}" : '');
+        if ($this->sendType == 'itinerary'){
+            $defaultSubject = setting("email.itinerary-document.subject", '');
+            $defaultTemplate = setting("email.itinerary-document.template", '');
+        } elseif ($this->sendType == 'reservation'){
+            $defaultSubject = setting("email.reservation-invoice-document.subject", '');
+            $defaultTemplate = setting("email.reservation-invoice-document.template", '');
+        } elseif ($this->sendType == 'booiing'){
+            $defaultSubject = '';
+            $defaultTemplate = '';
+        }
+        $this->subject = ($this->order?->tour?->event?->itinerary_email_subject !== null) ? $this->order?->tour?->event?->itinerary_email_subject : $defaultSubject;
+        $this->emailBody = ($this->order?->tour?->event?->itinerary_email_template !== null) ? $this->order?->tour?->event?->itinerary_email_template : $defaultTemplate;
+        $this->bccInput = setting('system.bcc.mail', '');
+        $this->ccInput = setting('system.cc.mail', '');
+        $this->showModal = true;
+        $this->successMessage = '';
+        $this->errorMessage = '';
+    }
+
+    public function closeModal(): void
+    {
+        $this->showModal = false;
+        $this->reset(['additionalAttachments', 'ccInput', 'bccInput', 'successMessage', 'errorMessage']);
+        $this->resetErrorBag();
+        $this->isSending = false;
+    }
+
+
+    public function removeAttachment($index)
+    {
+        unset($this->additionalAttachments[$index]);
+        $this->additionalAttachments = array_values($this->additionalAttachments);
+    }
+
+    protected function getTotalAttachmentsSize(): int
+    {
+        return collect($this->additionalAttachments)
+            ->sum(fn($file) => $file->getSize());
+    }
+
+    public function sendEmail(): void
+    {
+        $directory = 'attachments';
+        if (!Storage::exists($directory)) {
+            Storage::makeDirectory($directory, 0777, true);
+        }
+        $this->validate();
+        $this->isSending = true;
+        $this->successMessage = '';
+        $this->errorMessage = '';
+
+        $ccEmails = $this->parseEmails($this->ccInput);
+        $bccEmails = $this->parseEmails($this->bccInput);
+
+        if (!$this->validateEmailList($ccEmails, 'ccInput', 'cc')) return;
+        if (!$this->validateEmailList($bccEmails, 'bccInput', 'bcc')) return;
+
+        $fullPath = null;
+        $originalFilename = null;
+        $attachmentPaths  = [];
+        try {
+            if ($this->sendType == 'itinerary'){
+                $this->orderData = dompdf(view('pdf.invoices.itinerary', ['order' => $this->order, 'itinerary' => $this->order->repository->getItinerary(),]), false);
+            }
+
+            if (!empty($this->additionalAttachments)) {
+                foreach ($this->additionalAttachments as $file) {
+                    $originalName = $file->getClientOriginalName();
+                    $storedPath = $file->storeAs($directory, $originalName);
+                    $attachmentPaths[] = storage_path('app/' . $storedPath);
+                }
+            }
+
+            $mail = new OrderCustomMail(
+                Auth::user(),
+                $this->order,
+                $this->subject,
+                $this->emailBody,
+                $this->orderData,
+                $attachmentPaths,
+                $ccEmails,
+                $bccEmails,
+                $this->fromEmail,
+                $this->fromName
+            );
+            Mail::to($this->to)->send($mail);
+            $this->successMessage = 'The itinerary document has been successfully sent to the recipient ' . $this->to;
+        } catch (\Exception $e) {
+            $this->errorMessage = 'Failed to send email: ' . $e->getMessage();
+            $this->isSending = false;
+        } finally {
+            $this->isSending = false;
+        }
+        $this->isSending = false;
+    }
+
     public function render()
     {
         return view('livewire.admin.order.controls');
     }
+
+    private function parseEmails(?string $input): array
+    {
+        return collect(explode(';', $input ?? ''))
+            ->map(fn($email) => trim($email))
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
+    }
+
+    private function validateEmailList(array $emails, string $inputName, string $fieldAlias): bool
+    {
+        $validator = Validator::make([$inputName => $emails], [
+            "{$inputName}.*" => 'nullable|email',
+        ]);
+
+        if ($validator->fails()) {
+            $this->addError($inputName, "One or more " . strtoupper($fieldAlias) . " emails are invalid.");
+            $this->isSending = false;
+            return false;
+        }
+
+        return true;
+    }
+
 }

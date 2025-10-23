@@ -156,6 +156,17 @@ class ReportRepository
                 'view' => 'reports.installment-revenue',
                 'export' => 'reports.installment-revenue.export',
             ],
+            [
+                'name' => 'Intention Report',
+                'details' => 'Report containing all payment intentions and related models',
+                'view' => 'reports.payment-intentions.view',
+                'export' => 'reports.payment-intentions.export',
+            ],
+            [
+                'name' => 'Quote Finances',
+                'details' => 'Report containing details of quotes and finances',
+                'view' => 'reports.quote-finances',
+            ],
         ];
     }
 

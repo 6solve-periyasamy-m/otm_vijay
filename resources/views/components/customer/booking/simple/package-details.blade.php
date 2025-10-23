@@ -9,6 +9,7 @@
         display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 32px;
     }
     .payable_fulltext,
     .payable_txt,
@@ -61,7 +62,7 @@
         width: 2px;
         height: 20px;
         background: #D1D5DB;
-        margin-top: -20px;
+        margin-top: -40px;
     }
     .location-dollar-value p.dollar::before {
         background: url('/css/booking/icon/dollar.svg') no-repeat;
@@ -80,7 +81,7 @@
     .location, .dollar{
         padding-left: 20px !important;
     }
-    .psg-det { padding-top: 20px !important;}
+    .psg-det { letter-spacing: 2.24px;padding-top: 40px !important;}
 
     .contact-block {
         background: #F9F4EE;
@@ -125,14 +126,33 @@
         color: #7a7a7a !important;
     }
 
-    .subheading { font-size: 15px !important;}
-    
+    .subheading { font-size: 24px !important;}
+    .sub-text-color { margin-top: 8px; color: #808080; font-size: 16px; line-height: 24px;}
     @media only screen and (max-width: 1278px) {
         .sub-heading-3 {
             line-height: 40px !important;
         }
     }
-
+    .pkage_price,.gst_included{
+        font-family: "PP Neue Montreal Medium";
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        color: #000;
+        display: flex;
+        justify-content: space-between;
+    }
+    .pkage_price_total,.gst_included{padding: 32px 0px; border-bottom: 1px solid rgba(243, 91, 21, 0.2);}
+    .package_prc_total{
+        font-family: "PP Neue Montreal Bold";
+        font-weight: 700;
+        color: var(--text-dark);
+        font-size: 18px;
+        line-height: 24px;
+        display: flex;
+        justify-content: space-between;
+    }
+        
 </style>
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
@@ -140,11 +160,11 @@
 </div>
 <div class="snd-sec">
     @if(isset($tour->event?->image_url))
-        <div class="left-col">
+        <div class="left-col package_details_img">
             <img class="package-image" src="{{ asset($tour->event?->image_url) }}" alt="featured-img">
         </div>
     @endif
-    <div class="right-col">
+    <div class="right-col package_details_right">
         <h4 class="hide-event" style="display:none!important;">{{ $tour->event?->name }}</h4>
         <div class="name_price_div">
             <h4>{{$tour->name}}</h4>
@@ -159,59 +179,67 @@
             <p class="inclusion">{{ $inclusion }}</p>
         @endforeach
         <p class="see-more">
-            <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">See more</a>
+            <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">MORE INFORMATION</a>
         </p>
     </div>
 </div>
-<div class="third-col">
-    <ul>
-        <li>
-            <p class="txt">Package Price</p>
-            <p class="price pkg-price">{{ f_currency($booking->repository->getBasePrice()) }}</p>
-        </li>
-        <!-- @if($tour->booking_fee !== 0)
-            <li>
-                <p class="txt">Booking Fee</p>
-                <p class="price">{{ f_currency($tour->booking_fee) }}</p>
-            </li>
-        @endif -->
-        @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
-        @if($upgradePrice > 0 || $upgradePrice < 0)
-            <li>
-                <p class="txt">Upgrades Price</p>
-                <p class="price">{{ f_currency($upgradePrice) }}</p>
-            </li>
-        @endif
+
+<div class="additional-inclusions">
+    <div class="select-currency">
+        <div class="single">
+            <p></p>          
+        </div>
+        <div class="single">
+            <p>Package price</p>
+            <p>{{ f_currency($booking->repository->getBasePrice()) }}</p>
+        </div>
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         @if($singleOccupancy > 0 || $singleOccupancy < 0)
-        <li>
-            <p class="txt">Single occupancy surcharge</p>
-            <div class="single_occ_div">
-                <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>
-            </div>
-            <!-- <p class="price sng-price">{{ f_currency($singleOccupancy) }}</p>s -->
-        </li>
+        <div class="single">
+            <p>Single Occupancy</p>
+            <p>{{ f_currency($singleOccupancy) }}</p>
+        </div>
+        @endif
+    </div>
+
+    <div class="total">
+        <div class="single">
+            <p>Total</p>
+            <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
+        </div>
+        <div class="single">
+            <p>Base Package Price</p>
+            <p>{{ f_currency($booking->repository->getBasePrice()) }}</p>
+        </div>
+        @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+        @if($singleOccupancy > 0 || $singleOccupancy < 0)
+        <div class="single">
+            <p>Single Occupancy - {{ $booking->repository->getSingleOccupancyCount() }}</p>
+            <p>{{ f_currency($singleOccupancy) }}</p>
+        </div>
         @endif
         @if($booking->repository->getTaxes() !== null)
-            <li>
-                <p class="txt">{{ $tour->taxBracket()->name }} (Included)</p>
-                <p class="price tax-price">{{ f_currency($booking->repository->getTaxes()) }}</p>
-            </li>
+            <div class="single">
+                <p>{{ $tour->taxBracket()->name }} (Included)</p>
+                <p>{{ f_currency($booking->repository->getTaxes()) }}</p>
+            </div>
         @endif
-        <li>
-            <p class="total">Total</p>
-            <p class="price tot-price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
-        </li>
-        <!-- <li>
-            <p class="total">Total</p>
-            <p class="price tot-price">{{ f_currency($booking->repository->getTotalCost()) }}</p>
-        </li> -->
-    </ul>
+        @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
+        @if($upgradePrice > 0 || $upgradePrice < 0)
+            <div class="single">
+                <p>Upgrades Price</p>
+                <p>{{ f_currency($upgradePrice) }}</p>
+            </div>
+        @endif
+    </div>
+</div> 
+
+<div class="third-col">
     <div class="payable_dflex">
-    <div class="payable_txt">Payable today</div>
+    <div class="payable_txt">Payable now </div>
     <div class="payable_num">{{ f_currency($booking->repository->getDueTodayAmount()) }}</div>
     </div>
-      <div class="payable_fulltext">Remaining balance of {{ f_currency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by: {{ $tour->final_payment->format('d M Y') }}</div>
+      <div class="payable_fulltext sub-text-color">Balance {{ f_currency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by {{ $tour->final_payment->format('d M Y') }}</div>
     {{ $slot }}
     @error('common')
     <div class="submit-btn-cls add-on">
@@ -231,13 +259,16 @@
     <div class="popup-inner-two">
         <div class="convco-two">
             <div class="whole-block-two">
+                <div class="close-button">
+                    <img src="/css/booking/icon/Close-Button.svg" alt="close-btn">
+                </div>
                 <div class="package-details-heading-block">
                 <h3> Package details </h3>
-                <div class="close-button">
-                    <img src="/css/booking/icon/x-circle.svg" alt="close-btn">
+                <!-- <div class="close-button">
+                    <img src="/css/booking/icon/Close-Button.svg" alt="close-btn">
+                </div> -->
                 </div>
-                </div>
-                <div class="full-top-blcls-two">
+                <div class="full-top-blcls-two package_popup">
                     <div class="upp-block-two">
                         <div class="snd-sec">
                             <div class="left-col">
@@ -248,7 +279,7 @@
                                 <!--<p class="location">Sydney, Australia</p>-->
                                 <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                                 <h6>Description</h6>
-                                <p>{{ $tour->description }}</p>                               
+                                <p>{!! $tour->description !!}</p>                               
                                 <h6>Inclusions</h6>
                                 <!-- <p class="inclusion">Mens and womens final ticket</p>                                                         
                                 <p class="inclusion">3 nights, 5 star accommodation</p>

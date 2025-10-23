@@ -9,8 +9,8 @@ use App\Mail\Storage\OrderMail;
 use App\Models\Order\Order;
 use App\Models\Order\OrderInstallment;
 use App\Repository\Model\Order\InvoiceRepository;
-use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Log;
 
 class OrderMailer
@@ -166,7 +166,7 @@ class OrderMailer
         $customFromEmail = $user->email;
         $customFromName = $user->name ?? $user->email;
         $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
-        $bcc = ""; //flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
         try {
             $mail = (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null, $customFromEmail, $customFromName));
             if ($this->order?->tour?->event?->itinerary_email_template !== null) { $mail->setBody($this->order?->tour?->event?->itinerary_email_template); }

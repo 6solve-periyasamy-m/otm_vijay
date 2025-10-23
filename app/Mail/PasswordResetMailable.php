@@ -26,7 +26,7 @@ class PasswordResetMailable extends Mailable
 
     public function build()
     {
-        return $this->subject($this->subject)->view('mail.reset-password', ['reset' => route('admin.password.get-new', ['token' => $this->token, 'email' => $this->email,]),]);
+        return $this->subject($this->subject)->view('mail.reset-password', ['reset' => route('password.get-new', ['token' => $this->token, 'email' => $this->email,]),]);
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Admin\Transport;
 
+use App\Actions\Transport\DeleteTransport;
+use App\Exceptions\CannotDeleteException;
 use App\Http\Livewire\Abstract\ActionColumn;
 use App\Http\Livewire\Abstract\TruncatedAddressColumn;
 use App\Models\Transport\Operator;
@@ -10,9 +12,12 @@ use App\Models\Transport\TransportType;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
+use App\Http\Livewire\SendsEvents;
 
 class Table extends LivewireDatatable
 {
+    use SendsEvents;
+
     public bool $archived = false;
     public function builder()
     {
@@ -69,5 +74,23 @@ class Table extends LivewireDatatable
             $archiveColumn,
             ActionColumn::view('transport', 'transports.edit', 'transports.view'),
         ];
+    }
+
+    public function delete($id): void
+    {
+        $transports = Transport::find($id);
+        if ($transports === null) {
+            $this->toast('Cannot Delete Transport', 'The requested transport was not found.', 'danger');
+        }
+        if (! auth()->user()->can('self-child-access', [$transports, \App\Models\Transport\TransportInventory::class])) {
+            $this->toast('Unauthorized', 'You do not have permission to delete this transport.', 'danger');
+            return;
+        }
+        try {
+            DeleteTransport::run(Transport::find($id));
+            $this->toast('Transport Deleted Successfully', 'Successfully deleted the requested fransport.', 'success');
+        } catch (CannotDeleteException $e) {
+            $this->toast('Cannot Delete transport', $e->getMessage(), 'danger');
+        }
     }
 }

@@ -47,13 +47,13 @@
                     <h6 class="fw-bold">{{ $transport->internal_notes }}</h6>
                 </div>
                 <div class="col-12">
-                    @can('update', \App\Models\Transport\Transport::class)
+                    @can('self-update', \App\Models\Transport\Transport::class)
                         <a class="btn btn-success" href="{{route('transports.edit', ['transport' => $transport,])}}">
                             {{ Icon::edit() }}
                             <span>Edit Transport</span>
                         </a>
                     @endcan
-                    @can('create', \App\Models\Transport\Transport::class)
+                    @can('update', \App\Models\Transport\Transport::class)
                         <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('transports.duplicate', ['transport' => $transport,])}}">
                             {{ Icon::copy() }}
                             <span>Duplicate With Inventory</span>
@@ -80,8 +80,7 @@
 @endsection
 
 @section('inventory')
-
-    @can('create', \App\Models\Transport\TransportInventory::class)
+    @if(Gate::check('self-child-access', [$transport, \App\Models\Transport\TransportInventory::class]) || Gate::check('create', \App\Models\Transport\TransportInventory::class))
         <x-admin.section.card>
             <a href="{{ route('transport-inventories.create', ['transport' => $transport, ]) }}"
                class="btn btn-primary float-end me-1">
@@ -89,7 +88,7 @@
                 <span>Add Inventory</span>
             </a>
         </x-admin.section.card>
-    @endcan
+    @endif
     <x-admin.section.card>
         <table id="transportInventory" style="width: 100%;" class="datatable table table-striped">
             <thead class="thead-dark">
@@ -103,12 +102,18 @@
                 <th scope="col">Contracted Stock</th>
                 <th scope="col">Purchase Price</th>
                 <th scope="col">Sales Price</th>
+                <th scope="col">Occupancy</th>                
                 <th scope="col">Internal Notes</th>
                 <th scope="col">External Notes</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             @foreach($transport->transportInventory as $inventory)
+                @php
+                    $occupancy = $inventory->transportOccupancy;
+                    $name = $occupancy?->name;
+                    $maxOccupancy = $occupancy?->maximum_occupancy;
+                @endphp
                 <tr>
                     <td>{{ $inventory->travelClass->name }}</td>
                     <td>{{ $inventory->transport_number ?? 'Not Set' }}</td>
@@ -133,6 +138,11 @@
                     <td>{{ $inventory->contracted }}</td>
                     <td>{{ f_currency($inventory->purchase_price, $inventory->repository->getCurrency()) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
+                    <td>
+                        @if ($name)
+                            {{ $name }}@if ($maxOccupancy) ({{ $maxOccupancy }}) @endif
+                        @endif
+                    </td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>
                     <td class="actions-4">
@@ -146,7 +156,7 @@
                                 {{ Icon::list() }}
                             </span>
                         @endcan
-                        @can('create', \App\Models\Transport\TransportInventory::class)
+                        @can('self-child-access', [$transport, \App\Models\Transport\TransportInventory::class])
                             <a href="{{route('transport-inventories.duplicate', ['transport' => $transport, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-blue btn-sm mb-1"  title="Copy">
                                 {{ Icon::copy() }}
@@ -156,7 +166,7 @@
                             {{ Icon::copy() }}
                         </span>
                         @endcan
-                        @can('update', \App\Models\Transport\TransportInventory::class)
+                        @can('self-update', \App\Models\Transport\TransportInventory::class)
                             <a href="{{route('transport-inventories.edit', ['transport' => $transport, 'inventory' => $inventory,])}}"
                                class="btn btn-sm btn-outline-success mb-1"  title="Edit">
                                 {{ Icon::edit() }}
@@ -166,7 +176,7 @@
                             {{ Icon::edit() }}
                         </span>
                         @endcan
-                        @can('delete', \App\Models\Transport\TransportInventory::class)
+                        @can('self-delete', \App\Models\Transport\TransportInventory::class)
                             <a href="#" class="btn btn-sm btn-outline-danger mb-1"  title="Delete"
                                onclick="event.preventDefault();document.getElementById('transportInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}

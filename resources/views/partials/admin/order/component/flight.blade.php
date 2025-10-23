@@ -40,7 +40,10 @@
                             {{ f_currency($orderFlight->cost) }}
                         @endif
                     </td>
-                    <td>{{ f_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])</td>
+                    <td>
+                        {{ fr_currency($orderFlight->tourComponent->inventory->purchase_price, $orderFlight->tourComponent->inventory->repository->getCurrency()) }}
+                        ({{ fr_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
+                    </td>
                     <td>{{ f_date($orderFlight->updated_at) }}</td>
                     <td class="actions">
                         @can('update', \App\Models\Order\Component\OrderFlight::class)

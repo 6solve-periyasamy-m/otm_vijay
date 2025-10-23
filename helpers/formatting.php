@@ -149,3 +149,16 @@ if (!function_exists('sanitize')) {
         return preg_replace('/[^A-Za-z0-9\-]/', '', $str);
     }
 }
+if (!function_exists('get_class_name')) {
+    /**
+     * Returns the name of a class without a namespace
+     * @param $object
+     * @return string
+     */
+    function get_class_name($object): string
+    {
+        if ($object === null) { return ''; }
+        $class_parts = explode('\\', $object::class);
+        return end($class_parts);
+    }
+}

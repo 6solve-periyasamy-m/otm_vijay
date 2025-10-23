@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\Authentication\SendResetRequest;
 use App\Http\Requests\Admin\LoginRequest;
 use App\Models\Helper\Enum\ModelEventType;
 use App\Models\User;
+use App\Repository\Authentication\PasswordResetRepository;
 use Auth;
 use EventLogger;
 use Hash;
@@ -91,7 +92,10 @@ class AuthenticationController extends Controller
 
     public function getNewPassword(ReceivedResetRequest $request)
     {
-        return view('pages.auth.passwords.reset', ['token' => $request->token, 'email' => $request->email,]);
+        if (PasswordResetRepository::getResetEmail($request->token) !== null) {
+            return view('pages.auth.passwords.reset', ['token' => $request->token, 'email' => $request->email,]);
+        }
+        return redirect()->route('password.forgot')->withErrors(['msg'=> 'That password reset request has expired. Please request a new one.']);
     }
 
     public function resetPassword(PasswordResetRequest $request)
