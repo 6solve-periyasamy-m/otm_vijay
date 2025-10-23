@@ -60,8 +60,8 @@
                                             : f_currency($orderActivity->cost) }}
                                     </td>
                                     <td>
-                                        {{ f_currency($orderActivity->purchase_price) }}
-                                        @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', [])
+                                        {{ fr_currency($orderActivity->tourComponent->inventory->purchase_price, $orderActivity->tourComponent->inventory->repository->getCurrency()) }}
+                                        ({{ fr_currency($orderActivity->purchase_price) }} @includeWhen($orderActivity->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
                                     </td>
                                     <td>{{ f_date($orderActivity->updated_at) }}</td>
                                     <td>

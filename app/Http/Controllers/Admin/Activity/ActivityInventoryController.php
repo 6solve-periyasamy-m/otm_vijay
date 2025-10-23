@@ -13,11 +13,13 @@ class ActivityInventoryController extends Controller
 {
     public function create(Activity $activity)
     {
+        $this->authorize('self-child-access', [$activity, ActivityInventory::class]);
         return view('pages.admin.activity.inventory.form', ['activity' => $activity,]);
     }
 
     public function store(Request $request, Activity $activity)
     {
+        $this->authorize('self-child-access', [$activity, ActivityInventory::class]);
         $request->validate(ActivityInventory::getValidationRules());
         $activityInventory = ActivityInventory::make([
             'ticket_type_id' => $request->input('ticket_type_id'),
@@ -26,6 +28,7 @@ class ActivityInventoryController extends Controller
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
+            'currency_id' => $request->input('currency_id'),
             'sales_price' => $request->input('sales_price') ?? 0,
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),
@@ -61,6 +64,7 @@ class ActivityInventoryController extends Controller
             'fit_selectable' => $request->input('fit_selectable') === 'on' ? 1 : 0,
             'stock' => $request->input('stock'),
             'purchase_price' => $request->input('purchase_price') ?? 0,
+            'currency_id' => $request->input('currency_id'),
             'sales_price' => $request->input('sales_price') ?? 0,
             'internal_notes' => $request->input('internal_notes'),
             'external_notes' => $request->input('external_notes'),

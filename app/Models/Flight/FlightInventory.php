@@ -2,6 +2,7 @@
 
 namespace App\Models\Flight;
 
+use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderFlight;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Supplier\SupplierContractComponent;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use App\Models\User;
 
 /**
  * App\Models\Flight\FlightInventory
@@ -35,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property string $flight_number
  * @property bool $fit_selectable
  * @property int|null $stock
+ * @property int|null $currency_id
  * @property float|null $purchase_price
  * @property float|null $sales_price
  * @property string|null $internal_notes
@@ -48,6 +51,7 @@ use Illuminate\Support\Carbon;
  * @property-read Flight $component
  * @property-read Airport|null $departureAirport
  * @property-read Flight $flight
+ * @property-read Currency|null $currency
  * @property-read Collection|SupplierContractComponent[] $contractComponents
  * @property-read Collection|FlightInventoryTour[] $flightInventoryTour
  * @property-read Collection|OrderFlight[] $orders
@@ -124,6 +128,11 @@ class FlightInventory extends Model
     public function flight(): BelongsTo
     {
         return $this->belongsTo(Flight::class, 'flight_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function component(): BelongsTo
@@ -212,6 +221,20 @@ class FlightInventory extends Model
 
     public function getLocalPurchasePriceAttribute(): float|null
     {
-        return fx_convert($this->purchase_price, $this->component->currency);
+        return fx_convert($this->purchase_price, $this->repository->getCurrency());
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (FlightInventory $flightInventory) {
+            if (auth()->check() && !$flightInventory->created_by) {
+                $flightInventory->created_by = auth()->id();
+            }
+        });
     }
 }

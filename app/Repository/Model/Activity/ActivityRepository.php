@@ -61,18 +61,24 @@ class ActivityRepository extends ModelRepository implements HasActivityManifest
         return Activity::find($id);
     }
 
-    public function getEventActivityReportRow(Carbon $starts_at, Carbon $ends_at): EventActivityReportRow
+    public function getEventActivityReportRow(Carbon $starts_at, Carbon $ends_at): EventActivityReportRow|null
     {
         $total = 0;
         $used = 0;
+        $found = 0;
         foreach ($this->activity->activityInventory()->whereDate('starts_at' , '>=', $starts_at->subDay())
                      ->whereDate('ends_at' , '<=', $ends_at->addDay())->get() as $inventory) {
+            $found++;
             $total += $inventory->repository->getTotalStock();
             $used += $inventory->repository->getUsedStock();
+        }
+        if ($found === 0) {
+            return null;
         }
         return new EventActivityReportRow(
             $this->activity->name,
             $this->activity->activityType->name,
+            $this->activity->activity_category->label(),
             $total,
             $used,
             $this->activity,

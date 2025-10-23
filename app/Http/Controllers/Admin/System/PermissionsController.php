@@ -61,7 +61,7 @@ class PermissionsController extends Controller
         PermissionsRepository::revokeEverything($role);
         foreach ($available as $class) {
             try {
-                foreach (['create', 'read', 'update', 'delete', 'costing'] as $action) {
+                foreach (['create', 'read', 'update', 'delete', 'costing', 'self-update', 'self-delete'] as $action) {
                     if (!PermissionsRepository::canCurrentUser($action, $class)) continue;
                     if ($request->has($class . '-' . $action)) {
                         PermissionsRepository::grantPermission($role, $action, $class,  function () {});

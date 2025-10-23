@@ -23,7 +23,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
-
+use App\Models\User;
 
 /**
  * App\Models\Activity\Activity
@@ -149,5 +149,19 @@ class Activity extends Model
     {
 
         return "{$this->name} ({$this->activityType}) ({$this->address->region}, {$this->address->country})";
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($activity) {
+            if (auth()->check() && empty($activity->created_by)) {
+                $activity->created_by = auth()->id();
+            }
+        });
     }
 }

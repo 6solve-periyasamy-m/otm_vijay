@@ -3,6 +3,7 @@
 namespace App\Repository\Model\Transport;
 
 use App\Exceptions\CannotDeleteException;
+use App\Models\Location\Currency;
 use App\Models\Quote\Component\QuoteTransport;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Event;
@@ -163,6 +164,11 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         return $this->inventory->purchase_price ?? 0.0;
     }
 
+    public function getCurrency(): Currency
+    {
+        return $this->inventory->currency ?? $this->inventory->component->currency ?? Settings::currency();
+    }
+
     public function isStockControlActive(): bool
     {
         return false;
@@ -170,7 +176,7 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
 
     public function hasEnoughStock(int $amount = 1): bool
     {
-        return true;
+        return $this->getAvailableStock() >= $amount;
     }
 
     public function getSalesPrice(): ?float
@@ -190,12 +196,12 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
 
     public function getLocalPurchasePrice(): ?float
     {
-        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice() ?? 0;
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->getCurrency()) ?? $this->getPurchasePrice() ?? 0;
     }
 
     public function getPurchasePriceString(): string
     {
-        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
+        return f_currency($this->getPurchasePrice(), $this->getCurrency());
     }
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem

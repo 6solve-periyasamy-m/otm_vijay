@@ -39,16 +39,20 @@
                     <h6 class="fw-bold">{{ $accommodation->internal_notes }}</h6>
                 </div>
                 <div class="col-12">
-                    @can('update', \App\Models\Accommodation\Accommodation::class)
+                    @can('self-update', \App\Models\Accommodation\Accommodation::class)
                         <a class="btn btn-success" title="Edit Accommodation" href="{{route('accommodations.edit', ['accommodation' => $accommodation,])}}">
                             {{ Icon::edit() }}
                             <span>Edit Accommodation</span>
                         </a>
                     @endcan
-                    @can('create', \App\Models\Accommodation\Accommodation::class)
-                        <a class="btn btn-info" title="Duplicate Accommodation" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation,])}}">
+                    @can('update', \App\Models\Accommodation\Accommodation::class)
+                        <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation,])}}">
                             {{ Icon::copy() }}
-                            <span>Duplicate Accommodation</span>
+                            <span>Duplicate With Inventory</span>
+                        </a>
+                        <a class="btn btn-info" title="Duplicate Without Inventory" href="{{route('accommodations.duplicate', ['accommodation' => $accommodation, 'inventory' => false,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Without Inventory</span>
                         </a>
                     @endcan
                     <a class="btn btn-secondary" title="View Rooming List" href="{{route('accommodations.rooming', ['accommodation' => $accommodation,])}}">
@@ -130,13 +134,13 @@
                 @endcan
             </div>
             <div class="col-2">
-                @can('create', \App\Models\Accommodation\AccommodationInventory::class)
+                @if(Gate::check('self-child-access', [$accommodation, \App\Models\Accommodation\AccommodationInventory::class]) || Gate::check('create', \App\Models\Accommodation\AccommodationInventory::class))
                     <a href="{{ route('accommodation-inventories.create', ['accommodation' => $accommodation, ]) }}"
                        class="btn btn-primary">
                         {{ Icon::create() }}
                         <span>Add Inventory</span>
                     </a>
-                @endcan
+                @endif
             </div>
         </div>
     </x-admin.section.card>
@@ -193,7 +197,7 @@
                         <span>{{ $inventory->stockChildren()->count() === 1 ? '1 Child' : $inventory->stockChildren()->count() . ' Children' }}</span>
                     </td>
                     <td>{{ $inventory->contracted }}</td>
-                    <td>{{ f_currency($inventory->purchase_price, $accommodation->currency) }}</td>
+                    <td>{{ f_currency($inventory->purchase_price, $inventory->repository->getCurrency()) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>
@@ -208,7 +212,7 @@
                                 {{ Icon::list() }}
                             </span>
                         @endcan
-                        @can('create', \App\Models\Accommodation\AccommodationInventory::class)
+                        @can('self-child-access', [$accommodation, \App\Models\Accommodation\AccommodationInventory::class])
                             <a href="{{route('accommodation-inventories.duplicate', ['accommodation' => $accommodation, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-blue btn-sm mb-1" title="Copy">
                                 {{ Icon::copy() }}
@@ -218,7 +222,7 @@
                                 {{ Icon::copy() }}
                             </span>
                         @endcan
-                        @can('update', \App\Models\Accommodation\AccommodationInventory::class)
+                        @can('self-update', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="{{route('accommodation-inventories.edit', ['accommodation' => $accommodation, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1" title="Edit">
                                 {{ Icon::edit() }}
@@ -228,7 +232,7 @@
                                 {{ Icon::edit() }}
                             </span>
                         @endcan
-                        @can('delete', \App\Models\Accommodation\AccommodationInventory::class)
+                        @can('self-delete', \App\Models\Accommodation\AccommodationInventory::class)
                             <a href="#" class="btn btn-outline-danger btn-sm mb-1" title="Delete"
                                onclick="event.preventDefault();document.getElementById('accommodationInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}

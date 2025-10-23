@@ -35,16 +35,20 @@
                     <h6 class="fw-bold">{{ $activity->internal_notes }}</h6>
                 </div>
                 <div class="col-12">
-                    @can('update', \App\Models\Activity\Activity::class)
+                    @can('self-update', \App\Models\Activity\Activity::class)
                         <a class="btn btn-success" href="{{ route('activities.edit', ['activity' => $activity, ]) }}">
                             {{ Icon::edit() }}
                             <span>Edit Activity</span>
                         </a>
                     @endcan
-                    @can('create', \App\Models\Activity\Activity::class)
-                        <a class="btn btn-info" title="Duplicate Activity" href="{{route('activities.duplicate', ['activity' => $activity,])}}">
+                    @can('update', \App\Models\Activity\Activity::class)
+                        <a class="btn btn-info" title="Duplicate With Inventory" href="{{route('activities.duplicate', ['activity' => $activity,])}}">
                             {{ Icon::copy() }}
-                            <span>Duplicate Activity</span>
+                            <span>Duplicate With Inventory</span>
+                        </a>
+                        <a class="btn btn-info" title="Duplicate Without Inventory" href="{{route('activities.duplicate', ['activity' => $activity, 'inventory' => false,])}}">
+                            {{ Icon::copy() }}
+                            <span>Duplicate Without Inventory</span>
                         </a>
                     @endcan
                     <a class="btn btn-secondary" href="{{route('activities.manifest.view', ['activity' => $activity,])}}">
@@ -88,13 +92,13 @@
                     @endcan
                 </div>
                 <div class="col-2">
-                    @can('create', \App\Models\Activity\ActivityInventory::class)
+                    @if(Gate::check('self-child-access', [$activity, \App\Models\Activity\ActivityInventory::class]) || Gate::check('create', \App\Models\Activity\ActivityInventory::class))
                         <a href="{{ route('activity-inventories.create', ['activity' => $activity, ]) }}"
                            class="btn btn-primary">
                             {{ Icon::create() }}
                             <span>Add Inventory</span>
                         </a>
-                    @endcan
+                    @endif
                 </div>
             </div>
         </x-admin.section.card>
@@ -129,7 +133,7 @@
                         ({{$inventory->used_stock}} Sold)
                     </td>
                     <td>{{ $inventory->contracted }}</td>
-                    <td>{{ f_currency($inventory->purchase_price, $activity->currency) }}</td>
+                    <td>{{ f_currency($inventory->purchase_price, $inventory->repository->getCurrency()) }}</td>
                     <td>{{ f_currency($inventory->sales_price) }}</td>
                     <td>{{ $inventory->internal_notes }}</td>
                     <td>{{ $inventory->external_notes }}</td>
@@ -144,7 +148,7 @@
                                 {{ Icon::list() }}
                             </span>
                         @endcan
-                        @can('create', \App\Models\Activity\ActivityInventory::class)
+                        @can('self-child-access', [$activity, \App\Models\Activity\ActivityInventory::class])
                             <a href="{{route('activity-inventories.duplicate', ['activity' => $activity, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-blue btn-sm mb-1"  title="Copy">
                                 {{ Icon::copy() }}
@@ -154,7 +158,7 @@
                                 {{ Icon::copy() }}
                             </span>
                         @endcan
-                        @can('update', \App\Models\Activity\ActivityInventory::class)
+                        @can('self-update', \App\Models\Activity\ActivityInventory::class)
                             <a href="{{route('activity-inventories.edit', ['activity' => $activity, 'inventory' => $inventory,])}}"
                                class="btn btn-outline-success btn-sm mb-1"  title="Edit">
                                 {{ Icon::edit() }}
@@ -164,7 +168,7 @@
                                 {{ Icon::edit() }}
                             </span>
                         @endcan
-                        @can('delete', \App\Models\Activity\ActivityInventory::class)
+                        @can('self-delete', \App\Models\Activity\ActivityInventory::class)
                             <a href="#" class="btn btn-sm btn-outline-danger mb-1"  title="Delete"
                                onclick="event.preventDefault();document.getElementById('activityInventory-{{ $inventory->id }}-delete').submit();">
                                 {{ Icon::delete() }}

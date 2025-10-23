@@ -73,6 +73,7 @@ class ActivityController extends Controller
 
     public function importInventory(Request $request, Activity $activity): RedirectResponse
     {
+        $request->validate(['import' => 'required|file']);
         return $this->import((new ActivityOverrideImport($activity)), $request->file('import'));
     }
 
@@ -123,10 +124,10 @@ class ActivityController extends Controller
         return redirect()->route('activities.view', ['activity' => $activity,]);
     }
 
-    public function duplicate(Activity $activity): RedirectResponse
+    public function duplicate(Request $request, Activity $activity): RedirectResponse
     {
-        $duplicate = $activity->repository->duplicate(true);
-        return redirect()->route('activities.view', ['activity' => $duplicate,]);
+        $duplicate = $activity->repository->duplicate($request->inventory ?? true);
+        return redirect()->route('activities.edit', ['activity' => $duplicate,]);
     }
 
     public function archive(Activity $activity): RedirectResponse

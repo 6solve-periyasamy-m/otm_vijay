@@ -12,6 +12,7 @@ Route::prefix('{event}')->group(function () {
     Route::get('/report/hotel-stock/', [EventController::class, 'hotelReport'])->name('report.hotel-stock')->middleware('bouncer:Tour\Event,view');
     Route::get('/update', [EventController::class, 'edit'])->name('edit')->middleware('bouncer:Tour\Event,update');
     Route::post('/update', [EventController::class, 'update'])->name('update')->middleware('bouncer:Tour\Event,update');
+    Route::get('/duplicate', [EventController::class, 'duplicate'])->name('duplicate')->middleware('bouncer:Tour\Event,create');
     Route::post('/delete', [EventController::class, 'destroy'])->name('delete')->middleware('bouncer:Tour\Event,delete');
     Route::prefix('/manifest')->name('manifest.')->group(function () {
         Route::prefix('/order')->name('order.')->group(function () {

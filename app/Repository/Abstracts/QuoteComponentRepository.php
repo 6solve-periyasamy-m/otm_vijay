@@ -20,6 +20,28 @@ abstract class QuoteComponentRepository extends InventoryContainerRepository
     abstract public function convertToTourComponent(Tour $tour): InventoryTourRepository;
     abstract public function convertToQuoteSection(): QuoteSection;
     abstract public function priceShown(): bool;
+    abstract public function getInventory(): InventoryRepository|null;
+
+    public function hasEnoughStock(int $quantity = 1): bool
+    {
+        return $this->getInventory()?->hasEnoughStock($quantity);
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->getInventory()?->getAvailableStock();
+    }
+
+    public function getUsedStock(): int
+    {
+        return $this->getInventory()?->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->getInventory()?->getTotalStock();
+    }
+
     public function getEditUrl(): string
     {
         return route('quotes.components.edit', ['type' => $this->getComponentType(), 'id' => (int)$this->get()->id, 'quote' => $this->get()->quote]);

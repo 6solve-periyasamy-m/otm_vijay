@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin\Tour;
 
 use App\Exports\BulkReminderExport;
+use App\Helpers\ActivitySortFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TableRequest;
 use App\Http\Requests\Admin\Tour\EventRequest;
 use App\Models\Tour\Event;
 use App\Repository\Reporting\Manifest\OrderManifestRepository;
 use Excel;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EventController extends Controller
@@ -52,7 +54,7 @@ class EventController extends Controller
 
     public function view(TableRequest $request, Event $event)
     {
-        return view('pages.admin.event.view', ['event' => $event, 'hideNoCategory' => $request->hideNoCategory ?? false,]);
+        return view('pages.admin.event.view', ['event' => $event, 'activityFilter' => $request->activityFilter ?? ActivitySortFilter::MAIN_ACTIVITY, 'hideNoCategory' => $request->hideNoCategory ?? flag('tour.category.hide', false),]);
     }
 
     public function edit(Event $event)
@@ -87,6 +89,12 @@ class EventController extends Controller
             $event->image_url = store_file($request->image, $event->image_url);
         }
         $event->save();
+        return redirect()->route('events.view', ['event' => $event,]);
+    }
+
+    public function duplicate(Event $event): RedirectResponse
+    {
+        $event = $event->repository->duplicate();
         return redirect()->route('events.view', ['event' => $event,]);
     }
 

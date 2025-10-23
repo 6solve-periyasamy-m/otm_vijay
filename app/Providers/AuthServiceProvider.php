@@ -35,5 +35,74 @@ class AuthServiceProvider extends ServiceProvider
 
            return true;
         });
+
+        foreach (['self-update', 'self-delete'] as $action) {
+            Gate::define($action, function (User $user, $resource = null) use ($action) {
+                return $this->checkSelfPermission($user, $resource, $action);
+            });
+        }
+
+        /**
+         * Dynamic gate for creating child resources.
+         *
+         * Usage in Blade:
+         *   @can('self-child-access', [$parentModel, ChildModel::class])
+         */
+        Gate::define('self-child-access', function (User $user, $parent, string $childClass) {
+            return $this->checkSelfChildPermission($user, $parent, $childClass);
+        });
+
     }
+
+    private function checkSelfPermission(User $user, $resource, string $action): bool
+    {
+        if (is_null($resource) || is_string($resource)) {
+            return true;
+        }
+
+        if (method_exists($resource, 'getAttribute') && $resource->getAttribute('created_by') !== null) {
+
+            if ($resource->created_by === $user->id) {
+                return true;
+            }
+
+            $creator = User::find($resource->created_by);
+            if ($creator && $this->hasEqualOrHigherRoleLevel($user, $creator)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    private function checkSelfChildPermission(User $user, $parent, string $childClass): bool
+    {
+        if (!$user->can('create', $childClass)) {
+            return false;
+        }
+
+        if ($user->getHighestRoleLevel() > 5) {
+            return true;
+        }
+
+        if ($parent->created_by === $user->id) {
+            return true;
+        }
+
+        $creator = User::find($parent->created_by);
+        if ($creator && $this->hasEqualOrHigherRoleLevel($user, $creator)) {
+            return true;
+        }
+        return false;
+    }
+
+    private function hasEqualOrHigherRoleLevel(User $currentUser, User $creatorUser): bool
+    {
+        $currentUserRoleLevel = $currentUser->getHighestRoleLevel();
+        $creatorRoleLevel = $creatorUser->getHighestRoleLevel();
+        return $currentUserRoleLevel >= $creatorRoleLevel;
+    }
+
 }

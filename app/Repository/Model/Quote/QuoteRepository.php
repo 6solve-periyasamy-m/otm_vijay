@@ -23,6 +23,7 @@ use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Component\QuoteMerchandise;
 use App\Models\Quote\Component\QuoteTransport;
 use App\Models\Quote\Quote;
+use App\Models\Quote\QuoteCache;
 use App\Models\Quote\QuoteInstallment;
 use App\Models\Quote\QuotePricePoint;
 use App\Models\Quote\QuoteProspect;
@@ -184,6 +185,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemainingInstallment(int $paying = 1, float|null $price = null): float|null
     {
+        if ($this->quote->getDepositPercentage() >= 100) { return 0.0; }
         $ppp = ($price ?? sigfig($this->getTotalCost($paying) / $paying) ?? 0);
         $price = ($ppp * $paying);
         foreach ($this->quote->installments as $installment) {
@@ -545,12 +547,32 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
 
     public function getRemaining(int $paying = 1): float
     {
+        if ($this->quote->getDepositPercentage() >= 100) { return 0.0; }
         $cost = $this->getTotalCost($paying);
         $cost -= $this->quote->getDepositAmount($paying);
         foreach ($this->quote->installments as $installment) {
             $cost -= $installment->getAmount($paying);
         }
         return $cost;
+    }
+
+    public function recache(int|null $paying = null, int|null $travelling = null): void
+    {
+        $paying = $paying ?? $this->quote->paying + $this->quote->leadTraveller->paying;
+        $travelling = $travelling ?? $this->quote->paying + $this->quote->travelling + $this->quote->leadTraveller->travelling;
+        $conversion = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
+        $cache = $this->quote->cache ?? new QuoteCache(['quote_id' => $this->quote->id,]);
+        $total = (($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0.0) * $paying) * $conversion;
+        $ctc = $this->getTotalCostToCompany($travelling);
+        $margin = $total == 0 ? 100 : ((($total - $ctc) / $total) * 100);
+        $cache->update([
+            'total' => $total,
+            'cost_to_company' => $ctc,
+            'tax_amount' => $this->quote->taxBracket()?->calculate($total),
+            'profit' =>  $total - $ctc,
+            'margin' => $margin,
+        ]);
+        $cache->save();
     }
 
     /**

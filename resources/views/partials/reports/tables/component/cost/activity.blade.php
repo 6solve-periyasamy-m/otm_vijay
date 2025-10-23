@@ -22,7 +22,7 @@
     </thead>
     <tbody>
     @foreach($data as $component)
-        @php $componentCurrency = $component->tourComponent?->inventory?->component?->currency ?? Settings::currency(); @endphp
+        @php $componentCurrency = $component->tourComponent?->repository->getCurrency(); @endphp
         @php $hasIssue = $componentCurrency?->id !== Settings::currency()?->id && $component->tourComponent?->inventory?->purchase_price === $component->estimated_purchase_price; @endphp
         <tr>
             <th scope="row">

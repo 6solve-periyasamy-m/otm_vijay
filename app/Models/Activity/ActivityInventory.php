@@ -2,6 +2,7 @@
 
 namespace App\Models\Activity;
 
+use App\Models\Location\Currency;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Quote\Component\QuoteActivity;
 use App\Models\Supplier\SupplierContractComponent;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use App\Models\User;
 
 
 /**
@@ -32,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property bool|null $fit_selectable
  * @property int $ticket_type_id
  * @property int $stock
+ * @property int|null $currency_id
  * @property float|null $purchase_price
  * @property float|null $sales_price
  * @property string|null $internal_notes
@@ -45,6 +48,7 @@ use Illuminate\Support\Carbon;
  * @property-read float $local_purchase_price FX Converted Purchase Price
  * @property-read Activity $activity
  * @property-read Activity $component
+ * @property-read Currency|null $currency
  * @property-read string $activity_for_tour
  * @property-read int $used_on_tour_count
  * @property-read int $used_stock How much stock is sold
@@ -117,6 +121,11 @@ class ActivityInventory extends Model
         return $this->belongsTo(Activity::class, 'activity_id');
     }
 
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
+
     public function component(): BelongsTo
     {
         return $this->belongsTo(Activity::class, 'activity_id');
@@ -187,6 +196,20 @@ class ActivityInventory extends Model
 
     public function getLocalPurchasePriceAttribute(): float|null
     {
-        return fx_convert($this->purchase_price, $this->component->currency);
+        return fx_convert($this->purchase_price, $this->repository->getCurrency());
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (ActivityInventory $activityInventory) {
+            if (auth()->check() && !$activityInventory->created_by) {
+                $activityInventory->created_by = auth()->id();
+            }
+        });
     }
 }

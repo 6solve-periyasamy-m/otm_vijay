@@ -86,6 +86,7 @@ class AccommodationController extends Controller
 
     public function importInventory(Request $request, Accommodation $accommodation): RedirectResponse
     {
+        $request->validate(['import' => 'required|file']);
         return $this->import((new AccommodationOverrideImport($accommodation)), $request->file('import'));
     }
 
@@ -151,10 +152,10 @@ class AccommodationController extends Controller
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }
 
-    public function duplicate(Accommodation $accommodation): RedirectResponse
+    public function duplicate(Request $request, Accommodation $accommodation): RedirectResponse
     {
-        $duplicate = $accommodation->repository->duplicate(true);
-        return redirect()->route('accommodations.view', ['accommodation' => $duplicate,]);
+        $duplicate = $accommodation->repository->duplicate($request->inventory ?? true);
+        return redirect()->route('accommodations.edit', ['accommodation' => $duplicate,]);
     }
 
     public function archive(Accommodation $accommodation): RedirectResponse

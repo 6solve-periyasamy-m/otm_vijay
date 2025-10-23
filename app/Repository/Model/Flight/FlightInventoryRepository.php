@@ -5,6 +5,7 @@ namespace App\Repository\Model\Flight;
 use App\Exceptions\CannotDeleteException;
 use App\Models\Flight\FlightInventory;
 use App\Models\Flight\FlightInventoryTour;
+use App\Models\Location\Currency;
 use App\Models\Quote\Component\QuoteFlight;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Event;
@@ -163,6 +164,11 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
         return $this->inventory->purchase_price ?? 0.0;
     }
 
+    public function getCurrency(): Currency
+    {
+        return $this->inventory->currency ?? $this->inventory->component->currency ?? Settings::currency();
+    }
+
     public function getSalesPrice(): ?float
     {
         return $this->inventory->sales_price;
@@ -180,7 +186,7 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
 
     public function hasEnoughStock(int $amount = 1): bool
     {
-        return true;
+        return $this->getAvailableStock() >= $amount;
     }
 
     public static function find($id): FlightInventory|null
@@ -190,12 +196,12 @@ class FlightInventoryRepository extends InventoryRepository implements HasFlight
 
     public function getLocalPurchasePrice(): ?float
     {
-        return Settings::convertCurrency($this->getPurchasePrice(), $this->inventory->component->currency) ?? $this->getPurchasePrice() ?? 0;
+        return Settings::convertCurrency($this->getPurchasePrice(), $this->getCurrency()) ?? $this->getPurchasePrice() ?? 0;
     }
 
     public function getPurchasePriceString(): string
     {
-        return f_currency($this->getPurchasePrice(), $this->inventory->component->currency);
+        return f_currency($this->getPurchasePrice(), $this->getCurrency());
     }
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem

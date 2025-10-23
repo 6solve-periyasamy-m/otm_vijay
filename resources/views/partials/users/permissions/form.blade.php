@@ -13,7 +13,9 @@
             <th scope="col">View</th>
             <th scope="col">Create</th>
             <th scope="col">Edit</th>
+            <th scope="col">Self-Edit</th>
             <th scope="col">Delete</th>
+            <th scope="col">Self-Delete</th>
             <th scope="col">Costing</th>
             <th scope="col">All</th>
         </tr>
@@ -21,7 +23,7 @@
         <tbody>
             @foreach($permissions as $group => $classes)
                 <tr>
-                    <td colspan="6"><h4 style="text-decoration: underline">{{ $group }}</h4></td>
+                    <td colspan="8"><h4 style="text-decoration: underline">{{ $group }}</h4></td>
                     <td>
                         <div class="form-group">
                             <input type="checkbox" name="{{ str_replace(' ', '', $group).'Group' }}-all"
