@@ -44,7 +44,7 @@ abstract class AccommodationByDateComponent extends Component
         }
     }
 
-    abstract public function save(): void;
+    abstract public function save();
     abstract public function getPackageType(): string;
     abstract public function getReturnUrl(): string;
 

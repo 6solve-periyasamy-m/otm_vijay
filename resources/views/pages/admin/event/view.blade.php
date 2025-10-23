@@ -95,6 +95,10 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                         {{ Icon::report() }}
                         <span>View Order Manifest</span>
                     </a>
+                    <a class="btn btn-info" href="{{ route('events.report.hotel-stock', ['event' => $event]) }}">
+                        {{ Icon::report() }}
+                        <span>View Hotel Stock</span>
+                    </a>
                 </div>
             </div>
         </div>

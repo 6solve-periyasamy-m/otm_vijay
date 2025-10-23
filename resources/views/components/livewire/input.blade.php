@@ -3,14 +3,14 @@
         $disabled = true;
         $classes = ['input-disabled'];
     }
-    $fieldName = $attributes->get('name');
+    $fieldName = $attributes->get('wire:model', $attributes->get('name'));
     $hasError = $errors->has($fieldName);
 @endphp
 <div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px;">
     @if($attributes->get('label') !== null)
     <label class="{{ ($hasError && $attributes->has('required')) ? 'text-danger' : '' }}">
         {{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif
-        @error($attributes->get('wire:model', $attributes->get('name'))) <span class="text-danger">({{ $message }})</span> @enderror
+        @error($fieldName) <span class="text-danger">({{ $message }})</span> @enderror
     </label>
     @endif
     <div class="input-group">
