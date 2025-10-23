@@ -380,7 +380,7 @@ class ReportFieldRepository
             0 => [
                 'class' => 'Customer\Customer',
                 'type' => 'customer',
-                'eager' => ['homeAddress', 'billingAddress', 'tShirtSize', 'hatSize'],
+                'eager' => ['homeAddress', 'billingAddress', 'tShirtSize', 'hatSize', 'organization'],
                 'fields' => [
                     'email' => [
                         'name' => 'Email',
@@ -476,6 +476,14 @@ class ReportFieldRepository
                     'nationality' => [
                         'name' => 'Nationality',
                         'method' => 'nationality',
+                    ],
+                    'organization' => [
+                        'name' => 'Organization',
+                        'method' => 'organization',
+                    ],
+                    'gender' => [
+                        'name' => 'Gender',
+                        'method' => 'gender',
                     ],
                     'additional_loyalty_numbers' => [
                         'name' => 'All Loyalty Numbers',
