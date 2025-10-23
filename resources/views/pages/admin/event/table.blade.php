@@ -22,7 +22,6 @@
         <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
-            <th scope="col">Description</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Event Category</th>
@@ -34,7 +33,6 @@
         @foreach($events as $event)
             <tr>
                 <td><a href="{{route('events.view', ['event' => $event,])}}" class="link link-primary">{{ $event->name }}</a></td>
-                <td>{{ $event->description }}</td>
                 <td>{{ f_date($event->starts_at) }}</td>
                 <td>{{ f_date($event->ends_at) }}</td>
                 <td>{{ $event->event_category->label() }}</td>

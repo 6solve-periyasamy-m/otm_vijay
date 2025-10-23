@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-body" data-target="#components" onclick="toggleAccordion(this)">
+    <div class="card-body" data-target="#components" style="background: #a3caee" onclick="toggleAccordion(this)">
         <h4 class="fw-bold">{{ Icon::maximize() }} Components</h4>
     </div>
     <div class="collapse mx-1" id="components">

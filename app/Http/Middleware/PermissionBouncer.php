@@ -46,8 +46,18 @@ class PermissionBouncer
         if (!$instance) {
             return false;
         }
+
         // For other self permissions, check ownership
-        return $instance->created_by === $user->id;
+        if ($instance->created_by === $user->id) {
+            return true;
+        }
+
+        // Check if user has same role as creator
+        $creator = User::find($instance->created_by);
+        if ($creator && $this->hasEqualOrHigherRoleLevel($user, $creator)) {
+            return true;
+        }
+        return false;
     }
 
     protected function getModelInstanceFromRoute(Request $request, string $model)
@@ -55,6 +65,13 @@ class PermissionBouncer
         return collect($request->route()->parameters())
             ->first(fn($param) => $param instanceof \Illuminate\Database\Eloquent\Model
                 && get_class($param) === "App\\Models\\{$model}");
+    }
+
+    private function hasEqualOrHigherRoleLevel(User $currentUser, User $creatorUser): bool
+    {
+        $currentUserRoleLevel = $currentUser->getHighestRoleLevel();
+        $creatorRoleLevel = $creatorUser->getHighestRoleLevel();
+        return $currentUserRoleLevel >= $creatorRoleLevel;
     }
 
 }

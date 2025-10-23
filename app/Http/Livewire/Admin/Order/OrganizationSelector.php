@@ -4,9 +4,9 @@ namespace App\Http\Livewire\Admin\Order;
 
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
-use Livewire\Component;
 use App\Models\Customer\Organization;
 use App\Models\Order\Order;
+use Livewire\Component;
 
 class OrganizationSelector extends Component
 {
@@ -15,7 +15,7 @@ class OrganizationSelector extends Component
     public ?Organization $organization = null;
     public ?Order $order = null;
 
-    public float|null $commission = null;
+    public string|float|null $commission = null;
     public int|null $organization_id = null;
     public int|null $agent_id = null;
 

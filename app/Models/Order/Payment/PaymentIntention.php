@@ -44,6 +44,7 @@ class PaymentIntention extends Model
     protected $keyType = 'string';
     protected $fillable = ['id', 'customer_id', 'reference', 'data', 'type'];
     protected $casts = ['data' => 'array', 'amount' => 'float'];
+    protected $with = ['customer', 'order', 'booking'];
 
     private PaymentIntentionRepository $repo;
 
@@ -85,6 +86,15 @@ class PaymentIntention extends Model
         return $this->repository->process();
     }
 
+    public function booking(): BelongsTo
+    {
+        return $this->belongsTo(Booking::class, 'reference', 'token');
+    }
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'reference', 'booking_reference');
+    }
+
     public function getRepositoryAttribute(): PaymentIntentionRepository
     {
         $this->repo = $this->repo ?? new PaymentIntentionRepository($this);
@@ -96,10 +106,22 @@ class PaymentIntention extends Model
         return $this->getRelatedModel()?->tour?->brand ?? Brand::getSystemBrand();
     }
 
-    public function getRelatedModel(): Order|Booking|null
+    public function getRelatedModel(bool $force = false): Order|Booking|null
     {
-        return Order::where('booking_reference', '=', $this->reference)->first()
-            ?? Booking::where('token', '=', $this->reference)->first();
+        return $this->booking ?? $this->order;
+    }
+
+    public function getReference(): string|null
+    {
+        if ($this->getRelatedModel() instanceof Order) {
+            return $this->getRelatedModel()->booking_reference;
+        }
+
+        if ($this->getRelatedModel() instanceof Booking) {
+            return $this->getRelatedModel()->token;
+        }
+
+        return null;
     }
 
     public function customer(): BelongsTo

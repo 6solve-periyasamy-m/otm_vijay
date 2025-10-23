@@ -181,7 +181,7 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
 
     public function hasEnoughStock(int $amount = 1): bool
     {
-        return true;
+        return $this->getAvailableStock() >= $amount;
     }
 
     public function getSalesPrice(): ?float

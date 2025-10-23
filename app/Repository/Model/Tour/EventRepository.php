@@ -2,7 +2,9 @@
 
 namespace App\Repository\Model\Tour;
 
+use App\Helpers\ActivitySortFilter;
 use App\Models\Activity\Activity;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Order\Order;
 use App\Models\Tour\Event;
 use App\Repository\Abstracts\ModelRepository;
@@ -63,7 +65,7 @@ class EventRepository extends ModelRepository implements HasOrderManifest
     /**
      * @return array<EventActivityReportRow>
      */
-    public function getActivityReport(): array
+    public function getActivityReport(ActivitySortFilter|int $filter = ActivitySortFilter::ALL): array
     {
         $data = [];
         // If it is a child event, pull from the parent
@@ -71,6 +73,8 @@ class EventRepository extends ModelRepository implements HasOrderManifest
         // Fetch the inventory specifically between the start and the end of the current day. Add a day to make sure that all are captured
         /** @var Activity $activity */
         foreach ($parent->activities()->get() as $activity) {
+            if ($activity->activity_category === ActivityCategory::MAIN && $filter === ActivitySortFilter::INCLUSION) { continue; }
+            if ($activity->activity_category === ActivityCategory::NORMAL && $filter === ActivitySortFilter::MAIN_ACTIVITY) { continue; }
             $data[] = $activity->repository->getEventActivityReportRow($this->event->starts_at, $this->event->ends_at);
         }
         return $data;
