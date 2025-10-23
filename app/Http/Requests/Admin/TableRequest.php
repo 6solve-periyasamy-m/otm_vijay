@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property bool|null $historic
  * @property bool|null $hideNoCategory
+ * @property int|null $activityFilter
  */
 class TableRequest extends FormRequest
 {
