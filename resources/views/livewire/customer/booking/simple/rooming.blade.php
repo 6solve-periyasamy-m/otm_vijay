@@ -507,7 +507,6 @@
             </div>
             <div class="third-block">
                 @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
-                    @php($hotel = $rooms[$x]['room'])
                     <div class="first-bl" wire:key="{{Str::random()}}">                        
                         <div class="inn">
                             <h6>Room {{ $x + 1 }}</h6>
