@@ -186,6 +186,11 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
             </div>
             <x-admin.section.card>
                 <div class="row">
+                    @if($event->parent === null)
+                        <div class="col-12">
+                            <span style="color: red">Warning: No event parent is set, so cannot locate connected activities</span>
+                        </div>
+                    @endif
                     <div class="col-12">
                         <x-livewire.input.dropdown name="filter" :items="ActivitySortFilter::toArray()" value="{{$activityFilter->value}}" label="Filter" onchange="change_filter(this)"/>
                     </div>
@@ -204,7 +209,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                     <tbody>
                     @foreach($event->repository->getActivityReport($activityFilter) as $row)
                         @continue($row === null)
-                        <tr>
+                        <tr class="{{ ($row->totalStock - $row->usedStock) <= 0 ? 'tr-red' : '' }}">
                             <th scope="row">
                                 <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
                             </th>

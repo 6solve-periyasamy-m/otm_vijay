@@ -50,6 +50,7 @@ class Calculator extends Component
     public function mount(Quote $quote)
     {
         $this->quote = $quote;
+        $this->quote->repository->recache();
         $this->paying = $this->quote->paying ?? 0;
         $this->travelling = $this->quote->travelling ?? 0;
         $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
@@ -166,6 +167,7 @@ class Calculator extends Component
             'paying' => $this->paying + $this->quote->travellers()->where('paying', '=', true)->count(),
             'travelling' => $this->travelling + $this->quote->travellers()->where('travelling', '=', true)->count(),
         ]);
+        $this->quote->repository->recache();
         $this->render();
     }
 

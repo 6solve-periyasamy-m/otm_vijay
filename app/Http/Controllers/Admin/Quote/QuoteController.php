@@ -117,6 +117,7 @@ class QuoteController extends Controller
 
     public function view(Quote $quote)
     {
+        $quote->repository->recache();
         return view('pages.admin.quote.view', ['quote' => $quote,]);
     }
 

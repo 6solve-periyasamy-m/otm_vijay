@@ -51,6 +51,8 @@ use Settings;
  * @property-read string $event_details
  * @property-read Collection|Tour[] $tours
  * @property-read Collection|Order[] $orders
+ * @property-read Event $parent
+ * @property-read Collection<Event>|Event[] $children
  * @property-read int|null $tours_count
  * @property-read EventRepository $repository
  * @method static Builder|Event newModelQuery()
