@@ -2,6 +2,7 @@
 
 use App\Models\Booking\Booking;
 use App\Models\Order\Order;
+use App\Models\Quote\Quote;
 use App\Repository\Authentication\UserUpgrader;
 use App\Repository\Model\Order\InvoiceUpgrader;
 use Illuminate\Foundation\Inspiring;
@@ -46,9 +47,36 @@ Artisan::command('order:recache', function () {
     }
 })->purpose('Refresh the cache on all orders');
 
+Artisan::command('quote:recache', function () {
+    $quotes = Quote::all();
+    $bar = $this->output->createProgressBar($quotes->count());
+    $errors = "";
+    $bar->start();
+    foreach ($quotes as $quote) {
+        try {
+            $quote->repository->recache();
+        } catch (Exception $e) {
+            try {
+                \Log::error($e);
+            } catch (Exception $e) {
+                $errors .= "Failed to log error: " . $e->getMessage() . PHP_EOL;
+            }
+            $errors .=  "Failed to refresh quote: " . $quote->reference . PHP_EOL;
+        }
+        $bar->advance();
+    }
+    $bar->finish();
+    if (!empty($errors)) {
+        echo PHP_EOL . $errors;
+    }
+});
+
 Artisan::command('update:all', function () {
     $this->info("Recaching all orders");
     $this->runCommand('order:recache', [], $this->output);
+    echo PHP_EOL;
+    $this->info("Recaching all quotes");
+    $this->runCommand('quote:recache', [], $this->output);
     echo PHP_EOL;
     $this->runCommand('update:invoices', [], $this->output);
     echo PHP_EOL;
