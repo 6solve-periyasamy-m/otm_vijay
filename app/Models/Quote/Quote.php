@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
@@ -161,6 +162,11 @@ class Quote extends Model
     public function sentQuotes(): HasMany
     {
         return $this->hasMany(SentQuote::class, 'quote_id')->orderBy('sent', 'desc');
+    }
+
+    public function cache(): HasOne
+    {
+        return $this->hasOne(QuoteCache::class, 'quote_id');
     }
 
     public function sections(): HasMany
