@@ -30,8 +30,9 @@ class AccommodationOverrideImport implements ToCollection, WithHeadingRow, WithV
     {
         $data = [];
         foreach ($collection as $row) {
+            $id = $row['id'] ?? null;
             /** @var AccommodationInventory $inventory */
-            $inventory = $this->component->inventory()->where('id', $row['id'])->first() ??
+            $inventory = $this->component->inventory()->where('id', $id)->first() ??
                 AccommodationInventory::make(['accommodation_id' => $this->component->id,]);
             
             if (strtolower($inventory->roomType?->name) === strtolower(trim($row['room_type']))) {

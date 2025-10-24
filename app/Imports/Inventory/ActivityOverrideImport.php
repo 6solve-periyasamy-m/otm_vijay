@@ -26,7 +26,8 @@ class ActivityOverrideImport implements ToCollection, WithHeadingRow, WithValida
     {
         $data = [];
         foreach ($collection as $row) {
-            $inventory = $this->component->activityInventory()->where('id', $row['id'])->first() ??
+            $id = $row['id'] ?? null;
+            $inventory = $this->component->activityInventory()->where('id', $id)->first() ??
                 ActivityInventory::make(['activity_id' => $this->component->id,]);
             if (strtolower($inventory->ticketType?->name) === strtolower(trim($row['ticket_type']))) {
                 $ticketType = $inventory->ticketType?->id;

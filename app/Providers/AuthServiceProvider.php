@@ -61,7 +61,17 @@ class AuthServiceProvider extends ServiceProvider
         }
 
         if (method_exists($resource, 'getAttribute') && $resource->getAttribute('created_by') !== null) {
-            return $resource->created_by === $user->id;
+
+            if ($resource->created_by === $user->id) {
+                return true;
+            }
+
+            $creator = User::find($resource->created_by);
+            if ($creator && $this->hasEqualOrHigherRoleLevel($user, $creator)) {
+                return true;
+            }
+
+            return false;
         }
 
         return false;
@@ -77,6 +87,22 @@ class AuthServiceProvider extends ServiceProvider
             return true;
         }
 
-        return $parent->created_by === $user->id;
+        if ($parent->created_by === $user->id) {
+            return true;
+        }
+
+        $creator = User::find($parent->created_by);
+        if ($creator && $this->hasEqualOrHigherRoleLevel($user, $creator)) {
+            return true;
+        }
+        return false;
     }
+
+    private function hasEqualOrHigherRoleLevel(User $currentUser, User $creatorUser): bool
+    {
+        $currentUserRoleLevel = $currentUser->getHighestRoleLevel();
+        $creatorRoleLevel = $creatorUser->getHighestRoleLevel();
+        return $currentUserRoleLevel >= $creatorRoleLevel;
+    }
+
 }

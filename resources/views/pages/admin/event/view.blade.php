@@ -18,6 +18,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
         $(document).ready(function () {
             $('#orders').DataTable({fixedHeader: true, order: [[0, 'desc']],});
             $('#tours').DataTable({fixedHeader: true, order: [[2, 'desc']],});
+            $('#linked-activities').DataTable({fixedHeader: true, order: [[3, 'asc']],});
         });
 
         function change_filter(obj) {
@@ -100,7 +101,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
     </div>
     <hr class="splitter"/>
     <div class="row">
-        <div class="col-xl-6">
+        <div class="col-xl-{{ $event->event_category === \App\Models\Helper\Enum\EventType::MAIN ? 12 : 6 }}">
             <div class="heading pt-2 pb-md-3 pb-2">
                 <h2 class="fw-bold">Tours</h2>
             </div>
@@ -129,10 +130,10 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                             </td>
                             <td>{{ $tour->category === null ? 'None' : $tour->category->getDisplay() }}</td>
                             <td>{{ $tour->orders()->count() }}</td>
-                            <td style="width: 5em; overflow-wrap: break-word; display: block;">
+                            <td class="text-break" style="word-break: break-word; max-width: 180px;">
                                 @if(!empty($tour->getBookingFormUrl()))
                                     <a href="{{$tour->getBookingFormUrl()}}"
-                                       class="link link-primary">{{ $tour->getBookingFormUrl() }}</a>
+                                       class="link link-primary d-inline-block text-break">{{ $tour->getBookingFormUrl() }}</a>
                                 @else
                                     No Booking URL Set
                                 @endif
@@ -177,6 +178,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                 </x-admin.section.card>
             </x-admin.section.accordion>
         </div>
+        @if($event->event_category !== \App\Models\Helper\Enum\EventType::MAIN)
         <div class="col-xl-6">
             {{-- Linked Activities --}}
             <div class="heading pt-2 pb-md-3 pb-2">
@@ -184,15 +186,21 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
             </div>
             <x-admin.section.card>
                 <div class="row">
+                    @if($event->parent === null)
+                        <div class="col-12">
+                            <span style="color: red">Warning: No event parent is set, so cannot locate connected activities</span>
+                        </div>
+                    @endif
                     <div class="col-12">
                         <x-livewire.input.dropdown name="filter" :items="ActivitySortFilter::toArray()" value="{{$activityFilter->value}}" label="Filter" onchange="change_filter(this)"/>
                     </div>
                 </div>
-                <table class="table table-striped datatable">
+                <table class="table table-striped" id="linked-activities">
                     <thead>
                     <tr>
                         <th scope="col">Activity</th>
-                        <th scope="col">Type</th>
+                        <th scope="col">Category</th>
+                            <th scope="col">Type</th>
                         <th scope="col">Total Stock</th>
                         <th scope="col">Used Stock</th>
                         <th scope="col">Available Stock</th>
@@ -201,11 +209,12 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                     <tbody>
                     @foreach($event->repository->getActivityReport($activityFilter) as $row)
                         @continue($row === null)
-                        <tr>
+                        <tr class="{{ ($row->totalStock - $row->usedStock) <= 0 ? 'tr-red' : '' }}">
                             <th scope="row">
                                 <a href="{{ route('activities.view', ['activity' => $row->component,]) }}">{{ $row->activity }}</a>
                             </th>
-                            <td>{{ $row->type }}</td>
+                            <td>{{ $row->category }}</td>
+                                <td>{{ $row->type }}</td>
                             <td>{{ $row->totalStock }}</td>
                             <td>{{ $row->usedStock }}</td>
                             <td>{{ $row->totalStock - $row->usedStock }}</td>
@@ -215,5 +224,6 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
                 </table>
             </x-admin.section.card>
         </div>
+        @endif
     </div>
 @endsection

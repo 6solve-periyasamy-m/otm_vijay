@@ -279,6 +279,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'invoice_footer' => $tour->invoice_footer,
             'ordered_on' => $orderedOn ?? now(),
             'booking_fee' => $tour->booking_fee,
+            'internal_notes' => 'Booking Token: ' . $this->booking->token,
             'external_notes' => $this->booking->notes,
         ]);
         $order->saveQuietly();
