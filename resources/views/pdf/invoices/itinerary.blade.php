@@ -265,7 +265,6 @@
 
         @if(!empty($itinerary->items['Flights']))
             @php $firstLoop = true; @endphp
-
             @foreach($itinerary->items['Flights'] as $flight)
                 @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
                 <div class="single-module mb-n15 component-break">
@@ -273,7 +272,7 @@
                         <div class="heading-module">
                             <h3>
                                 <span class="mark"></span>
-                                <span class="text">Flights</span>
+                                <span class="text">Flights Section</span>
                             </h3>
                         </div>
                         @php $firstLoop = false; @endphp
