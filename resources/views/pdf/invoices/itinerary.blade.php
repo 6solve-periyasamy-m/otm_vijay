@@ -264,77 +264,80 @@
         @endif
 
         @if(!empty($itinerary->items['Flights']))
-    @php 
-        $firstLoop = true; 
-        // Group flights by sortKey and filter to only include unique booking references
-        $groupedFlights = collect($itinerary->items['Flights'])
-            ->filter(function($flight) {
-                return isset($flight->details['Quantity']) && 
-                       $flight->details['Quantity'] > 0 &&
-                       $flight->details['Flight Number'] !== $flight->details['Booking Reference'];
-            })
-            ->groupBy('sortKey')
-            ->map(function($flights) {
-                // For each group, get the first flight (they're duplicates except for booking reference)
-                return $flights->first();
-            });
-    @endphp
+            @php 
+                $firstLoop = true; 
 
-    @foreach($groupedFlights as $flight)
-        <div class="single-module mb-n15 component-break">
-            @if($firstLoop)
-                <div class="heading-module">
-                    <h3>
-                        <span class="mark"></span>
-                        <span class="text">Flights</span>
-                    </h3>
+                $groupedFlights = collect($itinerary->items['Flights'])
+                ->filter(function($flight) {
+                    return isset($flight->details['Quantity']) && 
+                        $flight->details['Quantity'] > 0 &&
+                        $flight->details['Flight Number'] !== $flight->details['Booking Reference'];
+                })
+                ->groupBy('sortKey')
+                ->map(function($flights) {
+                    // For each group, get the first flight (they're duplicates except for booking reference)
+                    return $flights->first();
+                });
+            @endphp
+            @foreach($groupedFlights as $flight)
+                @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
+                <div class="single-module mb-n15 component-break">
+                    @if($firstLoop)
+                        <div class="heading-module">
+                            <h3>
+                                <span class="mark"></span>
+                                <span class="text">Flights Section</span>
+                            </h3>
+                        </div>
+                        @php $firstLoop = false; @endphp
+                    @endif
+                    @if($flight->details['Flight Number'] !== $flight->details['Booking Reference'])
+                        <div class="details-module">
+                            <table>
+                                <tbody>
+                                    <tr><td colspan="2" class="pn10"></td></tr>
+                                    <tr>
+                                        <td class="w-125"><strong>Quantity:</strong></td>
+                                        <td>{{ $flight->details['Quantity'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="w-125"><strong>Booking Reference:</strong></td>
+                                        <td>{{ $flight->details['Booking Reference'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="non-booking-ref-block">&nbsp;</p>
+                    @endif
+                    <div class="component-body">
+                        <table class="tbl-quote-section" style="width: 90%;">
+                            <tr>
+                                <th>Airline</th>
+                                <th>Flight No.</th>
+                                <th>Class</th>
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                            </tr>
+                            <tr>
+                                <td class="word-wrap" style="width:80px;">{{ $flight->name }}</td>
+                                <td style="width:100px;">{{ $flight->details['Flight Number'] }}</td>
+                                <td style="width:60px;">{{ $flight->details['Class'] }}</td>
+                                <td style="width:70px;">{{ $flight->details['Departure Date'] }}</td>
+                                <td class="word-wrap" style="width:100px;">{{ $flight->details['Departure Airport'] }}</td>
+                                <td class="word-wrap" style="width:100px;">{{ $flight->details['Arrival Airport'] }}</td>
+                                <td style="width:55px;">{{ $flight->details['Departure Time'] }}</td>
+                                <td style="width:55px;">{{ $flight->details['Arrival Time'] }}</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-                @php $firstLoop = false; @endphp
-            @endif
-            
-            <div class="details-module">
-                <table>
-                    <tbody>
-                        <tr><td colspan="2" class="pn10"></td></tr>
-                        <tr>
-                            <td class="w-125"><strong>Quantity:</strong></td>
-                            <td>{{ $flight->details['Quantity'] }}</td>
-                        </tr>
-                        <tr>
-                            <td class="w-125"><strong>Booking Reference:</strong></td>
-                            <td>{{ $flight->details['Booking Reference'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="component-body">
-                <table class="tbl-quote-section" style="width: 90%;">
-                    <tr>
-                        <th>Airline</th>
-                        <th>Flight No.</th>
-                        <th>Class</th>
-                        <th>Date</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Departure</th>
-                        <th>Arrival</th>
-                    </tr>
-                    <tr>
-                        <td class="word-wrap" style="width:80px;">{{ $flight->name }}</td>
-                        <td style="width:100px;">{{ $flight->details['Flight Number'] }}</td>
-                        <td style="width:60px;">{{ $flight->details['Class'] }}</td>
-                        <td style="width:70px;">{{ $flight->details['Departure Date'] }}</td>
-                        <td class="word-wrap" style="width:100px;">{{ $flight->details['Departure Airport'] }}</td>
-                        <td class="word-wrap" style="width:100px;">{{ $flight->details['Arrival Airport'] }}</td>
-                        <td style="width:55px;">{{ $flight->details['Departure Time'] }}</td>
-                        <td style="width:55px;">{{ $flight->details['Arrival Time'] }}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    @endforeach
-@endif
+                @endif
+            @endforeach
+        @endif
 
         @if(!empty($itinerary->items['Transfers']))
             @php $firstLoop = true; @endphp
