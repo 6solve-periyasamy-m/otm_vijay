@@ -266,16 +266,13 @@
         @if(!empty($itinerary->items['Flights']))
             @php 
                 $firstLoop = true; 
-
                 $groupedFlights = collect($itinerary->items['Flights'])
                 ->filter(function($flight) {
                     return isset($flight->details['Quantity']) && 
-                        $flight->details['Quantity'] > 0 &&
-                        $flight->details['Flight Number'] !== $flight->details['Booking Reference'];
+                        $flight->details['Quantity'] > 0 ;
                 })
                 ->groupBy('sortKey')
                 ->map(function($flights) {
-                    // For each group, get the first flight (they're duplicates except for booking reference)
                     return $flights->first();
                 });
             @endphp
