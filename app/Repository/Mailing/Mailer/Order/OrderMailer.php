@@ -207,7 +207,10 @@ class OrderMailer
      */
     public function sendMail(string $code, string|null $email = null, bool $ignoreConsultantFlag = false, bool $sendAsConsultant = false, array $attachments = []): bool
     {
-        $bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email . ";" . (setting('system.bcc.mail') ?? "") : "";
+        $consultantEmail = $this->order->consultant?->email;
+        $bccEmails = setting('system.bcc.mail') ?? '';
+        $bcc = (! $ignoreConsultantFlag && flag('mail.bcc-consultant', false))  ? trim(implode(';', array_filter([$consultantEmail, $bccEmails])), ';'): '';
+        //$bcc = (!($ignoreConsultantFlag) && flag('mail.bcc-consultant', false)) ? $this->order->consultant->email . ";" . (setting('system.bcc.mail') ?? "") : "";
         if ($email === null) {
             $email = $this->order->agent?->email ??
                         $this->order->organization?->contact_email ??
