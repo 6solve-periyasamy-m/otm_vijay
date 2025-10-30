@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="desWrapper" style="display:none;">
-                        <p>{{ $faq->answer }}</p>
+                        <p>{!! $faq->answer !!}</p>
                     </div>
                 </div>
             @empty
