@@ -425,7 +425,7 @@
                                           <input id="home_is_billing" class="hs-input" type="checkbox" name="home_is_billing"
                                             value="1"
                                             {{ (isset($home_address_id) && isset($billing_address_id) && $home_address_id == $billing_address_id) ? 'checked' : '' }}>
-                                            <span>Same as Billing</span>
+                                            <span>Same as Home</span>
                                             
                                             </label>
                                     </span>
@@ -520,11 +520,11 @@
                         </div>
                         <hr/>
                         <div class="personal_details frequent_details" id="frequent_details">
-                            <h3>Frequent Flyer Details</h3>
+                            <h3>Memberships</h3>
                             <div class="frequent_details_form">
                                     <div class="one_input_field">
                                         <select name="airline_frequent_flyers_id" class="form-control">
-                                            <option value="">Select </option>
+                                            <option value="">Select Frequent Flyer</option>
                                             @foreach($frequentFlyers as $frequentFlyer)
                                                 <option value="{{ $frequentFlyer->id }}" {{ ($customer->airline_frequent_flyers_id ?? '') == $frequentFlyer->id ? 'selected' : '' }}>
                                                     {{ $frequentFlyer->name }}
@@ -532,7 +532,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP NUMBER" value="{{ $customer->membership ?? '' }}"></div>
+                                    <div class="one_input_field"><input type="text" name="membership number" placeholder="MEMBERSHIP" value="{{ $customer->membership ?? '' }}"></div>
                             </div>
                         </div>
                         <hr/>
@@ -540,22 +540,26 @@
                             <h3>Merchandise</h3>
                             <div class="other_details_form">
                                 <div class="two_input_field">
-                                        <select name="t_shirt_size_id" class="form-control">
+                                    
+                                    <input type="text" name="t_shirt_size_id" placeholder="T Shirt Size" value="{{ $customer->t_shirt_size }}">
+                                    <input type="text" name="hat_size_id" placeholder="Hat Size" value="{{ $customer->hat_size }}">
+                                    <input type="text" name="hat_size_id" placeholder="Loyalty Number" value="{{ $customer->loyalty_number }}">
+<!-- <select name="t_shirt_size_id" class="form-control">
                                         <option value="">Select T Shirt Size</option>
                                         @foreach(TShirtSize::all() as $tsize)
                                             <option value="{{ $tsize->id }}" {{ ($customer->t_shirt_size_id ?? '') == $tsize->id ? 'selected' : '' }}>
                                                 {{ strtoupper($tsize->name) }}
                                             </option>
                                         @endforeach
-                                    </select>
-                                        <select name="hat_size_id" class="form-control">
+                                    </select> -->
+                                        <!-- <select name="hat_size_id" class="form-control">
                                         <option value="">Select Hat Size</option>
                                         @foreach(HatSize::all() as $hsize)
                                             <option value="{{ $hsize->id }}" {{ ($customer->hat_size_id ?? '') == $hsize->id ? 'selected' : '' }}>
                                                 {{ strtoupper($hsize->name) }}
                                             </option>
                                         @endforeach
-                                    </select>
+                                    </select> -->
                                 </div>
                             </div>
                         </div>
@@ -662,7 +666,8 @@
         $('.phone-input').each(function () {
             const input = this;
             const iti = window.intlTelInput(input, {
-                initialCountry: "auto",
+                //initialCountry: "auto",
+                preferredCountries: [],
                 geoIpLookup: function(callback) {
                     $.get('https://ipapi.co/json', function() {}, "json").always(function(resp) {
                     var countryCode = (resp && resp.country_code) ? resp.country_code : "us";

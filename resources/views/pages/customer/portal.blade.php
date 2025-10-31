@@ -12,6 +12,9 @@
     use App\Models\Location\Country;
 @endphp
 @section('content')
+<style>
+p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
+</style>
  <div class="inner_content">
     <x-customer.overview-top-bar title="Overview" :search="false" />
     @php
@@ -26,9 +29,9 @@
     @endphp
     <div class="tours_list">
         <div class="upcoming_tours">
+            
+            <h2>Upcoming Trips {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span>--}}</h2>
             @if($upcomingOrders->count() > 0)
-                <h2>Upcoming Trips {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span>--}}</h2>
-            @endif
             @foreach($upcomingOrders as $kupcom => $vupcom)
                 <div class="event_list">
                     <div class="event_image_title">
@@ -62,10 +65,19 @@
                 </div>
                 <hr>
             @endforeach
+            @else
+                <div class="text-center justify-content-center align-items-center">
+                    <p class="no_upcoming_trips">No upcoming trips found.</p>
+                </div>
+                <hr>
+            @endif
+            
         </div>
         <div class="upcoming_payments">
             <h2>Upcoming Payments {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span>--}}</h2>
-            <div class="past_tour_row">
+
+                @if($upcomingOrders->count() > 0)
+                <div class="past_tour_row">
                 @foreach($upcomingOrders as $order)
                     @php
                         $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency());
@@ -198,13 +210,20 @@
                         @endif
                     </div>  
                 @endforeach
-            </div>
+                </div>
+                @else
+                    <div class="text-center justify-content-center align-items-center">
+                        <p class="no_upcoming_trips">No upcoming payments found.</p>
+                    </div>
+                
+                @endif
+            
             <hr>
         </div>
 
         <div class="past_tours">
-            @if($pastOrders->count())
                 <h2>Past Tours</h2>
+                @if($pastOrders->count())
                 <div class="past_tour_row">
                     @foreach($pastOrders as $kpast => $vpast)
                         <div class="past_tours_column">
@@ -247,7 +266,9 @@
                     <p>No past tours found.</p>
                 </div>
             @endif
+            <hr>
         </div>
+        
     </div>
 </div>
  <script>

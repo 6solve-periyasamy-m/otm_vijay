@@ -32,6 +32,20 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
     </script>
 @endpush
 @section('content')
+<style>
+.upcoming_tours_clock .common_btn.d-inline{display: flex !important;gap: 5px;}
+.upcoming_tours_clock .calendar_date{justify-content: space-between; }
+.event_image_title{width: 100%;}
+.title_date{max-width: 500px;width: 100%;}
+.event_image_title{align-items: flex-start;}
+.booking_reference,.ticket_type{display: flex; flex-flow: column; row-gap: 5px;}
+.booking_reference span:nth-child(2),.ticket_type span:nth-child(2){margin-left: 0px;font-weight: bold;}
+.booking_reference span:nth-child(1),.ticket_type span:nth-child(1){font-size: 14px;}
+.calendar_date p{margin-bottom: 0px;}
+.calendar_date h6{margin-bottom: 0px;}
+.upcoming_tours_clock .common_btn.d-inline p{margin-bottom: 0px;}
+.upcoming_tours_clock .booking_reference, .ticket_type{margin-bottom: 16px;}
+</style>
     {{-- -<div class="row payment-balance">
         <div class="col-12">
             <form class="form-horizontal mx-2">
@@ -205,14 +219,22 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         <div class="event_img"><img src="{{asset($evenImg1)}}" alt="{{ $order->tour->event->name }}"/></div>
                         <div class="title_date">                            
                             <h4>{{ $order->tour->event->name }}</h4>
-                            <p class="calendar_date"><img src="{{ asset('/images/customer/images/calendar.svg')}}" />
-                              {{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}
-                            </p>
-                            <p class="ticket_type"><span>Lead Guest</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></p>
                             <p class="booking_reference"><span>Booking Reference</span><span>{{$order->booking_reference}}</span></p>
-                        </div> 
-                </div>
-                @php  $is_download_itinerary = $order->tour?->event?->is_download_itinerary;  @endphp
+                             <div class="calendar_date">
+                                <div><p>From</p>
+                              <!--  <img src="{{ asset('/images/customer/images/calendar.svg')}}" /> -->
+                              <h6>{{ Carbon::parse($order->tour->date_from)->format('d M Y') }}</h6>
+                              </div>
+                              <div>
+                              <p>To</p>
+                              <h6> {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}</h6>
+                            </div>
+                            </div>
+                            <!-- <p class="ticket_type"><span>Lead Guest</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></p> -->
+                              <p class="ticket_type"><span>Lead Guest</span><span>
+                                {{ ($order->leadBooker->customer->first_name ?? '') . ' ' . ($order->leadBooker->customer->last_name ?? '') }}
+                            </span></p>
+                            @php  $is_download_itinerary = $order->tour?->event?->is_download_itinerary;  @endphp
                 <div class="common_btn d-inline">
                     @if($is_download_itinerary)
                     <p><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
@@ -221,7 +243,18 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                     <p><a href="{{ route('customer.preview.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="reservation_doc_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="reservation_org_icn" />
                     <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="reservation_wht_icn"/>RESERVATION DOCUMENT</a></p>
                 </div>
+                        </div> 
+                </div>
+                
             </div>
+            <!-- <div class="common_btn d-inline">
+                    @if($is_download_itinerary)
+                    <p><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
+                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/>DOWNLOAD ITINERARY</a></p>
+                    @endif
+                    <p><a href="{{ route('customer.preview.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="reservation_doc_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="reservation_org_icn" />
+                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="reservation_wht_icn"/>RESERVATION DOCUMENT</a></p>
+                </div> -->
         </div>
         <div class="customer_details">
             <h2>Customer Details</h2>

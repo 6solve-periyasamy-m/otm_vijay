@@ -86,9 +86,9 @@
 .calendar_date span{display: flex;gap: 8px;}
 .view_details a{color: #F35B15;text-decoration: none;letter-spacing: 2px;}
 hr{color: #F9F4EE;opacity: 1;}
-.overdue_btn{font-family: 'Inter Regular';font-size: 12px;line-height: 15px;background-color:#000000;color: #fff;
+.overdue_btn{font-family: 'Inter Regular';font-size: 12px;line-height: 15px;color: #fff;
     padding:10px;border: 0px; border-radius: 50px;margin-bottom: 15px;
-    margin-top: 15px;border: 1px solid #000;}
+    margin-top: 15px;}
 .upcoming_payments,.past_tours{margin-top: 48px;}
 .dollar_amount{font-family: 'PP Neue Montreal';font-size: 24px;line-height: 32px;color: #000000;position: relative; top: 5px;margin-right: 16px;}
 .event_title_date{padding-top: 16px;padding-bottom: 0px;}
@@ -956,7 +956,7 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     font-weight: 500 !important;
      font-size: 12px;
     letter-spacing: 2px;
-    padding: 10px;
+    padding: 6px 12px;
     border-radius: 50px;   
     text-transform: uppercase;    
     margin:0px;

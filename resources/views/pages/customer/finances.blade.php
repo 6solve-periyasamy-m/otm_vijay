@@ -9,6 +9,9 @@
 @endphp
 
 @section('content')
+<style>
+.btn-warning{ background-color: #fb3; border-radius: 40px !important;} 
+</style>
     <div class="inner_content">
         <x-customer.overview-top-bar title="Finances" :search="false" />
         <div class="tours_list">
@@ -39,9 +42,11 @@
                                                 @php $pastdue = 1 @endphp
                                             @endif
                                         @endforeach
-                                            <h6 class="btn btn-warning">{{ $order->status->description() }}</h6>
+                                            <!-- <h6 class="btn btn-warning">{{ $order->status->description() }}</h6> -->
+                                             <h6 class="btn btn-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
                                             <h4>{{ $order->tour?->event?->name}}</h4>
-                                            <h6>Lead Guest : {{$order->leadBooker->customer->first_name ?? '' . ' ' .$order->leadBooker->customer->last_name ?? ''}}</h6>
+                                            <!-- <h6>Lead Guest : {{$order->leadBooker->customer->first_name ?? '' . ' ' .$order->leadBooker->customer->last_name ?? ''}}</h6> -->
+                                             <h6>Lead Guest : {{ ($order->leadBooker->customer->first_name ?? '') . ' ' . ($order->leadBooker->customer->last_name ?? '') }}</h6>
                                             <!-- <h6>Booking Reference : {{ $order->booking_reference }}</h6> -->
                                             <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />{{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}</p>
                                     </div> 
@@ -100,7 +105,7 @@
                                                         @if($amount <= 0)
                                                             <p class="paid">Paid</p> 
                                                         @else
-                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                        <p class="unpaid badge btn-warning fw-bold overdue_btn">Un Paid</p>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -115,7 +120,7 @@
                                                     @if($amount <= 0)
                                                         <p class="paid">Paid</p> 
                                                     @else
-                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                        <p class="unpaid badge btn-warning fw-bold overdue_btn">Un Paid</p>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -130,7 +135,7 @@
                                                     @if($amount <= 0)
                                                         <p class="paid">Paid</p> 
                                                     @else
-                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                        <p class="unpaid badge btn-warning fw-bold overdue_btn">Un Paid</p>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -144,7 +149,7 @@
                                                     @if($amount <= 0)
                                                         <p class="paid">Paid</p> 
                                                     @else
-                                                        <p class="unpaid badge badge-warning fw-bold overdue_btn">Un Paid</p>
+                                                        <p class="unpaid badge btn-warning fw-bold overdue_btn">Un Paid</p>
                                                     @endif
                                                 </td>
                                             </tr>                                
