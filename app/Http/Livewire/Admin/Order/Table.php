@@ -21,6 +21,7 @@ class Table extends LivewireDatatable
             ->join('customers as lead_customer', 'lead.customer_id', '=', 'lead_customer.id')
             ->join('order_caches', 'order_caches.order_id', '=', 'orders.id')
             ->join('tours', 'tours.id', '=', 'orders.tour_id')
+            ->leftJoin('events', 'events.id', '=', 'tours.event_id')
             ->groupBy('orders.id');
     }
 
@@ -47,6 +48,11 @@ class Table extends LivewireDatatable
                 ->sortable()
                 ->searchable()
                 ->filterable(Tour::pluck('name')),
+             Column::name('events.name')
+                ->label('Event')
+                ->sortable()
+                ->searchable()
+                ->filterable(\App\Models\Tour\Event::orderBy('name')->pluck('name')->toArray()),
             Column::raw('CONCAT(COALESCE(lead_customer.first_name, ""), " ", COALESCE(lead_customer.last_name, ""))')
                 ->label("Lead Traveller Name")
                 ->sortable()
