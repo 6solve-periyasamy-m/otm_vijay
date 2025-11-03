@@ -6,24 +6,25 @@
     </x-admin.section.card>
     <div class="form-scroll-body"/>
         <x-admin.section.card>
+            <x-slot:title>Profile Details</x-slot:title>
             <div class="row">
                 <x-livewire.input wire:model="customer.title" label="Title" width="1" />
                 <x-livewire.input wire:model="customer.first_name" label="First Name" required width="3" />
-                <x-livewire.input wire:model="customer.middle_names" label="Middle Names" width="3" />
+                <x-livewire.input wire:model="customer.middle_names" label="Middle Names" width="2" />
                 <x-livewire.input wire:model="customer.last_name" label="Last Name" required width="3" />
+                <x-livewire.input wire:model="customer.gender" width="1" label="Gender" />
                 <x-livewire.input wire:model="customer.date_of_birth" type="date" label="Date of Birth" width="2" />
-                <x-livewire.input wire:model="customer.gender" width="2" label="Gender" />
+                <x-livewire.input.select.organization width="4" name="customer.organization_id" value="{{$customer->organization_id}}" clear label="Organization" />
                 <x-livewire.input.telephone name="customer.mobile_number" value="{{$customer->mobile_number}}" width="2" label="Primary Phone" />
                 <x-livewire.input.telephone name="customer.other_phone_number" value="{{$customer->other_phone_number}}" width="2" label="Secondary Phone" />
-                <x-livewire.input wire:model="customer.nationality" width="3" label="Nationality" />
+                {{-- <x-livewire.input wire:model="customer.nationality" width="3" label="Nationality" /> --}}
                 <x-livewire.input wire:model="customer.email_address" width="3" label="Email Address" />
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
             <div class="row">
-                <x-livewire.input.select.organization width="4" name="customer.organization_id" value="{{$customer->organization_id}}" clear label="Organization" />
-                <x-livewire.input wire:model="image" type="file" label="Picture" width="4" />
-                <x-livewire.input wire:model="customer.loyalty_number" width="4" label="Loyalty Number" />
+                {{-- <x-livewire.input wire:model="image" type="file" label="Picture" width="4" />
+                <x-livewire.input wire:model="customer.loyalty_number" width="4" label="Loyalty Number" /> --}}
                 <x-livewire.input wire:model="customer.emergency_contact_name" width="3" label="Emergency Contact Name" />
                 <x-livewire.input wire:model="customer.emergency_contact_relationship" width="3" label="Emergency Contact Relation" />
                 <x-livewire.input.telephone name="customer.emergency_contact_telephone" value="{{$customer->emergency_contact_telephone}}" width="3" label="Emergency Contact Phone" />
