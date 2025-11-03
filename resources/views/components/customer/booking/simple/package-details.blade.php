@@ -201,11 +201,18 @@
         </div>
         @endif
     </div>
-
+    @php
+        $rawAmount = $booking->repository->getTotalCost();
+        $currencyCode = Settings::currency()?->code;
+    @endphp
     <div class="total">
         <div class="single">
             <p>Total</p>
             <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
+            <p style="display:none">
+                <span class="currency-code">{{ $currencyCode }} </span>
+                <span class="total-cost">{{ $rawAmount }} </span>
+            </p>
         </div>
         <div class="single">
             <p>Base Package Price</p>

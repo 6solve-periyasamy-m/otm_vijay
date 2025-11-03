@@ -195,7 +195,7 @@
         <div class="bottom-foot">
             <div class="row">
                 <div class="col-one">
-                    <p>© 2024 {{ $brand->name }}.</p>
+                    <p>© {{ date('Y') }} {{ $brand->name }}.</p>
                 </div>
                 <div class="col-two">
                     <div class="contain">
