@@ -37,6 +37,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Subscription;
+use App\Models\User;
 
 
 /**
@@ -74,6 +75,7 @@ use Laravel\Cashier\Subscription;
  * @property int|null $t_shirt_size_id
  * @property int|null $hat_size_id
  * @property int|null $organization_id
+ * @property int|null $consultant_id
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property string|null $dietary_notes
@@ -189,6 +191,7 @@ class Customer extends Authenticatable implements NotificationSubject
             'last_name' => 'required',
             'date_of_birth' => 'nullable|date',
             'email_address' => 'nullable|email|unique:customers,email_address',
+            'consultant_id' => 'nullable|exists:users,id',
         ];
     }
 
@@ -208,6 +211,7 @@ class Customer extends Authenticatable implements NotificationSubject
                 'email',
                 Rule::unique('customers', 'email_address')->ignore($this->id),
             ],
+            'consultant_id' => 'nullable|exists:users,id',
         ];
     }
 
@@ -254,6 +258,11 @@ class Customer extends Authenticatable implements NotificationSubject
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'consultant_id');
     }
 
     public function orderCustomers(): HasMany

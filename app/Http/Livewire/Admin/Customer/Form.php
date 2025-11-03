@@ -143,6 +143,7 @@ class Form extends Component
             'customer.emergency_contact_name' => 'nullable|string',
             'customer.emergency_contact_relationship' => 'nullable|string',
             'customer.emergency_contact_telephone' => 'nullable|string',
+            'customer.consultant_id' => 'nullable|int|exists:users,id',
             'password' => ['nullable', Password::default(),],
             'home.address_line_1' => 'nullable|string',
             'home.address_line_2' => 'nullable|string',

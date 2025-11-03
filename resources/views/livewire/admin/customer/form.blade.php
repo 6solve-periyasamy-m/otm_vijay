@@ -17,18 +17,19 @@
                 <x-livewire.input.select.organization width="4" name="customer.organization_id" value="{{$customer->organization_id}}" clear label="Organization" />
                 <x-livewire.input.telephone name="customer.mobile_number" value="{{$customer->mobile_number}}" width="2" label="Primary Phone" />
                 <x-livewire.input.telephone name="customer.other_phone_number" value="{{$customer->other_phone_number}}" width="2" label="Secondary Phone" />
-                {{-- <x-livewire.input wire:model="customer.nationality" width="3" label="Nationality" /> --}}
-                <x-livewire.input wire:model="customer.email_address" width="3" label="Email Address" />
+                <x-livewire.input.select.user name="customer.consultant_id" value="{{ $customer->consultant_id }}" label="Inhouse Consultant" width="3" nullable="true" clear="true"/>
+                <x-livewire.input wire:model="customer.email_address" width="3" label="Email ID" />
+                <x-livewire.input wire:model="password" type="password" width="3" label="Password" />
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
+            <x-slot:title>Emergency Contact Details</x-slot:title>
             <div class="row">
                 {{-- <x-livewire.input wire:model="image" type="file" label="Picture" width="4" />
                 <x-livewire.input wire:model="customer.loyalty_number" width="4" label="Loyalty Number" /> --}}
                 <x-livewire.input wire:model="customer.emergency_contact_name" width="3" label="Emergency Contact Name" />
                 <x-livewire.input wire:model="customer.emergency_contact_relationship" width="3" label="Emergency Contact Relation" />
                 <x-livewire.input.telephone name="customer.emergency_contact_telephone" value="{{$customer->emergency_contact_telephone}}" width="3" label="Emergency Contact Phone" />
-                <x-livewire.input wire:model="password" type="password" width="3" label="Password" />
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
@@ -64,9 +65,10 @@
         <x-admin.section.card>
             <x-slot:title>Passport Details</x-slot:title>
             <div class="row">
-                <x-livewire.input wire:model="customer.passport_first_name" label="First Name" width="4" />
-                <x-livewire.input wire:model="customer.passport_middle_name" label="Middle Name" width="4" />
-                <x-livewire.input wire:model="customer.passport_last_name" label="Last Name" width="4" />
+                <x-livewire.input wire:model="customer.passport_first_name" label="First Name" width="3" />
+                <x-livewire.input wire:model="customer.passport_middle_name" label="Middle Name" width="3" />
+                <x-livewire.input wire:model="customer.passport_last_name" label="Last Name" width="3" />
+                <x-livewire.input wire:model="customer.nationality" width="3" label="Nationality" />
                 <x-livewire.input wire:model="customer.passport_number" label="Passport Number" width="3" />
                 <x-livewire.input wire:model="customer.passport_country_of_issue" label="Issuing Country" width="3" />
                 <x-livewire.input wire:model="customer.passport_issue_date" type="date" label="Issue Date" width="3" />
@@ -74,17 +76,16 @@
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
+            <x-slot:title>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 title-bold">Loyalty / Memberships</h5>
+                    <button wire:click="addLoyaltyNumber" class="btn btn-primary">
+                        {{ Icon::plus() }} Add Loyalty Number
+                    </button>
+                </div>
+            </x-slot:title>
             <div class="row">
-                <div class="col-12 col-xl-10">
-                    <span class="font-bold fw-bold">Loyalty Numbers</span>
-                </div>
-                <div class="col-12 col-xl-2 form-group">
-                    <button wire:click="addLoyaltyNumber" class="btn btn-primary">{{Icon::plus()}} Add Loyalty Number</button>
-                </div>
-            </div>
-        </x-admin.section.card>
-        <div class="row">
-            @foreach($this->loyalty as $key => $loyalty)
+                @foreach($this->loyalty as $key => $loyalty)
                 <div class="col-l-4 col-md-6 col-12">
                     <x-admin.section.card>
                         <div class="row">
@@ -97,9 +98,13 @@
                         </div>
                     </x-admin.section.card>
                 </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        </x-admin.section.card>
         <x-admin.section.card>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 title-bold">Merchandise / Others</h5>
+            </div>
             <div class="row">
                 <x-livewire.input.select.customer.hat-size name="customer.hat_size_id" value="{{$customer->hat_size_id}}" label="Hat Size" width="6" />
                 <x-livewire.input.select.customer.t-shirt-size name="customer.t_shirt_size_id" value="{{$customer->t_shirt_size_id}}" label="T-Shirt Size" width="6" />
