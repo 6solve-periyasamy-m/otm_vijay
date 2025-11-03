@@ -276,7 +276,7 @@
                     return $flights->first();
                 });
             @endphp
-            @foreach($groupedFlights as $flight)
+            @foreach($itinerary->items['Flights'] as $flight)
                 @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
                 <div class="single-module mb-n15 component-break">
                     @if($firstLoop)
