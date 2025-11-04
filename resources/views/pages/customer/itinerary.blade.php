@@ -260,7 +260,8 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
             <h2>Customer Details</h2>
             <div class="lead_guest name_address_font">
                 <h5>LEAD GUEST</h5>
-                <div><span class="lead_guest_name">Name</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></div>
+                <!-- <div><span class="lead_guest_name">Name</span><span>{{$order->leadBooker->customer->first_name ?? '' . " " .$order->leadBooker->customer->last_name ?? ''}}</span></div> -->
+                 <div><span class="lead_guest_name">Name</span><span>{{ ($order->leadBooker->customer->first_name ?? '') . ' ' . ($order->leadBooker->customer->last_name ?? '') }}</span></div>
                 <div><span class="lead_guest_email">Email address</span><span>{{ $order->leadBooker->customer->email_address }}</span></div>
             </div>
             @if(isset($order->orderCustomers) && $order->orderCustomers->count() > 1)
@@ -975,9 +976,9 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                 $evenImg = 'images/default_image.png';
                             }
                             @endphp
-                                <div class="event_img"><img src="{{asset($evenImg)}}" alt="{{ $vupcom->tour->event->name }}"/></div>
+                                <div class="event_img"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}"><img src="{{asset($evenImg)}}" alt="{{ $vupcom->tour->event->name }}"/></a></div>
                                 <div class="title_date">
-                                    <h6 class="btn btn-warning">{{ $vupcom->status->description() }}</h6>
+                                    <h6 class="btn btn-{{ $vupcom->status->color() }} fw-bold">{{ $vupcom->status->description() }}</h6>
                                     <h4>{{ $vupcom->tour?->event?->name}}</h4>                            
                                     <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                     {{ Carbon::parse($vupcom->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vupcom->tour->date_to)->format('d M Y')}}</p>

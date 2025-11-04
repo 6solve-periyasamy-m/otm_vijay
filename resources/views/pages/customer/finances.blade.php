@@ -10,6 +10,7 @@
 
 @section('content')
 <style>
+.btn-success{ background-color: #00c851; border-radius: 40px !important;}
 .btn-warning{ background-color: #fb3; border-radius: 40px !important;} 
 </style>
     <div class="inner_content">
@@ -46,7 +47,7 @@
                                              <h6 class="btn btn-{{ $order->status->color() }} fw-bold">{{ $order->status->description() }}</h6>
                                             <h4>{{ $order->tour?->event?->name}}</h4>
                                             <!-- <h6>Lead Guest : {{$order->leadBooker->customer->first_name ?? '' . ' ' .$order->leadBooker->customer->last_name ?? ''}}</h6> -->
-                                             <h6>Lead Guest : {{ ($order->leadBooker->customer->first_name ?? '') . ' ' . ($order->leadBooker->customer->last_name ?? '') }}</h6>
+                                             <h6 class="lead_guest">Lead Guest : {{ ($order->leadBooker->customer->first_name ?? '') . ' ' . ($order->leadBooker->customer->last_name ?? '') }}</h6>
                                             <!-- <h6>Booking Reference : {{ $order->booking_reference }}</h6> -->
                                             <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />{{ Carbon::parse($order->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($order->tour->date_to)->format('d M Y')}}</p>
                                     </div> 

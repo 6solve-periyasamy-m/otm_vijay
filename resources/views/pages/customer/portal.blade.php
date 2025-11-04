@@ -42,9 +42,9 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
                             $evenImg = 'images/default_image.png';
                         }
                         @endphp
-                            <div class="event_img"><img src="{{asset($evenImg)}}" alt="{{ $vupcom->tour->event->name }}"/></div>
+                            <div class="event_img"><a href="itinerary/{{$vupcom->booking_reference }}/{{$orderCustomer->customer_id }}"><img src="{{asset($evenImg)}}" alt="{{ $vupcom->tour->event->name }}"/></a></div>
                             <div class="title_date">
-				                <h6  class="btn btn-warning">{{ $vupcom->status->description() }}</h6>
+                                <h6 class="btn btn-{{ $vupcom->status->color() }} fw-bold">{{ $vupcom->status->description() }}</h6>
                                 <h4>{{ $vupcom->tour?->event?->name}}</h4>                            
                                 <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                 {{ Carbon::parse($vupcom->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vupcom->tour->date_to)->format('d M Y')}}</p>
