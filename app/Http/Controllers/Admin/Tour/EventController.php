@@ -62,6 +62,11 @@ class EventController extends Controller
         return view('pages.admin.event.form', ['event' => $event,]);
     }
 
+    public function hotelReport(Event $event)
+    {
+        return view('pages.admin.event.accommodation', ['event' => $event,]);
+    }
+
     public function orderManifest(Event $event)
     {
         return (new OrderManifestRepository($event->repository))->view('events.manifest.order.export', ['event' => $event]);
