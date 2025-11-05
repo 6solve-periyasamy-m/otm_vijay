@@ -104,6 +104,9 @@
         <x-admin.section.card>
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 title-bold">Merchandise / Others</h5>
+                <button wire:click="addMerchandiseCategory" class="btn btn-primary">
+                    {{ Icon::plus() }} Add Merchandise Category
+                </button>
             </div>
             <div class="row">
                 <x-livewire.input.select.customer.hat-size name="customer.hat_size_id" value="{{$customer->hat_size_id}}" label="Hat Size" width="6" />
