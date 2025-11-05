@@ -1351,7 +1351,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     color: #000000;
     max-width: 80%;
 }
-.event_information table td,.event_information p,.event_information ul li,.event_information a,.tours_list p,.event_information ol li{font-family: 'PP NeueMontreal Medium';}
+.event_information table td,.event_information p,.event_information ul li,.event_information a,.tours_list p,.event_information ol li,.faqs_list ul li{font-family: 'PP NeueMontreal Medium';}
 .event_information p strong,.event_information p {display: inline-block; padding-bottom: 15px;}
 .finances_event .btn-secondary,.title_date .btn-secondary{background-color: #a6c;}
 .finances_event .btn-info{background-color: #33b5e5; color: #fff;}
