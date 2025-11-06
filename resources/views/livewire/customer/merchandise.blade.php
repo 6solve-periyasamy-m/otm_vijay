@@ -1,7 +1,7 @@
 <div>
     
     <div class="mb-3 d-flex justify-content-between align-items-center">
-        <h3 class="mb-0">Merchandise</h3>
+        <h3 class="mb-0">Merchandise / Others</h3>
         <button type="button" wire:click="add" class="btn btn-primary btn-sm">
             Add Merchandise
         </button>
