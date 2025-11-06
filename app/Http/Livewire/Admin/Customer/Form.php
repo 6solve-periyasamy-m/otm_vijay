@@ -8,6 +8,7 @@ use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Customer\Customer;
 use App\Models\Customer\LoyaltyNumber;
+use App\Models\Customer\CustomerMerchandise;
 use App\Models\Location\Address;
 use Hash;
 use Illuminate\Http\UploadedFile;
@@ -27,6 +28,8 @@ class Form extends Component
     public bool $accordion = false;
     public array $loyalty = [];
     public array $loyaltyToDelete = [];
+    public array $merchandise = [];
+    public array $merchandiseToDelete = [];
     protected $messages = [
         'loyalty.*.type.required_with' => 'All fields are required',
         'loyalty.*.name.required_with' => 'All fields are required',
@@ -41,7 +44,10 @@ class Form extends Component
         foreach ($this->customer->loyaltyNumbers as $loyaltyNumber) {
             $this->loyalty[] = ['id' => $loyaltyNumber->id, 'type' => $loyaltyNumber->loyalty_number_type_id, 'name' => $loyaltyNumber->loyalty_number, 'notes' => $loyaltyNumber->notes];
         }
-        //dd($this->loyalty);
+
+        foreach ($this->customer->customerMerchandises as $merchandise) {
+            $this->merchandise[] = ['id' => $merchandise->id, 'category' => $merchandise->merchandise_category_id, 'size' => $merchandise->size, 'other_details' => $merchandise->other_details];
+        }
     }
 
     public function addLoyaltyNumber(): void
@@ -56,6 +62,22 @@ class Form extends Component
                 $this->loyaltyToDelete[] = $key;
             }
             unset($this->loyalty[$key]);
+        }
+        $this->render();
+    }
+
+    public function addMerchandise(): void
+    {
+        $this->merchandise[] = ['id' => null, 'category' => null, 'size' => null, 'other_details' => null,];
+    }
+
+    public function removeMerchandise(int $key): void
+    {
+        if (array_key_exists($key, $this->item)) {
+            if ($this->item[$key]['id'] !== null) {
+                $this->merchandiseToDelete[] = $key;
+            }
+            unset($this->item[$key]);
         }
         $this->render();
     }

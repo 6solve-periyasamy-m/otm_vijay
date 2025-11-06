@@ -103,6 +103,7 @@ use App\Models\User;
  * @property-read Collection|OrderCustomer[] $orderCustomers OrderCustomers for this customer
  * @property-read Collection|QuoteProspect[] $quoteProspects
  * @property-read Collection|LoyaltyNumber[] $loyaltyNumbers
+ * @property-read Collection|CustomerMerchandise[] $customerMerchandises
  * @property-read int|null $order_customers_count Amount of OrderCustomers for this customer
  * @property-read Collection|Order[] $orders Orders for this customer
  * @property-read int|null $orders_count Amount of orders for this customer
@@ -138,6 +139,7 @@ use App\Models\User;
  * @method static Builder|Customer whereLastName($value)
  * @method static Builder|Customer whereLoginToken($value)
  * @method static Builder|Customer whereLoyaltyNumber($value)
+ * @method static Builder|Customer whereCustomerMerchandise($value)
  * @method static Builder|Customer whereMiddleNames($value)
  * @method static Builder|Customer whereMobileNumber($value)
  * @method static Builder|Customer whereMobilityNotes($value)
@@ -182,7 +184,7 @@ class Customer extends Authenticatable implements NotificationSubject
 
     protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
     protected array $cascadeDeletes = ['quoteProspects',];
-    protected $with = ['loyaltyNumbers',];
+    protected $with = ['loyaltyNumbers', 'customerMerchandises'];
 
     public static function getValidationRules(): array
     {
@@ -230,6 +232,11 @@ class Customer extends Authenticatable implements NotificationSubject
         return $this->hasMany(LoyaltyNumber::class, 'customer_id');
     }
 
+    public function customerMerchandises(): HasMany
+    {
+        return $this->hasMany(CustomerMerchandise::class, 'customer_id');
+    }
+ 
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
