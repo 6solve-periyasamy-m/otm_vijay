@@ -1,11 +1,11 @@
 <div>
-    
     <div class="mb-3 d-flex justify-content-between align-items-center">
         <h3 class="mb-0">Merchandise / Others</h3>
-        <button type="button" wire:click="add" class="btn btn-primary btn-sm">
-            Add Merchandise
-        </button>
+        <div wire:click="add" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-border" title="Add Merchandise Item" role="button" tabindex="0" aria-label="Add Merchandise or Other Item">
+            <img src="{{ asset('images/customer/images/add_btn_color.svg') }}"  class="reservation_wht_icn plus-icon-size"  alt="Add" />
+        </div>
     </div>
+
 
     @foreach($merchandise as $key => $loyalty)
         <div class="row align-items-end border rounded p-2 mb-2" wire:key="loyalty-{{ $key }}">
@@ -41,9 +41,9 @@
                 width="3"
             />
             <div class="col-2 text-center">
-                <button type="button" wire:click="remove({{ $key }})" class="btn btn-outline-danger">
-                    <i class="bi bi-trash"></i>Delete
-                </button>
+                <div wire:click="remove({{ $key }})" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-no-border" title="Remove Merchandise Item" role="button" tabindex="0" aria-label="Remove Merchandise Item">
+                    <img src="{{ asset('images/customer/images/remove.png') }}"  class="reservation_wht_icn plus-icon-size"  alt="Remove" />
+                </div>
             </div>
         </div>
     @endforeach
@@ -51,10 +51,10 @@
     @if(session()->has('success'))
         <div class="alert alert-success mt-2">{{ session('success') }}</div>
     @endif
-
     <div class="mt-3">
-        <button type="button" wire:click="save" class="btn btn-secondary">
-            Update Merchandise
-        </button>
+        <div wire:click="save" class="btn d-inline-flex align-items-center gap-2 btn-bg-border" role="button" tabindex="0" title="Update Merchandise" aria-label="Update Merchandise" style="border:1px solid #F35B15; border-color: #F35B15; height: 32px; background-color: #F9F4EE;">
+            <img  src="{{ asset('images/customer/images/merchandise.png') }}"   class="reservation_wht_icn"   alt="Update Merchandise" />
+            <span>Update Merchandise</span>
+        </div>
     </div>
 </div>

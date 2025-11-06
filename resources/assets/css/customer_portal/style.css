@@ -1351,14 +1351,15 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     color: #000000;
     max-width: 80%;
 }
-.event_information table td,.event_information p,.event_information ul li,.event_information a,.tours_list p,.event_information ol li,.faqs_list ul li{font-family: 'PP NeueMontreal Medium';}
+
+.event_information table td,.event_information p,.event_information ul li,.event_information a,.tours_list p,.event_information ol li{font-family: 'PP NeueMontreal Medium';}
 .event_information p strong,.event_information p {display: inline-block; padding-bottom: 15px;}
 .finances_event .btn-secondary,.title_date .btn-secondary{background-color: #a6c;}
 .finances_event .btn-info{background-color: #33b5e5; color: #fff;}
 .btn-success{ background-color: #00c851 !important; border-radius: 40px !important;}
-.btn-warning{ background-color: #fb3; border-radius: 40px !important;} 
+.btn-warning{ background-color: #fb3; border-radius: 40px !important;}
 .title_date .btn{cursor:auto;}
-.title_date h6.btn,.past_tour_img span{font-family: 'Inter Medium';font-size: 12px;letter-spacing: 1.92px;font-weight: 500 !important;border-radius: 40px;line-height: 19px;text-transform: uppercase;border: 0px; cursor: auto;}
+.title_date h6.btn,.past_tour_img span{font-family: 'Inter Medium';font-size: 12px;letter-spacing: 1.92px;font-weight: 500 !important;border-radius: 40px;line-height: 19px;cursor: auto;text-transform: uppercase;border: 0px;}
 .finances_event .event_detail_top,.event_image_title{max-width: 700px;width: 100%;}
 .title_date .btn-success:hover{background-color: #00c851;border: 0px;}
 .title_date .btn-secondary:hover{background-color: #a6c;border: 0px;}
@@ -1367,4 +1368,12 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .title_date .btn-info:hover{background-color: #33b5e5;border: 0px;}
 .lead_guest{font-family: 'PP NeueMontreal Medium'; font-size: 16px;line-height: 19px; font-weight: 500; color: #000;}
 .notes_colm::placeholder {font-family: 'PP Editorial New';}
-.onsite-contact-detail-block a,.event_information td a{color: #000;}
+.onsite-contact-detail-block a,.event_information td a,.event_information ul li,.event_information a,.tours_list p,.event_information ol li{color: #000;}
+.iti__flag--placeholder{background-image: url(/images/customer/images/world_icn.png);background-size: contain; background-color: transparent; box-shadow: none; background-position: 0px; }
+.personal_details label{font-family: 'PP NeueMontreal Medium'; font-size: 14px; line-height: 16px; text-decoration: none; color: #F35B15; margin-bottom: 16px;}
+.personal_details .btn-outline-danger{ font-family: 'PP NeueMontreal Medium'; font-size: 14px; font-weight: 500; line-height: 17px; color: #fff; background-color: #F35B15; border-radius: 50px; padding: 11px 30px; border: 1px solid #F35B15; text-transform: uppercase; text-decoration: none; position: relative;}
+.personal_details .btn-primary,.personal_details .btn-secondary{background-color: #F35B15;border-radius: 50px;border: 1px solid #F35B15;}
+.btn-bg-border{border:1px solid #F35B15; border-color: #F35B15; height: 32px; background-color: #F9F4EE;}
+.icon-border{border:1px solid #F35B15; border-color: #F35B15; width: 32px; height: 32px;}
+.plus-icon-size{width: 20px; height: 20px;}
+.icon-no-border{width: 32px; height: 32px;}

@@ -1,12 +1,10 @@
 <div>
-    
     <div class="mb-3 d-flex justify-content-between align-items-center">
-        <h3 class="mb-0">Loyalty Numbers</h3>
-        <button type="button" wire:click="add" class="btn btn-primary btn-sm">
-            Add Loyalty Number
-        </button>
+        <h3 class="mb-0">Loyalty / Memberships</h3>
+        <div wire:click="add" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-border" title="Add Loyalty Item" role="button" tabindex="0" aria-label="Add Loyalty Item">
+            <img src="{{ asset('images/customer/images/add_btn_color.svg') }}"  class="reservation_wht_icn plus-icon-size"  alt="Add" />
+        </div>
     </div>
-
     @foreach($loyalties as $key => $loyalty)
         <div class="row align-items-end border rounded p-2 mb-2" wire:key="loyalty-{{ $key }}">
             {{-- <x-livewire.input
@@ -41,9 +39,9 @@
                 width="3"
             />
             <div class="col-2 text-center">
-                <button type="button" wire:click="remove({{ $key }})" class="btn btn-outline-danger">
-                    <i class="bi bi-trash"></i>Delete
-                </button>
+                <div wire:click="remove({{ $key }})" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-no-border" title="Remove Merchandise Item" role="button" tabindex="0" aria-label="Remove Merchandise Item">
+                    <img src="{{ asset('images/customer/images/remove.png') }}"  class="reservation_wht_icn plus-icon-size"  alt="Remove" />
+                </div>
             </div>
         </div>
     @endforeach
@@ -53,8 +51,9 @@
     @endif
 
     <div class="mt-3">
-        <button type="button" wire:click="save" class="btn btn-secondary">
-            Update Loyalty Numbers
-        </button>
+        <div wire:click="save" class="btn d-inline-flex align-items-center gap-2 btn-bg-border" role="button" tabindex="0" title="Update Loyalties" aria-label="Update Loyalties" style="border:1px solid #F35B15; border-color: #F35B15; height: 32px; background-color: #F9F4EE;">
+            <img  src="{{ asset('images/customer/images/merchandise.png') }}"   class="reservation_wht_icn"   alt="Update Loyalties" />
+            <span>Update Loyalties</span>
+        </div>
     </div>
 </div>

@@ -359,35 +359,67 @@
         }
     }
     // same as address fetch 
+
     $(document).ready(function () {
         
         // number formate with validation
         $('.phone-input').each(function () {
             const input = this;
+            let defaultCountry = '';
+            if ($(input).val().trim() !== '') {
+                    defaultCountry = 'in';
+            }
             const iti = window.intlTelInput(input, {
-                //initialCountry: "auto",
+                initialCountry: defaultCountry, // blank initially
                 preferredCountries: [],
-                geoIpLookup: function(callback) {
-                    $.get('https://ipapi.co/json', function() {}, "json").always(function(resp) {
-                    var countryCode = (resp && resp.country_code) ? resp.country_code : "us";
-                    callback(countryCode);
-                });
-            },
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
                 separateDialCode: true,
+                nationalMode: false,
+                autoPlaceholder: "On",
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
             });
-
-                // Save instance for later use
-            $(input).data('iti', iti);
-
-            // Set formatted number to hidden input whenever the phone input changes
-            $(input).on('input change blur', function () {
-                const id = $(this).attr('id'); // Get the ID of the phone input
-                const hiddenInput = $('input[name="' + id + '"]'); // Find hidden input with matching name
+ 
+            if ($(input).val().trim() == '') {
+                // --- Show "Choose Country" placeholder flag ---
+                const flagContainer = $(input).closest('.iti').find('.iti__selected-flag');
+                const placeholder = $('<div class="iti__flag iti__flag--placeholder"></div>');
+                flagContainer.find('.iti__flag').hide();
+                flagContainer.prepend(placeholder);
+                flagContainer.find('.iti__selected-dial-code').text(''); // clear dial code
+ 
+                // --- Track if first click happened ---
+                let firstTimeClick = true;
+ 
+                // Listen for country dropdown open (safe after plugin init)
+                $(input).on('open:countrydropdown', function () {
+                    if (firstTimeClick) {
+                        $('.iti__country-list .iti__country').one('click', function () {
+                            flagContainer.find('.iti__flag').show();
+                            placeholder.hide();
+                            flagContainer.find('.choose-text').hide();
+                            firstTimeClick = false;
+                        });
+                    }
+                });
+            }
+            // Also handle when user changes country (keyboard or code)
+            $(input).on('countrychange', function () {
+                flagContainer.find('.iti__flag').show();
+                placeholder.hide();
+            });
+ 
+            // --- Update hidden input for valid numbers ---
+            $(input).on('input change blur countrychange', function () {
+                const id = $(this).attr('id');
+                const hiddenInput = $('input[name="' + id + '"]');
                 if (hiddenInput.length && iti.isValidNumber()) {
-                    hiddenInput.val(iti.getNumber()); // Set the full international number (E.164 format)
+                    hiddenInput.val(iti.getNumber());
+                } else {
+                    hiddenInput.val('');
                 }
             });
+ 
+            // Save instance reference
+            $(input).data('iti', iti);
         });
         // Validate on form submit
         $('#userform').on('submit', function (e) {
