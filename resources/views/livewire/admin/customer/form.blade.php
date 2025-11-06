@@ -104,13 +104,27 @@
         <x-admin.section.card>
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 title-bold">Merchandise / Others</h5>
-                <button wire:click="addMerchandiseCategory" class="btn btn-primary">
+                <button wire:click="addMerchandise" class="btn btn-primary">
                     {{ Icon::plus() }} Add Merchandise Category
                 </button>
             </div>
             <div class="row">
-                <x-livewire.input.select.customer.hat-size name="customer.hat_size_id" value="{{$customer->hat_size_id}}" label="Hat Size" width="6" />
-                <x-livewire.input.select.customer.t-shirt-size name="customer.t_shirt_size_id" value="{{$customer->t_shirt_size_id}}" label="T-Shirt Size" width="6" />
+                @foreach($this->merchandise as $key => $item)
+                <div class="col-l-4 col-md-6 col-12">
+                    <x-admin.section.card>
+                        <div class="row">
+                            {{-- <x-livewire.input.select.customer.loyalty-number-type name="loyalty.{{$key}}.type" value="{{$loyalty['type']}}" label="Type" width="4" /> --}}
+                            <x-livewire.input wire:model="merchandise.{{$key}}.notes" label="size" width="3" />
+                            <x-livewire.input wire:model="merchandise.{{$key}}.name" label="Other Details" width="3" />
+                            <div class="col-2" style="display: flex;align-content: center;justify-content: center;margin: 1rem 0;">
+                                <button wire:click="removeMerchandise({{$key}})" class="btn btn-outline-danger mb-0">{{Icon::delete()}}</button>
+                            </div>
+                        </div>
+                    </x-admin.section.card>
+                </div>
+                @endforeach
+                {{-- <x-livewire.input.select.customer.hat-size name="customer.hat_size_id" value="{{$customer->hat_size_id}}" label="Hat Size" width="6" />
+                <x-livewire.input.select.customer.t-shirt-size name="customer.t_shirt_size_id" value="{{$customer->t_shirt_size_id}}" label="T-Shirt Size" width="6" /> --}}
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
