@@ -37,6 +37,8 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property int|null $document_order
+ * @property-read int $order
  * @property-read AccommodationInventory $accommodationInventory
  * @property-read int $available_stock How much stock is still available to be sold
  * @property-read string $tour_name
@@ -178,5 +180,10 @@ class AccommodationInventoryTour extends Model
     public function compare(AccommodationInventoryTour $inventoryTour): int
     {
         return AccommodationInventoryRepository::compareTwo($this->inventory, $inventoryTour->inventory);
+    }
+    
+    public function getOrderAttribute(): int
+    {
+        return $this->document_order ?? 0;
     }
 }

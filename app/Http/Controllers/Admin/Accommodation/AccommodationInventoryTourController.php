@@ -24,6 +24,7 @@ class AccommodationInventoryTourController extends Controller
             'is_template' => $request->input('is_template')  == 'on' ? 1 : 0,
             'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
             'is_bookable' =>  $request->input('is_bookable')  == 'on' ? 1 : 0,
+            'document_order' => $request->order,
         ]);
         $tour->accommodationInventoryTours()->save($accommodationInventoryTour);
         return redirect()->route('tours.view', ['tour' => $tour,]);
@@ -44,6 +45,7 @@ class AccommodationInventoryTourController extends Controller
             'is_template' => $request->input('is_template')  == 'on' ? 1 : 0,
             'stock_control_active' => $request->input('stock_control_active')  == 'on' ? 1 : 0,
             'is_bookable' =>  $request->input('is_bookable')  == 'on' ? 1 : 0,
+            'document_order' => $request->order,
         ]);
         return redirect()->route('tours.view', ['tour' => $tour,]);
     }

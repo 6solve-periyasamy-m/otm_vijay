@@ -240,6 +240,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
             'quote_id' => $quote->id,
             'tour_component_type' => $this->tourComponent->tour_component_type,
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'document_order' => $this->tourComponent->document_order,
         ]);
         return $component->repository;
     }
@@ -328,7 +329,7 @@ class ActivityInventoryTourRepository extends InventoryTourRepository implements
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        return $this->getInventory()?->getItineraryItem($quantity);
+        return $this->getInventory()?->getItineraryItem($quantity, $this->tourComponent->order);
     }
 
     public function getOverview(): string

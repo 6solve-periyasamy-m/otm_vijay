@@ -27,6 +27,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int|null $document_order
+ * @property-read int $order
  * @property-read Carbon $end
  * @property-read float $margin
  * @property-read float $purchase_price
@@ -94,5 +96,10 @@ class QuoteFlight extends Model
     public function getEndAttribute(): Carbon
     {
         return $this->inventory->arrives_at;
+    }
+
+    public function getOrderAttribute(): int
+    {
+        return $this->document_order ?? 0;
     }
 }

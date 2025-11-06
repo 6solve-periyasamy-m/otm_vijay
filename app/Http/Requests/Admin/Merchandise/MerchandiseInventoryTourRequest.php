@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
  * @property float $tour_sales_price
  * @property string|null $is_bookable
  * @property string|null $stock_control_active
+ * @property string|null $order
  */
 class MerchandiseInventoryTourRequest extends FormRequest
 {
@@ -20,6 +21,7 @@ class MerchandiseInventoryTourRequest extends FormRequest
             'tour_sales_price' => $this->tour_sales_price,
             'is_bookable' => $this->is_bookable == 'on',
             'stock_control_active' => $this->stock_control_active == 'on',
+            'document_order' => $this->order,
         ];
     }
 
@@ -33,6 +35,7 @@ class MerchandiseInventoryTourRequest extends FormRequest
         return [
             'tour_component_type' => ['required', Rule::in(['Included', 'Add-on']),],
             'tour_sales_price' => 'required|numeric|min:0',
+            'order' => 'nullable|numeric',
         ];
     }
 }
