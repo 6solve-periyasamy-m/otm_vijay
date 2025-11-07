@@ -10,6 +10,7 @@ use Mediconesystems\LivewireDatatables\DatetimeColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 use App\Models\Customer\Organization;
+use App\Http\Livewire\Abstract\ActionColumn;
 use App\Models\User;
 
 class Table extends LivewireDatatable
@@ -25,7 +26,7 @@ class Table extends LivewireDatatable
             ->join('tours', 'tours.id', '=', 'orders.tour_id')
             ->leftJoin('events', 'events.id', '=', 'tours.event_id')
             ->leftJoin('organizations', 'organizations.id', '=', 'orders.organization_id')
-            ->leftJoin('users as consultant', 'consultant.id', '=', 'orders.consultant_id')
+            ->leftJoin('users', 'users.id', '=', 'orders.consultant_id')
             ->groupBy('orders.id');
     }
 
@@ -67,15 +68,28 @@ class Table extends LivewireDatatable
                 ->filterable(Organization::pluck('name')->toArray()),
             Column::callback('order_caches.status', function ($status) {
                 return(new \App\View\Components\Badge\Order(OrderStatus::from($status)))->render();
-            })
+                })
                 ->label("Order Status")
                 ->sortable()
                 ->filterable(OrderStatus::asFilter()),
-            Column::name('consultant.name')
+            Column::name('users.name')
                 ->label('Consultant Name')
                 ->sortable()
                 ->searchable()
-                ->filterable(User::pluck('name')->toArray())
+                ->filterable(User::pluck('name')->toArray()),
+            Column::callback(['id'], function ($id) {
+                    $viewUrl = route('orders.view', ['order' => $id]);
+                    $editUrl = route('orders.edit', ['order' => $id]);
+                    return sprintf(
+                        '<div class="d-flex gap-1"><a href="%s" class="btn btn-outline-info btn-sm mb-1" title="View Order"><i class="fas fa-eye"></i></a>
+                        <a href="%s" class="btn btn-outline-success btn-sm mb-1" title="Edit Order"><i class="fas fa-edit"></i></a></div>',
+                        e($viewUrl),
+                        e($editUrl)
+                    );
+                })
+                ->label('Actions')
+                ->unsortable()
+                ->excludeFromExport(),
         ];
     }
 }
