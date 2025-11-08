@@ -34,6 +34,9 @@ class Form extends Component
         'loyalty.*.type.required_with' => 'All fields are required',
         'loyalty.*.name.required_with' => 'All fields are required',
         'loyalty.*.notes.required_with' => 'All fields are required',
+        'merchandise.*.category.required_with' => 'All fields are required',
+        'merchandise.*.size.required_with' => 'All fields are required',
+        'merchandise.*.other_details.required_with' => 'All fields are required',
     ];
 
     public function mount(Customer|int|null $customer)
@@ -73,11 +76,12 @@ class Form extends Component
 
     public function removeMerchandise(int $key): void
     {
-        if (array_key_exists($key, $this->item)) {
-            if ($this->item[$key]['id'] !== null) {
-                $this->merchandiseToDelete[] = $key;
+        if (array_key_exists($key, $this->merchandise)) {
+            if ($this->merchandise[$key]['id'] !== null) {
+                $this->merchandiseToDelete[] = $this->merchandise[$key]['id'];
             }
-            unset($this->item[$key]);
+            unset($this->merchandise[$key]);
+            $this->merchandise = array_values($this->merchandise);
         }
         $this->render();
     }
@@ -118,6 +122,24 @@ class Form extends Component
             $loyalty->customer_id = $this->customer->id;
             $loyalty->save();
         }
+
+        foreach ($this->merchandiseToDelete as $id) {
+            CustomerMerchandise::find($id)?->delete();
+        }
+        foreach ($this->merchandise as $data) {
+            if (empty($data['category']) && empty($data['name'])) { continue; }
+            if ($data['id'] !== null) {
+                $merchandise = CustomerMerchandise::find($data['id']);
+            } else {
+                $merchandise = new CustomerMerchandise();
+            }
+            $merchandise->merchandise_category_id = $data['category'] ?? null;
+            $merchandise->size = $data['size'] ?? null;
+            $merchandise->other_details = $data['other_details'] ?? null;
+            $merchandise->customer_id = $this->customer->id;
+            $merchandise->save();
+        }
+
         $this->closeModal();
         $this->redirect(route('customers.view', ['customer' => $this->customer,]));
     }
@@ -161,7 +183,6 @@ class Form extends Component
             'customer.other_phone_number' => 'nullable|string',
             'customer.nationality' => 'nullable|string',
             'customer.email_address' => ['nullable', 'string', 'email:rfc,dns', Rule::unique('customers', 'email_address')->ignore($this->customer->id),],
-            'customer.loyalty_number' => 'nullable|string',
             'customer.emergency_contact_name' => 'nullable|string',
             'customer.emergency_contact_relationship' => 'nullable|string',
             'customer.emergency_contact_telephone' => 'nullable|string',
@@ -186,8 +207,6 @@ class Form extends Component
             'customer.passport_country_of_issue' => 'nullable|string',
             'customer.passport_issue_date' => 'nullable|string',
             'customer.passport_expiry_date' => 'nullable|string',
-            'customer.hat_size_id' => 'nullable|int|exists:hat_sizes,id',
-            'customer.t_shirt_size_id' => 'nullable|int|exists:t_shirt_sizes,id',
             'customer.internal_notes' => 'nullable|string',
             'customer.external_notes' => 'nullable|string',
             'customer.dietary_notes' => 'nullable|string',
@@ -195,6 +214,10 @@ class Form extends Component
             'loyalty.*.type' => 'nullable|required_with:loyalty.*.name,loyalty.*.notes|int|exists:loyalty_number_types,id',
             'loyalty.*.name' => 'nullable|required_with:loyalty.*.notes,loyalty.*.type|string',
             'loyalty.*.notes' => 'nullable|required_with:loyalty.*.name,loyalty.*.type|string',
+
+            'merchandise.*.category' => 'nullable|required_with:merchandise.*.size,merchandise.*.other_details|int|exists:merchandise_categories,id',
+            'merchandise.*.size' => 'nullable|required_with:merchandise.*.other_details,merchandise.*.category|string',
+            'merchandise.*.other_details' => 'nullable|required_with:merchandise.*.size,merchandise.*.category|string',
         ];
     }
 }

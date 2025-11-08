@@ -6,6 +6,8 @@ use App\Events\Customer\CustomerRemovedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginAsCustomerRequest;
 use App\Models\Customer\Customer;
+use App\Exports\CustomersExport;
+use Excel;
 use Auth;
 
 class CustomerController extends Controller
@@ -51,5 +53,11 @@ class CustomerController extends Controller
         $customer->delete();
         event(new CustomerRemovedEvent($customer));
         return redirect()->route('customers.all');
+    }
+    public function export()
+    {
+        $extension = 'xlsx';
+        $filename = 'customer-list-' . now()->format('Y-m-d_H-i-s') . '.' . $extension;
+        return Excel::download(new CustomersExport, $filename);
     }
 }

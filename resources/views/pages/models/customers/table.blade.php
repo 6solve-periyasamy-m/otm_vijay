@@ -9,6 +9,11 @@
                 {{ Icon::create() }}
                 Create New
             </a>
+            &nbsp;&nbsp;
+            <a href="{{ route('customers.export') }}" class="btn btn-success">
+                {!! Icon::excel() !!}
+                <span>Export Customers</span>
+            </a>
         </div>
     </x-admin.section.card>
     <x-admin.section.card>

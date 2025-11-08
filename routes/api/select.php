@@ -15,6 +15,7 @@ use App\View\Components\Livewire\Input\Select\Currency;
 use App\View\Components\Livewire\Input\Select\Customer;
 use App\View\Components\Livewire\Input\Select\Customer\HatSize;
 use App\View\Components\Livewire\Input\Select\Customer\LoyaltyNumberType;
+use App\View\Components\Livewire\Input\Select\Customer\MerchandiseCategory;
 use App\View\Components\Livewire\Input\Select\Customer\TShirtSize;
 use App\View\Components\Livewire\Input\Select\Event\All as AllEvents;
 use App\View\Components\Livewire\Input\Select\Event\Main as MainEvent;
@@ -97,6 +98,11 @@ Route::prefix('customers')->name('customers.')->group(function () {
 Route::prefix('loyalty-number-type')->name('loyalty-number-type.')->group(function () {
     Route::post('/', [LoyaltyNumberType::class, 'getAll'])->name('select');
     Route::post('/{id}', [LoyaltyNumberType::class, 'getOne'])->name('selected');
+});
+
+Route::prefix('merchandise-category')->name('merchandise-category.')->group(function () {
+    Route::post('/', [MerchandiseCategory::class, 'getAll'])->name('select');
+    Route::post('/{id}', [MerchandiseCategory::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('hat-size')->name('hat-size.')->group(function () {

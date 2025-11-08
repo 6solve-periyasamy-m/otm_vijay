@@ -24,9 +24,7 @@
         </x-admin.section.card>
         <x-admin.section.card>
             <x-slot:title>Emergency Contact Details</x-slot:title>
-            <div class="row">
-                {{-- <x-livewire.input wire:model="image" type="file" label="Picture" width="4" />
-                <x-livewire.input wire:model="customer.loyalty_number" width="4" label="Loyalty Number" /> --}}
+            <div class="row">                
                 <x-livewire.input wire:model="customer.emergency_contact_name" width="3" label="Emergency Contact Name" />
                 <x-livewire.input wire:model="customer.emergency_contact_relationship" width="3" label="Emergency Contact Relation" />
                 <x-livewire.input.telephone name="customer.emergency_contact_telephone" value="{{$customer->emergency_contact_telephone}}" width="3" label="Emergency Contact Phone" />
@@ -78,9 +76,9 @@
         <x-admin.section.card>
             <x-slot:title>
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 title-bold">Loyalty / Memberships</h5>
+                    <h4 class="mb-0 title-bold" style="font-weight:700">Loyalty / Memberships</h4>
                     <button wire:click="addLoyaltyNumber" class="btn btn-primary">
-                        {{ Icon::plus() }} Add Loyalty Number
+                        {{ Icon::plus() }} Add Loyalty Number 
                     </button>
                 </div>
             </x-slot:title>
@@ -102,32 +100,33 @@
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 title-bold">Merchandise / Others</h5>
-                <button wire:click="addMerchandise" class="btn btn-primary">
-                    {{ Icon::plus() }} Add Merchandise Category
-                </button>
-            </div>
+            <x-slot:title>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0 title-bold" style="font-weight:700">Merchandise / Others</h4>
+                    <button wire:click="addMerchandise" class="btn btn-primary">
+                        {{ Icon::plus() }} Add Merchandise Category
+                    </button>
+                </div>
+            </x-slot:title>
             <div class="row">
                 @foreach($this->merchandise as $key => $item)
                 <div class="col-l-4 col-md-6 col-12">
                     <x-admin.section.card>
                         <div class="row">
-                            {{-- <x-livewire.input.select.customer.loyalty-number-type name="loyalty.{{$key}}.type" value="{{$loyalty['type']}}" label="Type" width="4" /> --}}
-                            <x-livewire.input wire:model="merchandise.{{$key}}.notes" label="size" width="3" />
-                            <x-livewire.input wire:model="merchandise.{{$key}}.name" label="Other Details" width="3" />
+                            <x-livewire.input.select.customer.merchandise-category name="merchandise.{{$key}}.category" value="{{$item['category']}}" label="Category" width="4" />
+                            <x-livewire.input wire:model="merchandise.{{$key}}.size" label="size" width="3" />
+                            <x-livewire.input wire:model="merchandise.{{$key}}.other_details" label="Other Details" width="3" />
                             <div class="col-2" style="display: flex;align-content: center;justify-content: center;margin: 1rem 0;">
                                 <button wire:click="removeMerchandise({{$key}})" class="btn btn-outline-danger mb-0">{{Icon::delete()}}</button>
                             </div>
                         </div>
                     </x-admin.section.card>
                 </div>
-                @endforeach
-                {{-- <x-livewire.input.select.customer.hat-size name="customer.hat_size_id" value="{{$customer->hat_size_id}}" label="Hat Size" width="6" />
-                <x-livewire.input.select.customer.t-shirt-size name="customer.t_shirt_size_id" value="{{$customer->t_shirt_size_id}}" label="T-Shirt Size" width="6" /> --}}
+                @endforeach                
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
+            <x-slot:title>Notes</x-slot:title>
             <div class="row">
                 <x-livewire.input.text-area wire:model="customer.internal_notes" label="Internal Notes" width="3" />
                 <x-livewire.input.text-area wire:model="customer.external_notes" label="External Notes" width="3" />

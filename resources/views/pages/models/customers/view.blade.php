@@ -100,6 +100,7 @@
     <div class="row">
         <div class="col-xl-4 col-md-6 col-12">
             <x-admin.section.card>
+                <x-slot:title>Orders</x-slot:title>
                 <table class="datatable table table-striped order-table">
                     <thead>
                     <tr>
@@ -124,6 +125,7 @@
         </div>
         <div class="col-xl-4 col-md-6 col-12">
             <x-admin.section.card>
+                <x-slot:title>Quotes</x-slot:title>
                 <table class="datatable table table-striped order-table">
                     <thead>
                     <tr>
@@ -147,7 +149,17 @@
         </div>
         <div class="col-xl-4 col-md-6 col-12">
             <x-admin.section.card>
-                <livewire:admin.customer.loyalty-number.table :customer="$customer" />
+                <x-slot:title>Loyalty Numbers</x-slot:title>
+                <div class="row">
+                    <livewire:admin.customer.loyalty-number.table :customer="$customer" />
+                </div>                
+            </x-admin.section.card>
+
+            <x-admin.section.card>
+                <x-slot:title>Merchandises</x-slot:title>
+                <div class="row">
+                    <livewire:admin.customer.merchandise.table :customer="$customer" />
+                </div>
             </x-admin.section.card>
         </div>
     </div>
