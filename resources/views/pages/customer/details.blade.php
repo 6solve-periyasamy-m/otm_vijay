@@ -385,21 +385,39 @@
                 flagContainer.find('.iti__flag').hide();
                 flagContainer.prepend(placeholder);
                 flagContainer.find('.iti__selected-dial-code').text(''); // clear dial code
+                flagContainer.attr('title', 'Select your country');
  
                 // --- Track if first click happened ---
                 let firstTimeClick = true;
  
                 // Listen for country dropdown open (safe after plugin init)
+
+              // Old code  // $(input).on('open:countrydropdown', function () {
+                //     if (firstTimeClick) {
+                //         $('.iti__country-list .iti__country').one('click', function () {
+                //             flagContainer.find('.iti__flag').show();
+                //             placeholder.hide();
+                //             flagContainer.find('.choose-text').hide();
+                //             firstTimeClick = false;
+                //         });
+                //     }
+                // }); old code//
+
                 $(input).on('open:countrydropdown', function () {
-                    if (firstTimeClick) {
-                        $('.iti__country-list .iti__country').one('click', function () {
-                            flagContainer.find('.iti__flag').show();
-                            placeholder.hide();
-                            flagContainer.find('.choose-text').hide();
-                            firstTimeClick = false;
-                        });
+                    const countryList = $('.iti__country-list'); // dropdown element
+                    if (countryList.find('.iti__choose-country').length === 0) {
+                        // Add custom "Select your country" item only once
+                        const chooseCountryItem = $(`
+                            <li class="iti__country iti__choose-country" style="font-weight:bold; cursor:default;">
+                                
+                                <span class="iti__country-name">Select your country</span>
+                            </li>
+                        `);
+                        countryList.prepend(chooseCountryItem);
                     }
                 });
+
+
             }
             // Also handle when user changes country (keyboard or code)
             $(input).on('countrychange', function () {
@@ -483,6 +501,7 @@
             input.next('.input-error-message').remove();
         }
     });
+
 
 
 </script>

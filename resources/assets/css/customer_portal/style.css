@@ -508,14 +508,21 @@ transition: all 0.8s ease;
     right: 16px;
 }
 .contact_us_text img{margin-left: 8px;margin-top: -2px;}
-.trip_text_btn h2{
+.event_information h2,.notes_div h2{
     font-family: 'PP Editorial New';
     font-size: 40px;
     line-height: 48px;
     font-weight: 500;
     color: #000000;                                                                                                                                                                                                                             
     margin-bottom: 0px;
-
+}
+.trip_text_btn h2{
+    font-family: 'PP Editorial New';
+    font-size: 32px;
+    line-height: 42px;
+    font-weight: 500;
+    color: #000000;                                                                                                                                                                                                                             
+    margin-bottom: 0px;
 }
 .trip_itinerary_row{padding-top: 32px!important;}
 .trip_days{border: 1px solid #F9F4EE;padding: 32px;}
@@ -576,7 +583,7 @@ transition: all 0.8s ease;
     letter-spacing: 2.24px;
     text-transform: uppercase;
 }
-.invoice_tbl td{padding-right: 30px;}
+.invoice_tbl td{padding-right: 30px;color: #fff !important;}
 .invoice_tbl td,.order_value_amount p{
     font-family: 'PP NeueMontreal Medium';
     font-size: 16px;
@@ -611,7 +618,7 @@ transition: all 0.8s ease;
     background-color: #fff !important;
     transition: all 0.8s ease;
 }
-.invoice_tbl .paid{background: #52D86866;color:#1E4E22;}
+.invoice_tbl .paid{background: #00c851;color:#fff;}
 /* .invoice_tbl .paid:hover{
     border: 1px solid #1E4E22 !important;
     background-color: #fff !important;
@@ -753,7 +760,7 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     line-height: 32px;
 }
 .faqs_list h4{color: #000;}
-.faqs_list p{
+.faqs_list p,.faqs_list table td,.faqs_list ul li,.faqs_list ol li{
     font-family: 'PP NeueMontreal Medium';
     font-size: 14px;
     color: #000;
@@ -761,8 +768,6 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     line-height: 20px;
 }
 .faqs_list {position: relative;}
-.faqs_list ul{padding-inline-start: 0px;}
-.faqs_list ul li{list-style: none;}
 .faqs_list h4,.faqs_list p{margin-bottom: 0px;}
 .titleWrapper.active h4{color: #F35B15;}
 .titleWrapper.active .arrow-icon::after{
@@ -775,7 +780,6 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     position: absolute;
     top: 34px;
     right: 0px;
-	
 }
 .titleWrapper.active .arrow-icon img{display: none;}
 .tab-accordian{
@@ -956,11 +960,12 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     font-weight: 500 !important;
      font-size: 12px;
      line-height: 19px !important;
-    letter-spacing: 2px;
+    letter-spacing: 2px; 
     text-transform: uppercase;    
     margin:0px;
     width:100px;
     border: 0px !important;
+    color: #fff !important;
 }
 h6.badge.fw-bold.overdue_btn {
     font-family: 'Inter Regular';
@@ -972,6 +977,7 @@ h6.badge.fw-bold.overdue_btn {
     margin:0px 0px 12px 0px;
     width: unset;
     border: 0px !important;
+    color: #fff !important;
 }
 .upcoming_tours .calendar_date{margin-bottom:24px;line-height: 13px;display: flex;gap: 8px;}
 .upcoming_tours .view_details{margin-bottom: 0px;}
@@ -1176,20 +1182,10 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 
 .btn-warning {
     font-size: 13px;
-    color: #000;
+    color: #fff !important;
     letter-spacing: 1px;
     line-height: 15px !important;
-    border: 2px solid rgba(240, 173, 78, 0.75) !important;
-    border-radius: 40px !important;
-    background: rgba(240, 173, 78, 0.75) !important;
     transition: all 0.3s ease 0s;
-}
-
-.btn-warning:hover,
-.btn-warning:focus,
-.btn-warning:active {
-    background: rgba(240, 173, 78, 1);
-    border-color: rgba(240, 173, 78, 1);
 }
 
 .input-error {
@@ -1249,7 +1245,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .submit_btn button:hover .pay_right_arrow_org,.common_submit button:hover .pay_right_arrow_org{display: block;}
 .title_date p,.title_date .calendar_date h6{ font-family: 'PP NeueMontreal Medium'; }
 .calendar_date{font-size: 14px;}
-.title_date h6.btn.btn-warning{font-family: 'Inter Medium';font-size: 12px;line-height: 12px;text-transform: uppercase;color: #000000;}
+.title_date h6.btn.btn-warning{font-family: 'Inter Medium';font-size: 12px;line-height: 12px;text-transform: uppercase;color: #fff;}
 .tours_list .upcoming_payments h2{margin-bottom: 16px;}
 .pay_ment_due{
     font-family: 'PP NeueMontreal Medium';
@@ -1351,13 +1347,12 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     color: #000000;
     max-width: 80%;
 }
-
-.event_information table td,.event_information p,.event_information ul li,.event_information a,.tours_list p,.event_information ol li{font-family: 'PP NeueMontreal Medium';}
+.event_information table td,.event_information p,.event_information ul li,.event_information a,.tours_list p,.event_information ol li,.past_tours p{font-family: 'PP NeueMontreal Medium';}
 .event_information p strong,.event_information p {display: inline-block; padding-bottom: 15px;}
 .finances_event .btn-secondary,.title_date .btn-secondary{background-color: #a6c;}
 .finances_event .btn-info{background-color: #33b5e5; color: #fff;}
 .btn-success{ background-color: #00c851 !important; border-radius: 40px !important;}
-.btn-warning{ background-color: #fb3; border-radius: 40px !important;}
+.btn-warning{ background-color: #fb3 !important; border-radius: 40px !important;} 
 .title_date .btn{cursor:auto;}
 .title_date h6.btn,.past_tour_img span{font-family: 'Inter Medium';font-size: 12px;letter-spacing: 1.92px;font-weight: 500 !important;border-radius: 40px;line-height: 19px;cursor: auto;text-transform: uppercase;border: 0px;}
 .finances_event .event_detail_top,.event_image_title{max-width: 700px;width: 100%;}
@@ -1369,11 +1364,76 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .lead_guest{font-family: 'PP NeueMontreal Medium'; font-size: 16px;line-height: 19px; font-weight: 500; color: #000;}
 .notes_colm::placeholder {font-family: 'PP Editorial New';}
 .onsite-contact-detail-block a,.event_information td a,.event_information ul li,.event_information a,.tours_list p,.event_information ol li{color: #000;}
-.iti__flag--placeholder{background-image: url(/images/customer/images/world_icn.png);background-size: contain; background-color: transparent; box-shadow: none; background-position: 0px; }
-.personal_details label{font-family: 'PP NeueMontreal Medium'; font-size: 14px; line-height: 16px; text-decoration: none; color: #F35B15; margin-bottom: 16px;}
-.personal_details .btn-outline-danger{ font-family: 'PP NeueMontreal Medium'; font-size: 14px; font-weight: 500; line-height: 17px; color: #fff; background-color: #F35B15; border-radius: 50px; padding: 11px 30px; border: 1px solid #F35B15; text-transform: uppercase; text-decoration: none; position: relative;}
+.iti__flag--placeholder{background-image: url(/images/customer/images/world_icn.png);background-size: contain;
+    background-color: transparent;
+    box-shadow: none;
+    background-position: 0px;
+}
+.personal_details label{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration: none;
+    color: #F35B15;
+    margin-bottom: 16px;
+}
+.personal_details .btn-outline-danger{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    color: #fff;
+    background-color: #F35B15;
+    border-radius: 50px;
+    padding: 11px 30px;
+    border: 1px solid #F35B15;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative; 
+}
 .personal_details .btn-primary,.personal_details .btn-secondary{background-color: #F35B15;border-radius: 50px;border: 1px solid #F35B15;}
-.btn-bg-border{border:1px solid #F35B15; border-color: #F35B15; height: 32px; background-color: #F9F4EE;}
-.icon-border{border:1px solid #F35B15; border-color: #F35B15; width: 32px; height: 32px;}
-.plus-icon-size{width: 20px; height: 20px;}
-.icon-no-border{width: 32px; height: 32px;}
+.notes_colm .form-floating>.form-control:focus~label{display: none;}
+.notes_colm .form-floating>.form-control:not(:placeholder-shown)~label::after{display: none;}
+.faqs_list .tab-accordian h1{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 40px;
+    line-height: 40px;
+    color: #000;
+}
+.faqs_list .tab-accordian h2{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 32px;
+    line-height: 32px;
+    color: #000;
+}
+.faqs_list .tab-accordian h3{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 24px;
+    line-height: 24px;
+    color: #000;
+}
+.faqs_list .tab-accordian h4{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 16px;
+    line-height: 16px;
+    color: #000;
+}
+.faqs_list .tab-accordian h5{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 14px;
+    line-height: 14px;
+    color: #000;
+}
+.faqs_list .tab-accordian h6{
+    font-family: 'PP NeueMontreal Medium';
+    font-size: 12px;
+    line-height: 16px;
+    color: #000;
+}
+
+.notes_colm .form-control::placeholder {
+  color: #721111 !important;
+  opacity: 1;
+    font-family: 'PP Editorial New';
+    font-size: 16px;
+}
