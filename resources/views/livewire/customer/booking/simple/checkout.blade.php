@@ -225,7 +225,7 @@
                                 </label>
                             </div>
                             <div class="right-assets">
-                                <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
+                                <p>{{ f_currency_booking($booking->repository->getTotalCost()) }}</p>
                             </div>
                         </div>
                        

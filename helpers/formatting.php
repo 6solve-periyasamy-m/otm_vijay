@@ -48,6 +48,28 @@ if (!function_exists('fr_currency')) {
         return $code . $formatted;
     }
 }
+if (!function_exists('f_currency_booking')) {
+    /**
+     * Format currency for booking form pages — show symbol only (no code)
+     *
+     * @param float|null $amount
+     * @param Currency|string|null $currency
+     * @return string
+     */
+    function f_currency_booking(?float $amount, Currency|string|null $currency = null): string
+    {
+        if (!is_string($currency)) {
+            $currency = ($currency ?? Settings::currency())?->code;
+        }
+        $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
+        $formatted = $formatter->formatCurrency($amount ?? 0.0, $currency);
+        $formatted = preg_replace("/^{$currency}\s+{$currency}/", $currency, $formatted);
+        if (preg_match("/^{$currency}\s+([^\d]+)/", $formatted, $matches)) {
+            $formatted = trim(str_replace("{$currency} ", '', $formatted));
+        }
+        return $formatted;
+    }
+}
 if (!function_exists('f_date')) {
     /**
      * Alias for StringFormatter::formatDate
