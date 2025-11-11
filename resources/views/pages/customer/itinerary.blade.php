@@ -904,7 +904,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         @endphp
         @if(filled($event?->description))
             <div class="event_information">
-                <h3>{{ 'Event Information' }}</h3>
+                <h2>{{ 'Event Information' }}</h2>
                 <p>{!! $event->description !!}</p>
             </div>
             <hr />
@@ -912,13 +912,13 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         
         @if(filled($event?->final_terms))
             <div class="event_information">
-                <h3>{{ 'Event Information' }}</h3>
+                <h2>{{ 'Event Information' }}</h2>
                 <p>{!! $event->final_terms !!}</p>
             </div>
             <hr />
         @endif
         <div class="notes_div">
-            <h3>Special Requests</h3>
+            <h2>Special Requests</h2>
             <p>Request for twin-share rooms for players, single occupancy for coaching staff. Prefer hotels with access to a gym or fitness center.
                 Rooms near each other or on the same floor for team coordination.</p>
             <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
@@ -931,8 +931,8 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         <p class="notes_title">{!! $orderCustomer->external_notes ?? '' !!}</p>
                     </div> -->
                     <div class="notes_colm">
-                        <x-customer.input.text-area  name="external_notes" value="{{ $order->external_notes }}">
-                            External Notes
+                        <x-customer.input.text-area  id="extnt" name="external_notes" placeholder="Enter any special requests or additional instructions here…" value="{{ $order->external_notes }}">
+                           
                         </x-customer.input.text-area>
                     </div>
                     {{-- <div  class="notes_colm">
@@ -1044,3 +1044,23 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
     </div>
 @endif
 @endsection
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const textarea = document.getElementById("extnt");
+
+    // When user focuses, hide placeholder
+    textarea.addEventListener("focus", function () {
+        textarea.setAttribute("data-placeholder", textarea.placeholder);
+        textarea.placeholder = "";
+    });
+
+    // When user blurs (clicks out)
+    textarea.addEventListener("blur", function () {
+        // Only show placeholder if textarea is empty
+        if (textarea.value.trim() === "") {
+            textarea.placeholder = textarea.getAttribute("data-placeholder");
+        }
+    });
+});
+
+</script>
