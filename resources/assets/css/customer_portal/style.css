@@ -518,8 +518,8 @@ transition: all 0.8s ease;
 }
 .trip_text_btn h2{
     font-family: 'PP Editorial New';
-    font-size: 32px;
-    line-height: 42px;
+    font-size: 40px;
+    line-height: 48px;
     font-weight: 500;
     color: #000000;                                                                                                                                                                                                                             
     margin-bottom: 0px;
@@ -1341,7 +1341,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     margin-bottom: 24px;
 }
 .notes_div p{
-    font-family: 'PP Editorial New';
+    font-family: 'PP NeueMontreal Medium';
     font-size: 16px;
     line-height: 24px;
     color: #000000;
@@ -1362,7 +1362,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .title_date .btn-danger:hover{background-color: #ff3547;border: 0px;}
 .title_date .btn-info:hover{background-color: #33b5e5;border: 0px;}
 .lead_guest{font-family: 'PP NeueMontreal Medium'; font-size: 16px;line-height: 19px; font-weight: 500; color: #000;}
-.notes_colm::placeholder {font-family: 'PP Editorial New';}
+.notes_colm::placeholder {font-family: 'PP NeueMontreal Medium';}
 .onsite-contact-detail-block a,.event_information td a,.event_information ul li,.event_information a,.tours_list p,.event_information ol li{color: #000;}
 .iti__flag--placeholder{background-image: url(/images/customer/images/world_icn.png);background-size: contain;
     background-color: transparent;
@@ -1437,3 +1437,5 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     font-family: 'PP Editorial New';
     font-size: 16px;
 }
+.event_information table td{padding: 15px 0px;}
+.customer_details h2{font-family:'PP Editorial New';font-size: 40px;color: #000000;line-height: 48px;display: flex;align-items: center;margin-bottom: 0px;}

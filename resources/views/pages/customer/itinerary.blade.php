@@ -450,66 +450,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                     </div>                    
                 </div>
                 
-                <!-- On-Site Contact Details Section -->
-                @php 
-                    $phoneIcon = asset('/images/icons-phone.png') ;
-                    $mailIcon = asset('/images/icons-email.png') ;
-                @endphp
-                @if(!empty($order->tour?->event?->onsite_name) || !empty($order->tour?->event?->onsite_email) || !empty($order->tour?->event?->onsite_phone))
-                <div class="trip_days">
-                    <div class="row">
-                        <div class="single-module mb-n15">
-                            <div class="heading-module"> <h5> On-Site Contact Details </h5></div>
-                            <div class="details-module">
-                                <table class="onsite-contact-detail-block">
-                                    <tbody>
-                                        @if(!empty($order->tour?->event?->onsite_name))
-                                            <tr>
-                                                <td class="left_label_column"><strong>Name:</strong></td>
-                                                <td class="item-detail">{{ $order->tour?->event->onsite_name }}</td>
-                                            </tr>
-                                        @endif
-
-                                        @if(!empty($order->tour?->event?->onsite_email))
-                                            <tr>
-                                                <td class="left_label_column"><strong>Email:</strong></td>
-                                                <td><img src="{{ $mailIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" /><a href="mailto:{{ $order->tour?->event->onsite_email }}">{{ $order->tour?->event->onsite_email }}</a></td>
-                                            </tr>
-                                        @endif
-                                        @if(!empty($order->tour?->event?->onsite_phone))
-                                            <tr>
-                                                <td class="left_label_column"><strong>Phone:</strong></td>
-                                                <td>
-                                                    @php
-                                                        $phones = preg_split('/[\;|]+/', $order->tour?->event->onsite_phone);
-                                                    @endphp
-                                                    <table class="onsite-contact-no">
-                                                    <tr>
-                                                        @foreach($phones as $phone)
-                                                            @php $trimmedPhone = trim($phone); @endphp
-                                                            @if($trimmedPhone)
-                                                                <td style="padding-right: 2px;">
-                                                                    <span style="display: inline-flex; align-items: center;">
-                                                                        <img src="{{ $phoneIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" />
-                                                                        <a href="tel:{{ preg_replace('/\D+/', '', $trimmedPhone) }}">{{ $trimmedPhone }}</a>
-                                                                        @unless($loop->last) &nbsp;&nbsp;|&nbsp; @endunless
-                                                                    </span>
-                                                                </td>
-                                                            @endif
-                                                        @endforeach
-                                                    </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                <!-- Endof of the On-Site Contact Details Section -->
+                
 
 
             @php
@@ -619,7 +560,67 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                 </div>
             @endforeach --}}
         <div class="trip_days">
-            
+        
+                <!-- On-Site Contact    Details Section -->
+                @php 
+                    $phoneIcon = asset('/images/icons-phone.png') ;
+                    $mailIcon = asset('/images/icons-email.png') ;
+                @endphp
+                @if(!empty($order->tour?->event?->onsite_name) || !empty($order->tour?->event?->onsite_email) || !empty($order->tour?->event?->onsite_phone))
+                    <div class="row">
+                        <div class="single-module mb-n15">
+                            <div class="heading-module"> <h5> On-Site Contact Details </h5></div>
+                            <div class="details-module">
+                                <table class="onsite-contact-detail-block">
+                                    <tbody>
+                                        @if(!empty($order->tour?->event?->onsite_name))
+                                            <tr>
+                                                <td class="left_label_column"><strong>Name:</strong></td>
+                                                <td class="item-detail">{{ $order->tour?->event->onsite_name }}</td>
+                                            </tr>
+                                        @endif
+
+                                        @if(!empty($order->tour?->event?->onsite_email))
+                                            <tr>
+                                                <td class="left_label_column"><strong>Email:</strong></td>
+                                                <td><img src="{{ $mailIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" /><a href="mailto:{{ $order->tour?->event->onsite_email }}">{{ $order->tour?->event->onsite_email }}</a></td>
+                                            </tr>
+                                        @endif
+                                        @if(!empty($order->tour?->event?->onsite_phone))
+                                            <tr>
+                                                <td class="left_label_column"><strong>Phone:</strong></td>
+                                                <td>
+                                                    @php
+                                                        $phones = preg_split('/[\;|]+/', $order->tour?->event->onsite_phone);
+                                                    @endphp
+                                                    <table class="onsite-contact-no">
+                                                    <tr>
+                                                        @foreach($phones as $phone)
+                                                            @php $trimmedPhone = trim($phone); @endphp
+                                                            @if($trimmedPhone)
+                                                                <td style="padding-right: 2px;">
+                                                                    <span style="display: inline-flex; align-items: center;">
+                                                                        <img src="{{ $phoneIcon }}"  alt="Phone Icon"  class="on-site-icon"  style="width: 16px; height: 16px; margin-right: 5px;" />
+                                                                        <a href="tel:{{ preg_replace('/\D+/', '', $trimmedPhone) }}">{{ $trimmedPhone }}</a>
+                                                                        @unless($loop->last) &nbsp;&nbsp;|&nbsp; @endunless
+                                                                    </span>
+                                                                </td>
+                                                            @endif
+                                                        @endforeach
+                                                    </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <!-- Endof of the On-Site Contact Details Section -->
+
+
                 @if(!empty($itinerary->items['Flights']))
                     @php $firstLoop = true; @endphp
 
@@ -932,7 +933,6 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                     </div> -->
                     <div class="notes_colm">
                         <x-customer.input.text-area  id="extnt" name="external_notes" placeholder="Enter any special requests or additional instructions here…" value="{{ $order->external_notes }}">
-                           
                         </x-customer.input.text-area>
                     </div>
                     {{-- <div  class="notes_colm">
