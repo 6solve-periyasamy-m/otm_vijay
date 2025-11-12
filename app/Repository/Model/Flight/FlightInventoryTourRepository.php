@@ -230,6 +230,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
             'tour_component_type' => $this->tourComponent->tour_component_type,
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
             'flight_type' => $this->tourComponent->flight_type,
+            'document_order' => $this->tourComponent->document_order,
         ]);
         return $component->repository;
     }
@@ -299,7 +300,7 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        $item = $this->getInventory()?->getItineraryItem($quantity);
+        $item = $this->getInventory()?->getItineraryItem($quantity, $this->tourComponent->order);
         if ($this->tourComponent->flight_type === 'Outbound') { $item->type = 'Outbound Flight'; }
         elseif ($this->tourComponent->flight_type === 'Inbound') { $item->type = 'Inbound Flight'; }
         else { $item->type = 'Mid-Package Flight'; }

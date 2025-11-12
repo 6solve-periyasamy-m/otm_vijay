@@ -35,6 +35,8 @@ use Illuminate\Validation\Rule;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property int|null $document_order
+ * @property-read int $order
  * @property-read FlightInventory $flightInventory
  * @property-read string $atol_string
  * @property-read int $available_stock
@@ -178,5 +180,10 @@ class FlightInventoryTour extends Model
     {
         if (!isset($this->internal_repository)) $this->internal_repository = new FlightInventoryTourRepository($this);
         return $this->internal_repository;
+    }
+
+    public function getOrderAttribute(): int
+    {
+        return $this->document_order ?? 0;
     }
 }

@@ -109,6 +109,7 @@ class QuoteFlightRepository extends QuoteComponentRepository
             'tour_sales_price' => $this->quoteComponent->tour_sales_price,
             'flight_inventory_id' => $this->quoteComponent->flight_inventory_id,
             'flight_type' => $this->quoteComponent->flight_type,
+            'document_order' => $this->quoteComponent->document_order,
         ]);
         return $tourComponent->repository;
     }

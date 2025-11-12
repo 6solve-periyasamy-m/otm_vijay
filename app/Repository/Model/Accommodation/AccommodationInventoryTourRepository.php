@@ -239,6 +239,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
             'tour_component_type' => $this->tourComponent->tour_component_type,
             'tour_sales_price' => $this->tourComponent->tour_sales_price,
             'is_template' => $this->tourComponent->is_template,
+            'document_order' => $this->tourComponent->document_order,
         ]);
         return $component->repository;
     }
@@ -318,7 +319,7 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
 
     public function getItineraryItem(int|null $quantity = null): ItineraryItem
     {
-        return $this->getInventory()?->getItineraryItem($quantity);
+        return $this->getInventory()?->getItineraryItem($quantity, $this->tourComponent->order);
     }
 
     public function getOverview(): string
