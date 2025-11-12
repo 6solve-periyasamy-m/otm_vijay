@@ -55,14 +55,13 @@ if (!function_exists('f_currency_booking')) {
      */
     function f_currency_booking(?float $amount, Currency|string|null $currency = null): string
     {
-        if (!is_string($currency)) {
-            $currency = ($currency ?? Settings::currency())?->code;
-        }
+        $currencyCode = is_string($currency) ? $currency : ($currency?->code ?? Settings::currency()?->code);
+        $amount = $amount ?? 0.0;
         $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
-        $formatted = $formatter->formatCurrency($amount ?? 0.0, $currency);
-        $formatted = preg_replace("/^{$currency}\s+{$currency}/", $currency, $formatted);
-        if (preg_match("/^{$currency}\s+([^\d]+)/", $formatted, $matches)) {
-            $formatted = trim(str_replace("{$currency} ", '', $formatted));
+        $formatted = $formatter->formatCurrency($amount, $currencyCode);
+        $formatted = preg_replace('/^[A-Z]{0,2}\$/', '$', $formatted);
+        if (preg_match("/^{$currencyCode}\s+([^\d]+)/", $formatted, $matches)) {
+            $formatted = trim(str_replace("{$currencyCode} ", '', $formatted));
         }
         return $formatted;
     }

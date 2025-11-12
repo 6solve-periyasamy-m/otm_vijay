@@ -164,6 +164,7 @@
         padding-top: 5px;
     }
     .cart_sub_title_color {color: #000;}
+    .font-weight-bold {font-weight: 700;}
 </style>
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
@@ -201,8 +202,8 @@
             <p></p>          
         </div>
         <div class="single">
-            <p>Package price</p>
-            <p>{{ f_currency_booking($booking->repository->getBasePrice()) }}</p>
+            <p class="font-weight-bold">Package price</p>
+            <p class="font-weight-bold">{{ f_currency_booking($booking->repository->getBasePrice()) }}</p>
         </div>
         <div class="cart_sub_title">
             <p>Price per Person</p>
