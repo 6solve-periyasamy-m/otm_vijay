@@ -204,7 +204,7 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
         return f_currency($this->getPurchasePrice(), $this->getCurrency());
     }
 
-    public function getItineraryItem(int|null $quantity = null): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null, int|null $order = 0): ItineraryItem
     {
         //if($this->inventory && $this->inventory->hasSufficientOccupancy($quantity))
         //{
@@ -235,6 +235,7 @@ class TransportInventoryRepository extends InventoryRepository implements HasTra
                 $this->inventory->component->name,
                 'Journey',
                 $this->inventory->departs_at->unix(),
+                $order,
                 $details,
             );
         //}

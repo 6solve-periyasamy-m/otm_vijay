@@ -2,20 +2,11 @@
 
 namespace App\Models\Helper;
 
+use App\Models\Helper\Traits\MountsLivewire;
+
 class Model extends \Illuminate\Database\Eloquent\Model
 {
-    protected $fillable = [
-        'archived',
-    ];
+    use MountsLivewire;
 
-    public static function getForMount(Model|int|null $model): static
-    {
-        if (is_int($model)) {
-            $model = static::find($model);
-        }
-        if ($model === null) {
-            $model = new static();
-        }
-        return $model;
-    }
+    protected $fillable = ['archived',];
 }

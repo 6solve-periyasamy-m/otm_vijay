@@ -2,12 +2,12 @@
 
 namespace App\Models\Location;
 
+use App\Models\Helper\Model;
 use App\Repository\Model\Location\AddressRepository;
 use Database\Factories\Location\AddressFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;

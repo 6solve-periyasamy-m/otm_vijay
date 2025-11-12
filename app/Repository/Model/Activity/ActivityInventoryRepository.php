@@ -209,7 +209,7 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
         return f_currency($this->getPurchasePrice(),$this->getCurrency());
     }
 
-    public function getItineraryItem(int|null $quantity = null): ItineraryItem
+    public function getItineraryItem(int|null $quantity = null, int|null $order = 0): ItineraryItem
     {
         $details = [
             'Dates' => $this->inventory->starts_at->format('d M Y') . ' to ' . $this->inventory->ends_at->format('d M Y'),
@@ -223,6 +223,7 @@ class ActivityInventoryRepository extends InventoryRepository implements HasActi
             $this->inventory->component->name,
             $this->inventory->component->activity_category === ActivityCategory::MAIN ? 'Event' : 'Inclusions',
             $this->inventory->starts_at->unix(),
+            $order,
             $details,
         );
     }

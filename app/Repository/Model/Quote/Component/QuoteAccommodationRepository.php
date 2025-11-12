@@ -123,6 +123,7 @@ class QuoteAccommodationRepository extends QuoteComponentRepository
             'tour_component_type' => $this->quoteComponent->tour_component_type,
             'tour_sales_price' => $this->quoteComponent->tour_sales_price,
             'accommodation_inventory_id' => $this->quoteComponent->accommodation_inventory_id,
+            'document_order' => $this->quoteComponent->document_order,
         ]);
         return $tourComponent->repository;
     }

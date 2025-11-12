@@ -46,7 +46,8 @@ class Table extends LivewireDatatable
             Column::name('events.name')
                 ->label('Event Name')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->filterable(\App\Models\Tour\Event::orderBy('name')->pluck('name')->toArray()),
             DateColumn::name('quotes.created_at')
                 ->label('Quote Created')
                 ->sortable()
