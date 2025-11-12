@@ -13,10 +13,8 @@ use App\View\Components\Livewire\Input\Select\Agent;
 use App\View\Components\Livewire\Input\Select\Brand;
 use App\View\Components\Livewire\Input\Select\Currency;
 use App\View\Components\Livewire\Input\Select\Customer;
-use App\View\Components\Livewire\Input\Select\Customer\HatSize;
 use App\View\Components\Livewire\Input\Select\Customer\LoyaltyNumberType;
 use App\View\Components\Livewire\Input\Select\Customer\MerchandiseCategory;
-use App\View\Components\Livewire\Input\Select\Customer\TShirtSize;
 use App\View\Components\Livewire\Input\Select\Event\All as AllEvents;
 use App\View\Components\Livewire\Input\Select\Event\Main as MainEvent;
 use App\View\Components\Livewire\Input\Select\Event\Normal as NormalEvent;
@@ -103,16 +101,6 @@ Route::prefix('loyalty-number-type')->name('loyalty-number-type.')->group(functi
 Route::prefix('merchandise-category')->name('merchandise-category.')->group(function () {
     Route::post('/', [MerchandiseCategory::class, 'getAll'])->name('select');
     Route::post('/{id}', [MerchandiseCategory::class, 'getOne'])->name('selected');
-});
-
-Route::prefix('hat-size')->name('hat-size.')->group(function () {
-    Route::post('/', [HatSize::class, 'getAll'])->name('select');
-    Route::post('/{id}', [HatSize::class, 'getOne'])->name('selected');
-});
-
-Route::prefix('t-shirt-size')->name('t-shirt-size.')->group(function () {
-    Route::post('/', [TShirtSize::class, 'getAll'])->name('select');
-    Route::post('/{id}', [TShirtSize::class, 'getOne'])->name('selected');
 });
 
 Route::prefix('brands')->name('brands.')->group(function () {
