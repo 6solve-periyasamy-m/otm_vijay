@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpDynamicFieldDeclarationInspection */
 
 namespace App\Repository\Reporting;
 
@@ -7,13 +7,13 @@ class ReportFieldRepository
     public static function getFieldsFromParent(string $parent): array
     {
         return match ($parent) {
-            'accommodation' => ReportFieldRepository::getAccommodationFields(),
-            'activity' => ReportFieldRepository::getActivityFields(),
-            'flight' => ReportFieldRepository::getFlightFields(),
-            'transport' => ReportFieldRepository::getTransportFields(),
-            'customer' => ReportFieldRepository::getCustomerFields(),
-            'order-installment' => ReportFieldRepository::getOrderInstallmentFields(),
-            'payment' => ReportFieldRepository::getOrderPaymentFields(),
+            'accommodation' => self::getAccommodationFields(),
+            'activity' => self::getActivityFields(),
+            'flight' => self::getFlightFields(),
+            'transport' => self::getTransportFields(),
+            'customer' => self::getCustomerFields(),
+            'order-installment' => self::getOrderInstallmentFields(),
+            'payment' => self::getOrderPaymentFields(),
             default => [],
         };
     }
@@ -47,7 +47,7 @@ class ReportFieldRepository
         $lowestType = null;
         $lowestEager = null;
         foreach ($available as $field => $data) {
-            if (in_array($field, $used) && $lowestDepth < $data->depth) {
+            if ($lowestDepth < $data->depth && in_array($field, $used)) {
                 $lowestDepth = $data->depth;
                 $lowestClass = $data->class;
                 $lowestType = $data->type;
@@ -279,7 +279,7 @@ class ReportFieldRepository
                     ],
                 ], self::getInventoryFooter()),
             ],
-            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour', ['inventory.travelClass', 'inventory.flight.departureAirport', 'inventory.flight.departureAirport.address', 'inventory.flight.arrivalAirport', 'inventory.flight.arrivalAirport.address', 'tour'],)
+            2 => self::getTourInventoryFooter('Flight\FlightInventoryTour', ['inventory.travelClass', 'inventory.flight.departureAirport', 'inventory.flight.departureAirport.address', 'inventory.flight.arrivalAirport', 'inventory.flight.arrivalAirport.address', 'tour'])
         ];
     }
 
@@ -380,7 +380,7 @@ class ReportFieldRepository
             0 => [
                 'class' => 'Customer\Customer',
                 'type' => 'customer',
-                'eager' => ['homeAddress', 'billingAddress', 'tShirtSize', 'hatSize'],
+                'eager' => ['homeAddress', 'billingAddress', 'tShirtSize', 'hatSize', 'organization'],
                 'fields' => [
                     'email' => [
                         'name' => 'Email',
@@ -412,7 +412,7 @@ class ReportFieldRepository
                         'format' => 'date',
                     ],
                     'mobile_number' => [
-                        'name' => 'Mobile Number',
+                        'name' => 'Primary Phone',
                         'method' => 'mobile_number',
                     ],
                     'other_phone_number' => [
@@ -455,6 +455,11 @@ class ReportFieldRepository
                         'name' => 'Passport Number',
                         'method' => 'passport_number',
                     ],
+                    'passport_issue_date' => [
+                        'name' => 'Passport Issue Date',
+                        'method' => 'passport_issue_date',
+                        'format' => 'date',
+                    ],
                     'passport_expiry_date' => [
                         'name' => 'Passport Expiry Date',
                         'method' => 'passport_expiry_date',
@@ -467,6 +472,22 @@ class ReportFieldRepository
                     'loyalty_number' => [
                         'name' => 'Loyalty Number',
                         'method' => 'loyalty_number',
+                    ],
+                    'nationality' => [
+                        'name' => 'Nationality',
+                        'method' => 'nationality',
+                    ],
+                    'organization' => [
+                        'name' => 'Organization',
+                        'method' => 'organization',
+                    ],
+                    'gender' => [
+                        'name' => 'Gender',
+                        'method' => 'gender',
+                    ],
+                    'additional_loyalty_numbers' => [
+                        'name' => 'All Loyalty Numbers',
+                        'method' => 'loyalty_numbers_for_report',
                     ],
                     'profile_picture' => [
                         'name' => 'Profile Picture',
