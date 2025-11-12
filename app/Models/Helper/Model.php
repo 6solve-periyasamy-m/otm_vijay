@@ -8,5 +8,5 @@ class Model extends \Illuminate\Database\Eloquent\Model
 {
     use MountsLivewire;
 
-    protected $fillable = ['archived',];
+    protected $guarded = [];
 }
