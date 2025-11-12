@@ -184,7 +184,21 @@
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\HatSizeRepository::class])
         </div>
         <div class="col-xl-4">
-            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\TShirtSizeRepository::class])
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Merchandise Category</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.customer.merchandise-category.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+                </slot:header>
+                <livewire:admin.customer.merchandise-category.table />
+            </x-admin.section.card>
+        </div>
+        <div class="col-xl-4">
+            @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Customer\LoyaltyNumberTypeRepository::class])
         </div>
         <div class="col-xl-4">
             <x-admin.section.card>

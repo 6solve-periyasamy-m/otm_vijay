@@ -1,14 +1,11 @@
 @php
-    $id = $attributes->get('id', Str::random());
+    $id = $attributes->get('id', div_id());
     $route = $attributes->get('route');
     $allRoute = route('api.' . $route . '.select');
     $value = $attributes->get('value');
     $value = empty($value) ? null : $value;
     $clear = $attributes->get('clear', false);
-    $updateRoute = null;
-    if ($value !== null) {
-        $updateRoute = route("api.{$route}.selected", ['id' => '%id%', ]);
-    }
+    $updateRoute = route("api.{$route}.selected", ['id' => '%id%', ]);
 
     $createRoute = $attributes->get('createRoute');
     $createForm = $attributes->get('createForm');
@@ -71,7 +68,7 @@
                     if (event.detail.key === '{{ $attributes->get('name') }}') {
                         $.ajax({
                             url: '{{ $updateRoute }}'.replace('%id%', event.detail.value),
-                            type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', }
+                            type: 'post', data: { __api_token: '{{ Auth::user()->getCurrentToken()->token }}', _token: "{{csrf_token()}}" },
                         }).then(function (data) {
                             selector.append(new Option(data.text, data.id, true, true)).trigger('change');
 

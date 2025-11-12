@@ -13,13 +13,17 @@ class ActivityInventoryController extends Controller
 {
     public function create(Activity $activity)
     {
-        $this->authorize('self-child-access', [$activity, ActivityInventory::class]);
+        if (!request()?->user()->can('create', ActivityInventory::class)) {
+            $this->authorize('self-child-access', [$activity, ActivityInventory::class]);
+        }
         return view('pages.admin.activity.inventory.form', ['activity' => $activity,]);
     }
 
     public function store(Request $request, Activity $activity)
     {
-        $this->authorize('self-child-access', [$activity, ActivityInventory::class]);
+        if (!request()?->user()->can('create', ActivityInventory::class)) {
+            $this->authorize('self-child-access', [$activity, ActivityInventory::class]);
+        }
         $request->validate(ActivityInventory::getValidationRules());
         $activityInventory = ActivityInventory::make([
             'ticket_type_id' => $request->input('ticket_type_id'),

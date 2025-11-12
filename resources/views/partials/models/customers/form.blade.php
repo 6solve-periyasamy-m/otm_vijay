@@ -47,7 +47,7 @@
     @include('partials.fields.text', ['name' => 'Billing Postcode', 'field' => 'billing_postcode', 'value' => $billing_postcode ?? null, 'width' => 6, ])
 </div>
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Mobile Number', 'field' => 'mobile_number', 'value' => $mobile_number ?? null, 'width' => 6,])
+@include('partials.fields.text', ['name' => 'Primary Phone', 'field' => 'mobile_number', 'value' => $mobile_number ?? null, 'width' => 6,])
 @include('partials.fields.text', ['name' => 'Other Phone Number', 'field' => 'other_phone_number', 'value' => $other_phone_number ?? null, 'width' => 6,])
 <hr class="splitter"/>
 @include('partials.fields.text', ['name' => 'Emergency Contact Name', 'field' => 'emergency_contact_name', 'value' => $emergency_contact_name ?? null, 'width' => 4,])

@@ -66,16 +66,16 @@
                                 </div>
                                 <div class="one_input_field">
                                 </div>
-                                <div class="two_input_field">  
+                                <div class="two_input_field">
                                     <input placeholder="DATE OF BIRTH*" onfocus="(this.type='date')"
-                                    onblur="(this.type='text')" type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday" required > 
+                                    onblur="(this.type='text')" type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday" required >
                                     <input type="email" placeholder="EMAIL ADDRESS" name="email_address" value="{{ $customer->email_address ?? '' }}">
                                 </div>
                                 <div class="two_input_field mobile_number">
                                     <input style="width: 100%;" type="tel" id="mobile_number" value="{{ old('mobile_number', $customer->mobile_number ?? '') }}" class=" phone-input form-control" required>
                                     <input type="hidden" name="mobile_number" id="mobile_number"  value="{{ old('mobile_number', $customer->mobile_number ?? '') }}">
-                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span>                                      
-                                    <input type="tel" id="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" placeholder="ALTERNATE MOBILE NUMBER"  class="phone-input alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"  style="width: 100%;">                                        
+                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span>
+                                    <input type="tel" id="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" placeholder="ALTERNATE MOBILE NUMBER"  class="phone-input alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"  style="width: 100%;">
                                     <input type="hidden" name="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}">
                                     <span  style="color:red; display:none;">Please enter a valid phone number.</span>
                                 </div>
@@ -116,7 +116,7 @@
                                             value="1"
                                             {{ (isset($home_address_id) && isset($billing_address_id) && $home_address_id == $billing_address_id) ? 'checked' : '' }}>
                                             <span>Same as Home</span>
-                                            
+
                                             </label>
                                     </span>
                                     </div>
@@ -149,29 +149,29 @@
                                     <input type="text" name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" placeholder="RELATIONSHIP" class="relationship_input" required>
                                     <input style="width: 100%;" type="tel" id="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" placeholder="MOBILE NUMBER" required   class=" phone-input mobile_no [&::-webkit-inner-spin-button]:appearance-none">
                                     <input type="hidden" name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" >
-                                </div>                                    
+                                </div>
                             </div>
-                        </div>                        
+                        </div>
                         <hr/>
                         <div class="personal_details other_details" id="other_details">
                             <h3>Other Details</h3>
                             <div class="other_details_form">
                                 <div class="one_input_field"><input type="text" name="other_notes" value="{{ $customer->external_notes }}"  placeholder="Other Notes"  ></div>
                                 <div class="one_input_field"><input type="text"  name="dietary_notes" value="{{ $customer->dietary_notes }}" placeholder="Dietary Requirements"  ></div>
-                                <div class="one_input_field"><input type="text" name="mobility_notes" value="{{ $customer->mobility_notes }}" placeholder="Mobility Requirements" ></div>                           
+                                <div class="one_input_field"><input type="text" name="mobility_notes" value="{{ $customer->mobility_notes }}" placeholder="Mobility Requirements" ></div>
                             </div>
                         </div>
                         </hr>
                         <div class="personal_details passport_details" id="passport_details">
                             <h3>Passport Details</h3>
-                            
-                            @php 
+
+                            @php
                                 $passportdisabled = '';
                                 $passportreadonly = '';
                             @endphp
                             @if ($passport)
                                 <span class="fw-bold">Passport details are currently locked due to an upcoming tour. If you need to update your passport details, please contact us.</span>
-                                @php 
+                                @php
                                     $passportdisabled = 'disabled';
                                     $passportreadonly = 'readonly';
                                 @endphp
@@ -238,7 +238,7 @@
                             <h3>Merchandise</h3>
                             <div class="other_details_form">
                                 <div class="two_input_field">
-                                    
+
                                     <input type="text" name="t_shirt_size_id" placeholder="T Shirt Size" value="{{ $customer->t_shirt_size }}">
                                     <input type="text" name="hat_size_id" placeholder="Hat Size" value="{{ $customer->hat_size }}">
                                     <input type="text" name="hat_size_id" placeholder="Loyalty Number" value="{{ $customer->loyalty_number }}">
@@ -274,7 +274,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                
+
                                 <div class="two_input_field">
                                     <input type="password"  name="new_password" width="4" autocomplete="new-password" placeholder="NEW PASSWORD">
                                     <input type="password"  name="new_password_confirmation" autocomplete="new-password" placeholder="CONFIRM NEW PASSWORD" >
@@ -293,7 +293,7 @@
     var billing_address_id  = '{{ $billing_address_id}}';
     var home_address_id     = '{{ $home_address_id}}';
     jQuery('.your_details_colm_1 li').click(function(e) {
-        e.preventDefault(); 
+        e.preventDefault();
         jQuery('.your_details_colm_1 li').removeClass('active');
         jQuery(this).addClass('active');
         const targetId = jQuery(this).find('a').attr('href');
@@ -303,7 +303,7 @@
             }
         }
     });
-    // password show 
+    // password show
      $('.toggle-password').on('click', function () {
         const input = $(this).siblings('input');
         const img = $(this).find('img');
@@ -316,7 +316,7 @@
             img.attr('src', '/images/customer/images/eye-slash.svg'); // eye slash
         }
     });
-    // same address check 
+    // same address check
     if (home_address_id == billing_address_id) {
         $('#home_is_billing')
             .prop('checked', true);
@@ -358,10 +358,10 @@
             $('#home-address-section').show();
         }
     }
-    // same as address fetch 
+    // same as address fetch
 
     $(document).ready(function () {
-        
+
         // number formate with validation
         $('.phone-input').each(function () {
             const input = this;
@@ -377,7 +377,7 @@
                 autoPlaceholder: "On",
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
             });
- 
+
             if ($(input).val().trim() == '') {
                 // --- Show "Choose Country" placeholder flag ---
                 const flagContainer = $(input).closest('.iti').find('.iti__selected-flag');
@@ -386,10 +386,10 @@
                 flagContainer.prepend(placeholder);
                 flagContainer.find('.iti__selected-dial-code').text(''); // clear dial code
                 flagContainer.attr('title', 'Select your country');
- 
+
                 // --- Track if first click happened ---
                 let firstTimeClick = true;
- 
+
                 // Listen for country dropdown open (safe after plugin init)
 
               // Old code  // $(input).on('open:countrydropdown', function () {
@@ -409,7 +409,7 @@
                         // Add custom "Select your country" item only once
                         const chooseCountryItem = $(`
                             <li class="iti__country iti__choose-country" style="font-weight:bold; cursor:default;">
-                                
+
                                 <span class="iti__country-name">Select your country</span>
                             </li>
                         `);
@@ -424,7 +424,7 @@
                 flagContainer.find('.iti__flag').show();
                 placeholder.hide();
             });
- 
+
             // --- Update hidden input for valid numbers ---
             $(input).on('input change blur countrychange', function () {
                 const id = $(this).attr('id');
@@ -435,7 +435,7 @@
                     hiddenInput.val('');
                 }
             });
- 
+
             // Save instance reference
             $(input).data('iti', iti);
         });

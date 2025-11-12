@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\Admin\Customer\CustomerController;
 use App\Http\Controllers\Admin\Customer\HatSizeController;
+use App\Http\Controllers\Admin\Customer\LoyaltyNumberTypeController;
 use App\Http\Controllers\Admin\Customer\TShirtSizeController;
 
 Route::get('/', [CustomerController::class, 'index'])->name('customers.all')->middleware('bouncer:Customer\Customer,read');
 Route::get('/create', [CustomerController::class, 'create'])->name('customers.create')->middleware('bouncer:Customer\Customer,create');
 Route::post('/create', [CustomerController::class, 'store'])->name('customers.store')->middleware('bouncer:Customer\Customer,create');
 Route::post('/login', [CustomerController::class, 'login'])->name('customers.login-as')->middleware('bouncer:Customer\Customer,read');
+Route::get('/export', [CustomerController::class, 'export'])->name('customers.export')->middleware('bouncer:Customer\Customer,read');
+
 Route::prefix('{customer}')->group(function () {
     Route::get('/', [CustomerController::class, 'view'])->name('customers.view')->middleware('bouncer:Customer\Customer,read');
     Route::post('/forget', [CustomerController::class, 'forget'])->name('customers.forget')->middleware(['bouncer:Customer\Customer,update', 'password.confirm']);
@@ -36,4 +39,9 @@ Route::prefix('hat-sizes')->group(function () {
         Route::post('/update', [HatSizeController::class, 'update'])->name('hat-sizes.update')->middleware('bouncer:Customer\HatSize,update');
         Route::post('/delete', [HatSizeController::class, 'destroy'])->name('hat-sizes.delete')->middleware('bouncer:Customer\HatSize,delete');
     });
+});
+Route::prefix('loyalty-number-types')->name('loyalty-number-type.')->group(function () {
+    Route::get('/create', [LoyaltyNumberTypeController::class, 'create'])->name('create');
+    Route::get('/{type}/update', [LoyaltyNumberTypeController::class, 'edit'])->name('edit');
+    Route::post('/{type}/delete', [LoyaltyNumberTypeController::class, 'delete'])->name('delete');
 });

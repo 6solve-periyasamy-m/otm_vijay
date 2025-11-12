@@ -11,12 +11,12 @@ class HatSizeController extends Controller
 
     public function index()
     {
-        return view('pages.models.hat_sizes.table', ['hatSizes' => HatSize::all(),]);
+        return view('pages.admin.customer.hat-size.table', ['hatSizes' => HatSize::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.hat_sizes.create');
+        return view('pages.admin.customer.hat-size.create');
     }
 
     public function store(Request $request)
@@ -30,12 +30,12 @@ class HatSizeController extends Controller
 
     public function view(HatSize $hatSize)
     {
-        return view('pages.models.hat_sizes.view', ['hatSize' => $hatSize,]);
+        return view('pages.admin.customer.hat-size.view', ['hatSize' => $hatSize,]);
     }
 
     public function edit(HatSize $hatSize)
     {
-        return view('pages.models.hat_sizes.update', ['hatSize' => $hatSize,]);
+        return view('pages.admin.customer.hat-size.update', ['hatSize' => $hatSize,]);
     }
 
     public function update(Request $request, HatSize $hatSize)

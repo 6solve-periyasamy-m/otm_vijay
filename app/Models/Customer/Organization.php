@@ -105,4 +105,9 @@ class Organization extends Model
             (new OrderCustomer())->order(),
         )->groupBy('orders.id');
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
