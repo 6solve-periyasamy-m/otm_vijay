@@ -27,6 +27,8 @@ use App\Http\Gateways\OpayoGateway;
 use App\Http\Middleware\ApiAuthenticate;
 use App\Http\Middleware\ExpectsJson;
 use App\View\Components\Livewire\Input\Select\Country;
+use App\View\Components\Livewire\Input\Select\Customer\HatSize;
+use App\View\Components\Livewire\Input\Select\Customer\TShirtSize;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/admin')->middleware([ExpectsJson::class, ApiAuthenticate::class])->name('api.admin.')->group(function () {
@@ -73,16 +75,16 @@ Route::prefix('countries')->name('api.countries.')->group(function () {
 
 Route::middleware('api.token.both')->name('api.')->prefix('dual')->group(function () {
     Route::prefix('select')->group(function () {
-        Route::post('hat-size', [SelectController::class, 'getHatSizes'])->name('hat-size.select');
-        Route::post('t-shirt-size', [SelectController::class, 'getTShirtSizes'])->name('t-shirt-size.select');
+        Route::post('hat-size', [HatSize::class, 'getAll'])->name('hat-size.select');
+        Route::post('t-shirt-size', [TShirtSize::class, 'getAll'])->name('t-shirt-size.select');
         Route::post('available-merchandise/{orderCustomer}', [SelectController::class, 'getAvailableMerchandise'])->name('available-merchandise.select');
         Route::post('available-accommodation/{orderCustomer}', [SelectController::class, 'getAvailableAccommodation'])->name('available-accommodation.select');
         Route::post('available-activities/{orderCustomer}', [SelectController::class, 'getAvailableActivities'])->name('available-activities.select');
         Route::post('available-flights/{orderCustomer}', [SelectController::class, 'getAvailableFlights'])->name('available-flights.select');
         Route::post('available-transports/{orderCustomer}', [SelectController::class, 'getAvailableTransport'])->name('available-transports.select');
         Route::prefix('selected')->group(function () {
-            Route::post('hat-size/{id}', [SelectController::class, 'getSelectedHatSize'])->name('hat-size.selected');
-            Route::post('t-shirt-size/{id}', [SelectController::class, 'getSelectedTShirtSize'])->name('t-shirt-size.selected');
+            Route::post('hat-size/{id}', [HatSize::class, 'getOne'])->name('hat-size.selected');
+            Route::post('t-shirt-size/{id}', [TShirtSize::class, 'getOne'])->name('t-shirt-size.selected');
         });
     });
 
