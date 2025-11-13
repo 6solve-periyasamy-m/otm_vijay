@@ -60,6 +60,10 @@ class Table extends LivewireDatatable
                 ->searchable()
                 ->sortable()
                 ->filterable(\App\Models\Tour\Event::orderBy('name')->pluck('name')->toArray()),
+            Column::callback(['quotes.id'], fn($id) =>
+                    f_currency(Quote::find($id)?->final_price ?? 0.00, Quote::find($id)?->currency)
+                )
+                ->label('Final Price'),
             Column::name('organizations.name')
                 ->label('Organization')
                 ->sortable()
