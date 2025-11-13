@@ -7,8 +7,8 @@ use App\Events\Customer\CustomerEditedEvent;
 use App\Http\Livewire\Abstract\LivewireForm;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Customer\Customer;
-use App\Models\Customer\LoyaltyNumber;
 use App\Models\Customer\CustomerMerchandise;
+use App\Models\Customer\LoyaltyNumber;
 use App\Models\Location\Address;
 use Hash;
 use Illuminate\Http\UploadedFile;
@@ -94,6 +94,9 @@ class Form extends Component
         }
         if (!empty($this->password)) {
             $this->customer->password = Hash::make($this->password);
+        }
+        if (empty(trim($this->customer->email_address))) {
+            $this->customer->email_address = null;
         }
         $this->home->save();
         $this->billing->save();
