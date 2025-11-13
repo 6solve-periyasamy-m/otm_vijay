@@ -9,6 +9,7 @@ use App\Models\Booking\BookingTraveller;
 use App\Repository\Model\Booking\BookingRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Settings;
 
 class SimpleBookingController extends ApiController
 {
@@ -30,10 +31,11 @@ class SimpleBookingController extends ApiController
     {
         $booking = Booking::where('token', '=', $request->token)->first();
         if ($booking === null) { return response()->json(['success' => false, 'message' => 'Requested booking was not for the selected tour'], 422); }
+        $rate = Settings::getConversionRate(Settings::currency(), $booking->currency?->code) ?? 1.0;
         if ($request->full ?? false) {
-            $amount = $booking->repository->getTotalCost();
+            $amount = $booking->repository->getTotalCost() * $rate;
         } else {
-            $amount = $booking->repository->getDueTodayAmount();
+            $amount = $booking->repository->getDueTodayAmount() * $rate;
         }
         return response()->json(['success' => true, 'checkoutSessionClientSecret' => $booking->repository->getStripeKey($amount),]);
     }

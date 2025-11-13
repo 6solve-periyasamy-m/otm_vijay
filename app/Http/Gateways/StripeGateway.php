@@ -28,14 +28,14 @@ class StripeGateway extends Gateway implements SupportsRedirect
         return $this->getCheckout($items, $intention, $customer, $success)->url;
     }
 
-    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string|null $currency = null): string
     {
-        return $this->getCheckout($items, $intention, $customer, $success, 'custom')->client_secret;
+        return $this->getCheckout($items, $intention, $customer, $success, 'custom', $currency)->client_secret;
     }
 
-    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
+    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted', string|null $currency = null): Session
     {
-        $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currency = $currency ?? (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
         $currency = strtolower(empty($currency) ? \Settings::currency()?->code : $currency);
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe($currency); }
