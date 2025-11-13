@@ -111,7 +111,7 @@ $passport = $customer->repository->isPassportLocked();
                             </x-customer.input>
 
                             <x-customer.input name="mobile_number" value="{{ $customer->mobile_number ?? '' }}" width="4" autocomplete="tel">
-                                Mobile Number
+                                Primary Phone
                             </x-customer.input>
 
                             <x-customer.input name="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" width="4">

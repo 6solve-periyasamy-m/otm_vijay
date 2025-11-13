@@ -7,6 +7,7 @@ use App\Http\Livewire\Abstract\QuoteBadgeColumn;
 use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\QuoteStatus;
 use App\Models\Quote\Quote;
+use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
@@ -14,6 +15,7 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 class Table extends LivewireDatatable
 {
     public $name = 'all-quotes-table';
+    public $defaultFilters = ['quotes.archived' => '0',];
 
     public function builder()
     {
@@ -69,7 +71,20 @@ class Table extends LivewireDatatable
             QuoteBadgeColumn::raw('(IF(quotes.order_id IS NULL, IF(NOW() < quotes.expires, quotes.quote_status, IF(quotes.quote_status < 2, -1, quotes.quote_status)), 4))')
                 ->label('Status')
                 ->filterable(QuoteStatus::asFilter()),
-            ActionColumn::view('quote', 'quotes.edit', 'quotes.view'),
+            BooleanColumn::name('quotes.archived')
+                ->label('Archived')
+                ->sortable()
+                ->filterable(),
+            ActionColumn::view('quote', 'quotes.edit', 'quotes.view', 'partials.admin.livewire.table.archive-actions'),
         ];
+    }
+
+    public function archive($id)
+    {
+        $quote = Quote::find($id);
+        if ($quote !== null) {
+            $quote->archived = !$quote->archived;
+            $quote->save();
+        }
     }
 }

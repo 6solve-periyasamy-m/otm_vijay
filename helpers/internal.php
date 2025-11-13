@@ -169,3 +169,14 @@ if (!function_exists('get_date')) {
         return null;
     }
 }
+if (!function_exists('div_id')) {
+    /**
+     * Returns an ID suitable for a DIV, sanitzed to be compatible as a JS Variable Name
+     *
+     * @return string
+     */
+    function div_id(): string
+    {
+        return preg_replace("/\d/u", "", Str::random());
+    }
+}

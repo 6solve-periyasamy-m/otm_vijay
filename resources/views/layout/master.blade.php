@@ -22,6 +22,7 @@
     @livewireStyles
     <script src="{{ asset('/js/app.js') }}"></script>
     <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.11.2/build/css/intlTelInput.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
     {{-- Addons (fold): --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css" rel="stylesheet" />
@@ -50,6 +51,7 @@
             font-size: 18px;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.11.2/build/js/intlTelInput.min.js"></script>
 </head>
 <body>
     @include('partials.navbar')

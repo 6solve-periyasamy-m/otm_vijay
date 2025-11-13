@@ -1254,6 +1254,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $section->title,
             'Section',
             $section->sort_date?->unix() ?? $section->order,
+            $section->order ?? null,
             $details,
         );
     }

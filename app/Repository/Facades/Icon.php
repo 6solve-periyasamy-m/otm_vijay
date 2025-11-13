@@ -157,6 +157,11 @@ class Icon
         return $this->solid('arrow-left');
     }
 
+    public function right(): View|string|Closure
+    {
+        return $this->solid('arrow-right');
+    }
+
     public function back(): View|string|Closure
     {
         return $this->left();

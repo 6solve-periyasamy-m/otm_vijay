@@ -11,6 +11,12 @@
                 <span>Create New</span>
             </a>
         @endif
+        @if($repository::getCreateModal() !== null)
+            <a class="btn btn-primary" onclick="openModal('{{$repository::getCreateModal()}}')">
+                {{ Icon::create() }}
+                <span>Create New</span>
+            </a>
+        @endif
     </div>
     <table style="width: 100%;" class="table table-striped datatable">
         <thead class="thead-dark">

@@ -16,13 +16,17 @@ class AccommodationInventoryController extends Controller
 {
     public function create(Accommodation $accommodation)
     {
-        $this->authorize('self-child-access', [$accommodation, AccommodationInventory::class]);
+        if (!request()?->user()->can('create', AccommodationInventory::class)) {
+            $this->authorize('self-child-access', [$accommodation, AccommodationInventory::class]);
+        }
         return view('pages.admin.accommodation.inventory.form', ['accommodation' => $accommodation,]);
     }
 
     public function store(AccommodationInventoryRequest $request, Accommodation $accommodation)
     {
-        $this->authorize('self-child-access', [$accommodation, AccommodationInventory::class]);
+        if (!request()?->user()->can('create', AccommodationInventory::class)) {
+            $this->authorize('self-child-access', [$accommodation, AccommodationInventory::class]);
+        }
         $accommodation->inventory()->save(AccommodationInventory::make($request->getData()));
         return redirect()->route('accommodations.view', ['accommodation' => $accommodation,]);
     }

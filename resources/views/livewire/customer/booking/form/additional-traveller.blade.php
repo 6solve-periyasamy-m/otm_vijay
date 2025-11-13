@@ -26,7 +26,7 @@
         </x-customer.input>
 
         <x-customer.input wire:model="traveller.mobile_number" value="{{ $traveller?->mobile_number ?? '' }}" width="6" autocomplete="tel">
-            Mobile Number
+            Primary Phone
         </x-customer.input>
         @if($this->booking->tour?->templates->count() && empty($traveller?->id))
             <div class="form-group col-md-6">

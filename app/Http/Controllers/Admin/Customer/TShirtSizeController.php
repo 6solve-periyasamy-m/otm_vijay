@@ -11,12 +11,12 @@ class TShirtSizeController extends Controller
 
     public function index()
     {
-        return view('pages.models.t_shirt_sizes.table', ['tShirtSizes' => TShirtSize::all(),]);
+        return view('pages.admin.customer.t-shirt-size.create', ['tShirtSizes' => TShirtSize::all(),]);
     }
 
     public function create()
     {
-        return view('pages.models.t_shirt_sizes.create');
+        return view('pages.admin.customer.t-shirt-size.create');
     }
 
     public function store(Request $request)
@@ -30,12 +30,12 @@ class TShirtSizeController extends Controller
 
     public function view(TShirtSize $tShirtSize)
     {
-        return view('pages.models.t_shirt_sizes.view', ['tShirtSize' => $tShirtSize,]);
+        return view('pages.admin.customer.t-shirt-size.view', ['tShirtSize' => $tShirtSize,]);
     }
 
     public function edit(TShirtSize $tShirtSize)
     {
-        return view('pages.models.t_shirt_sizes.update', ['tShirtSize' => $tShirtSize,]);
+        return view('pages.admin.customer.t-shirt-size.update', ['tShirtSize' => $tShirtSize,]);
     }
 
     public function update(Request $request, TShirtSize $tShirtSize)
