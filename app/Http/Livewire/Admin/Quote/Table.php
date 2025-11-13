@@ -11,6 +11,8 @@ use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
+use App\Models\Customer\Organization;
+use App\Models\User;
 
 class Table extends LivewireDatatable
 {
@@ -20,9 +22,10 @@ class Table extends LivewireDatatable
     public function builder()
     {
         return Quote::query()
-            ->leftJoin('quote_prospects', 'quote_prospects.id', '=', 'quotes.lead_traveller_id')
-            ->leftJoin('customers', 'customers.id', '=', 'quote_prospects.customer_id')
-            ->leftJoin('events', 'events.id', '=', 'quotes.event_id');
+            ->leftJoin('events', 'events.id', '=', 'quotes.event_id')
+            ->leftJoin('organizations', 'organizations.id', '=', 'quotes.organization_id')
+            ->leftJoin('users', 'users.id', '=', 'quotes.consultant_id')
+            ->groupBy('quotes.id');
     }
 
     public function getColumns(): array
@@ -33,8 +36,17 @@ class Table extends LivewireDatatable
     public function columns(): array
     {
         return [
-            Column::name('quotes.reference')
-                ->label('Reference')
+            DateColumn::name('quotes.created_at')
+                ->label('Quote Created')
+                ->sortable()
+                ->searchable()
+                ->filterable()
+                ->format('d/m/Y'),
+            Column::callback(['quotes.id', 'quotes.reference'], function ($id, $reference) {
+                    $url = route('quotes.view', ['quote' => $id]);
+                    return "<a href='{$url}' class='text-primary  hover:underline'>{$reference}</a>";
+                })
+                ->label('Booking Reference')
                 ->searchable()
                 ->sortable(),
             Column::name('quotes.name')
@@ -48,33 +60,19 @@ class Table extends LivewireDatatable
                 ->searchable()
                 ->sortable()
                 ->filterable(\App\Models\Tour\Event::orderBy('name')->pluck('name')->toArray()),
-            DateColumn::name('quotes.created_at')
-                ->label('Quote Created')
+            Column::name('organizations.name')
+                ->label('Organization')
                 ->sortable()
                 ->searchable()
-                ->filterable()
-                ->format('d/m/Y'),
-            Column::callback(['customers.title', 'customers.first_name', 'customers.last_name'], static function (...$fields) { return implode(' ', $fields); })
-                ->label('Lead Traveller')
-                ->searchable()
-                ->sortable(),
-            Column::name('customers.email_address')
-                ->label('Email')
-                ->searchable()
-                ->sortable()
-                ->filterable(Customer::pluck('email_address')),
-            DateColumn::name('quotes.expires')
-                ->label('Expiry')
-                ->searchable()
-                ->sortable()
-                ->filterable(),
+                ->filterable(Organization::pluck('name')->toArray()),
             QuoteBadgeColumn::raw('(IF(quotes.order_id IS NULL, IF(NOW() < quotes.expires, quotes.quote_status, IF(quotes.quote_status < 2, -1, quotes.quote_status)), 4))')
                 ->label('Status')
                 ->filterable(QuoteStatus::asFilter()),
-            BooleanColumn::name('quotes.archived')
-                ->label('Archived')
+            Column::name('users.name')
+                ->label('Consultant Name')
                 ->sortable()
-                ->filterable(),
+                ->searchable()
+                ->filterable(User::pluck('name')->toArray()),                                
             ActionColumn::view('quote', 'quotes.edit', 'quotes.view', 'partials.admin.livewire.table.archive-actions'),
         ];
     }
