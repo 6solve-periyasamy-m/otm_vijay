@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Abstract;
 
 use App\Exceptions\MailDisabledException;
 use App\Exceptions\MailFailedException;
+use App\Http\Controllers\Customer\BookingV3Controller;
 use App\Mail\Storage\Attachment;
 use App\Mail\Storage\QuoteMail;
 use App\Models\Accommodation\Accommodation;
@@ -35,7 +36,7 @@ abstract class V3BookingComponent extends Component
     public bool $payFull = false;
     public BookingTraveller|null $lead = null;
     public bool $showCustomerForm = false;
-    public $listeners = ['currencyUpdated' => 'updateCurrency'];
+    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
 
     public function mount(Tour|int|null $tour = null, Booking|int|null $booking = null, Quote|int|null $quote = null)
     {
@@ -121,10 +122,12 @@ abstract class V3BookingComponent extends Component
 
     public function updateCurrency(string $currency): void
     {
-        $this->selectedCurrency = $currency;
-        $this->booking->currency_id = Currency::where('code', $currency)->first()?->id ?? Settings::currency()?->id;
-        $this->booking->repository->updateCurrency($currency);
-        $this->renew();
+        if (in_array(strtoupper($currency), BookingV3Controller::ALLOWED_CURRENCIES)) {
+            $this->selectedCurrency = $currency;
+            $this->booking->currency_id = Currency::where('code', $currency)->first()?->id ?? Settings::currency()?->id;
+            $this->booking->repository->updateCurrency($currency);
+            $this->renew();
+        }
     }
 
     public function renew()

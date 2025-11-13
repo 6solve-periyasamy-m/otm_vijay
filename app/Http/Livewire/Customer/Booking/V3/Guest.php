@@ -8,10 +8,10 @@ use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Quote\Quote;
 use App\Repository\Model\Booking\BookingTravellerRepository;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Http;
 
 class Guest extends V3BookingComponent
 {
@@ -24,7 +24,7 @@ class Guest extends V3BookingComponent
     ];
     public BookingTraveller|null $lead = null;
 
-    public $listeners = ['advanceWithRecaptcha' => 'advanceWithRecaptcha'];
+    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advanceWithRecaptcha' => 'advanceWithRecaptcha',];
 
     public function mount($tour = null, $booking = null, $quote = null)
     {        
