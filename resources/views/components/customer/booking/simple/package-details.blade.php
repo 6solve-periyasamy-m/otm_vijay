@@ -220,6 +220,9 @@
     @php
         $rawAmount = $booking->repository->getTotalCost();
         $currencyCode = Settings::currency()?->code;
+        $dueToday = $booking->repository->getDueTodayAmount();
+        $balance = $rawAmount - $dueToday;
+        $hasBalance = $balance > 0;
     @endphp
     <div class="total">
         <div class="single">
@@ -230,8 +233,14 @@
                 <span class="total-cost">{{ $rawAmount }} </span>
             </p>
         </div>
+
         <div class="cart_sub_title">
-            <p class="cart_sub_title_color">Payable now</p>
+            <p class="cart_sub_title_color">
+                Payable now
+                @if($hasBalance && $booking->tour?->deposit_percentage)
+                    ({{ $booking->tour->deposit_percentage }}%)
+                @endif
+            </p>
             <p class="fw-bold cart_sub_title_color">{{ f_currency_booking($booking->repository->getDueTodayAmount()) }}</p>
         </div>
         
