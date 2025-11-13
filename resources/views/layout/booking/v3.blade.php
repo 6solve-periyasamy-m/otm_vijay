@@ -57,12 +57,12 @@
             });
         });
         const fetchClientSecretFull = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) }}')
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) !!}', {method: 'GET'})
                 .then((response) => response.json())
                 .then((json) => json.checkoutSessionClientSecret)
         }
         const fetchClientSecretToday = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) }}', {method: 'GET'})
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) !!}', {method: 'GET'})
                 .then((response) => response.json())
                 .then((json) => json.checkoutSessionClientSecret)
         }
