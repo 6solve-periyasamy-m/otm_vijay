@@ -29,7 +29,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-        //Cashier::useCustomerModel(Customer::class);
         Stripe::setApiKey(config('app.gateways.stripe.secret'));
         Mail::extend('minimal-log', function (array $config = []) {
             return new MinimalLogTransport();

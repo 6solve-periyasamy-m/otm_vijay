@@ -201,7 +201,15 @@ abstract class V3BookingComponent extends Component
         if (flag('booking.round_to_five')) {
             $value = round_to_five($value);
         }
-        return fr_currency($value, $this->getCurrency(), true, $decimalPrecision);
+        //return fr_currency($value, $this->getCurrency(), true, $decimalPrecision);
+        $currency =  $this->getCurrency();
+        $currencyCode = $currency->code;
+        $formatted = fr_currency($value, $this->getCurrency(), true, $decimalPrecision);
+        if (preg_match("/^{$currencyCode}\s+([^\d]+)/", $formatted, $matches)) {
+            $formatted = trim(str_replace("{$currencyCode} ", '', $formatted));
+        }
+        $formatted = preg_replace('/^[A-Z]{0,2}\$/', '$', $formatted);
+        return $formatted;
     }
 
     public function hasActivity(ActivityInventoryTour $tourComponent): bool

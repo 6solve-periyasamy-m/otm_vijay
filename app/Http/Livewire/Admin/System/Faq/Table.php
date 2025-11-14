@@ -13,6 +13,8 @@ class Table extends LivewireDatatable
 {
     public $name = "payment-method-table";
 
+    protected $listeners = ['toggleActive' => 'toggleActive'];
+
     public function builder()
     {        
         return Faq::query()
@@ -32,14 +34,12 @@ class Table extends LivewireDatatable
             Column::name('question')
                 ->label('Question')
                 ->searchable(),
-
-            Column::name('answer')
-                ->label('Answer')
-                ->searchable(),
-
-            Column::callback(['active'], function ($is_active) {
-                return $is_active ? 'Yes' : 'No';
-            })->label('Active'),
+            Column::callback(['id', 'active'], function ($id, $is_active) {
+                return view('partials.admin.livewire.table.toggle-active', [
+                        'id' => $id,
+                        'is_active' => $is_active,
+                    ]);
+                })->label('Active'),
 
             Column::callback(['id',], function ($id) {
                 return view('partials.admin.livewire.table.actions', [
@@ -52,4 +52,16 @@ class Table extends LivewireDatatable
                 ->unsortable(),
         ];
     }
+
+    public function toggleActive($id)
+    {
+        $faq = Faq::find($id);
+
+        if ($faq) {
+            $faq->active = !$faq->active;
+            $faq->save();
+            $this->emit('refreshLivewireDatatable');
+        }
+    }
+
 }
