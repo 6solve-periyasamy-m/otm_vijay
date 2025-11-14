@@ -103,8 +103,8 @@
                                 <div class="select-currency">
                                     {{-- @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector')) --}}
                                     <div class="single">
-                                        <p>Package price</p>
-                                        <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
+                                        <p class="font-weight-bold">Package price</p>
+                                        <p class="font-weight-bold">{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
                                     <div class="cart_sub_title">
                                         <p>Price per Person</p>
