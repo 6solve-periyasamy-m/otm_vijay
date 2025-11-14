@@ -104,9 +104,13 @@
                                     @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                     <div class="single">
                                         <p>Package price</p>
+                                        <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
+                                    </div>
+                                    <div class="cart_sub_title">
+                                        <p>Price per Person</p>
                                         <p>{{ $this->formatCurrency($this->tour->base_price_per_person) }}</p>
                                     </div>
-                                    <div class="single">
+                                    {{-- <div class="single">
                                         <p>Number of packages - {{ $this->getTravellerCount() }}</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
@@ -115,9 +119,9 @@
                                         <p>Single Occupancy - {{ $this->booking->repository->getSingleOccupancyCount() }}</p>
                                         <p>{{ $this->formatCurrency($this->booking->repository->getSingleOccupancyAmount()) }}</p>
                                     </div>
-                                    @endif
+                                    @endif --}}
                                     @php $estimateSingleOccupancy = 0; @endphp
-                                    @if($this->booking->groups()->count() <= 0)
+                                    {{-- @if($this->booking->groups()->count() <= 0)
                                         @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
                                         @if($singleCount > 0)
                                             @php $estimateSingleOccupancy = $this->tour->single_occupancy_surcharge * $singleCount; @endphp
@@ -126,7 +130,7 @@
                                                 <p>{{ $this->formatCurrency($this->tour->single_occupancy_surcharge * $singleCount) }}</p>
                                             </div>
                                         @endif
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 @php $upgrades = $this->booking->repository->getUpgradesForPackageDetails(); @endphp
                                 <div class="added-nights" style="display:none;">
@@ -139,6 +143,7 @@
                                         <p>A$1,500</p>
                                     </div>
                                 </div>
+                                {{--
                                 @if(count($upgrades['rooms']) > 0)
                                 <div class="room-upgrades @if($stage === 2) txt-org @endif">
                                     <h5>Room upgrades</h5>
@@ -149,7 +154,7 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                @endif
+                                @endif --}}
                                 @php $default = $this->getDefaultHotel()?->component; @endphp
                                 @if ($default !== null)
                                 <div class="Hotel" style="display:none;">
@@ -160,6 +165,7 @@
                                     </div>
                                 </div>
                                 @endif
+                                {{--
                                 @if(count($upgrades['tickets']) > 0)
                                 <div class="ticket-upgrades @if($stage === 3) txt-org @endif">
                                     <h5>Ticket upgrades</h5>
@@ -181,21 +187,31 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                @endif
+                                @endif --}}
                                 <div class="total">
                                     <div class="single">
                                         @php
                                             $rawAmount = $booking->repository->getTotalCost() + $estimateSingleOccupancy;
                                             $convertedAmount = $rawAmount * $this->getFXRate();
                                             $currencyCode = $this->getCurrency()->code;
+                                            $upgradePrice = $booking->repository->getUpgradeCosts();
                                         @endphp
-                                        <p>Total</p>
+                                        <p>Total ({{ $currencyCode }})</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</p>
                                         <p style="display:none">
                                             <span class="currency-code">{{ $currencyCode }} </span>
                                             <span class="total-cost">{{ $convertedAmount }} </span>
                                         </p>
                                     </div>
+
+                                    <div class="cart_sub_title">
+                                        <p class="cart_sub_title_color">Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
+                                        <p class="fw-bold cart_sub_title_color">
+                                            {{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount())  }}
+                                        </p>
+                                    </div>
+
+                                    {{--
                                     <div class="single">
                                         <p>Base Package Price</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
@@ -221,7 +237,6 @@
                                             </div>
                                         @endif
                                     @endif
-                                    @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
                                     @if($upgradePrice > 0 || $upgradePrice < 0)
                                         <div class="single">
                                             <p>Upgrades & Add Ons</p>
@@ -234,9 +249,11 @@
                                             <p>{{ $this->formatCurrency($booking->repository->getTaxes(), false) }}</p>
                                         </div>
                                     @endif
+                                    --}}
                                 </div>
                             </div>
                             <div class="payment-method ">
+                                {{--
                                 <div class="payable-now">
                                     <div class="single">
                                         <p>Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
@@ -249,6 +266,7 @@
                                     </p>
                                     @endif
                                 </div>
+                                --}}
                                 {{--
                                 <div class="email-quote">
                                     <h6 class="sub-heading-6" wire:click="toggleCustomerForm">EMAIL Quote</h6>
