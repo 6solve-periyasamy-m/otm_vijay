@@ -7,6 +7,7 @@ use App\Models\Tour\Tour;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Settings;
 
 class PackageDetails extends Component
 {
@@ -27,5 +28,24 @@ class PackageDetails extends Component
     public function render(): View|Closure|string
     {
         return view('components.customer.booking.simple.package-details');
+    }
+    public function getCurrency()
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getFXRate(): float
+    {
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
+    }
+
+    public function formatCurrency(int|float|null $value, bool $round = true): string
+    {
+        $value = $value ?? 0.0;
+        $value *= $this->getFXRate();
+        if ($round && flag('booking.round_to_five')) {
+            $value = round_to_five($value);
+        }
+        return f_currency_booking($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
     }
 }

@@ -3073,3 +3073,9 @@ p.hotel-info, p.hotel-more-info {    margin: 0 !important;    font-size: 12px !i
 .acm_title{letter-spacing: 2.24px;}
 .ma-block .row .left-col .contain p.booking-dates{font-size: 16px;line-height: 24px;}
 .ma-block .row .left-col .contain p.traveller_tle,.ma-block .row .left-col .contain p.date_tle{letter-spacing: 2.24px;}
+.select-currency .single:first-child>p{font-size:16px;line-height:24px;color:var(--text-dark)}
+.select-currency .single:first-child>select{font-size:16px;line-height:24px;padding:4px 12px;border:1px solid var(--primary-color);border-radius:999px;width:82px;font-family:"PP Neue Montreal Medium";font-weight:500;outline:0}
+.select-currency .single:first-child>select{appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url(/icons/Chevron-down.svg);background-repeat:no-repeat;background-position:right 12px center;background-size:16px 16px;cursor:pointer}
+.select-currency .single:first-child{margin-bottom:12px}
+.select-currency .single:nth-child(2){margin-bottom:8px}
+.select-currency .single:nth-child(2) p{color:var(--text-dark)}
