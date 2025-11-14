@@ -13,6 +13,7 @@ abstract class DatabaseTestCase extends TestCase
     {
         parent::setUp();
         $this->seed();
+        Settings::set('system.currency', 'GBP');
         Settings::forceRenewal();
     }
 
