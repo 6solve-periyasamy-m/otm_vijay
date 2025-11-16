@@ -2,6 +2,8 @@
     <thead>
     <tr>
         <th scope="col">Booking Reference</th>
+        <th scope="col">Tour</th>
+        <th scope="col">Event</th>
         <th scope="col">Customer Name</th>
         <th scope="col">Passport Name</th>
         <th scope="col">Order Internal Notes</th>
@@ -25,6 +27,8 @@
     @foreach($data as $row)
         <tr>
             <th scope="row">{{ $row->reference }}</th>
+            <td>{{ $row->tour }}</td>
+            <td>{{ $row->event }}</td>
             <td>{{ $row->customer }}</td>
             <td>{{ $row->passport }}</td>
             <td>{{ $row->orderInternal }}</td>
