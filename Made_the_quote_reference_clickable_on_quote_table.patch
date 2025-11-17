@@ -1,0 +1,21 @@
+Subject: [PATCH] Made the quote reference clickable on quote table
+---
+Index: app/Http/Livewire/Admin/Quote/Table.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/Http/Livewire/Admin/Quote/Table.php b/app/Http/Livewire/Admin/Quote/Table.php
+--- a/app/Http/Livewire/Admin/Quote/Table.php	(revision c7b60d90e41407373dd754fc5a0a7a5704451c77)
++++ b/app/Http/Livewire/Admin/Quote/Table.php	(revision 64d67bb17e94b412da216593b8b080e8574f0f05)
+@@ -33,7 +33,9 @@
+     public function columns(): array
+     {
+         return [
+-            Column::name('quotes.reference')
++            Column::callback(['quotes.id', 'quotes.reference'], function ($id, $reference) {
++                return '<a href="' . route('quotes.view', ['quote' => $id]) . '">' . $reference . '</a>';
++            })
+                 ->label('Reference')
+                 ->searchable()
+                 ->sortable(),
