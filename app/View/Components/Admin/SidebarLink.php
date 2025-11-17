@@ -6,17 +6,14 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Activity\Activity;
 use App\Models\Customer\Customer;
 use App\Models\Flight\Flight;
-use App\Models\Location\Address;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Order\Order;
 use App\Models\Quote\Quote;
-use App\Models\Supplier\Supplier;
 use App\Models\System\Report;
 use App\Models\System\Setting;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
-use App\Models\User;
 use Bouncer;
 use Closure;
 use Icon;
@@ -74,13 +71,13 @@ class SidebarLink extends Component
             new SidebarLink('Flights', route('flights.all'), Icon::flight(), 'flights', Flight::class, 'read'),
             new SidebarLink('Transport', route('transports.all'), Icon::transport(), 'transport', Transport::class, 'read'),
             new SidebarLink('Merchandise', route('merchandise.all'), Icon::merchandise(), 'merchandise', Merchandise::class, 'read'),
-            new SidebarLink('Addresses', route('addresses.all'), Icon::address(), 'addresses', Address::class, 'read'),
-            new SidebarLink('Vouchers', route('vouchers.index'), Icon::voucher(), 'vouchers'),
-            new SidebarLink('Suppliers', route('supplier.index'), Icon::supplier(), 'supplier', Supplier::class, 'read'),
-            new SidebarLink('Settings', route('settings.edit'), Icon::setting(), 'settings', Setting::class, 'update'),
+            //new SidebarLink('Addresses', route('addresses.all'), Icon::address(), 'addresses', Address::class, 'read'),
+            new SidebarLink('Administration', route('system.admin'), Icon::setting(), 'system', Setting::class, 'read'),
+            //new SidebarLink('Suppliers', route('supplier.index'), Icon::supplier(), 'supplier', Supplier::class, 'read'),
+            //new SidebarLink('Settings', route('settings.edit'), Icon::setting(), 'settings', Setting::class, 'update'),
             new SidebarLink('Attributes Manager', route('attributes.edit'), Icon::attribute(), 'attributes'),
-            new SidebarLink('Users', route('users.all'), Icon::user(), 'users', User::class, 'read'),
-            new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
+            //new SidebarLink('Users', route('users.all'), Icon::user(), 'users', User::class, 'read'),
+            //new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
             new SidebarLink('Reports', route('reports.all'), Icon::report(), 'reports', Report::class, 'read'),
         ];
     }

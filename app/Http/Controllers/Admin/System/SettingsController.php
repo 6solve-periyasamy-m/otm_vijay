@@ -138,7 +138,7 @@ class SettingsController extends Controller
         
         $this->saveCustomerFields($request);
         $this->saveOrderCustomerFields($request);
-        return redirect()->route('settings.edit');
+        return redirect()->route('system.admin');
     }
 
     // Method to get selected fields from settings
