@@ -352,4 +352,25 @@ class Quote extends Model
         }
         return $this->payment_details;
     }
+    public function getFinalPriceAttribute(): ?float
+    {
+        try {
+            $paying = $this->paying + ($this->leadTraveller?->paying ? 1 : 0);
+            $travelling = $this->travelling + ($this->leadTraveller?->travelling ? 1 : 0);
+
+            $totalTravellerCount = $paying + $travelling;
+            $costToCompany = $this->repository->getTotalCostToCompany($totalTravellerCount);
+
+            $pricePerPerson = $this->repository->getPricePerPerson($paying)?->price_per_person ?? 0;
+            $total = $pricePerPerson * $paying;
+
+            $commission = $this->commission ? ($total * ($this->commission / 100)) : 0;
+
+            $finalPrice = $total - $commission;
+
+            return sigfig($finalPrice);
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
 }
