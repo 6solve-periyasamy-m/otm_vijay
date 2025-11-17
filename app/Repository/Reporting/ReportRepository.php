@@ -482,7 +482,7 @@ class ReportRepository
     public static function getOnlineOrderReport(): array
     {
         $data = [];
-        $orders = Order::whereHas('bookings')->orderBy('ordered_on', 'desc')->limit(25)->get();
+        $orders = Order::whereHas('bookings')->orderBy('ordered_on', 'desc')->get();
         foreach ($orders as $order) {
             $nextPayment = $order->next_installment;
             $row = collect();
