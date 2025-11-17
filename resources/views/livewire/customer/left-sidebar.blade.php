@@ -10,7 +10,7 @@
                   <li>
                       <a href="{{ route('customer.portal') }}" class="{{ Route::currentRouteName() == 'customer.portal' ? 'active' : '' }}"><img src="/images/customer/images/category.svg" alt="category" />OVERVIEW</a>
                   </li>
-                  <li class="tours_menu submenu-toggle">
+                  <!-- <li class="tours_menu submenu-toggle">
                       <a href="{{ route('customer.itinerary') }}" class="{{ Route::currentRouteName() == 'customer.itinerary' ? 'active' : '' }}"><img src="/images/customer/images/airplane.svg" alt="tours" />TOURS</a>
                       <ul class="travel_sub_menu">
                         @foreach($upcomingOrders as $order)
@@ -21,7 +21,21 @@
                             </li>
                         @endforeach
                       </ul>
-                  </li>
+                  </li> -->
+                  <li class="tours_menu submenu-toggle {{ Route::currentRouteName() == 'customer.itinerary' ? 'open' : '' }}">
+                        <a href="{{ route('customer.itinerary') }}" class="{{ Route::currentRouteName() == 'customer.itinerary' ? 'active' : '' }}">
+                            <img src="/images/customer/images/airplane.svg" alt="tours" />TOURS
+                        </a>
+                        <ul class="travel_sub_menu" style="{{ Route::currentRouteName() == 'customer.itinerary' ? 'display: block;' : '' }}">
+                            @foreach($upcomingOrders as $order)
+                                <li>
+                                    <a href="{{ url('customer/itinerary/' . $order->booking_reference . '/' . $orderCustomer->customer_id) }}">
+                                        {{ $order->tour?->event?->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
                   <li>
                       <a href="{{ route('customer.finances') }}" class="{{ Route::currentRouteName() == 'customer.finances' ? 'active' : '' }}"><img src="/images/customer/images/wallet.svg" alt="finances" />FINANCES</a>
                   </li>
@@ -29,7 +43,7 @@
                       <a href="{{ route('customer.edit') }}" class="{{ Route::currentRouteName() == 'customer.edit' ? 'active' : '' }}"><img src="/images/customer/images/user.svg" alt="your details" />YOUR DETAILS</a>
                   </li>
                   <li>
-                      <a href="{{ route('customer.faq') }}" class="{{ Route::currentRouteName() == 'customer.faq' ? 'active' : '' }}"><img src="/images/customer/images/message-question.svg" alt="faqs" />FAQS</a>
+                      <a href="{{ route('customer.faq') }}" class="{{ Route::currentRouteName() == 'customer.faq' ? 'active' : '' }}"><img src="/images/customer/images/message-question.svg" alt="faqs" />FAQ's</a>
                   </li>
                   <li>
                       <a href="logout" onclick="event.preventDefault();logout();"><img src="/images/customer/images/login.svg" alt="logout" />LOGOUT</a>
@@ -78,15 +92,27 @@
         });
 
         document.querySelectorAll('.submenu-toggle').forEach(button => {
-            button.addEventListener('click', () => {
-            const submenu = button.parentElement.querySelector('.travel_sub_menu');
-            if (submenu) {
-                submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-            }
+            button.addEventListener('click', event => {
+                const menuItem = button.closest('.tours_menu');
+                const submenu = menuItem.querySelector('.travel_sub_menu');
  
-                    const menuItem = button.closest('.tours_menu');
-            menuItem.classList.toggle('open');
+                if (submenu) {
+                    const isOpen = menuItem.classList.contains('open');
  
+                    if (isOpen) {
+                        submenu.style.display = 'none';
+                        menuItem.classList.remove('open');
+                    } else {
+                        submenu.style.display = 'block';
+                        menuItem.classList.add('open');
+                    }
+                }
+            });
+        });
+ 
+        document.querySelectorAll('.travel_sub_menu').forEach(submenu => {
+            submenu.addEventListener('click', event => {
+                event.stopPropagation();
             });
         });
     </script>
