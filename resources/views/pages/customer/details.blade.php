@@ -37,10 +37,10 @@
                     <ul>
                         <li class="active"><a href="#personal_details">Personal Details</a></li>
                         <li><a href="#address_details">Address</a></li>
-                        <li><a href="#passport_details">Passport Details</a></li>
-                        <li><a href="#frequent_details">Frequent Flier Details</a></li>
+						{{--<li><a href="#passport_details">Passport Details</a></li>--}}
+                        <li><a href="#frequent_details">Frequent Flyer Details</a></li>
                         <li><a href="#other_details">Other Details</a></li>
-                        <li><a href="#change_password">Change Password</a></li>
+                        {{--<li><a href="#change_password">Change Password</a></li>--}}
                     </ul>
                 </div>
                 <div class="your_details_colm_2">
@@ -72,9 +72,9 @@
                                     <div class="two_label_field"><label>Mobile Number</label><input style="width: 100%;" type="tel" id="mobile_number" value="{{ old('mobile_number', $customer->mobile_number ?? '') }}" class=" phone-input form-control" required>
                                     <input type="hidden" name="mobile_number" id="mobile_number"  value="{{ old('mobile_number', $customer->mobile_number ?? '') }}">
                                     <span  style="color:red; display:none;">Please enter a valid phone number.</span></div>
-                                    <input type="tel" id="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" placeholder="ALTERNATE MOBILE NUMBER"  class="phone-input alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"  style="width: 100%;">
+                                    <div class="two_label_field"><label>Alternate Mobile Number</label><input type="tel" id="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" placeholder="ALTERNATE MOBILE NUMBER"  class="phone-input alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"  style="width: 100%;">
                                     <input type="hidden" name="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}">
-                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span>
+                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span></div>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
                         <div class="personal_details contact_details" id="contact_details">
                             <h3>Emergency Contact Details</h3>
                             <div class="emergency_details_form">
-                                <div class="two_input_field">
+                                <div class="two_input_field full_width_field">
 								<label>Contact Name</label>
                                     <input type="text" placeholder="Contact Name" name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}">
                                 </div>

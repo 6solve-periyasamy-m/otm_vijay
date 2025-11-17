@@ -578,7 +578,7 @@ transition: all 0.8s ease;
     letter-spacing: 2.24px;
     text-transform: uppercase;
 }
-.invoice_tbl td{padding-right: 30px;color: #fff !important;}
+.invoice_tbl td[data-content="Outstanding"]{padding-right: 30px;color: #fff !important;}
 .invoice_tbl td,.order_value_amount p{
     font-family: 'PP NeueMontreal Medium';
     font-size: 16px;
@@ -1441,3 +1441,4 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .two_label_field{display: flex; flex-flow: column; width: 50%;}
 .two_input_field.full_width_field{flex-flow: column;}
 header.topbar{width: 20%;float: left;}
+.two_input_field.mobile_number .one_input_field{width: 50%;}
