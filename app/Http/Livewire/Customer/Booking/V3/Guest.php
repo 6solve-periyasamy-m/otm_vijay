@@ -8,10 +8,10 @@ use App\Models\Customer\Customer;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Quote\Quote;
 use App\Repository\Model\Booking\BookingTravellerRepository;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Http;
 
 class Guest extends V3BookingComponent
 {
@@ -65,7 +65,6 @@ class Guest extends V3BookingComponent
         }
 
         $data = $response->json();
-        \Log::info('reCAPTCHA v3 score: ', $data);
         return ($data['success'] ?? false) && ($data['score'] ?? 0) >= 0.5;
     }
 
