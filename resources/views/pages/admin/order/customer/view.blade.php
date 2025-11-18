@@ -678,8 +678,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ fr_currency($orderFlight->tourComponent->inventory->purchase_price, $orderFlight->tourComponent->inventory->repository->getCurrency()) }}
-                                        ({{ fr_currency($orderFlight->purchase_price) }} @includeWhen($orderFlight->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
+                                        {{ fr_currency($orderTransport->tourComponent->inventory->purchase_price, $orderTransport->tourComponent->inventory->repository->getCurrency()) }}
+                                        ({{ fr_currency($orderTransport->purchase_price) }} @includeWhen($orderTransport->estimated_purchase_price === null, 'partials.admin.order.component.epp-calculated', []))
                                     </td>
                                     <td>{{ f_date($orderTransport->updated_at) }}</td>
                                     <td style="width: 20%">
