@@ -14,13 +14,17 @@ class TransportInventoryController extends Controller
 
     public function create(Transport $transport)
     {
-        $this->authorize('self-child-access', [$transport, TransportInventory::class]);
+        if (!request()?->user()->can('create', TransportInventory::class)) {
+            $this->authorize('self-child-access', [$transport, TransportInventory::class]);
+        }
         return view('pages.admin.transport.inventory.form', ['transport' => $transport,]);
     }
 
     public function store(Request $request, Transport $transport)
     {
-        $this->authorize('self-child-access', [$transport, TransportInventory::class]);
+        if (!request()?->user()->can('create', TransportInventory::class)) {
+            $this->authorize('self-child-access', [$transport, TransportInventory::class]);
+        }
         $request->validate(TransportInventory::getValidationRules());
         $inventory = TransportInventory::make([
             'travel_class_id' => $request->input('travel_class_id'),

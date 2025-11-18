@@ -27,7 +27,7 @@
         </x-customer.input>
 
         <x-customer.input name="additional[{{ $number }}][mobile_number]" value="{{ $traveller?->mobile_number ?? '' }}" width="3" autocomplete="tel">
-            Mobile Number
+            Primary Phone
         </x-customer.input>
         @if($shouldRooming)
         <div class="form-group col-md-6">

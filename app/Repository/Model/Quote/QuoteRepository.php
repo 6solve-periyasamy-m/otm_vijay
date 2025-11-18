@@ -701,6 +701,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'tour_component_type' => $component->getTourComponentType(),
                 'tour_sales_price' => $component->get()->tour_sales_price,
                 'price_shown' => $component->priceShown(),
+                'document_order' => $component->get()?->document_order,
             ];
             switch ($component->getComponentType()) {
                 case 'accommodation':
@@ -760,6 +761,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 'tour_sales_price' => $datum['tour_sales_price'],
                 'flight_type' => $datum['flight_type'],
                 'price_shown' => $datum['price_shown'] ?? false,
+                'document_order' => $datum['document_order'],
             ]);
         }
         $transport = [];
@@ -1188,7 +1190,8 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $items[$heading][] = $item;
         }
 
-        foreach ($this->quote->flights as $component) {
+        $flightsComponents = collect($this->quote->flights)->sortBy('document_order');
+        foreach ($flightsComponents as $component) {
             $key = "flight-{$component->flight_inventory_id}";
             if (in_array($key, $seen, true)) { continue; }
             $seen[] = $key;
@@ -1224,8 +1227,10 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $items[$heading][] = $item;
         }
         foreach ($items as $key => $data) {
-            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->sortKey >= $b->sortKey ? 1 : -1; });
-            $items[$key] = $data;
+            if ($key !== "Flights" && is_array($data)) {
+                usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->compare($b); });
+                $items[$key] = $data;
+            }
         }
         if (isset($this->quote->sections) && !empty($this->quote->sections)){
             $heading = "Sections";
@@ -1249,6 +1254,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             $section->title,
             'Section',
             $section->sort_date?->unix() ?? $section->order,
+            $section->order ?? null,
             $details,
         );
     }

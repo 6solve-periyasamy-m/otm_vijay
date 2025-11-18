@@ -10,6 +10,7 @@ use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
+use App\Models\Customer\Organization;
 
 class Table extends LivewireDatatable
 {
@@ -21,7 +22,8 @@ class Table extends LivewireDatatable
     {
         return Customer::query()
                 ->leftJoin('addresses', 'customers.home_address_id', '=', 'addresses.id')
-                ->leftJoin('countries', 'addresses.country_id', '=', 'countries.id');
+                ->leftJoin('countries', 'addresses.country_id', '=', 'countries.id')
+                ->leftJoin('organizations', 'organizations.id', '=', 'customers.organization_id');
     }
 
     public function columns()
@@ -37,28 +39,24 @@ class Table extends LivewireDatatable
                 ->label('Email')
                 ->sortable()
                 ->searchable(),
-            BooleanColumn::raw('IF(ISNULL(customers.email_address), false, IF(ISNULL(customers.password), false, true)) AS registered')
-                ->label('Registered')
+            Column::name('customers.mobile_number')
+                ->label('Phone Number')
                 ->sortable()
-                ->searchable()
-                ->filterable(),
+                ->searchable(),
             DateColumn::name('customers.date_of_birth')
                 ->label('Date Of Birth')
                 ->sortable()
                 ->searchable(),
-            AddressColumn::table('addresses', 'countries')
-                ->label('Home Address')
-                ->sortable()
-                ->searchable(),
-            Column::name('customers.mobile_number')
-                ->label('Mobile Number')
-                ->sortable()
-                ->searchable(),
-            DateColumn::name('customers.passport_expiry_date')
-                ->label('Passport Expiry Date')
+            BooleanColumn::raw('IF(ISNULL(customers.email_address), false, IF(ISNULL(customers.password), false, true)) AS registered')
+                ->label('Status')
                 ->sortable()
                 ->searchable()
                 ->filterable(),
+            Column::name('organizations.name')
+                ->label('Organization')
+                ->sortable()
+                ->searchable()
+                ->filterable(Organization::pluck('name')->toArray()),
             ActionColumn::view('customer', 'customers.edit', 'customers.view'),
         ];
     }

@@ -152,7 +152,19 @@
         display: flex;
         justify-content: space-between;
     }
-        
+    
+    .cart_sub_title {
+        font-family: "PP Neue Montreal Medium";
+        font-weight: 400;
+        font-size:13px;
+        line-height:24px;
+        color: #5a5555ff;
+        display: flex;
+        justify-content: space-between;
+        padding-top: 5px;
+    }
+    .cart_sub_title_color {color: #000;}
+    .font-weight-bold {font-weight: 700;}
 </style>
 <div class="top-sec">
     <div class="head-txt"><h4>Package details</h4></div>
@@ -169,7 +181,7 @@
         <div class="name_price_div">
             <h4>{{$tour->name}}</h4>
             <div class="base-price-div">
-                {{ f_currency($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
+                {{ f_currency_booking($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
             </div>
         </div>
         <!-- <h6>{{ $tour->name }}</h6> -->
@@ -190,56 +202,81 @@
             <p></p>          
         </div>
         <div class="single">
-            <p>Package price</p>
-            <p>{{ f_currency($booking->repository->getBasePrice()) }}</p>
+            <p class="font-weight-bold">Package price</p>
+            <p class="font-weight-bold">{{ f_currency_booking($booking->repository->getBasePrice()) }}</p>
         </div>
-        @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+        <div class="cart_sub_title">
+            <p>Price per Person</p>
+            <p>{{ f_currency_booking($tour->base_price_per_person) }}</p>
+        </div>
+        {{-- @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         @if($singleOccupancy > 0 || $singleOccupancy < 0)
         <div class="single">
             <p>Single Occupancy</p>
-            <p>{{ f_currency($singleOccupancy) }}</p>
+            <p>{{ f_currency_booking($singleOccupancy) }}</p>
         </div>
-        @endif
+        @endif --}}
     </div>
-
+    @php
+        $rawAmount = $booking->repository->getTotalCost();
+        $currencyCode = Settings::currency()?->code;
+        $dueToday = $booking->repository->getDueTodayAmount();
+        $balance = $rawAmount - $dueToday;
+        $hasBalance = $balance > 0;
+    @endphp
     <div class="total">
         <div class="single">
-            <p>Total</p>
-            <p>{{ f_currency($booking->repository->getTotalCost()) }}</p>
+            <p>Total ({{ $currencyCode }})</p>
+            <p>{{ f_currency_booking($booking->repository->getTotalCost()) }}</p>
+            <p style="display:none">
+                <span class="currency-code">{{ $currencyCode }} </span>
+                <span class="total-cost">{{ $rawAmount }} </span>
+            </p>
         </div>
-        <div class="single">
+
+        <div class="cart_sub_title">
+            <p class="cart_sub_title_color">
+                Payable now
+                @if($hasBalance && $booking->tour?->deposit_percentage)
+                    ({{ $booking->tour->deposit_percentage }}%)
+                @endif
+            </p>
+            <p class="fw-bold cart_sub_title_color">{{ f_currency_booking($booking->repository->getDueTodayAmount()) }}</p>
+        </div>
+        
+        {{-- <div class="single">
             <p>Base Package Price</p>
-            <p>{{ f_currency($booking->repository->getBasePrice()) }}</p>
+            <p>{{ f_currency_booking($booking->repository->getBasePrice()) }}</p>
         </div>
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         @if($singleOccupancy > 0 || $singleOccupancy < 0)
         <div class="single">
             <p>Single Occupancy - {{ $booking->repository->getSingleOccupancyCount() }}</p>
-            <p>{{ f_currency($singleOccupancy) }}</p>
+            <p>{{ f_currency_booking($singleOccupancy) }}</p>
         </div>
         @endif
         @if($booking->repository->getTaxes() !== null)
             <div class="single">
                 <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                <p>{{ f_currency($booking->repository->getTaxes()) }}</p>
+                <p>{{ f_currency_booking($booking->repository->getTaxes()) }}</p>
             </div>
         @endif
         @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
         @if($upgradePrice > 0 || $upgradePrice < 0)
             <div class="single">
                 <p>Upgrades Price</p>
-                <p>{{ f_currency($upgradePrice) }}</p>
+                <p>{{ f_currency_booking($upgradePrice) }}</p>
             </div>
-        @endif
+        @endif --}}
     </div>
 </div> 
 
 <div class="third-col">
-    <div class="payable_dflex">
+    {{-- <div class="payable_dflex">
     <div class="payable_txt">Payable now </div>
-    <div class="payable_num">{{ f_currency($booking->repository->getDueTodayAmount()) }}</div>
+    <div class="payable_num">{{ f_currency_booking($booking->repository->getDueTodayAmount()) }}</div>
     </div>
-      <div class="payable_fulltext sub-text-color">Balance {{ f_currency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by {{ $tour->final_payment->format('d M Y') }}</div>
+    <div class="payable_fulltext sub-text-color">Balance {{ f_currency_booking($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by {{ $tour->final_payment->format('d M Y') }}</div> --}}
     {{ $slot }}
     @error('common')
     <div class="submit-btn-cls add-on">

@@ -4,6 +4,7 @@ namespace App\Models\Customer;
 
 use App\Models\Helper\NotificationSubject;
 use App\Models\Helper\Traits\HasNotifications;
+use App\Models\Helper\Traits\MountsLivewire;
 use App\Models\Location\Address;
 use App\Models\Order\Order;
 use App\Models\Order\OrderCustomer;
@@ -11,6 +12,7 @@ use App\Models\Quote\QuoteProspect;
 use App\Models\System\ApiToken;
 use App\Models\System\CustomerApiToken;
 use App\Models\Traits\HasRepository;
+use App\Models\User;
 use App\Notifications\CustomerResetPassword;
 use App\Repository\Authentication\CustomerAuthenticationRepository;
 use App\Repository\Model\Customer\CustomerRepository;
@@ -34,8 +36,6 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
-use Laravel\Cashier\Billable;
-use Laravel\Cashier\Subscription;
 
 
 /**
@@ -55,6 +55,7 @@ use Laravel\Cashier\Subscription;
  * @property Carbon|null $date_of_birth
  * @property string|null $mobile_number
  * @property string|null $other_phone_number
+ * @property string|null $nationality
  * @property int $home_address_id
  * @property int $billing_address_id
  * @property string|null $emergency_contact_name
@@ -72,6 +73,7 @@ use Laravel\Cashier\Subscription;
  * @property int|null $t_shirt_size_id
  * @property int|null $hat_size_id
  * @property int|null $organization_id
+ * @property int|null $consultant_id
  * @property string|null $internal_notes
  * @property string|null $external_notes
  * @property string|null $dietary_notes
@@ -92,11 +94,14 @@ use Laravel\Cashier\Subscription;
  * @property-read Collection|Order[] $leadingOrders Orders where they are the lead booker
  * @property-read Organization|null $organization
  * @property-read CustomerRepository $repository
+ * @property-read string $loyalty_numbers_for_report A list of loyalty numbers, ordered for the report
  * @property-read int|null $leading_orders_count Amount of orders where they are the lead booker
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications System notifications for customer
  * @property-read int|null $notifications_count Amount of system notifications for customer
  * @property-read Collection|OrderCustomer[] $orderCustomers OrderCustomers for this customer
  * @property-read Collection|QuoteProspect[] $quoteProspects
+ * @property-read Collection|LoyaltyNumber[] $loyaltyNumbers
+ * @property-read Collection|CustomerMerchandise[] $customerMerchandises
  * @property-read int|null $order_customers_count Amount of OrderCustomers for this customer
  * @property-read Collection|Order[] $orders Orders for this customer
  * @property-read int|null $orders_count Amount of orders for this customer
@@ -132,6 +137,7 @@ use Laravel\Cashier\Subscription;
  * @method static Builder|Customer whereLastName($value)
  * @method static Builder|Customer whereLoginToken($value)
  * @method static Builder|Customer whereLoyaltyNumber($value)
+ * @method static Builder|Customer whereCustomerMerchandise($value)
  * @method static Builder|Customer whereMiddleNames($value)
  * @method static Builder|Customer whereMobileNumber($value)
  * @method static Builder|Customer whereMobilityNotes($value)
@@ -162,23 +168,20 @@ class Customer extends Authenticatable implements NotificationSubject
     use SoftDeletes;
     use HasFactory;
     use Notifiable;
-    use Billable;
     use CascadeSoftDeletes;
     use HasRepository;
     use HasNotifications;
+    use MountsLivewire;
 
     protected string $guard = 'customer';
 
-    protected $fillable = ['title', 'first_name', 'middle_names', 'last_name', 'date_of_birth', 'mobile_number', 'other_phone_number',
-        'email_address', 'password', 'gender', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_telephone',
-        'passport_first_name', 'passport_middle_name', 'passport_last_name', 'passport_number', 'passport_issue_date', 'passport_expiry_date',
-        'passport_country_of_issue', 't_shirt_size_id', 'hat_size_id', 'notes', 'loyalty_number', 'login_token', 'home_address_id',
-        'billing_address_id', 'internal_notes', 'external_notes', 'dietary_notes', 'mobility_notes', 'organization_id'];
+    protected $guarded = [];
 
     protected $casts = ['date_of_birth' => 'date:Y-m-d', 'passport_issue_date' => 'date:Y-m-d', 'passport_expiry_date' => 'date:Y-m-d',];
 
     protected $hidden = ['password', 'pm_type', 'pm_last_four', 'trial_ends_at'];
     protected array $cascadeDeletes = ['quoteProspects',];
+    protected $with = ['loyaltyNumbers', 'customerMerchandises'];
 
     public static function getValidationRules(): array
     {
@@ -187,6 +190,7 @@ class Customer extends Authenticatable implements NotificationSubject
             'last_name' => 'required',
             'date_of_birth' => 'nullable|date',
             'email_address' => 'nullable|email|unique:customers,email_address',
+            'consultant_id' => 'nullable|exists:users,id',
         ];
     }
 
@@ -206,6 +210,7 @@ class Customer extends Authenticatable implements NotificationSubject
                 'email',
                 Rule::unique('customers', 'email_address')->ignore($this->id),
             ],
+            'consultant_id' => 'nullable|exists:users,id',
         ];
     }
 
@@ -219,6 +224,16 @@ class Customer extends Authenticatable implements NotificationSubject
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function loyaltyNumbers(): HasMany
+    {
+        return $this->hasMany(LoyaltyNumber::class, 'customer_id');
+    }
+
+    public function customerMerchandises(): HasMany
+    {
+        return $this->hasMany(CustomerMerchandise::class, 'customer_id');
+    }
+ 
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
@@ -247,6 +262,11 @@ class Customer extends Authenticatable implements NotificationSubject
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'consultant_id');
     }
 
     public function orderCustomers(): HasMany
@@ -323,5 +343,14 @@ class Customer extends Authenticatable implements NotificationSubject
     {
         $route = route('customers.view', ['customer' => $this,]);
         return "<a href='$route'>{$this->full_name}</a>";
+    }
+
+    public function getLoyaltyNumbersForReportAttribute(): string
+    {
+        $str = "";
+        foreach ($this->loyaltyNumbers as $loyaltyNumber) {
+            $str .= "{$loyaltyNumber->type->name} - {$loyaltyNumber->notes} - {$loyaltyNumber->loyalty_number}\n";
+        }
+        return $str;
     }
 }

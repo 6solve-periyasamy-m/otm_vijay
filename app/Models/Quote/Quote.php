@@ -48,6 +48,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $brand_id
  * @property int|null $agent_id
  * @property int $revision
+ * @property bool $archived
  * @property string|null $reference
  * @property string $name
  * @property string|null $description
@@ -153,6 +154,7 @@ class Quote extends Model
         'quote_status' => QuoteStatus::class,
         'from_rate' => 'float',
         'to_rate' => 'float',
+        'archived' => 'bool',
     ];
     private QuoteRepository $internal_repository;
     protected array $cascadeDeletes = ['sentQuotes', 'leadTraveller', 'pricePoints', 'installments', 'accommodation', 'activities', 'flights', 'transport', 'merchandise', 'costs'];
@@ -349,5 +351,26 @@ class Quote extends Model
             return setting('company.bank_transfer', "");
         }
         return $this->payment_details;
+    }
+    public function getFinalPriceAttribute(): ?float
+    {
+        try {
+            $paying = $this->paying + ($this->leadTraveller?->paying ? 1 : 0);
+            $travelling = $this->travelling + ($this->leadTraveller?->travelling ? 1 : 0);
+
+            $totalTravellerCount = $paying + $travelling;
+            $costToCompany = $this->repository->getTotalCostToCompany($totalTravellerCount);
+
+            $pricePerPerson = $this->repository->getPricePerPerson($paying)?->price_per_person ?? 0;
+            $total = $pricePerPerson * $paying;
+
+            $commission = $this->commission ? ($total * ($this->commission / 100)) : 0;
+
+            $finalPrice = $total - $commission;
+
+            return sigfig($finalPrice);
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }

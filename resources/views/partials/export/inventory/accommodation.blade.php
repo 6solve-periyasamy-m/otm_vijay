@@ -31,7 +31,7 @@
             <td>{{ $inventory->roomType->name }}</td>
             <td>{{ $inventory->roomType->maximum_occupancy }}</td>
             <td>{{ $inventory->boardType->name }}</td>
-            <td>{{ $inventory->category->name }}</td>
+            <td>{{ $inventory->category?->name }}</td>
             <td>{{ $inventory->stock }}</td>
             <td>{{ $inventory->purchase_price }}</td>
             <td>{{ $inventory->sales_price }}</td>

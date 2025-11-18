@@ -54,7 +54,7 @@
                 </x-customer.input>
 
                 <x-customer.input name="lead_mobile_number" value="{{ $customer?->mobile_number ?? '' }}" width="3" autocomplete="tel" required>
-                    Mobile Number
+                    Primary Phone
                 </x-customer.input>
                 @if($shouldRooming)
                 <div class="form-group col-md-12">

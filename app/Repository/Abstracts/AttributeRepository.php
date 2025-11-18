@@ -69,6 +69,8 @@ abstract class AttributeRepository extends ModelRepository
         return redirect()->route('attributes.edit');
     }
 
+    public static function getCreateModal(): string|null { return null; }
+
     public static abstract function getCreateUrl(): string|null;
     public static abstract function getAll(bool $trashed = false): array|Collection;
     public static abstract function getName(): string;

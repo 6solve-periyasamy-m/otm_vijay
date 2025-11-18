@@ -38,14 +38,14 @@ class AccommodationOverrideImport implements ToCollection, WithHeadingRow, WithV
             if (strtolower($inventory->roomType?->name) === strtolower(trim($row['room_type']))) {
                 $room = $inventory->roomType?->id;
             } else {
-                $room = RoomType::findOrCreate(trim($row['room_type']), trim($row['room_type']))?->id;
+                $room = RoomType::findOrCreate(trim($row['room_type']), (int)(trim($row['room_type'])))?->id;
             }
             if (strtolower($inventory->boardType?->name) === strtolower(trim($row['board_type']))) {
                 $board = $inventory->boardType?->id;
             } else {
                 $board = BoardType::findOrCreate(trim($row['board_type']))?->id;
             }
-            if (strtolower($inventory->boardType?->name) === strtolower(trim($row['category']))) {
+            if (strtolower($inventory->category?->name) === strtolower(trim($row['category']))) {
                 $category = $inventory->category?->id;
             } else {
                 $category = RoomCategory::findOrCreate(trim($row['category']))?->id;

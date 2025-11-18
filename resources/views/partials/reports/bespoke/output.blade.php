@@ -11,7 +11,7 @@
         @foreach($data as $dataset)
             <tr>
                 @foreach($dataset as $field)
-                    <td>{{ $field ?? 'Not Set' }}</td>
+                    <td style="white-space: pre-wrap">{{ $field ?? 'Not Set' }}</td>
                 @endforeach
             </tr>
         @endforeach

@@ -2,16 +2,11 @@
 
 namespace App\Models\Helper;
 
+use App\Models\Helper\Traits\MountsLivewire;
+
 class Model extends \Illuminate\Database\Eloquent\Model
 {
-    public static function getForMount(Model|int|null $model): static
-    {
-        if (is_int($model)) {
-            $model = static::find($model);
-        }
-        if ($model === null) {
-            $model = new static();
-        }
-        return $model;
-    }
+    use MountsLivewire;
+
+    protected $guarded = [];
 }
