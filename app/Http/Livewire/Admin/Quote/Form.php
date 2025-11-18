@@ -57,7 +57,7 @@ class Form extends Component
         }
     }
 
-    public function updatedQuoteDateFrom($value)
+    public function changedQuoteDateFrom($value): void
     {
         if ($value) {
             $dateFrom = Carbon::parse($value);
@@ -68,7 +68,7 @@ class Form extends Component
         }
     }
 
-    public function updatedQuoteOrganizationId($organization_id)
+    public function changedQuoteOrganizationId($organization_id): void
     {
         if ($organization_id) {
             $organization = Organization::find($organization_id);
@@ -80,6 +80,15 @@ class Form extends Component
             $this->quote->agent_id = null;
         }
         $this->validateOnly('quote.agent_id');
+    }
+
+    public function updated($field, $value): void
+    {
+        match ($field) {
+            'quote.date_from' => $this->changedQuoteDateFrom($value),
+            'quote.organization_id' => $this->changedQuoteOrganizationId($value),
+            default => null,
+        };
     }
 
     public function save()
