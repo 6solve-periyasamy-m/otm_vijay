@@ -1084,7 +1084,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $items[$header][] = $item;
         }
 
-        if ($items['Transfers']) {
+        if (!empty($items['Transfers'] ?? null)) {
             foreach ($items as $header => $data) {
                 $first = reset($data);
                 if (is_array($first) && array_key_exists('item', $first) && array_key_exists('sort_ts', $first)) {
