@@ -41,6 +41,8 @@ class Table extends LivewireDatatable
                 ->hide(),
             DateColumn::name('orders.ordered_on')
                 ->label('Order Date')
+                ->sortBy('orders.ordered_on')
+                ->defaultSort('desc')
                 ->sortable()
                 ->searchable()
                 ->filterable()
