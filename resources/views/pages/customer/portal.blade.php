@@ -238,7 +238,7 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
                                 <div class="tour_event_img"><img src="{{asset($evenImg)}}" alt="{{ $vpast->tour?->event?->name }}"/></div>
                                 <div class="event_title_date">
                                     <h4>{{ $vpast->tour?->event?->name}}</h4>
-                                    <p class="pst_tour_details">{{ $vpast->tour->name }}</p>
+										{{-- <p class="pst_tour_details">{{ $vpast->tour->name }}</p> --}}
                                     <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                     {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}
                                     </p>

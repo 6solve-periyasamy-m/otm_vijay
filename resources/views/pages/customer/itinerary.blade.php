@@ -235,26 +235,17 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                                 {{ ($order->leadBooker->customer->first_name ?? '') . ' ' . ($order->leadBooker->customer->last_name ?? '') }}
                             </span></p>
                             @php  $is_download_itinerary = $order->tour?->event?->is_download_itinerary;  @endphp
-                <div class="common_btn d-inline">
-                    @if($is_download_itinerary)
-                    <p><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
-                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/>DOWNLOAD ITINERARY</a></p>
-                    @endif
-                    <p><a href="{{ route('customer.preview.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="reservation_doc_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="reservation_org_icn" />
-                    <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="reservation_wht_icn"/>RESERVATION DOCUMENT</a></p>
-                </div>
                         </div> 
                 </div>
-                
-            </div>
-            <!-- <div class="common_btn d-inline">
+				<div class="common_btn d-inline">
                     @if($is_download_itinerary)
                     <p><a href="{{ route('customer.itinerary.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="download_itinerary_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="download_itinerary_org_icn"/>
                     <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="download_itinerary_wht_icn"/>DOWNLOAD ITINERARY</a></p>
                     @endif
                     <p><a href="{{ route('customer.preview.download', ['reference' => $order->booking_reference, 'customer' => $orderCustomer->customer_id ?? '']) }}" target="_blank" class="reservation_doc_link"><img src="{{ asset('images/customer/images/download_icon.svg') }}" class="reservation_org_icn" />
                     <img src="{{ asset('images/customer/images/download_icon_white.svg') }}" class="reservation_wht_icn"/>RESERVATION DOCUMENT</a></p>
-                </div> -->
+                </div>
+            </div>
         </div>
         <div class="customer_details">
             <h2>Customer Details</h2>

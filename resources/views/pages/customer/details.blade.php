@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
 <style>
     .iti__selected-flag { z-index: 1; position: relative; display: flex; align-items: center; height: 100%; padding: 4px 0px 14px 7px !important }
-    .two_input_field.mobile_number .iti{width: 50%;}
+    .two_input_field.mobile_number .iti{width: 100%;}
     .two_input_field.mobile_number .iti--separate-dial-code .iti__selected-flag{background: transparent;padding-left: 24px !important;padding-bottom: 7px !important;}
     .two_input_field.mobile_number .iti__arrow { width: 1px; height: 17px; display: inline-block; background: #F35B15; border: unset !important; margin-left: 7px; }
     .two_input_field.mobile_number .iti__selected-dial-code { font-family: "PP Neue Montreal" !important; font-size: 14px !important; line-height: 24px !important; color: #721111 !important; }
@@ -62,7 +62,8 @@
                                 <div class="one_input_field"><label>Title</label><input type="text" name="title" value="{{ $customer->title ?? '' }}" autocomplete="honorific-prefix" required ></div>
                                 <div class="two_input_field">
                                     <div class="two_label_field"><label>First Name</label><input type="text" name="first_name" value="{{ $customer->first_name ?? '' }}"  autocomplete="given-name" placeholder="First Name *" required></div>
-                                   <div class="two_label_field"><label>Last Name</label> <input type="text" name="last_name" value="{{ $customer->last_name ?? '' }}"  autocomplete="family-name"  placeholder="Last Name *" required></div>
+									<div class="two_label_field"><label>Middle Name</label><input type="text" name="middle_names" value="{{ $customer->middle_names ?? '' }}"  autocomplete="middle-name" placeholder="Middle Name"></div>
+                                    <div class="two_label_field"><label>Last Name</label><input type="text" name="last_name" value="{{ $customer->last_name ?? '' }}"  autocomplete="family-name"  placeholder="Last Name *" required></div>
                                 </div>
                                 <div class="two_input_field">
                                     <div class="two_label_field"><label>Date of Birth</label><input placeholder="DATE OF BIRTH*" type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday" required ></div>
