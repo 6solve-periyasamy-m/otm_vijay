@@ -11,6 +11,7 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 use App\Models\Customer\Organization;
 use App\Http\Livewire\Abstract\ActionColumn;
+use Mediconesystems\LivewireDatatables\DateColumn;
 use App\Models\User;
 use App\Models\Tour\Event;
 
@@ -38,12 +39,13 @@ class Table extends LivewireDatatable
                 ->label('Travellers')
                 ->searchable()
                 ->hide(),
-            Column::raw('DATE_FORMAT(orders.ordered_on, "%d/%m/%Y")')
+            DateColumn::name('orders.ordered_on')
                 ->label('Order Date')
                 ->sortBy('orders.ordered_on')
                 ->defaultSort('desc')
                 ->searchable()
-                ->filterable(),
+                ->filterable()
+                ->format('d/m/Y'),
             Column::callback(['orders.id', 'orders.booking_reference'], function ($id, $reference) {
                 return '<a href="' . route('orders.view', ['order' => $id]) . '">' . $reference . "</a>";
             })
