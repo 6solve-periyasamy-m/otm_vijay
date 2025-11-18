@@ -13,7 +13,7 @@
                 <x-livewire.input.select.user name="quote.consultant_id" value="{{$quote->consultant_id ?? get_current_admin()?->id}}" label="Consultant" width="3" />
                 <!-- -->
                 <x-livewire.input.select.event.normal name="quote.event_id" value="{{$quote->event_id}}" label="Event" width="3" />
-                <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="3" wire:change="changedQuoteOrganizationId($event.target.value)"/>
+                <x-livewire.input.select.organization name="quote.organization_id" value="{{$quote->organization_id}}" label="Organization" width="3" />
                 <x-livewire.input wire:model="quote.commission" label="Commission (%)" width="2" />
                 <x-livewire.input.checkbox wire:model="agentRequired" label="Require Agent?" width="1" />
                 <x-livewire.input.select.agent name="quote.agent_id" value="{{$quote->agent_id}}" label="Agent" width="3" />
@@ -36,7 +36,7 @@
         </x-admin.section.card>
         <x-admin.section.card>
             <div class="row">
-                <x-livewire.input type="date" wire:model="quote.date_from" wire:change="changedQuoteDateFrom($event.target.value)" label="Date From" width="3" required id="date_from"  min="{{ now()->format('Y-m-d') }}" />
+                <x-livewire.input type="date" wire:model="quote.date_from" label="Date From" width="3" required id="date_from"  min="{{ now()->format('Y-m-d') }}" />
                 <x-livewire.input type="date" wire:model="quote.date_to" label="Date To" width="3" required id="date_to" :min="$minToDate"  />
                 <x-livewire.input type="date" wire:model="quote.final_payment" label="Final Payment" width="3" required id="final_payment"  :max="$maxFinalDate"  />
                 <x-livewire.input type="date" wire:model="quote.expires" label="Quote Expiry Date" width="3" required min="{{ now()->format('Y-m-d') }}" />
