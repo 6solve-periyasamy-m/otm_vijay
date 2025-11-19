@@ -484,6 +484,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 } else {
                     $status = OrderStatus::CANCELLED_REFUND_REQUIRED;
                 }
+            } else if ($this->order->calculated_deposit > $paidAmount) {
+                $status = OrderStatus::DEPOSIT_UNPAID;
             } else if ($total > $paidAmount) {
                 $next = $this->order->next_installment;
                 if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
