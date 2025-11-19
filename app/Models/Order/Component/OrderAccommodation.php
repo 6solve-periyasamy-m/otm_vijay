@@ -123,7 +123,7 @@ class OrderAccommodation extends Model
     {
         // TODO: Fix when cross-order room sharing implemented
         // Assume the order is cancelled if there are no travellers in the group
-        return $this->group->orderCustomers()->first()?->order->cancelled ?? true;
+        return $this->group->orderCustomers()->first()?->order?->cancelled ?? true;
     }
 
     public function getDetailsAttribute(): string
