@@ -107,7 +107,8 @@ class OrderTransport extends Model
 
     public function getCancelledAttribute(): bool
     {
-        return $this->orderCustomer->order->cancelled;
+        // If the order customer or order don't exist, assume cancelled
+        return $this->orderCustomer?->order?->cancelled ?? true;
     }
 
     public function getDetailsAttribute(): string
