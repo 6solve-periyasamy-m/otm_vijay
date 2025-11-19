@@ -516,6 +516,20 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         return $installment->remaining > 0 ? $installment : null;
     }
 
+    public function getDepositInstallmentForReminder(): ?OrderInstallment
+    {
+        if ($this->order->calculated_deposit > $this->order->paid) {
+            return new OrderInstallment([
+                'id' => -1,
+                'order_id' => $this->order->id,
+                'amount' => $this->order->calculated_deposit,
+                'remaining' => min($this->order->calculated_deposit - $this->order->paid, 0),
+                'due_on' => $this->order->ordered_on,
+            ]);
+        }
+        return null;
+    }
+
     public function resetInstallments(): void
     {
         $this->order->installments()->delete();

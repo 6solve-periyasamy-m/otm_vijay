@@ -42,6 +42,8 @@ class OrderMail extends TemplatedMail
             'ORDER_COST' => fr_currency($order?->cost ?? $fakerNumber, $order?->currency),
             'TOTAL_OWED' => fr_currency($order?->total ?? $fakerNumber, $order?->currency),
             'DEPOSIT' => fr_currency($order?->calculated_deposit ?? $fakerNumber, $order?->currency),
+            'DEPOSIT_PAID' => fr_currency(min($order?->paid, $order?->calculated_deposit) ?? $fakerNumber, $order?->currency),
+            'DEPOSIT_REMAINING' => fr_currency(max($order?->paid - $order?->calculated_deposit, 0) ?? $fakerNumber, $order?->currency),
             'TOTAL_PAID' => fr_currency($order?->paid ?? $fakerNumber, $order?->currency),
             'TOTAL_REMAINING' => fr_currency($order?->remaining ?? $fakerNumber, $order?->currency),
             'DUE_PAYMENT_TOTAL' => fr_currency(isset($order) ? $nextPayment?->calculated_amount : $fakerNumber, $order?->currency),

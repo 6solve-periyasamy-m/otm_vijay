@@ -6,7 +6,6 @@ use App\Mail\Storage\OrderCustomerMail;
 use App\Mail\Storage\OrderMail;
 use App\Mail\Storage\PaymentMail;
 use App\Mail\Storage\QuoteMail;
-use App\Mail\Storage\SettingsMail;
 use App\Mail\Storage\TemplatedMail;
 
 class MailRepository
@@ -26,6 +25,8 @@ class MailRepository
             'booking-confirmation' => new OrderMail('booking-confirmation'),
             'payment-due' => new OrderMail('payment-due'),
             'payment-overdue' => new OrderMail('payment-overdue'),
+            'deposit-due' => new OrderMail('deposit-due'),
+            'deposit-overdue' => new OrderMail('deposit-overdue'),
             'final-payment-due' => new OrderMail('final-payment-due'),
             'final-payment-overdue' => new OrderMail('final-payment-overdue'),
             'payment-made' => new PaymentMail('payment-made'),
