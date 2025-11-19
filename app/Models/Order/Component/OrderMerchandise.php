@@ -76,6 +76,7 @@ class OrderMerchandise extends Model
 
     public function getCancelledAttribute(): bool
     {
+        // If the order customer or order don't exist, assume cancelled
         return $this->orderCustomer?->order?->cancelled ?? true;
     }
 
