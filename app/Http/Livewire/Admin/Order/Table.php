@@ -11,7 +11,9 @@ use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 use App\Models\Customer\Organization;
 use App\Http\Livewire\Abstract\ActionColumn;
+use Mediconesystems\LivewireDatatables\DateColumn;
 use App\Models\User;
+use App\Models\Tour\Event;
 
 class Table extends LivewireDatatable
 {
@@ -37,11 +39,14 @@ class Table extends LivewireDatatable
                 ->label('Travellers')
                 ->searchable()
                 ->hide(),
-            Column::raw('DATE_FORMAT(orders.ordered_on, "%d/%m/%Y")')
+            DateColumn::name('orders.ordered_on')
                 ->label('Order Date')
+                ->sortBy('orders.ordered_on')
+                ->defaultSort('desc')
                 ->sortable()
                 ->searchable()
-                ->filterable(),
+                ->filterable()
+                ->format('d/m/Y'),
             Column::callback(['orders.id', 'orders.booking_reference'], function ($id, $reference) {
                 return '<a href="' . route('orders.view', ['order' => $id]) . '">' . $reference . "</a>";
             })
@@ -52,7 +57,7 @@ class Table extends LivewireDatatable
                 ->label('Event')
                 ->sortable()
                 ->searchable()
-                ->filterable(\App\Models\Tour\Event::orderBy('name')->pluck('name')->toArray()), 
+                ->filterable(Event::pluck('name')),
             Column::raw('CONCAT(COALESCE(lead_customer.first_name, ""), " ", COALESCE(lead_customer.last_name, ""))')
                 ->label("Lead Traveller Name")
                 ->sortable()
@@ -65,7 +70,7 @@ class Table extends LivewireDatatable
                 ->label('Organization')
                 ->sortable()
                 ->searchable()
-                ->filterable(Organization::pluck('name')->toArray()),
+                ->filterable(Organization::pluck('name')),
             Column::callback('order_caches.status', function ($status) {
                 return(new \App\View\Components\Badge\Order(OrderStatus::from($status)))->render();
                 })
@@ -76,7 +81,7 @@ class Table extends LivewireDatatable
                 ->label('Consultant Name')
                 ->sortable()
                 ->searchable()
-                ->filterable(User::pluck('name')->toArray()),
+                ->filterable(User::pluck('name')),
             Column::callback(['id'], function ($id) {
                     $viewUrl = route('orders.view', ['order' => $id]);
                     $editUrl = route('orders.edit', ['order' => $id]);
