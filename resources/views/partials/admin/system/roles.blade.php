@@ -6,7 +6,7 @@
     </script>
 @endpush
 
-<x-admin.section.accordion>
+<x-admin.section.accordion closed color="#a3caee">
     <x-slot:title>Roles</x-slot:title>
     <x-admin.section.card>
         <a class="btn btn-primary float-end" href="{{ route('roles.create') }}">

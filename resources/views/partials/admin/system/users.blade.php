@@ -1,7 +1,7 @@
 @php
     $usersViewable = auth()->user()->can('read', \App\Models\User::class);
 @endphp
-<x-admin.section.accordion>
+<x-admin.section.accordion closed color="#a3caee">
     <x-slot:title>Users</x-slot:title>
     <x-admin.section.card>
         @if(\App\Repository\Authentication\UserRepository::getRemainingUserCount() > 0)

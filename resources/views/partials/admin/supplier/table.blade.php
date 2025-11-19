@@ -5,7 +5,7 @@
         }
     </script>
 @endpush
-<x-admin.section.accordion>
+<x-admin.section.accordion closed color="#a3caee">
     <x-slot:title>Suppliers</x-slot:title>
     <x-admin.section.card>
         <div class="text-end">
