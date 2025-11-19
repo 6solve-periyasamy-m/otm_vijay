@@ -75,7 +75,7 @@ class SidebarLink extends Component
             new SidebarLink('Administration', route('system.admin'), Icon::setting(), 'system', Setting::class, 'read'),
             //new SidebarLink('Suppliers', route('supplier.index'), Icon::supplier(), 'supplier', Supplier::class, 'read'),
             //new SidebarLink('Settings', route('settings.edit'), Icon::setting(), 'settings', Setting::class, 'update'),
-            new SidebarLink('Attributes Manager', route('attributes.edit'), Icon::attribute(), 'attributes'),
+            //new SidebarLink('Attributes Manager', route('attributes.edit'), Icon::attribute(), 'attributes'),
             //new SidebarLink('Users', route('users.all'), Icon::user(), 'users', User::class, 'read'),
             //new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
             new SidebarLink('Reports', route('reports.all'), Icon::report(), 'reports', Report::class, 'read'),
