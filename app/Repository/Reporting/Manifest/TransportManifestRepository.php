@@ -33,6 +33,9 @@ class TransportManifestRepository implements HasTransportManifest
             'tourComponent.inventory.component.arrivalAddress',
             'tourComponent.inventory.component.transportType',
             'tourComponent.inventory.component.operator',
+            'orderCustomer.order.currency',
+            'tourComponent.inventory.currency',
+            'tourComponent.inventory.component.currency',
         ];
     }
 
@@ -72,7 +75,9 @@ class TransportManifestRepository implements HasTransportManifest
             $row->component = $orderComponent->tourComponent->tour_component_type;
             $row->start = $orderComponent->repository->getStartTime();
             $row->end = $orderComponent->repository->getEndTime();
-            $row->purchase = $orderComponent->repository->getCostToCompany();
+            $row->purchase_currency = $orderComponent->tourComponent->repository->getCurrency()->code;
+            $row->purchase = $orderComponent->tourComponent->repository->getPurchasePrice();
+            $row->sales_currency = $orderComponent->orderCustomer->order->currency?->code ?? \Settings::currency()->code;
             $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
             $row->notes = $orderComponent->orderCustomer->transport_notes;
             $data[] = $row;

@@ -30,6 +30,9 @@ class ActivityManifestRepository implements HasActivityManifest
             'tourComponent.inventory.component',
             'tourComponent.inventory.ticketType',
             'tourComponent.inventory.component.activityType',
+            'orderCustomer.order.currency',
+            'tourComponent.inventory.currency',
+            'tourComponent.inventory.component.currency',
         ];
     }
 
@@ -69,7 +72,9 @@ class ActivityManifestRepository implements HasActivityManifest
             $row->component = $orderComponent->tourComponent->tour_component_type;
             $row->start = $orderComponent->tourComponent->inventory->starts_at;
             $row->end = $orderComponent->tourComponent->inventory->ends_at;
-            $row->purchase = $orderComponent->repository->getCostToCompany();
+            $row->purchase_currency = $orderComponent->tourComponent->repository->getCurrency()->code;
+            $row->purchase = $orderComponent->tourComponent->repository->getPurchasePrice();
+            $row->sales_currency = $orderComponent->orderCustomer->order->currency?->code ?? \Settings::currency()->code;
             $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
             $row->notes = $orderComponent->orderCustomer->activity_notes;
             $row->internal_notes = $orderComponent->orderCustomer->internal_notes;

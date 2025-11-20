@@ -17,6 +17,7 @@
         <th scope="col">Fulfilled</th>
         <th scope="col">Component Type</th>
         <th scope="col">Purchase Price</th>
+        <th scope="col">Sales Currency</th>
         <th scope="col">Sales Price</th>
     </tr>
     </thead>
@@ -38,8 +39,9 @@
             <td>{{ $row->size }}</td>
             <td>{{ f_bool($row->fulfilled) }}</td>
             <td>{{ $row->component }}</td>
-            <td>{{ f_currency($row->purchase) }}</td>
-            <td>{{ f_currency($row->sales) }}</td>
+            <td>{{ fr_currency($row->purchase) }}</td>
+            <td>{{ $row->sales_currency }}</td>
+            <td>{{ f_currency($row->sales, $row->sales_currency) }}</td>
         </tr>
     @endforeach
     </tbody>
