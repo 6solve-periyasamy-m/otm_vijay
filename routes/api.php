@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SelectController;
+use App\Http\Controllers\Api\StripeController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TransportController;
 use App\Http\Gateways\AirwallexGateway;
@@ -52,7 +53,8 @@ Route::prefix('/orders')->group(function () {
     Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('addTransportAddon');
 });
 
-Route::stripeWebhooks('/stripe/webhooks');
+//Route::stripeWebhooks('/stripe/webhooks');
+Route::post('/stripe/webhooks', [StripeController::class, 'webhook'])->name('api.stripe.webhook');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 Route::post('/opayo/webhook', [OpayoGateway::class, 'webhook'])->name('api.opayo.webhook');
 Route::post('/airwallex/webhook', [AirwallexGateway::class, 'webhook'])->name('api.airwallex.webhook');
