@@ -36,7 +36,10 @@ class StripeGateway extends Gateway implements SupportsRedirect
         return $this->getCheckout($items, $intention, $customer, $success, 'custom', $currency)->client_secret;
     }
 
-    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted', string|null $currency = null): Session
+    /**
+     * @throws ApiErrorException
+     */
+    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted', string|null $currency = null)
     {
         $currency = $currency ?? (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
         $currencyKeys = config('app.gateways.stripe.currencies.' . strtoupper($currency), []);

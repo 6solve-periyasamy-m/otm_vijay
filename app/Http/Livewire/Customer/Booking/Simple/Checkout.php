@@ -177,7 +177,7 @@ class Checkout extends Component
 
     private function popupStripe(bool $full = false): void
     {
-        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full,]);
+        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full, 'currency' => $this->booking->currency?->code ?? Settings::currency()?->code,]);
     }
 
     public function getCurrency()

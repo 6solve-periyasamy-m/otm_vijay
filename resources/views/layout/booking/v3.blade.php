@@ -40,7 +40,6 @@
         }
     </script>
     <script type="text/javascript">
-        const stripe = Stripe('{{ config('app.gateways.stripe.publishable') }}');
         window.addEventListener('popupCheckout', (event) => {
             Airwallex.init({
                 env: '{{ config('app.gateways.airwallex.live', false) ? 'prod' : 'demo' }}',
@@ -67,6 +66,8 @@
                 .then((json) => json.checkoutSessionClientSecret)
         }
         window.addEventListener('popupStripeCheckout', (event) => {
+            console.log(event.detail)
+            let stripe = Stripe(event.detail.publishable);
             if (event.detail.checkout !== null) {
                 let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
                 stripe.initCheckout({fetchClientSecret: fn}).then((checkout) => {
@@ -696,7 +697,6 @@
             const moreInfoLink = document.querySelector('.moreinfo-href');
             const popup = document.querySelector('.more-package-info-popup');
             const closeBtn = document.querySelector('.info-close-button');
-            console.log("asdsadsadsada");
             moreInfoLink?.addEventListener('click', function (e) {
                 e.preventDefault();
                 popup.style.display = 'flex';
