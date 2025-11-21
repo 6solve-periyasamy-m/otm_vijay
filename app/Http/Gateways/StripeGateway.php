@@ -7,7 +7,8 @@ use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
-use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
+use Stripe\StripeClient;
 
 class StripeGateway extends Gateway implements SupportsRedirect
 {
@@ -22,6 +23,8 @@ class StripeGateway extends Gateway implements SupportsRedirect
 
     /**
      * @inheritDoc
+     * @throws ApiErrorException
+     * @noinspection PhpArrayKeyDoesNotMatchArrayShapeInspection
      */
     public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
@@ -36,6 +39,8 @@ class StripeGateway extends Gateway implements SupportsRedirect
     private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted', string|null $currency = null): Session
     {
         $currency = $currency ?? (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currencyKeys = config('app.gateways.stripe.currencies.' . strtoupper($currency), []);
+        $secret = $currencyKeys['secret'] ?? config('app.gateways.stripe.secret');
         $currency = strtolower(empty($currency) ? \Settings::currency()?->code : $currency);
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe($currency); }
@@ -69,8 +74,9 @@ class StripeGateway extends Gateway implements SupportsRedirect
                 'cancel_url' => $this->cancelled,
             ];
         }
+        $stripe = new StripeClient($secret);
 
-        return Session::create($data);
+        return $stripe->checkout->sessions->create($data);
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string

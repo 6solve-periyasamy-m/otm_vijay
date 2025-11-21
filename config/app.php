@@ -2,6 +2,20 @@
 
 use App\Facades\StringFormatterFacade;
 
+function getAllStripeKeys(): array
+{
+    $currencies = ['EUR', 'GBP', 'USD', 'AUD'];
+    $data = [];
+    foreach ($currencies as $currency) {
+        $data[$currency] = [
+            'client' => env('STRIPE_CLIENT_' . $currency),
+            'secret' => env('STRIPE_SECRET_' . $currency),
+            'webhook' => env('STRIPE_WEBHOOK_' . $currency),
+        ];
+    }
+    return $data;
+}
+
 return [
 
     /*
@@ -258,6 +272,8 @@ return [
         'stripe' => [
             'publishable' => env('STRIPE_KEY'),
             'secret' => env('STRIPE_SECRET'),
+            'webhook' => env('STRIPE_WEBHOOK_SECRET'),
+            'currencies' => getAllStripeKeys(),
         ],
         'felloh' => [
             'client' => env('FELLOH_CLIENT'),
