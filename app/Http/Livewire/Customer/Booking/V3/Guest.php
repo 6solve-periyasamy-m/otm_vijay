@@ -65,7 +65,6 @@ class Guest extends V3BookingComponent
         }
 
         $data = $response->json();
-        \Log::info('reCAPTCHA v3 score: ', $data);
         return ($data['success'] ?? false) && ($data['score'] ?? 0) >= 0.5;
     }
 

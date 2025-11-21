@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
 <style>
     .iti__selected-flag { z-index: 1; position: relative; display: flex; align-items: center; height: 100%; padding: 4px 0px 14px 7px !important }
-    .two_input_field.mobile_number .iti{width: 50%;}
+    .two_input_field.mobile_number .iti{width: 100%;}
     .two_input_field.mobile_number .iti--separate-dial-code .iti__selected-flag{background: transparent;padding-left: 24px !important;padding-bottom: 7px !important;}
     .two_input_field.mobile_number .iti__arrow { width: 1px; height: 17px; display: inline-block; background: #F35B15; border: unset !important; margin-left: 7px; }
     .two_input_field.mobile_number .iti__selected-dial-code { font-family: "PP Neue Montreal" !important; font-size: 14px !important; line-height: 24px !important; color: #721111 !important; }
@@ -37,10 +37,10 @@
                     <ul>
                         <li class="active"><a href="#personal_details">Personal Details</a></li>
                         <li><a href="#address_details">Address</a></li>
-                        <li><a href="#passport_details">Passport Details</a></li>
-                        <li><a href="#frequent_details">Frequent Flier Details</a></li>
+						{{--<li><a href="#passport_details">Passport Details</a></li>--}}
+                        <li><a href="#frequent_details">Frequent Flyer Details</a></li>
                         <li><a href="#other_details">Other Details</a></li>
-                        <li><a href="#change_password">Change Password</a></li>
+                        {{--<li><a href="#change_password">Change Password</a></li>--}}
                     </ul>
                 </div>
                 <div class="your_details_colm_2">
@@ -59,25 +59,23 @@
                             <p>Manage your personal details</p>
                             <div class="personal_details_form">
                                 <h5>User Details</h5>
-                                <div class="one_input_field"><input type="text" name="title" value="{{ $customer->title ?? '' }}" autocomplete="honorific-prefix" required ></div>
+                                <div class="one_input_field"><label>Title</label><input type="text" name="title" value="{{ $customer->title ?? '' }}" autocomplete="honorific-prefix" required ></div>
                                 <div class="two_input_field">
-                                    <input type="text" name="first_name" value="{{ $customer->first_name ?? '' }}"  autocomplete="given-name" placeholder="First Name *" required>
-                                    <input type="text" name="last_name" value="{{ $customer->last_name ?? '' }}"  autocomplete="family-name"  placeholder="Last Name *" required>
-                                </div>
-                                <div class="one_input_field">
+                                    <div class="two_label_field"><label>First Name</label><input type="text" name="first_name" value="{{ $customer->first_name ?? '' }}"  autocomplete="given-name" placeholder="First Name *" required></div>
+									<div class="two_label_field"><label>Middle Name</label><input type="text" name="middle_names" value="{{ $customer->middle_names ?? '' }}"  autocomplete="middle-name" placeholder="Middle Name"></div>
+                                    <div class="two_label_field"><label>Last Name</label><input type="text" name="last_name" value="{{ $customer->last_name ?? '' }}"  autocomplete="family-name"  placeholder="Last Name *" required></div>
                                 </div>
                                 <div class="two_input_field">
-                                    <input placeholder="DATE OF BIRTH*" onfocus="(this.type='date')"
-                                    onblur="(this.type='text')" type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday" required >
-                                    <input type="email" placeholder="EMAIL ADDRESS" name="email_address" value="{{ $customer->email_address ?? '' }}">
+                                    <div class="two_label_field"><label>Date of Birth</label><input placeholder="DATE OF BIRTH*" type="date" name="date_of_birth" value="{{ $customer->date_of_birth?->format('Y-m-d') ?? '' }}" width="4" autocomplete="bday" required ></div>
+                                    <div class="two_label_field"><label>Email Address</label><input type="email" placeholder="EMAIL ADDRESS" name="email_address" value="{{ $customer->email_address ?? '' }}"></div>
                                 </div>
                                 <div class="two_input_field mobile_number">
-                                    <input style="width: 100%;" type="tel" id="mobile_number" value="{{ old('mobile_number', $customer->mobile_number ?? '') }}" class=" phone-input form-control" required>
+                                    <div class="two_label_field"><label>Mobile Number</label><input style="width: 100%;" type="tel" id="mobile_number" value="{{ old('mobile_number', $customer->mobile_number ?? '') }}" class=" phone-input form-control" required>
                                     <input type="hidden" name="mobile_number" id="mobile_number"  value="{{ old('mobile_number', $customer->mobile_number ?? '') }}">
-                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span>
-                                    <input type="tel" id="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" placeholder="ALTERNATE MOBILE NUMBER"  class="phone-input alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"  style="width: 100%;">
+                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span></div>
+                                    <div class="two_label_field"><label>Alternate Mobile Number</label><input type="tel" id="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}" placeholder="ALTERNATE MOBILE NUMBER"  class="phone-input alternate_no mobile_no [&::-webkit-inner-spin-button]:appearance-none"  style="width: 100%;">
                                     <input type="hidden" name="other_phone_number" value="{{ $customer->other_phone_number ?? '' }}">
-                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span>
+                                    <span  style="color:red; display:none;">Please enter a valid phone number.</span></div>
                                 </div>
                             </div>
                         </div>
@@ -88,12 +86,13 @@
                             <div class="address_details_form">
                                 <div class="address_detail_colm_1" id="home-address-section">
                                     <h5>Home Address</h5>
-                                    <div class="one_input_field"><input type="text" name="home_address_line_1" value="{{ $customer->homeAddress->address_line_1 ?? '' }}" autocomplete="address-line1"placeholder="ADDRESS LINE 1" required ></div>
-                                    <div class="one_input_field"><input type="text" name="home_address_line_2" value="{{ $customer->homeAddress->address_line_2 ?? '' }}" autocomplete="address-line2" placeholder="ADDRESS LINE 2" required ></div>
-                                    <div class="one_input_field"><input type="text" name="home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode" placeholder="POST CODE" required ></div>
-                                    <div class="one_input_field"><input type="text" name="home_town" value="{{ $customer->homeAddress->town ?? '' }}" autocomplete="address-level2"placeholder="TOWN" required ></div>
-                                    <div class="one_input_field"><input type="text" name="home_region" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1" placeholder="REGION" required ></div>
+                                    <div class="one_input_field"><label>Address Line 1</label><input type="text" name="home_address_line_1" value="{{ $customer->homeAddress->address_line_1 ?? '' }}" autocomplete="address-line1"placeholder="ADDRESS LINE 1" required ></div>
+                                    <div class="one_input_field"><label>Address Line 2</label><input type="text" name="home_address_line_2" value="{{ $customer->homeAddress->address_line_2 ?? '' }}" autocomplete="address-line2" placeholder="ADDRESS LINE 2" required ></div>
+                                    <div class="one_input_field"><label>Post Code</label><input type="text" name="home_postcode" value="{{ $customer->homeAddress->postcode ?? '' }}" autocomplete="postcode" placeholder="POST CODE" required ></div>
+                                    <div class="one_input_field"><label>Town</label><input type="text" name="home_town" value="{{ $customer->homeAddress->town ?? '' }}" autocomplete="address-level2"placeholder="TOWN" required ></div>
+                                    <div class="one_input_field"><label>Region</label><input type="text" name="home_region" value="{{ $customer->homeAddress->region ?? '' }}" autocomplete="address-level1" placeholder="REGION" required ></div>
                                     <div class="one_input_field">
+									<label>Select Country</label>
                                           <select name="home_country_id" id="home_country_id" class="form-control">
                                             <option value="">Select </option>
                                             @foreach(Country::all() as $country)
@@ -120,12 +119,13 @@
                                             </label>
                                     </span>
                                     </div>
-                                    <div class="one_input_field"><input type="text"  name="billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" autocomplete="address-line1" placeholder="ADDRESS LINE 1" ></div>
-                                    <div class="one_input_field"><input type="text" name="billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" autocomplete="address-line2" placeholder="ADDRESS LINE 2"  ></div>
-                                    <div class="one_input_field"><input type="text" name="billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode" placeholder="POST CODE" required ></div>
-                                    <div class="one_input_field"><input type="text" name="billing_town" value="{{ $customer->billingAddress->town ?? '' }}" autocomplete="address-level2" placeholder="TOWN" ></div>
-                                    <div class="one_input_field"><input type="text" name="billing_region" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1" placeholder="REGION" ></div>
+                                    <div class="one_input_field"><label>Address Line 1</label><input type="text"  name="billing_address_line_1" value="{{ $customer->billingAddress->address_line_1 ?? '' }}" autocomplete="address-line1" placeholder="ADDRESS LINE 1" ></div>
+                                    <div class="one_input_field"><label>Address Line 2</label><input type="text" name="billing_address_line_2" value="{{ $customer->billingAddress->address_line_2 ?? '' }}" autocomplete="address-line2" placeholder="ADDRESS LINE 2"  ></div>
+                                    <div class="one_input_field"><label>Post Code</label><input type="text" name="billing_postcode" value="{{ $customer->billingAddress->postcode ?? '' }}" autocomplete="postcode" placeholder="POST CODE" required ></div>
+                                    <div class="one_input_field"><label>Town</label><input type="text" name="billing_town" value="{{ $customer->billingAddress->town ?? '' }}" autocomplete="address-level2" placeholder="TOWN" ></div>
+                                    <div class="one_input_field"><label>Region</label><input type="text" name="billing_region" value="{{ $customer->billingAddress->region ?? '' }}" autocomplete="address-level1" placeholder="REGION" ></div>
                                     <div class="one_input_field">
+									<label>Select Country</label>
                                        <select name="billing_country_id" id="billing_country_id" class="form-control">
                                             <option value="">Select </option>
                                             @foreach(Country::all() as $country)
@@ -142,13 +142,18 @@
                         <div class="personal_details contact_details" id="contact_details">
                             <h3>Emergency Contact Details</h3>
                             <div class="emergency_details_form">
-                                <div class="two_input_field">
-                                    <input type="text" placeholder="Contact NAME*" name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}"  required>
+                                <div class="two_input_field full_width_field">
+								<label>Contact Name</label>
+                                    <input type="text" placeholder="Contact Name" name="emergency_contact_name" value="{{ $customer->emergency_contact_name ?? '' }}">
                                 </div>
                                 <div class="two_input_field mobile_number">
-                                    <input type="text" name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" placeholder="RELATIONSHIP" class="relationship_input" required>
+									<div class="one_input_field"><label>Relationship</label>
+										<input type="text" name="emergency_contact_relationship" value="{{ $customer->emergency_contact_relationship ?? '' }}" placeholder="RELATIONSHIP" class="relationship_input" required>
+									</div>
+									<div class="one_input_field"><label>Mobile Number</label>
                                     <input style="width: 100%;" type="tel" id="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" placeholder="MOBILE NUMBER" required   class=" phone-input mobile_no [&::-webkit-inner-spin-button]:appearance-none">
                                     <input type="hidden" name="emergency_contact_telephone" value="{{ $customer->emergency_contact_telephone ?? '' }}" >
+									</div>
                                 </div>
                             </div>
                         </div>
@@ -156,13 +161,16 @@
                         <div class="personal_details other_details" id="other_details">
                             <h3>Other Details</h3>
                             <div class="other_details_form">
-                                <div class="one_input_field"><input type="text" name="other_notes" value="{{ $customer->external_notes }}"  placeholder="Other Notes"  ></div>
-                                <div class="one_input_field"><input type="text"  name="dietary_notes" value="{{ $customer->dietary_notes }}" placeholder="Dietary Requirements"  ></div>
-                                <div class="one_input_field"><input type="text" name="mobility_notes" value="{{ $customer->mobility_notes }}" placeholder="Mobility Requirements" ></div>
+                                <div class="one_input_field"><div class="two_input_field full_width_field">
+                                    <label>Other Notes</label><input type="text" name="other_notes" value="{{ $customer->external_notes }}"  placeholder="Other Notes"  ></div></div>
+                                <div class="one_input_field"><div class="two_input_field full_width_field">
+                                    <label>Dietary Requirements</label><input type="text"  name="dietary_notes" value="{{ $customer->dietary_notes }}" placeholder="Dietary Requirements"  ></div></div>
+                                <div class="one_input_field"><div class="two_input_field full_width_field">
+                                    <label>Mobility Requirements</label><input type="text" name="mobility_notes" value="{{ $customer->mobility_notes }}" placeholder="Mobility Requirements" ></div></div>
                             </div>
                         </div>
                         </hr>
-                        <div class="personal_details passport_details" id="passport_details">
+                        {{--<div class="personal_details passport_details" id="passport_details">
                             <h3>Passport Details</h3>
 
                             @php
@@ -207,7 +215,7 @@
                                     onblur="(this.type='text')"  >
                                     </div>
                             </div>
-                        </div>
+                        </div>--}}
                         <hr/>
                         {{-- <div class="personal_details frequent_details" id="frequent_details">
                             <h3>Memberships</h3>
@@ -263,7 +271,7 @@
                         </div>
                         <hr/> --}}
 
-                        <div class="personal_details change_password" id="change_password">
+                        {{--<div class="personal_details change_password" id="change_password">
                             <h3>Change Password</h3>
                             <div class="change_password_form">
                                 <div class="two_input_field">
@@ -282,7 +290,7 @@
                             </div>
                         </div>
 
-                    </div>
+						</div>--}}
                     <div class="common_btn"><button type="submit" class="save_changes">Save Changes</button></div>
                 </form>
                 </div>

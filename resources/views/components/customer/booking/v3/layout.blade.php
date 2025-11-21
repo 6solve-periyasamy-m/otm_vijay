@@ -195,6 +195,8 @@
                                             $convertedAmount = $rawAmount * $this->getFXRate();
                                             $currencyCode = $this->getCurrency()->code;
                                             $upgradePrice = $booking->repository->getUpgradeCosts();
+                                            $balance = $rawAmount - $booking->repository->getDueTodayAmount();
+                                            $hasBalance = $balance > 0;
                                         @endphp
                                         <p>Total ({{ $currencyCode }})</p>
                                         <p>{{ $this->formatCurrency($booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</p>
@@ -205,7 +207,11 @@
                                     </div>
 
                                     <div class="cart_sub_title">
-                                        <p class="cart_sub_title_color">Payable now @if(!$payFull)({{ $booking->tour?->deposit_percentage }}%)@endif</p>
+                                        <p class="cart_sub_title_color">Payable now
+                                            @if($hasBalance && $booking->tour?->deposit_percentage)
+                                                ({{ $booking->tour->deposit_percentage }}%)
+                                            @endif
+                                        </p>
                                         <p class="fw-bold cart_sub_title_color">
                                             {{ $this->formatCurrency($payFull ? $booking->repository->getTotalCost() + $estimateSingleOccupancy : $booking->repository->getDueTodayAmount())  }}
                                         </p>
