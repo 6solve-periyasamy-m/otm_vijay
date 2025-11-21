@@ -168,7 +168,7 @@ class Settings
     public function availableInvoiceStyles(): array
     {
         $styles = [1 => 'Default Invoice Style',];
-        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+        if (kpt()) {
             $styles[2] = 'Alternative Style (Under Development)';
         }
         return $styles;
@@ -177,7 +177,7 @@ class Settings
     public function availableQuoteStyles(): array
     {
         $styles = [1 => 'Default Quote Style',];
-        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+        if (kpt()) {
             $styles[2] = 'Alternative Style (Under Development)';
         }
         return $styles;
@@ -186,7 +186,7 @@ class Settings
     public function availableItineraryStyles(): array
     {
         $styles = [1 => 'Default Itinerary Style',];
-        if (config('app.features.bleeding-edge') || config('app.features.kpt')) {
+        if (kpt()) {
             $styles[2] = 'Alternative Style (Under Development)';
         }
         return $styles;

@@ -20,7 +20,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use App\Exceptions\MailFailedException;
 
 abstract class Gateway
 {
@@ -85,11 +84,18 @@ abstract class Gateway
 
     public function success(Request $request): Factory|View|Application
     {
-        return view('pages.payments.success');
+        if (kpt()) {
+            return view('pages.payments.success');
+        }
+
+        return view('pages.payments.standard.success');
     }
 
     public function cancelled(Request $request): Factory|View|Application
     {
-        return view('pages.payments.cancelled');
+        if (kpt()) {
+            return view('pages.payments.cancelled');
+        }
+        return view('pages.payments.standard.cancelled');
     }
 }
