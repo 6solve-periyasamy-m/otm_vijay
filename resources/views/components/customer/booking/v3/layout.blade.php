@@ -8,7 +8,7 @@
         <div class="container">
             <div class="column">
                 @if(isset($this->brand))
-                    <a href="https://www.keithprowsetravel.com/" target="_blank"><img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 60px" alt="logo" title="{{ $this->brand->name }}"></a>
+                    <a href="https://www.keithprowsetravel.com/" target="_blank"><img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 75px" alt="logo" title="{{ $this->brand->name }}"></a>
                 @endif
             </div>
             <div class="column right">
