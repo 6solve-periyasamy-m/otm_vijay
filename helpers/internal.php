@@ -196,3 +196,26 @@ if (!function_exists('div_id')) {
         return preg_replace("/\d/u", "", Str::random());
     }
 }
+if (!function_exists('bleeding_edge')) {
+    /**
+     * Is BLEEDING_EDGE env set
+     *
+     * @return bool
+     */
+    function bleeding_edge(): bool
+    {
+        return config('app.features.bleeding-edge', false);
+    }
+}
+if (!function_exists('kpt')) {
+    /**
+     * Is IS_KPT env set
+     * @param bool $bleeding Should the BLEEDING_EDGE variable be assumed equal to IS_KPT
+     * @return bool
+     */
+    function kpt(bool $bleeding = true): bool
+    {
+        return config('app.features.kpt', false)
+            || ($bleeding && bleeding_edge());
+    }
+}

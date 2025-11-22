@@ -182,11 +182,11 @@
                 @include('partials.fields.checkbox', ['name' => 'Maintain quote reference on conversion where possible', 'field' => 'quote_reference', 'value' => flag('quote.convert.reference', false),])                
                 @include('partials.fields.checkbox', ['name' => 'Should Booking Deposit Percentage Include Additional Costs', 'field' => 'deposit_full', 'value' => flag('booking.deposit.full', false),])
                 @include('partials.fields.checkbox', ['name' => 'Show Non-Paying travellers', 'field' => 'nonpaying_travellers_enabled', 'value' => flag('non-paying.travellers.enabled', true),])
-                @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
+                @if(kpt())
                     @include('partials.fields.checkbox', ['name' => 'Enable sending reservation and invoice document emails.', 'field' => 'reservation_invoice_mail_enabled', 'value' => flag('reservation.invoice.mail.enabled', false),])
                     @include('partials.fields.checkbox', ['name' => 'Round booking values to nearest 5', 'field' => 'round_to_five', 'value' => flag('booking.round_to_five', false)])
                 @endif
-                @if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
+                @if(kpt())
                     @include('partials.fields.checkbox', ['name' => 'Enable sending itinerary document emails.', 'field' => 'itinerary_document_mail_enabled', 'value' => flag('itinerary.document.mail.enabled', false),])
                 @endif
                 @include('partials.fields.checkbox', ['name' => 'Show Currency Code Before Symbol', 'field' => 'show_currency_code', 'value' => flag('currency.code.show', false),])
@@ -281,7 +281,7 @@
             @include('partials.fields.ckeditor', ['name' => 'Bank Transfer', 'field' => 'bank_transfer', 'value' => setting('company.bank_transfer', ''), 'width' => 12])
         </x-admin.section.card>
     </div>
-    @if(config('app.features.kpt') || config('app.features.bleeding-edge'))
+    @if(kpt())
         <div class="col-xl-6">
             <x-admin.section.card>
                 <x-slot:title>Default Documentation Colors</x-slot:title>

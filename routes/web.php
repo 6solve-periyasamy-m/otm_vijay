@@ -26,7 +26,11 @@ Route::get('/', function () {
 
 Route::prefix('admin')->group(__DIR__ . '/web/admin.php');
 
-Route::prefix('customer')->name('customer.')->group(__DIR__ . '/web/customer.php');
+if (kpt()) {
+    Route::prefix('customer')->name('customer.')->group(__DIR__ . '/web/customer.php');
+} else {
+    Route::prefix('customer')->name('customer.')->group(__DIR__ . '/web/standard-customer.php');
+}
 
 Route::prefix('payment')->name('payment.')->group(function () {
     Route::prefix('gateway')->name('gateway.')->group(function () {
