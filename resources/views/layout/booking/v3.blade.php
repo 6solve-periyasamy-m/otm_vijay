@@ -98,7 +98,7 @@
 
     <style>
         :root {
-            --primary-color: #F35B15;
+            --primary-color: #FFB319;
             --white: #FFFFFF;
             --text-light-dark: #383232;
             --text-dark: #000000;
@@ -111,6 +111,10 @@
             --footer-color: #000000;
             --secondary-color: #FEEFE8;
             --text-ligh-grey: #7A7A7A;
+            --para-text-color: #000000;
+            --sub-heading-2: #143e34;
+            --next-btn:#ffb81c;
+            --back-btn:#ffb81c;
         }
 
         body { background-color: transparent; margin: 0; } 
@@ -121,18 +125,18 @@
         @font-face { font-family: "PP Neue Montreal Bold"; src: url("{{ asset('fonts/ppneuemontreal-bold.otf') }}"); } 
         @font-face { font-family: "PlayfairDisplay-Regular"; src: url("{{ asset('fonts/PlayfairDisplay-Regular.ttf') }}"); } 
         @font-face { font-family: "Inter-Medium"; src: url("{{ asset('fonts/Inter-Medium.ttf') }}"); } 
-        header { background-color: var(--primary-color); } 
+        header { background: linear-gradient(to right, #143e34 50%, #143e34 75%); } 
         header .container { display: flex; justify-content: space-between; align-items: center; } 
         header .column { display: flex; } 
         header .column.right { display: flex; align-items: center; column-gap: 16px; } 
         header .column.right p { font-family: "PP Neue Montreal Medium"; font-weight: 500; font-size: 14px; line-height: 20px; color: var(--white); text-transform: uppercase; letter-spacing: 2.24px; margin: 0; } 
         header .column.right a { background-color: var(--white); padding: 12px 16px; border-radius: 40px; font-family: "PP Neue Montreal Medium"; font-weight: 500; color: var(--primary-color); display: flex; column-gap: 8px; align-items: center; text-decoration: unset; font-size: 14px; line-height: 18px; letter-spacing: 2.24px; } 
-        header .container { padding: 24px 0px; } 
+        header .container { padding: 15px 0px; } 
         body main { padding-bottom: 100px; } 
-        footer { width: 100%; background-color: rgba(59, 59, 59, 0.97); position: fixed; bottom: 0; z-index: 9; } 
+        footer { width: 100%; background: linear-gradient(to right, #143e34 50%, #143e34 75%); position: fixed; bottom: 0; z-index: 9; } 
         footer .container { display: flex; justify-content: space-between; align-items: center; padding: 24px 0px; }
-        .Go-back{display:inline-block;padding:11.5px 56px;border:1.5px solid var(--white);border-radius:999px;font-family:"PP Neue Montreal Medium";font-weight:500;font-size:14px;line-height:20px;color:var(--white);cursor:pointer}
-        .Go-next{display:inline-block;padding:11.5px 56px;border:1.5px solid #f35b15;border-radius:999px;font-family:"PP Neue Montreal Medium";font-weight:500;font-size:14px;line-height:20px;color:var(--white);cursor:pointer;background:var(--primary-color)}
+        .Go-back{display:inline-block;padding:11.5px 56px;border:1.5px solid var(--primary-color);border-radius:999px;font-family:"PP Neue Montreal Medium";font-weight:500;font-size:14px;line-height:20px;color:var(--white);cursor:pointer}
+        .Go-next{display:inline-block;padding:11.5px 56px;border:1.5px solid var(--primary-color);border-radius:999px;font-family:"PP Neue Montreal Medium";font-weight:500;font-size:14px;line-height:20px;color:var(--para-text-color);cursor:pointer;background:var(--primary-color)}
         footer .value{display:flex;column-gap:16px;align-items:center}
         footer .value h6{font-family:"PP Neue Montreal Bold";font-weight:700;color:var(--white);font-size:18px;line-height:24px;margin:0}
         footer .value p{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:18px;line-height:24px;color:var(--white);margin:0}
@@ -285,7 +289,7 @@
         .payable-now>p{margin-top:8px;color:var(--sub-text-color)}
         .payment-method .email-quote h6{margin:32px 0 24px 0;text-transform:uppercase;text-align:center;text-decoration:underline;font-size:16px;line-height:20px;cursor:pointer}
         .email-quote label{font-size:16px;line-height:24px;margin:0;color:var(--text-dark);width:100%;display:block;margin-bottom:12px;font-family:"PP Neue Montreal Medium";font-weight:500}
-        .top-form-contain .email-quote input{width:82%;height:46px;border:2px solid #f35b15;outline:0;font-size:14px;line-height:14px;padding-block:0px;padding-inline:0px;border-radius:50px;padding:0 24px;margin-bottom:12px}
+        .top-form-contain .email-quote input{width:82%;height:46px;border:2px solid var(--primary-color);outline:0;font-size:14px;line-height:14px;padding-block:0px;padding-inline:0px;border-radius:50px;padding:0 24px;margin-bottom:12px}
         .top-form-contain .email-quote{display:flex;gap:24px;justify-content:space-between}
         .top-form-contain .email-quote p{width:50%;margin-block-start:0px;margin-block-end:24px}
         .top-form-contain .mdle_nme{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:12px;line-hight:14px;color:#7f7f7f;display:block}
@@ -293,7 +297,8 @@
         .top-form-contain .email-quote .text-danger{display:block}
         .next-button{margin-top:24px;width:100%;height:67px;background:var(--primary-color);border:0;border-radius:99px;cursor:pointer}
         .next-button>span{display:flex;align-items:center;justify-content:center;column-gap:8px}
-        .next-button>span>span{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:16px;line-height:20px;letter-spacing:2.24px;color:var(--white)}
+        /*.next-button>span>span{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:16px;line-height:20px;letter-spacing:2.24px;color:var(--white)} */
+        .next-button>span>span{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:16px;line-height:20px;letter-spacing:2.24px;color:var(--text-dark)}
         @media only screen and (min-width:768px) and (max-width:980px){
             .package-container .container{flex-wrap:wrap;row-gap:60px}
             .package-container .container>.left,.package-container .container>.right{width:100%;margin-right:0}
@@ -597,7 +602,8 @@
         .individual-module .out-of-stock{color:#9f0a1a}
         .out-of-stock,.text-danger{color:#9f0a1a}
         .in-stock{color:#4caf50}
-        .room-selection .room-listing-module .bed-configuration-h{display:flex;justify-content:space-around;align-items:center;border:1.5px solid #f35b15;border-radius:50px;padding:8px;margin-bottom:8px;cursor:pointer;transition:border .3s;width:209px}
+        /*.room-selection .room-listing-module .bed-configuration-h{display:flex;justify-content:space-around;align-items:center;border:1.5px solid #f35b15;border-radius:50px;padding:8px;margin-bottom:8px;cursor:pointer;transition:border .3s;width:209px}*/
+        .room-selection .room-listing-module .bed-configuration-h{display:flex;justify-content:space-around;align-items:center;border:1.5px solid #FFB319;border-radius:50px;padding:8px;margin-bottom:8px;cursor:pointer;transition:border .3s;width:209px}
         .room-selection .room-listing-module .bed-configuration-h .radio_txt{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:12px;line-height:14px;color:#f35b15;margin-block-start:0px;margin-block-end:0px;width:54px;text-align:center}
         .bed-configuration-h input[type=radio]:checked+.custom-radio{background-color:#f35b15}
         .bed-configuration-h input[type=radio]:checked+.custom-radio p{color:#fff}
@@ -619,7 +625,8 @@
         .acc-tp-cond .fnal-txt{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:17px;line-height:15px;color:#000}
         .acc-tp-cond .fnal-txt a{color:var(--primary-color)}
         .acc-tp-cond .contain-v{margin-bottom:0}
-        .booking-dates a,.default-hotel-more-info a,.hotel-more-info a,.more-package-info a,.timeline a{color:#f35b15}
+        /*.booking-dates a,.default-hotel-more-info a,.hotel-more-info a,.more-package-info a,.timeline a{color:#f35b15} */
+        .booking-dates a,.default-hotel-more-info a,.hotel-more-info a,.more-package-info a,.timeline a{color:#143e34}
         .disable-next{display:inline-block;padding:11.5px 56px;border:1.5px solid #c0c0c8;border-radius:999px;font-family:"PP Neue Montreal Medium";font-weight:500;font-size:14px;line-height:20px;color:var(--white);background-color:var(--include-cta-color)}
         .reselect_config{color:red;padding:10px;margin-top:20px;text-align:left}
         .notice-message{font-weight:700}
@@ -658,6 +665,19 @@
         .cart_sub_title {font-family: "PP Neue Montreal Medium"; font-weight: 400; font-size:13px;line-height:24px; color: #5a5555ff;display: flex;justify-content: space-between; padding-top: 5px; }
         .cart_sub_title_color {color: #000;}
         .font-weight-bold {font-weight: 700;}
+
+        
+        .top-form-contain input:focus, .details-form-module input:focus 
+        {
+            transition: all 0.5s;
+            box-shadow: 0 0 40px #f9d442b9;
+            border-color: #f9d342;
+            outline: none;
+        }
+        .next-button img { filter: brightness(0) saturate(100%); }
+        body {background-color: #f4f4f4; color: #333333;}
+
+
     </style>
 </head>
 <body>
