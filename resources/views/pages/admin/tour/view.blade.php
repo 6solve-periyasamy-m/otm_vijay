@@ -39,7 +39,7 @@
                         <span>Create Quote</span>
                     </a>
                 @endcan
-                @if(config('app.features.bleeding-edge') || config('app.features.kpt'))
+                @if(kpt())
                     <a href="{{ route('tours.accommodation', ['tour' => $tour]) }}" class="btn btn-secondary">
                         {{ Icon::accommodation() }}
                         {{ __('tours.view.buttons.accommodation') }}

@@ -47,7 +47,7 @@ class AccommodationSelector extends AccommodationByDateComponent
     public function getAvailableTypes(): array
     {
         $types = ['Included' => 'Included', 'Add-on' => 'Add-on'];
-        if (config('app.features.kpt', false) || config('app.features.bleeding-edge', false)) {
+        if (kpt()) {
             $types['Upgrade'] = 'Upgrade';
         }
         return $types;
