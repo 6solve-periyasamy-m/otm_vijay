@@ -63,8 +63,9 @@
         .accommodation-detail .locate h5 { color: #7a7a7a;}
         .ma-block .row .right-col .contain .snd-sec .right-col p.see-more a {color: #143e34;}
         .ma-block .row .right-col.package_details_right .name_price_div h4 { color:var(--primary-color);}
-        .ma-block .row .right-col .contain .snd-sec .right-col p.date:before { filter: brightness(0) saturate(100%) invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);}
+        .ma-block .row .right-col .contain .snd-sec .right-col p.date:before, .upp-block-two .right-col p.date:before { filter: brightness(0) saturate(100%) invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);}
         .form-field-full-width .note-editor.note-frame.panel.panel-default {border: 1px solid #aaa;}
+        .package_popup .upp-block-two .right-col h5, .package_popup .upp-block-two .snd-sec .right-col h6 {color:var(--primary-color);}
     </style>
 
     <script src="{{ asset('js/booking/simple.js') }}"></script>
