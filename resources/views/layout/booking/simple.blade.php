@@ -55,7 +55,7 @@
         .ma-block .row .left-col .contain .top-form-contain .form-field input {border: 2px solid #aaa;}
         .ma-block .row .left-col .contain .third-block .form-field:last-child select { border: 1px solid var(--primary-color) !important;}
         .bottom-foot .row { padding: 30px 0;}
-        .ma-block .row {padding-bottom: 10px !important;}
+        .ma-block .row {padding-bottom: 120px !important;}
         .accommodation-detail .locate {  border: 1px solid var(--primary-color);}
         .submit-btn-cls input {color:var(--text-dark)}
         .hotel-more-info a { color: #143e34;}
@@ -66,6 +66,7 @@
         .ma-block .row .right-col .contain .snd-sec .right-col p.date:before, .upp-block-two .right-col p.date:before { filter: brightness(0) saturate(100%) invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);}
         .form-field-full-width .note-editor.note-frame.panel.panel-default {border: 1px solid #aaa;}
         .package_popup .upp-block-two .right-col h5, .package_popup .upp-block-two .snd-sec .right-col h6 {color:var(--primary-color);}
+        .ma-block .row .left-col .contain .accommodation-details-hover .contain {padding: 34px 24px 5px 24px;}
     </style>
 
     <script src="{{ asset('js/booking/simple.js') }}"></script>
