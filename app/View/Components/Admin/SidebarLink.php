@@ -15,11 +15,11 @@ use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Bouncer;
 use Closure;
 use Icon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class SidebarLink extends Component
@@ -64,8 +64,11 @@ class SidebarLink extends Component
         if (empty($user) || !($user instanceof User)) {
             return [];
         }
+        $canViewEdash = $user->getHighestRoleLevel() >= 5;
         $links = [
             new SidebarLink('Dashboard', route('dash'), Icon::dashboard()),
+            $canViewEdash ? new SidebarLink('e-Dashboard', route('edashboard'), Icon::dashboard()) : null,
+            null,
             new SidebarLink('Events', route('events.all'), Icon::event(), 'events', Event::class, 'read'),
             new SidebarLink('Tours', route('tours.all'), Icon::tour(), 'tours', Tour::class, 'read'),
             new SidebarLink('Quotes', route('quotes.all'), Icon::quote(), 'quotes', Quote::class, 'read'),
@@ -87,12 +90,7 @@ class SidebarLink extends Component
             new SidebarLink('Reports', route('reports.all'), Icon::report(), 'reports', Report::class, 'read'),
         ];
 
-        // Conditionally add 'e-Dashboard' if user role level is high enough
-        if ($user->getHighestRoleLevel() >= 5) {
-            $links[] = new SidebarLink('e-Dashboard', route('edashboard'), Icon::dashboard());
-        }
-
-        return $links;
+        return array_filter($links);
     }
 
     public static function getLogsURL(): SidebarLink
