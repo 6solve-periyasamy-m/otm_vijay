@@ -60,3 +60,7 @@ Route::prefix('/booking/{bookingUrl}')->group(function () {
     Route::get('/{token}/addon/purchase/{id}/{type}', [CustomerBookingController::class, 'purchaseAddon'])->name('customer-booking.purchase-addon');
     Route::get('/{token}/addon/remove/{id}/{type}', [CustomerBookingController::class, 'removeAddon'])->name('customer-booking.remove-addon');
 });
+
+Route::prefix('system')->middleware(['auth:web', 'bouncer:System\Setting,read'])->name('system.')->group(function () {
+    Route::get('/',[\App\Http\Controllers\Admin\SystemController::class, 'administration'])->name('admin');
+});
