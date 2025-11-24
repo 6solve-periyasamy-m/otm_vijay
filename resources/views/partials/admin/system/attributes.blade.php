@@ -72,6 +72,20 @@
             </x-admin.section.card>
         </div>
         <div class="col-xl-4">
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Seating Map</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.activity.seating-map.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+                </slot:header>
+                <livewire:admin.activity.seating-map.table />
+            </x-admin.section.card>
+        </div>
+        <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\Activity\TicketTypeRepository::class])
         </div>
         <div class="col-xl-4">
@@ -94,6 +108,20 @@
         </div>
         <div class="col-xl-4">
             @include('partials.admin.small-model-table', ['repository' => \App\Repository\Model\TravelClassRepository::class])
+        </div>
+        <div class="col-xl-4">
+            <x-admin.section.card>
+                <slot:header>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="fw-bold">Airline Frequent Flyers</h4>
+                        <button class="btn btn-primary" onclick="openModal('admin.customer.airline-frequent-flyers.form')">
+                            {{ Icon::create() }}
+                            Create New
+                        </button>
+                    </div>
+                </slot:header>
+                <livewire:admin.customer.airline-frequent-flyers.table />
+            </x-admin.section.card>
         </div>
     </div>
     <div class="card">
