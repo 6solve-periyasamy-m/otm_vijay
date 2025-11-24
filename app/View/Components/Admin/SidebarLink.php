@@ -6,22 +6,20 @@ use App\Models\Accommodation\Accommodation;
 use App\Models\Activity\Activity;
 use App\Models\Customer\Customer;
 use App\Models\Flight\Flight;
-use App\Models\Location\Address;
 use App\Models\Merchandise\Merchandise;
 use App\Models\Order\Order;
 use App\Models\Quote\Quote;
-use App\Models\Supplier\Supplier;
 use App\Models\System\Report;
 use App\Models\System\Setting;
 use App\Models\Tour\Event;
 use App\Models\Tour\Tour;
 use App\Models\Transport\Transport;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Bouncer;
 use Closure;
 use Icon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class SidebarLink extends Component
@@ -66,35 +64,33 @@ class SidebarLink extends Component
         if (empty($user) || !($user instanceof User)) {
             return [];
         }
+        $canViewEdash = $user->getHighestRoleLevel() >= 5;
         $links = [
             new SidebarLink('Dashboard', route('dash'), Icon::dashboard()),
+            $canViewEdash ? new SidebarLink('e-Dashboard', route('edashboard'), Icon::dashboard()) : null,
+            null,
             new SidebarLink('Events', route('events.all'), Icon::event(), 'events', Event::class, 'read'),
             new SidebarLink('Tours', route('tours.all'), Icon::tour(), 'tours', Tour::class, 'read'),
+            new SidebarLink('Quotes', route('quotes.all'), Icon::quote(), 'quotes', Quote::class, 'read'),
+            new SidebarLink('Orders', route('orders.all'), Icon::order(), 'orders', Order::class, 'read'),
+            new SidebarLink('Customers', route('customers.all'), Icon::customer(), 'customers', Customer::class, 'read'),
+            new SidebarLink('Organizations', route('organizations.all'), Icon::organization(), 'organization', Customer::class, 'read'),
             new SidebarLink('Accommodation', route('accommodations.all'), Icon::accommodation(), 'accommodation', Accommodation::class, 'read'),
             new SidebarLink('Activities', route('activities.all'), Icon::activity(), 'activities', Activity::class, 'read'),
             new SidebarLink('Flights', route('flights.all'), Icon::flight(), 'flights', Flight::class, 'read'),
             new SidebarLink('Transport', route('transports.all'), Icon::transport(), 'transport', Transport::class, 'read'),
             new SidebarLink('Merchandise', route('merchandise.all'), Icon::merchandise(), 'merchandise', Merchandise::class, 'read'),
-            new SidebarLink('Addresses', route('addresses.all'), Icon::address(), 'addresses', Address::class, 'read'),
-            new SidebarLink('Vouchers', route('vouchers.index'), Icon::voucher(), 'vouchers'),
-            new SidebarLink('Orders', route('orders.all'), Icon::order(), 'orders', Order::class, 'read'),
-            new SidebarLink('Quotes', route('quotes.all'), Icon::quote(), 'quotes', Quote::class, 'read'),
-            new SidebarLink('Suppliers', route('supplier.index'), Icon::supplier(), 'supplier', Supplier::class, 'read'),
-            new SidebarLink('Customers', route('customers.all'), Icon::customer(), 'customers', Customer::class, 'read'),
-            new SidebarLink('Organizations', route('organizations.all'), Icon::organization(), 'organization', Customer::class, 'read'),
-            new SidebarLink('Settings', route('settings.edit'), Icon::setting(), 'settings', Setting::class, 'update'),
-            new SidebarLink('Attributes Manager', route('attributes.edit'), Icon::attribute(), 'attributes'),
-            new SidebarLink('Users', route('users.all'), Icon::user(), 'users', User::class, 'read'),
-            new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
+            //new SidebarLink('Addresses', route('addresses.all'), Icon::address(), 'addresses', Address::class, 'read'),
+            new SidebarLink('Administration', route('system.admin'), Icon::setting(), 'system', Setting::class, 'read'),
+            //new SidebarLink('Suppliers', route('supplier.index'), Icon::supplier(), 'supplier', Supplier::class, 'read'),
+            //new SidebarLink('Settings', route('settings.edit'), Icon::setting(), 'settings', Setting::class, 'update'),
+            //new SidebarLink('Attributes Manager', route('attributes.edit'), Icon::attribute(), 'attributes'),
+            //new SidebarLink('Users', route('users.all'), Icon::user(), 'users', User::class, 'read'),
+            //new SidebarLink('Roles', route('roles.all'), Icon::role(), 'roles', User::class, 'read'),
             new SidebarLink('Reports', route('reports.all'), Icon::report(), 'reports', Report::class, 'read'),
         ];
 
-        // Conditionally add 'e-Dashboard' if user role level is high enough
-        if ($user->getHighestRoleLevel() >= 5) {
-            $links[] = new SidebarLink('e-Dashboard', route('edashboard'), Icon::dashboard());
-        }
-
-        return $links;
+        return array_filter($links);
     }
 
     public static function getLogsURL(): SidebarLink
