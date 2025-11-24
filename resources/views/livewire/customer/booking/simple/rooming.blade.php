@@ -13,8 +13,7 @@
                         <p class="location">{{ $location }}</p>
                         <span></span>
                     @endif
-                    @php $currencyCode = $booking->currency?->code ?? Settings::currency()->code; @endphp
-                    <p class="dollar">From {{ f_currency_booking($tour->base_price_per_person) }} ({{$currencyCode}}) / person twin share</p>
+                    <p class="dollar">From {{ f_currency_booking($tour->base_price_per_person) }} / person twin share</p>
                 </div>
             </div>
             <p class="psg-det">PASSENGER DETAILS</p>
@@ -248,9 +247,9 @@
             </style>
 
             <div class="second-block date-details">
-                <!-- <p class="date_tle">DATE</p> -->
-                <p class="booking-dates">If you would like to extend your stay, please contact our Sales team at <a href="mailto:{{ $brand->email ?? setting('company.contact.email', 'Email not set') }}">{{ $brand->email ?? setting('company.contact.email', 'Email not set') }}</a></p>
-                {{-- <div class="date_outer_div">
+                <p class="date_tle">DATE</p>
+                <p class="booking-dates">If you would like to extend your stay, please contact our Sales team at <a href="mailto:travel@keithprowsetravel.com">travel@keithprowsetravel.com</a></p>
+                <div class="date_outer_div">
                     <div class="first">
                         <div class="image-module">
                             <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon">
@@ -273,7 +272,18 @@
                             <img src="{{ asset('/css/booking/icon/calendar.svg') }}" alt="icon"> 
                         </div>
                     </div>
-                </div> --}}
+
+                    <!-- <div class="check_text_dflex check_text_div">
+                        <div class="checkintext">Check-in</div>
+                        <div class="checkouttext">Check-out</div>
+                    </div>
+                    <div class="check_text_dflex">
+                        <div class="checkindate">{{ \Carbon\Carbon::parse($tour->date_from)->format('D, d M y') }}</div>
+                        <div class="dateslash">-</div>
+                        <div class="checkoutdate">{{ \Carbon\Carbon::parse($tour->date_to)->format('D, d M y') }}</div>
+                    </div> -->
+
+                </div>
             </div>
 
             <style>

@@ -47,8 +47,8 @@
         </div>
         <div class="contact-block">
             <p class="description">Get in touch for a tailor-made package:</p>
-            <p class="phone">Phone <a href="tel:{{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}"> {{ $brand->phone ?? setting('company.contact.phone', 'Phone number not set') }}</a></p>
-            <p class="email">Email <a href="mailto:{{ $brand->email ?? setting('company.contact.email', 'Email not set') }}">{{ $brand->email ?? setting('company.contact.email', 'Email not set') }}</a></p>
+            <p class="phone">Phone <a href="tel:+61 2 7201 9353"> +61 2 7201 9353</a></p>
+            <p class="email">Email <a href="mailto:travel@keithprowsetravel.com">travel@keithprowsetravel.com</a></p>
         </div>
     </x-slot:left>
 </x-customer.booking.v3.layout>

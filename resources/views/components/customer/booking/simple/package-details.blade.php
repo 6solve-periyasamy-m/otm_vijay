@@ -187,43 +187,43 @@
         <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
         <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
-        {{-- @foreach($tour->repository->getInclusions(4) as $inclusion)
+        @foreach($tour->repository->getInclusions(4) as $inclusion)
             <p class="inclusion">{{ $inclusion }}</p>
-        @endforeach --}}
+        @endforeach
         <p class="see-more">
             <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">MORE INFORMATION</a>
         </p>
     </div>
 </div>
 
-@php
-    $rawAmount = $booking->repository->getTotalCost();
-    $currencyCode = $booking->currency?->code ?? Settings::currency()->code;
-    $dueToday = $booking->repository->getDueTodayAmount();
-    $balance = $rawAmount - $dueToday;
-    $hasBalance = $balance > 0;
-@endphp
 <div class="additional-inclusions">
     <div class="select-currency">
         <div class="single">
             <p></p>          
         </div>
         <div class="single">
-            <p class="font-weight-bold">Package price ({{ $currencyCode }})</p>
+            <p class="font-weight-bold">Package price</p>
             <p class="font-weight-bold">{{ f_currency_booking($booking->repository->getBasePrice()) }}</p>
         </div>
         <div class="cart_sub_title">
             <p>Price per Person</p>
             <p>{{ f_currency_booking($tour->base_price_per_person) }}</p>
         </div>
-        @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
+        {{-- @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         @if($singleOccupancy > 0 || $singleOccupancy < 0)
-        <div class="cart_sub_title">
+        <div class="single">
             <p>Single Occupancy</p>
             <p>{{ f_currency_booking($singleOccupancy) }}</p>
         </div>
-        @endif
+        @endif --}}
     </div>
+    @php
+        $rawAmount = $booking->repository->getTotalCost();
+        $currencyCode = $booking->currency?->code ?? Settings::currency()->code;
+        $dueToday = $booking->repository->getDueTodayAmount();
+        $balance = $rawAmount - $dueToday;
+        $hasBalance = $balance > 0;
+    @endphp
     <div class="total">
         <div class="single">
             <p>Total ({{ $currencyCode }})</p>
