@@ -15,12 +15,7 @@ class CustomerDetailsController extends CustomerController
 {
     public function edit()
     {
-        $frequentFlyers = AirlineFrequentFlyers::all();
-        return view('pages.customer.details', [
-            'customer' => $this->user(),
-            'editable' => $this->user()->repository->getEditableCustomers(),
-            'frequentFlyers' => $frequentFlyers,
-        ]);
+        return view('pages.customer.details-livewire', ['customer' => $this->user(),]);
     }
 
     public function editOther(Customer $customer)

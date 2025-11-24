@@ -20,6 +20,7 @@
     <!-- Custom CSS -->
     {{-- <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet"> --}}
     <link href="{{ asset('/css/customer/style.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.11.2/build/css/intlTelInput.css">
     {{-- <link href="{{ asset('/css/customer.css?v=').time() }}" rel="stylesheet"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="{{ asset('js/app.js') . '?' . date('U')  }}"></script>
@@ -54,6 +55,7 @@
         }
     </script>
     @livewireStyles
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.11.2/build/js/intlTelInput.min.js"></script>
 </head>
 <body>
     <!-- Preloader -->
