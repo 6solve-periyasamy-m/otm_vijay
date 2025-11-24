@@ -34,6 +34,39 @@
 
     <link rel="stylesheet" href="{{ asset('css/booking/simple.css') }}">
 
+    <style>
+        :root {
+            --primary-color: #FFB319;
+            --white: #FFFFFF;
+            --text-light-dark: #383232;
+            --text-dark: #000000;
+            --sub-text-color: #808080;
+            --sub-heading-2: #143e34;
+            --next-btn:#ffb81c;
+            --back-btn:#ffb81c;
+        }
+        body {background-color: #f4f4f4; color: #333333;}
+        .top-head, .bottom-foot { background: linear-gradient(to right, #143e34 50%, #143e34 75%); }
+        .top-head .row {padding: 14px 0;}
+        .top-head .row .col-one .img-contain { max-height: 60px !important;}
+        .top-head .row .col-two .cont-details .single-div a:hover {color: var(--primary-color);}
+        .top-head .row .col-two .cont-details .single-div a.contact:after, .submit-btn-cls .inner:after   { filter: brightness(0) saturate(100%); }
+        .form-field input:focus{ transition: all 0.5s; box-shadow: 0 0 40px #f9d442b9; border-color: #f9d342; outline: none; }
+        .ma-block .row .left-col .contain .top-form-contain .form-field input {border: 2px solid #aaa;}
+        .ma-block .row .left-col .contain .third-block .form-field:last-child select { border: 1px solid var(--primary-color) !important;}
+        .bottom-foot .row { padding: 30px 0;}
+        .ma-block .row {padding-bottom: 10px !important;}
+        .accommodation-detail .locate {  border: 1px solid var(--primary-color);}
+        .submit-btn-cls input {color:var(--text-dark)}
+        .hotel-more-info a { color: #143e34;}
+        .hotel-more-info a::after {filter: brightness(0) saturate(100%) invert(25%) sepia(21%) saturate(984%) hue-rotate(121deg) brightness(92%) contrast(90%);}
+        .accommodation-detail .locate h5 { color: #7a7a7a;}
+        .ma-block .row .right-col .contain .snd-sec .right-col p.see-more a {color: #143e34;}
+        .ma-block .row .right-col.package_details_right .name_price_div h4 { color:var(--primary-color);}
+        .ma-block .row .right-col .contain .snd-sec .right-col p.date:before { filter: brightness(0) saturate(100%) invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);}
+        .form-field-full-width .note-editor.note-frame.panel.panel-default {border: 1px solid #aaa;}
+    </style>
+
     <script src="{{ asset('js/booking/simple.js') }}"></script>
     <script src="https://js.stripe.com/basil/stripe.js"></script>
 
@@ -124,7 +157,7 @@
                     <div class="img-contain">
                         @if(isset($brand))
                             <a href="https://www.keithprowsetravel.com/" target="_blank">
-                                <img style="width: 300px; height: 32px;" src="{{ $brand->alt_image }}" alt="lo{{ $brand->name }}go" title="{{ $brand->name }}">
+                                <img style="width: 300px;" src="{{ $brand->alt_image }}" alt="lo{{ $brand->name }}go" title="{{ $brand->name }}">
                             </a>
                         @endif
                     </div>
@@ -201,11 +234,11 @@
                     <div class="contain">
                         <p>Legal Notices <span>|</span></p>
                         <p>
-                            <a href="https://www.kpt.com.au/privacy-policy/" target="_blank">Privacy Policy</a>
+                            <a href="https://www.keithprowsetravel.com/privacy-policy/" target="_blank">Privacy Policy</a>
                             <span>|</span>
                         </p>
                         <p>
-                            <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a>
+                            <a href="https://www.keithprowsetravel.com/terms-and-conditions/" target="_blank">Terms & Conditions</a>
                         </p>
                     </div>
                 </div>

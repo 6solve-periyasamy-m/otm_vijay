@@ -8,7 +8,7 @@
         <div class="container">
             <div class="column">
                 @if(isset($this->brand))
-                    <a href="https://www.keithprowsetravel.com/" target="_blank"><img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 75px" alt="logo" title="{{ $this->brand->name }}"></a>
+                    <a href="https://www.keithprowsetravel.com/" target="_blank"><img src="{{ asset($this->brand->alt_logo ?? $this->brand->logo) }}" style="max-height: 60px" alt="logo" title="{{ $this->brand->name }}"></a>
                 @endif
             </div>
             <div class="column right">
@@ -64,7 +64,7 @@
                                 <p class="location">{{ $location }}</p>
                                 <span></span>
                             @endif
-                            <p class="dollar">From {{ $this->formatCurrency($tour->base_price_per_person) }} / person twin share</p>
+                            <p class="dollar">From {{ $this->formatCurrency($tour->base_price_per_person) }} ({{$selectedCurrency}}) / person twin share</p>
                         </div>
                     </div>
                     {{ $left }}
@@ -103,7 +103,7 @@
                                 <div class="select-currency">
                                     {{-- @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector')) --}}
                                     <div class="single">
-                                        <p class="font-weight-bold">Package price</p>
+                                        <p class="font-weight-bold">Package price ({{$selectedCurrency}})</p>
                                         <p class="font-weight-bold">{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
                                     </div>
                                     <div class="cart_sub_title">
