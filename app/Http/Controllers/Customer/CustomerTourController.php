@@ -35,12 +35,14 @@ class CustomerTourController extends CustomerController
         $customer = $customer ?? $this->user();
         $order = $reference ??  $customer->repository->getDefaultOrder();
         if (!$this->user()->repository->canEditCustomer($customer)) abort(404);
-        if (!isset($order)) abort(404);
+        // if (!isset($order)) abort(404);
         $oCustomer = null;
-        foreach ($order->orderCustomers as $orderCustomer) {
-            if ($orderCustomer->customer_id === $customer?->id) {
-                $oCustomer = $orderCustomer;
-                break;
+        if(isset($order->orderCustomers)){
+            foreach ($order->orderCustomers as $orderCustomer) {
+                if ($orderCustomer->customer_id === $customer?->id) {
+                    $oCustomer = $orderCustomer;
+                    break;
+                }
             }
         }
         return $oCustomer;
@@ -49,13 +51,35 @@ class CustomerTourController extends CustomerController
     public function showItinerary(?Order $reference = null, ?Customer $customer = null)
     {
         $orderCustomer = $this->getOrderCustomer($reference, $customer);
-        if (!isset($orderCustomer)) abort(404);
+        // if (!isset($orderCustomer)) abort(404);
+        $editable = (isset($orderCustomer->order)) ? $this->getOrderCustomers($orderCustomer->order , $this->user()) : [];
         return view('pages.customer.itinerary', [
             'orderCustomer' => $orderCustomer,
-            'order' => $orderCustomer->order,
-            'orders' => $this->user()->orders,
-            'editable' => $this->getOrderCustomers($orderCustomer->order, $this->user()),
+            'order' => $orderCustomer->order ?? [],
+            'orders' => $this->getFilteredOrders(),
+            'itinerary' => $orderCustomer?->order->repository->getItinerary() ?? [],
+            'editable' => $editable,
         ]);
+    }
+    private function getFilteredOrders()
+    {
+        $search = request('search');
+
+        $ordersQuery = $this->user()?->orders()
+            ->with(['tour'])
+            ->orderBy('cancelled', 'asc')
+            ->orderBy('ordered_on', 'desc');
+
+        if (!empty($search)) {
+            $ordersQuery->where(function ($query) use ($search) {
+                $query->where('booking_reference', 'like', '%' . $search . '%')
+                    ->orWhereHas('tour', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        return $ordersQuery->get();
     }
 
     public function downloadItinerary(?Order $reference = null, ?Customer $customer = null): StreamedResponse
@@ -63,6 +87,13 @@ class CustomerTourController extends CustomerController
         $orderCustomer = $this->getOrderCustomer($reference, $customer);
         if (!isset($orderCustomer)) { abort(404); }
         return (new ItineraryRepository($orderCustomer->order))->getResponseStream($orderCustomer);
+    }
+
+    public function downloadPreview(?Order $reference = null, ?Customer $customer = null): StreamedResponse
+    {
+        $orderCustomer = $this->getOrderCustomer($reference, $customer);
+        if (!isset($orderCustomer)) { abort(404); }
+        return dompdf(view('pdf.quotes.itinerary', ['itinerary' => $orderCustomer->order->repository->getReservationDocument(), 'type' => 'Reservation']));
     }
 
     public function showExtras(?Order $reference = null, ?Customer $customer = null)
@@ -165,26 +196,24 @@ class CustomerTourController extends CustomerController
 
     public function updateNotes(TourDetailsRequest $request, Order $reference, OrderCustomer $orderCustomer)
     {
-        $customer = $this->user();
-        if (!isset($customer)) abort(404);
+        // $customer = $this->user();
+        // if (!isset($customer)) abort(404);
         $order = $reference;
 
-        if (!isset($order) || $order->cancelled) abort(404);
-        if (!$order->repository->isLeadBooker($customer)) abort(404);
-
-        if ($order->repository->isLeadBooker($this->user())) {
-            $order->update(['external_notes' => $request->order_notes,]);
-            $order->save();
-        }
-        $details = $request->getOrderCustomerDetails();
-        if ($order->tour->repository->isOrderNotesLocked()) { unset($details['order_notes']); unset($details['order_customer_notes']); }
-        if ($order->tour->repository->isAccommodationLocked()) { unset($details['accommodation_notes']); }
-        if ($order->tour->repository->isActivityLocked()) { unset($details['activity_notes']); }
-        if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
-        if ($order->tour->repository->isTransportLocked()) { unset($details['transport_notes']); }
-        $orderCustomer->repository->update($details);
-
-        $order->createNotification(NotificationType::ORDER_UPDATED, 'Order Notes updated by customer', $this->user());
+        // if (!isset($order) || $order->cancelled) abort(404);
+        // if (!$order->repository->isLeadBooker($customer)) abort(404);
+        // if ($order->repository->isLeadBooker($this->user())) {
+        $order->update(['external_notes' => $request->external_notes,'internal_notes' => $request->internal_notes,]);
+        $order->save();
+        // }
+        // $details = $request->getOrderCustomerDetails();
+        // if ($order->tour->repository->isOrderNotesLocked()) { unset($details['order_notes']); unset($details['order_customer_notes']); }
+        // if ($order->tour->repository->isAccommodationLocked()) { unset($details['accommodation_notes']); }
+        // if ($order->tour->repository->isActivityLocked()) { unset($details['activity_notes']); }
+        // if ($order->tour->repository->isFlightLocked()) { unset($details['flight_notes']); }
+        // if ($order->tour->repository->isTransportLocked()) { unset($details['transport_notes']); }
+        // $orderCustomer->repository->update($details);       
+        // $order->createNotification(NotificationType::ORDER_UPDATED, 'Order Notes updated by customer', $this->user());
         return redirect()->route('customer.itinerary', ['reference' => $order->booking_reference,]);
     }
 

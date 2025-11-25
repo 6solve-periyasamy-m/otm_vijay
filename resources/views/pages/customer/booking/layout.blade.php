@@ -4,7 +4,7 @@
  */
 @endphp
 
-@extends('layout.customer', ['branding' => $tour->brand])
+@extends('layout.customer-standard', ['branding' => $tour->brand])
 
 @section('content')
     <div class="card">

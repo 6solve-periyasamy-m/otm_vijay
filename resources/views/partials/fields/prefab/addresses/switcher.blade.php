@@ -22,16 +22,16 @@ $prefix = $prefix ?? "";
 @endpush
 <hr class="splitter"/>
 <div class="form-group col-xl-6">
-    <input type="checkbox" name="{{ $prefix }}use_existing" class="form-check-input"
+    <input type="checkbox" name="{{ $prefix }}use_existing" class="form-check-input border-success"
            @if(isset($address_id)) checked @endif
     id="{{ $prefix }}use_existing-input" onchange="{{ $prefix }}switchView();">
-    <label for="{{ $prefix }}use_existing-input" class="form-check-label">Use Pre-Existing Address</label>
+    <label for="{{ $prefix }}use_existing-input" class="form-check-label fw-bold text-success">Use Pre-Existing Address</label>
 </div>
 <hr class="splitter"/>
 <div class="{{ $prefix }}switcher-existing">
     @include('partials.fields.prefab.addresses.selector', ['value' => $address?->id, ])
 </div>
 <div class="switcher-new row">
-    @include('partials.models.addresses.form', ['address' => $address, 'prefix' => $prefix,])
+    @include('partials.models.addresses.form', ['address' => $address, 'prefix' => $prefix, 'submit' => false,])
 </div>
 <hr class="splitter"/>

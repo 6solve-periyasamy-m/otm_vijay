@@ -2,6 +2,8 @@
     <thead>
     <tr>
         <th scope="col">Booking Reference</th>
+        <th scope="col">Event</th>
+        <th scope="col">Booking Travellers</th>
         <th scope="col">Customer Name</th>
         <th scope="col">Passport Name</th>
         <th scope="col">Order Internal Notes</th>
@@ -9,6 +11,7 @@
         <th scope="col">Operator</th>
         <th scope="col">Travel Class</th>
         <th scope="col">Transport Number</th>
+        <th scope="col">Name</th>
         <th scope="col">Departure Date</th>
         <th scope="col">Departure Time</th>
         <th scope="col">Departure Address</th>
@@ -27,6 +30,8 @@
     @foreach($data as $row)
         <tr>
             <th scope="row">{{ $row->reference }}</th>
+            <td>{{ $row->event }}</td>
+            <td>{{ $row->travellers }}</td>
             <td>{{ $row->customer }}</td>
             <td>{{ $row->passport }}</td>
             <td>{{ $row->orderInternal }}</td>
@@ -34,6 +39,7 @@
             <td>{{ $row->operator }}</td>
             <td>{{ $row->ticket }}</td>
             <td>{{ $row->number }}</td>
+            <td>{{ $row->transport }}</td>
             <td>{{ f_date($row->start)}}</td>
             <td>{{ f_time($row->start)}}</td>
             <td>{{ $row->departure->name }}</td>

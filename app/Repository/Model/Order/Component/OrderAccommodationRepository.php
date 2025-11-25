@@ -108,6 +108,10 @@ class OrderAccommodationRepository extends OrderComponentRepository
         }
         return $quantity;
     }
+    public function getOrderComponent()
+    {
+        return $this->orderComponent;
+    }
 
     public function getItineraryItem(Order|null $order = null): ItineraryItem
     {

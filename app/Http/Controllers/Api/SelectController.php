@@ -19,6 +19,7 @@ use App\Transforms\MerchandiseTransforms;
 use App\Transforms\OrderTransforms;
 use App\Transforms\TourTransforms;
 use App\Transforms\TransportTransforms;
+use App\Customer\AirlineFrequentFlyers;
 use Illuminate\Http\Request;
 
 class SelectController extends ApiController
@@ -416,6 +417,16 @@ class SelectController extends ApiController
 
     public function getSelectedTransportOccupancy($id) {
         return TransportTransforms::getSelectedTransportOccupancy($id);
+    }
+
+
+    public function getFrequentFlyer(Request $request) {
+        $filter = $request->has('filter') ? $request->input('filter') : "";
+        return CustomerTransforms::getSelectFrequentFlyer($filter);
+    }
+
+    public function getSelectedFrequentFlyer($id) {
+        return CustomerTransforms::getSelectedFrequentFlyer($id);
     }
 
 }

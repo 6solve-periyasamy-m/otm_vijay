@@ -6,6 +6,8 @@ use App\Models\Customer\HatSize;
 use App\Models\Customer\Organization;
 use App\Models\Customer\Agent;
 use App\Models\Customer\TShirtSize;
+use App\Models\Customer\AirlineFrequentFlyers;
+
 
 interface CustomerTransformsInterface
 {
@@ -16,6 +18,8 @@ interface CustomerTransformsInterface
     public static function getSelectHatSizes($filter);
 
     public static function getSelectedHatSize($id);
+
+    public static function getSelectedFrequentFlyer($id);
 }
 
 class CustomerTransforms implements CustomerTransformsInterface
@@ -101,6 +105,28 @@ class CustomerTransforms implements CustomerTransformsInterface
             $option['text'] = $agent->first_name . ' ' . $agent->last_name;
             $data['results'][] = $option;
         }
+        return $data;
+    }
+
+    public static function getSelectFrequentFlyer($filter)
+    {
+        $data = [];
+        foreach (AirlineFrequentFlyers::all() as $program) {
+            $subData = [];
+            $subData['id'] = $program->id;
+            $subData['text'] = $program->name;
+            if (str_contains(strtolower($subData['text']), strtolower($filter))) $data['results'][] = $subData;
+        }
+        return $data;
+    }
+
+    public static function getSelectedFrequentFlyer($id)
+    {
+        if ($id == 0) return null;
+        $program = AirlineFrequentFlyers::findOrFail($id);
+        $data = [];
+        $data['id'] = $program->id;
+        $data['text'] = $program->name;
         return $data;
     }
 }

@@ -123,6 +123,13 @@ class SettingsController extends Controller
             'system.cc.mail' => $request->input('system_cc_email'),
             'system.bcc.mail' => $request->input('system_bcc_email'),
             'round.base_price' => $request->input('round_base_price'),
+            'booking.round_to_five' => $request->input('round_to_five') === 'on' ? 1 : 0,
+            'booking.head.tracking.code' => $request->input('head_tracking_code'),
+            'booking.body.tracking.code' => $request->input('body_tracking_code'),
+            'booking.captcha.key' => $request->input('captcha_site_key'),
+            'booking.captcha.secret' => $request->input('captcha_secret_key'),
+            'booking.captcha.minscore' => $request->input('captcha_min_score'),
+            'booking.expiry' => $request->input('booking_expiry'),
         ]);
         if ($request->has('company_logo')  && !empty($request->file('company_logo'))) {
             Settings::set('company.logo', $this->saveImage($request->file('company_logo')));
@@ -188,6 +195,11 @@ class SettingsController extends Controller
     public function import()
     {
         return view('pages.admin.system.import');
+    }
+
+    public function purge()
+    {
+        return view('pages.admin.system.purge');
     }
 
     public function authorizeReminders(int $days): RedirectResponse

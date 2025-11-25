@@ -18,7 +18,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
         $(document).ready(function () {
             $('#orders').DataTable({fixedHeader: true, order: [[0, 'desc']],});
             $('#tours').DataTable({fixedHeader: true, order: [[2, 'desc']],});
-            $('#linked-activities').DataTable({fixedHeader: true, order: [[3, 'asc']],});
+            $('#linked-activities').DataTable({fixedHeader: true, order: [[4, 'desc']],});
         });
 
         function change_filter(obj) {
