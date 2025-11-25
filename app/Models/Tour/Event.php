@@ -41,6 +41,7 @@ use Settings;
  * @property string|null $itinerary_email_subject
  * @property string|null $itinerary_email_template
  * @property string|null $notes
+ * @property string|null $additional_description
  * @property string|null $onsite_name
  * @property string|null $onsite_email
  * @property string|null $onsite_phone

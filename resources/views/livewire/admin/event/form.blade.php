@@ -20,6 +20,8 @@
                 <x-livewire.input wire:model="event.booking_url" label="Booking URL" width="10" />
                 <x-livewire.input.checkbox wire:model="event.is_download_itinerary" label="Download Itinerary?" width="2" />
                 <x-livewire.input.text-area wire:model="event.notes" label="Notes" />
+                <h6 class="fs-5 fw-bold">e-Commerce</h6>
+                <x-livewire.ckeditor name="event.additional_description" value="{{ $event?->additional_description }}" label="Additional Description" />
             </div>
         </x-admin.section.card>
     </div>
