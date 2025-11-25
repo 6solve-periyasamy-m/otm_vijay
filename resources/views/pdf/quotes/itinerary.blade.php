@@ -129,24 +129,8 @@
     font-family: "PPNeueMontreal-Regular";
     src: url('images/pdf_assets/fonts/PPNeueMontreal-Regular.ttf');
     }
-  h1 {
-    color: var(--text-color);
-    font-family: "PlayfairDisplay-Medium";
-    font-size: 30px;
-    font-weight: 500;
-    line-height: 36px;
-    margin-bottom: 0px;
-  }
-  .customer-details-block h6 {
-    font-family: "PPNeueMontreal-Medium";
-    font-size:14px;
-    font-weight:500;
-    line-height:16px;
-    margin:0px;
-    margin-bottom:8px;
-    color: var(--text-head-color);
-    text-transform:uppercase;
-  } 
+  h1 { color: var(--text-color); font-family: "PlayfairDisplay-Medium"; font-size: 30px; font-weight: 500; line-height: 36px; margin-bottom: 0px; }
+  .customer-details-block h6 { font-family: "PPNeueMontreal-Medium"; font-size:14px; font-weight:500; line-height:16px; margin:0px; margin-bottom:8px; color: var(--text-head-color); text-transform:uppercase; }
  .customer-details-block .customer-details-text-block,.customer-details-block .customer-details-image-block  {
     float:left;  
  }
@@ -1079,7 +1063,7 @@ figure.table {
                       <span style="width: 100%;height: 1px;display: block;margin: 0;margin-top: 2px;background-color: var(--head-text-background);"></span>
                       </strong></td>
                       <td class="currency-symbol"><span class="final-price">{{ fr_currency($itinerary->finances->total, $currency, false, 0) }}</span></td>
-                  </tr>                                    
+                  </tr>
            </tbody>
         </table>
     </div>
@@ -1220,7 +1204,13 @@ figure.table {
               <td>
                 {{ ($installment->type === ItineraryScheduleType::INSTALLMENT) ? "Instalment" : ucfirst(strtolower($installment->type->name)) }}
               </td>
-              <td class="currency-symbol">{{ fr_currency($installment->amount, $currency) }}</td>
+              <td class="currency-symbol">
+                @if ($installment->type === ItineraryScheduleType::TOTAL)
+                  {{ fr_currency($installment->amount, $currency) }}
+                @else
+                  {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
+                @endif
+              </td>
               <td>
                 @if ($installment->type === ItineraryScheduleType::DEPOSIT)
                   Now

@@ -6,7 +6,7 @@
                     <x-slot:icon>{{ Icon::tour() }}</x-slot:icon>
                     View Tour
                 </x-admin.popup-button>
-                @if(config('app.features.kpt') || config('app.features.bleeding-edge'))
+                @if(kpt())
                     <x-admin.popup-button href="{{ route('orders.reservation', ['order' => $order,]) }}" target="_blank" class="color-info row-1">
                         <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
                         View Reservation Document
@@ -27,7 +27,7 @@
                     </x-admin.popup-button>
                 @endif
                 {{-- Email Sending --}}
-                @if((config('app.features.kpt', false) || config('app.features.bleeding-edge')) && flag('reservation.invoice.mail.enabled', false))
+                @if((kpt()) && flag('reservation.invoice.mail.enabled', false))
                         <x-admin.popup-button href="#" onclick="event.preventDefault(); if(confirm('Are you sure you want to send the Reservation document to email?')) { Livewire.emit('sendReservationToEmail'); }" class="color-mint row-4">
                         {{-- <x-admin.popup-button href="#" wire:click.prevent="openPopupEmailForm('reservation')" class="color-mint row-4">--}}
                         <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
@@ -47,7 +47,7 @@
                     </x-admin.popup-button>
                 @endif
 
-                @if((config('app.features.kpt', false) || config('app.features.bleeding-edge')) && flag('itinerary.document.mail.enabled', false))
+                @if((kpt()) && flag('itinerary.document.mail.enabled', false))
                     <x-admin.popup-button href="#" wire:click.prevent="openPopupEmailForm('itinerary')" class="color-mint row-4">
                         <x-slot:icon>{{ Icon::email() }}</x-slot:icon>
                         Send Itinerary Document

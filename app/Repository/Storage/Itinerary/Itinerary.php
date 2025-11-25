@@ -7,6 +7,7 @@ use App\Models\Customer\Organization;
 use App\Models\System\Brand;
 use App\Models\Tour\Event;
 use App\Models\User;
+use App\Models\Customer\Customer;
 use Carbon\Carbon;
 
 /**
@@ -46,7 +47,8 @@ class Itinerary
         public string|null $reference,
         public Organization|null $organization,
         public Agent|null $agent,
-        public User|null $consultant,
+        // public User|null $consultant,
+        public User|Customer|null $consultant,
         public Carbon $start,
         public Carbon $end,
         public Carbon $created,

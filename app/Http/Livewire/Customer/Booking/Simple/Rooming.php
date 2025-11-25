@@ -21,10 +21,11 @@ class Rooming extends Component
     ];
 
     public Tour|int $tour;
-    public int|null $selectedHotel;
+    public int|null $selectedHotel = null;
     public Booking|int|null $booking;
     public BookingTraveller|null $lead = null;
     public array $rooms = [];
+    public int $maxTravellers;
 
     public function mount(Tour|int $tour, Booking|int|null $booking = null): void
     {
@@ -32,6 +33,8 @@ class Rooming extends Component
         $this->booking = Booking::getForMount($booking);
 
         if ($this->booking->tour_id !== null && $this->booking->tour_id !== $this->tour->id) { abort(404); }
+
+        $this->maxTravellers = $this->tour->stock_control_active ? min($this->tour->repository->getAvailableStock(), self::MAX_TRAVELLERS) : self::MAX_TRAVELLERS;
 
         if ($this->booking->id === null) {
             $this->booking = BookingRepository::make($this->tour);
@@ -67,6 +70,7 @@ class Rooming extends Component
 
     private function renewRooming(): void
     {
+        if ($this->tour->accommodationInventoryTours()->count() === 0) { return; }
         foreach ($this->booking->groups as $group) {
             $type = $group->accommodation()->first()?->tourComponent->inventory->room_type_id ?? $this->tour->repository->getDefaultRoom($this->selectedHotel);
             $this->rooms[] = ['room' => $type, 'travellers' => $group->travellers()->count(),];
@@ -80,7 +84,7 @@ class Rooming extends Component
 
     public function addTraveller(): void
     {
-        if ($this->booking->travellers()->count() >= self::MAX_TRAVELLERS) { return; }
+        if ($this->booking->travellers()->count() >= $this->maxTravellers) { return; }
         $this->booking->repository->addUnknownTraveller();
         $this->validateRoomCount();
         $this->renew();
@@ -97,6 +101,7 @@ class Rooming extends Component
 
     public function setupRooming(): void
     {
+        if ($this->tour->accommodationInventoryTours()->count() === 0) { return; }
         $this->booking->repository->setupSimpleRooming($this->selectedHotel, $this->rooms);
     }
 
@@ -106,15 +111,21 @@ class Rooming extends Component
         $this->lead->save();
         $this->booking->lead_traveller_id = $this->lead->id;
         $this->booking->save();
-        $travellerExcess = $this->getTravellerCount();
-        foreach ($this->rooms as $room) {
-            $travellerExcess -= RoomType::find($room['room'])?->maximum_occupancy;
-        }
-        if ($travellerExcess > 0) {
-           return $this->addError('common', 'Not all travellers have rooms');
-        }
-        if ($travellerExcess < 0) {
-           return $this->addError('common', 'More travellers have been added to rooms than are travelling');
+        if ($this->tour->accommodationInventoryTours()->count() > 0) {
+            $travellerExcess = $this->getTravellerCount();
+            foreach ($this->rooms as $room) {
+                $travellerExcess -= RoomType::find($room['room'])?->maximum_occupancy;
+            }
+            if ($travellerExcess > 0) {
+               return $this->addError('common', 'Not all travellers have rooms');
+            }
+            if ($travellerExcess < 0) {
+               return $this->addError('common', 'More travellers have been added to rooms than are travelling');
+            }
+            if (!$this->booking->repository->validateStock()) {
+                $bEmail = $this->booking->tour->brand->email;
+                return $this->addError('common', "Some components in this package are out-of-stock. Please contact us at {$bEmail} for alternative options.");
+            }
         }
         return redirect()->route('booking.simple.checkout', [
             'token' => $this->booking->token,
@@ -147,6 +158,7 @@ class Rooming extends Component
 
     public function validateRoomCount(): void
     {
+        if ($this->tour->accommodationInventoryTours()->count() === 0) { return; }
         foreach ($this->rooms as $i => $iValue) {
             $this->rooms[$i]['travellers'] = (int)$iValue['travellers'];
         }
@@ -187,10 +199,19 @@ class Rooming extends Component
     // }
     public function rules()
     {
+        if ($this->tour->accommodationInventoryTours()->count() > 0) {
+            return [
+                'lead.email_address' => 'required|email:rfc,dns',
+                'rooms.*.room' => 'required|integer',
+                'selectedHotel' => 'required|integer',
+                //'rooms.*.travellers' => 'required|integer|min:1',
+            ];
+        }
+
         return [
             'lead.email_address' => 'required|email:rfc,dns',
-            'rooms.*.room' => 'required|integer',
-            'selectedHotel' => 'required|integer',
+            'rooms.*.room' => 'nullable|integer',
+            'selectedHotel' => 'nullable|integer',
             //'rooms.*.travellers' => 'required|integer|min:1',
         ];
     }

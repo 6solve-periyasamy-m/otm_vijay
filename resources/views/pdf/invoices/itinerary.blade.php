@@ -264,19 +264,8 @@
         @endif
 
         @if(!empty($itinerary->items['Flights']))
-            @php 
-                $firstLoop = true; 
-                $groupedFlights = collect($itinerary->items['Flights'])
-                ->filter(function($flight) {
-                    return isset($flight->details['Quantity']) && 
-                        $flight->details['Quantity'] > 0 ;
-                })
-                ->groupBy('sortKey')
-                ->map(function($flights) {
-                    return $flights->first();
-                });
-            @endphp
-            @foreach($groupedFlights as $flight)
+            @php $firstLoop = true; @endphp
+            @foreach($itinerary->items['Flights'] as $flight)
                 @if(isset($flight->details['Quantity']) && $flight->details['Quantity'] > 0)
                 <div class="single-module mb-n15 component-break">
                     @if($firstLoop)

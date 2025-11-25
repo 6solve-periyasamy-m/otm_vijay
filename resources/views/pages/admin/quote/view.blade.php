@@ -89,7 +89,7 @@
                 {{ Icon::edit() }}
                 {{ __('quotes.view.buttons.edit') }}
             </a>
-            @if(config('app.features.bleeding-edge') || config('app.features.kpt'))
+            @if(kpt())
             <a href="{{ route('quotes.accommodation', ['quote' => $quote]) }}" class="btn btn-secondary">
                 {{ Icon::accommodation() }}
                 {{ __('quotes.view.buttons.accommodation') }}

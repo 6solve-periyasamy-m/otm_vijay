@@ -55,6 +55,8 @@ class OrderCache extends Model
         'next_payment_remaining' => 'float',
         'next_payment_date' => 'date',
         'cached' => 'datetime',
+        'date_from' => 'date:Y-m-d',
+        'date_to' => 'date:Y-m-d',
     ];
 
     protected $guarded = [];

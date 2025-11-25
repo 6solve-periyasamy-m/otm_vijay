@@ -172,8 +172,9 @@ class AccommodationInventoryRepository extends InventoryRepository implements Ha
         return "{$this->inventory->component} - {$this->inventory->roomType} {$this->inventory->boardType} (" . f_datetime($this->inventory->check_in) . " to " . f_datetime($this->inventory->check_out) . ")";
     }
 
-    public function addToTour(Tour $tour, string|null $tourComponentType = 'Included', float $price = -1): ?AccommodationInventoryTourRepository
+    public function addToTour(Tour $tour, string|null $tourComponentType = 'Included', float|null $price = -1): ?AccommodationInventoryTourRepository
     {
+        $price = $price ?? $this->inventory->sales_price;
         $inventoryTour = AccommodationInventoryTour::make([
             'tour_sales_price' => $price == -1 ? $this->inventory->sales_price : $price,
             'tour_component_type' => $tourComponentType,

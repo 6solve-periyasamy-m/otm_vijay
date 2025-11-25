@@ -1,4 +1,4 @@
-@extends('layout.customer')
+@extends('layout.customer-standard')
 
 @section('title', 'Failed to Fetch Gateway')
 

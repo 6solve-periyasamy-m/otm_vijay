@@ -911,8 +911,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if ($traveller->id === $this->order->lead_booker_id) { continue; }
             $travellers[] = new ItineraryTraveller(
                 $traveller->customer,
-                $traveller->is_charged,
-                $traveller->is_travelling,
+                $traveller->is_charged ?? false,
+                $traveller->is_travelling ?? false,
             );
         }
         return $travellers;
@@ -989,7 +989,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->date_from,
             $this->order->tour->date_to,
             $this->order->ordered_on,
-            new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker->is_charged, $this->order->leadBooker->is_travelling),
+            new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker?->is_charged ?? false, $this->order->leadBooker?->is_travelling ?? false),
             $this->order->tour->brand,
             $this->getTravellerItineraryArray(),
             $this->getReservationComponents(),

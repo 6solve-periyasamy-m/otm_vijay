@@ -41,6 +41,9 @@ if (!function_exists('fr_currency')) {
         $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $decimalPrecision ?? 0); // Hide decimals
         $amountToFormat = $decimalPrecision ? $amount : $roundedAmount;
         $formatted = $formatter->formatCurrency($amountToFormat, $currency);
+        if ($currency === 'SGD') {
+            $formatted = preg_replace('/^SGD\s*/', '$', $formatted);
+        }
         $code = flag('currency.code.show', false) ? "{$currency} " : "";
         return $code . $formatted;
     }
@@ -155,6 +158,23 @@ if (!function_exists('truncate')) {
     function truncate(?string $str, int $chars = 150, string $append = '...'): string
     {
         return Str::limit($str ?? "", $chars, $append);
+    }
+}
+if (!function_exists('round_to_nearest_five')) {
+    /**
+     * Round a number to the nearest multiple of 5.
+     *
+     * Examples:
+     * - 2332 becomes 2330
+     * - 2333 becomes 2335
+     * - 2335 stays 2335
+     *
+     * @param float|int $amount  The number to round.
+     * @return int               The number rounded to the nearest 5.
+     */
+    function round_to_nearest_five($amount): int
+    {
+        return round($amount / 5) * 5;
     }
 }
 if (!function_exists('sanitize')) {

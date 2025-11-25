@@ -48,7 +48,7 @@ class UserController extends Controller
         $this->updateAvatar($request, $user);
         try { event(new Registered($user)); } catch (Exception $e) { Log::error($e); }
         $user->assign($request->input('role') ?? 'user');
-        return redirect()->route('users.all');
+        return redirect()->route('system.admin');
     }
 
     public function view(User $user)
@@ -100,7 +100,7 @@ class UserController extends Controller
         $this->updateAvatar($request, $user);
         try { event(new Registered($user)); } catch (Exception $e) { Log::error($e); }
         $user->save();
-        return redirect()->route('users.all');
+        return redirect()->route('system.admin');
     }
 
     public function saveAvatar(UpdateAvatarRequest $request, User $user)
@@ -114,7 +114,7 @@ class UserController extends Controller
     {
         if (!$this->verifyUser($user, false)) abort(403);
         $user->delete();
-        return redirect()->route('users.all');
+        return redirect()->route('system.admin');
     }
 
     public function restore($user)
@@ -122,7 +122,7 @@ class UserController extends Controller
         if (UserRepository::getRemainingUserCount() <= 0) abort(403);
         $user = User::withTrashed()->findOrFail($user);
         $user->restore();
-        return redirect()->route('users.all');
+        return redirect()->route('system.admin');
     }
 
     /**

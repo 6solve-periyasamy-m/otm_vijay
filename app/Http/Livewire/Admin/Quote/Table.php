@@ -22,6 +22,8 @@ class Table extends LivewireDatatable
     public function builder()
     {
         return Quote::query()
+            ->join('quote_prospects as lead', 'lead.id', '=', 'quotes.lead_traveller_id')
+            ->join('customers as lead_customer', 'lead.customer_id', '=', 'lead_customer.id')
             ->leftJoin('events', 'events.id', '=', 'quotes.event_id')
             ->leftJoin('organizations', 'organizations.id', '=', 'quotes.organization_id')
             ->leftJoin('users', 'users.id', '=', 'quotes.consultant_id')
@@ -60,6 +62,10 @@ class Table extends LivewireDatatable
                 ->searchable()
                 ->sortable()
                 ->filterable(\App\Models\Tour\Event::orderBy('name')->pluck('name')->toArray()),
+            Column::raw('CONCAT(COALESCE(lead_customer.first_name, ""), " ", COALESCE(lead_customer.last_name, ""))')
+                ->label("Lead Traveller Name")
+                ->sortable()
+                ->searchable(),
             Column::callback(['quotes.id'], fn($id) =>
                     f_currency(Quote::find($id)?->final_price ?? 0.00, Quote::find($id)?->currency)
                 )

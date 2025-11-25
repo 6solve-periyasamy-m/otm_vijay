@@ -24,6 +24,9 @@
                 <a href="{{ route('settings.mail') }}" class="btn btn-info">{{ Icon::email() }} Email Templates</a>
             </div>
             <div>
+                <a href="{{ route('settings.purge') }}" class="btn btn-info">{{ Icon::delete() }} Purge Bookings</a>
+            </div>
+            <div>
                 <a href="{{ route('orders.reminders') }}" class="btn btn-info">{{ Icon::order() }} Order Reminders</a>
             </div>
         </div>
@@ -87,6 +90,24 @@
     </div>
     <div class="collapse mx-1" id="brands">
         <livewire:admin.system.brand.brand-list />
+    </div>
+    <!-- Faq's -->
+     <div class="card">
+        <div class="card-body" data-target="#faqs" onclick="toggleAccordion(this)">
+            <h4 class="fw-bold">{{ Icon::maximize() }} Faq's</h4>
+        </div>
+    </div>
+    <div class="collapse mx-1" id="faqs">
+        <x-admin.section.card>
+            <div class="flex float-end">
+                <button class="btn btn-success" onclick="openModal('admin.system.faq.form')">
+                    {{ Icon::create() }}Create New
+                </button>
+            </div>
+        </x-admin.section.card>
+        <x-admin.section.card>
+            <livewire:admin.system.faq.table />
+        </x-admin.section.card>
     </div>
     <!-- Default Installments -->
     <div class="card">

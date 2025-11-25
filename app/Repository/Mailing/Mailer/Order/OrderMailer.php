@@ -40,6 +40,17 @@ class OrderMailer
     }
 
     /**
+     * Sends a online booking confirmation email for the order
+     * @param string|null $email Email to send the mail to. Defaults to lead booker if null
+     * @return bool Did the mail send successfully?
+     * @throws MailFailedException
+     */
+    public function sendOrderConfirmation(string $email = null): bool
+    {
+        return $this->sendMail('order-confirmation', $email);
+    }
+
+    /**
      * @param string|null $email Email to send to
      * @param OrderInstallment|null $next Next Installment, if you've already fetched it
      * @return bool Did the mail send successfully?
@@ -172,7 +183,7 @@ class OrderMailer
         $invoice->organization = $order->organization ?? null;
         $invoice->agent = $order->agent ?? null;
 
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email. ";" . (setting('system.bcc.mail') ?? "") : "";
 
         try {
             (new OrderMail('reservation-invoice-document', $sendAsConsultant ? $this->order->consultant : null))
@@ -195,14 +206,14 @@ class OrderMailer
         $customFromEmail = $user->email;
         $customFromName = $user->name ?? $user->email;
         $email = $email ?? $this->order->agent?->email ?? $this->order->organization?->contact_email ?? $this->order->leadBooker->customer->email_address ;
-        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email : "";
+        $bcc = flag('mail.bcc-consultant', false) ? $this->order->consultant?->email. ";" . (setting('system.bcc.mail') ?? "") : "";
         try {
             $mail = (new OrderMail('itinerary-document', $sendAsConsultant ? $this->order->consultant : null, $customFromEmail, $customFromName));
             if ($this->order?->tour?->event?->itinerary_email_template !== null) { $mail->setBody($this->order?->tour?->event?->itinerary_email_template); }
             if ($this->order?->tour?->event?->itinerary_email_subject !== null) { $mail->setSubject($this->order?->tour?->event?->itinerary_email_subject); }
             $mail->setSender($customFromEmail, $customFromName);
             $mail->send($email, $this->order, [$this->getItineraryAttachment()], $bcc, true);
-            return true;
+                    return true;
         } catch (MailDisabledException) {
             return false;
         } catch (MailFailedException $e) {

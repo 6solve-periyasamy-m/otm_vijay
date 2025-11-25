@@ -26,6 +26,8 @@
       'passport_country_of_issue' => $customer->passport_country_of_issue,
       't_shirt_size_id' => $customer->t_shirt_size_id,
       'hat_size_id' => $customer->hat_size_id,
+      'membership' => $customer->membership,
+      'airline_frequent_flyers_id' => $customer->airline_frequent_flyers_id,
       'internal_notes' => $customer->internal_notes,
       'external_notes' => $customer->external_notes,
       'dietary_notes' => $customer->dietary_notes,
