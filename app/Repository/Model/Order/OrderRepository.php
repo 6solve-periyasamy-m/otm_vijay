@@ -523,7 +523,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 'id' => -1,
                 'order_id' => $this->order->id,
                 'amount' => $this->order->calculated_deposit,
-                'remaining' => min($this->order->calculated_deposit - $this->order->paid, 0),
+                'remaining' => max($this->order->calculated_deposit - $this->order->paid, 0),
                 'due_on' => $this->order->ordered_on,
             ]);
         }
