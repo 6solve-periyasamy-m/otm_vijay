@@ -144,6 +144,7 @@ class Form extends Component
             'event.final_terms' => 'nullable|string',
             'event.itinerary_email_subject' => 'nullable|string',
             'event.itinerary_email_template' => 'nullable|string',
+            'event.additional_description' => 'nullable|string',
         ];
     }
 }
