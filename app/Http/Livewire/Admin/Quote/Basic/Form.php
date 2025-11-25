@@ -15,6 +15,7 @@ class Form extends Component
 
     public BasicQuote $quote;
     public bool $agentRequired = false;
+    public array $costs = [];
 
     public function mount(Tour|int $tour)
     {

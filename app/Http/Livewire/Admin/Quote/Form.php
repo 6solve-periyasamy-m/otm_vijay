@@ -214,7 +214,7 @@ class Form extends Component
     {
         if (array_key_exists($key, $this->costs)) {
             if ($this->costs[$key]['id'] !== null) {
-                $this->tour->costs()->where('id', $this->costs[$key]['id'])->forceDelete();
+                $this->quote->costs()->where('id', $this->costs[$key]['id'])->forceDelete();
             }
             unset($this->costs[$key]);
         }

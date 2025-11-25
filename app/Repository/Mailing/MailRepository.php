@@ -37,6 +37,7 @@ class MailRepository
             'quote' => new QuoteMail('quote'),
             'reservation-invoice-document' => new OrderMail('reservation-invoice-document'),
             'itinerary-document' => new OrderMail('itinerary-document'),
+            'order-confirmation' => new OrderMail('order-confirmation'),
         ];
     }
 }

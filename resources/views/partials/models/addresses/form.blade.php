@@ -15,11 +15,13 @@ $prefix = $prefix ?? "";
              'route' => 'location-types', 'onchange' => 'getLocationType($(this).val())'])
 @endcan
 <hr class="splitter"/>
-@include('partials.fields.text', ['name' => 'Address Name', 'field' => ($prefix) . 'address_name', 'value' => $address?->name,])
-@include('partials.fields.text', ['name' => 'Address Line 1', 'field' => ($prefix) . 'address_line_1', 'value' => $address?->address_line_1, 'width' => 6])
+@include('partials.fields.text', ['name' => 'Address Name', 'field' => ($prefix) . 'address_name', 'value' => $address?->name, 'required' => true])
+@include('partials.fields.text', ['name' => 'Address Line 1', 'field' => ($prefix) . 'address_line_1', 'value' => $address?->address_line_1, 'width' => 6, 'required' => true])
 @include('partials.fields.text', ['name' => 'Address Line 2', 'field' => ($prefix) . 'address_line_2', 'value' => $address?->address_line_2, 'width' => 6])
 @include('partials.fields.text', ['name' => 'Town', 'field' => ($prefix) . 'town', 'value' => $address?->town, 'width' => 6])
 @include('partials.fields.text', ['name' => 'Region', 'field' => ($prefix) . 'region', 'value' => $address?->region, 'width' => 6])
-<x-livewire.input.select.country label="Country" name="{{ ($prefix) . 'country_id' }}" value="{{$address?->country_id}}" width="6" />
+<x-livewire.input.select.country label="Country" name="{{ ($prefix) . 'country_id' }}" value="{{$address?->country_id}}" width="6" required />
 @include('partials.fields.text', ['name' => 'Postcode', 'field' => ($prefix) . 'postcode', 'value' => $address?->postcode, 'width' => 6])
+@if($submit ?? true)
 @include('partials.fields.submit')
+@endif

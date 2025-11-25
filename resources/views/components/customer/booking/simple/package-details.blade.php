@@ -219,7 +219,7 @@
     </div>
     @php
         $rawAmount = $booking->repository->getTotalCost();
-        $currencyCode = Settings::currency()?->code;
+        $currencyCode = $booking->currency?->code ?? Settings::currency()->code;
         $dueToday = $booking->repository->getDueTodayAmount();
         $balance = $rawAmount - $dueToday;
         $hasBalance = $balance > 0;
@@ -287,6 +287,11 @@
     @enderror
 
     <div style="padding-top: 1rem;">
+        <div id="stripe-hidden" style="visibility: hidden">
+            <div id="stripe-container"></div>
+            <button id="pay-button">Pay</button>
+            <div id="confirm-errors"></div>
+        </div>
         <div id="airwallex-container" class="airwallex-content"></div>
     </div>
 </div>

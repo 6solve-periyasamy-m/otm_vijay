@@ -582,6 +582,11 @@ class Order extends Model implements NotificationSubject
         return "<a href='{$url}'>{$this->booking_reference}</a>";
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     /**
      * @return float Sum of 'cost' from manual adjustments
      */

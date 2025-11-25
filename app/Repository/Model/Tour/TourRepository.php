@@ -6,6 +6,9 @@ use App\Exceptions\CannotDeleteException;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
+use App\Models\Accommodation\BoardType;
+use App\Models\Accommodation\RoomCategory;
+use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
 use App\Models\Booking\Component\BookingActivity;
@@ -44,8 +47,10 @@ use App\Repository\Reporting\Manifest\TransportManifestRepository;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
+use App\Repository\Storage\Tour\GroupedHotelRooming;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Settings;
 
 class TourRepository extends ComponentPackageRepository implements HasStockControl, HasRoomingList, HasActivityManifest, HasFlightManifest, HasTransportManifest, HasMerchandiseManifest
@@ -667,18 +672,25 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         $seen = [];
         foreach ($this->tour->accommodationInventoryTours as $component) {
             $key = 'accommodation-' .  $component->inventory->component->id;
-            if (in_array($key, $seen)) { continue; }
-            $seen[] = $key;
+
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                if (in_array($key, $seen)) {
+                    $found = $components[$key];
+                    if ($found->getStartTime()?->gt($component->repository->getStartTime()) ?? true) {
+                        $components[$key] = $component->inventory->repository;
+                    }
+                } else {
+                    $components[$key] = $component->inventory->repository;
+                }
             }
+            $seen[] = $key;
         }
         foreach ($this->tour->activityInventoryTours as $component) {
             $key = "activity-{$component->activity_inventory_id}";
             if (in_array($key, $seen)) { continue; }
             $seen[] = $key;
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                $components[$key] = $component->inventory->repository;
             }
         }
         foreach ($this->tour->merchandise as $component) {
@@ -686,7 +698,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             if (in_array($key, $seen)) { continue; }
             $seen[] = $key;
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                $components[$key] = $component->inventory->repository;
             }
         }
         foreach ($this->tour->transportInventoryTours as $component) {
@@ -694,7 +706,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             if (in_array($key, $seen)) { continue; }
             $seen[] = $key;
             if ($component->tour_component_type === 'Included') {
-                $components[] = $component->inventory->repository;
+                $components[$key] = $component->inventory->repository;
             }
         }
         usort($components, static function (InventoryRepository $a, InventoryRepository $b) {
@@ -730,10 +742,21 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
      */
     public function getHotels(): array
     {
-        // TODO: Optimize
         $hotels = [];
-        foreach ($this->tour->accommodationInventory()->groupBy('accommodation_id')->get() as $inventory) {
-            $hotels[$inventory->accommodation_id] = ['hotel' => $inventory->accommodation, 'type' => $inventory->category?->name, 'board' => $inventory->boardType?->name];
+
+        // Fetch and sort inventory items by check_in descending
+        $inventories = $this->tour->accommodationInventory()
+            ->with(['accommodation.accommodationtype', 'category', 'boardType']) // eager load to prevent N+1
+            ->orderBy('check_in')
+            ->get()
+            ->unique('accommodation_id'); // keep only the latest per accommodation_id
+        foreach ($inventories as $inventory) {
+            $hotels[$inventory->accommodation_id] = [
+                'hotel' => $inventory->accommodation,
+                'type' => $inventory->category?->name,
+                'board' => $inventory->boardType?->name,
+                'accommodationType' => $inventory->accommodation->accommodationtype?->name,
+            ];
         }
         return $hotels;
     }
@@ -769,6 +792,84 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $rooms;
     }
 
+    public function getBookingRooms(Accommodation|int|null $hotel = null): array
+    {
+        $rooms = [];
+        if (is_int($hotel)) {
+            $hotel = Accommodation::find($hotel);
+        }
+        if ($hotel !== null) {
+            $tourComponents =
+                $this->tour->accommodationInventoryTours()
+                    ->join('accommodation_inventories', 'accommodation_inventories.id', '=', 'accommodation_inventory_tours.accommodation_inventory_id')
+                    ->where('accommodation_inventories.accommodation_id', '=', $hotel->id)
+                    ->get();
+        } else {
+            $tourComponents = $this->tour->accommodationInventoryTours;
+        }
+        $availability = [];
+        foreach ($tourComponents as $inventoryTour) {
+            $name = $inventoryTour->inventory->roomType->name;
+            if ($inventoryTour->tour_component_type !== 'Included') {
+                $cost = $inventoryTour->tour_sales_price;
+                //if ($cost > 0) { $name .= ' (+' . f_currency($cost) . ')';  }
+                //if ($cost < 0) { $name .= ' (-' . f_currency($cost*-1) . ')'; }
+            }
+
+            $bedType = trim(Str::afterLast($name, '-'));
+            $rooms[$inventoryTour->inventory->room_type_id] = ['id'=> $inventoryTour->inventory->roomType->id, 'name' => $bedType, 'room_desc' => $inventoryTour->inventory->category_description, 'occupancy' => $inventoryTour->inventory->roomType->maximum_occupancy, 'component_type' => $inventoryTour->tour_component_type, 'board_type' => $inventoryTour->inventory->boardType?->name, 'sales_price' => $inventoryTour->tour_sales_price];
+            $available = $inventoryTour->repository->isStockControlActive() ? $inventoryTour->repository->getAvailableStock() : 999_999;
+            $availability[$inventoryTour->inventory->room_type_id] = min($available, ($availablility[$inventoryTour->inventory->room_type_id] ?? 999_999));
+        }
+        foreach ($rooms as $key => $data) {
+            $rooms[$key] = [
+                ...$data,
+                'availability' => $availability[$key],
+            ];
+        }
+        return $rooms;
+    }
+
+
+    public function getNextAccommodationByRating(Collection|array $hotels, string $currentRating): ?array
+    {
+        $hotels = collect($hotels);
+
+        preg_match('/\d+/', $currentRating, $matches);
+        $currentRatingValue = isset($matches[0]) ? (int) $matches[0] : null;
+
+        if ($currentRatingValue === null) {
+            return null; 
+        }
+
+        $hotelsWithStars = $hotels->map(function ($hotel) {
+            $type = $hotel['accommodationType'] ?? '';
+            preg_match('/\d+/', $type, $matches);
+            $hotel['star_value'] = isset($matches[0]) ? (int) $matches[0] : null;
+            return $hotel;
+        })->filter(fn($hotel) => $hotel['star_value'] !== null);
+
+        $nextRating = $hotelsWithStars
+            ->pluck('star_value')
+            ->unique()
+            ->sort()
+            ->first(fn($val) => $val > $currentRatingValue);
+
+        if (!$nextRating) {
+            return null; 
+        }
+
+        return $hotelsWithStars
+            ->first(fn($hotel) => $hotel['star_value'] === $nextRating);
+    }
+
+    public function getTourNights(): int
+    {
+        $start = Carbon::parse($this->tour->date_from);
+        $end = Carbon::parse($this->tour->date_to);
+        return $start->diffInDays($end);
+    }
+
     public function getDefaultRoom(int|null $hotel = null): int|null
     {
         foreach ($this->getRooms($hotel) as $key => $name) {
@@ -793,5 +894,70 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'inclusions' => $this->getInclusions(),
             'rooms' => $this->getRooms(),
         ];
+    }
+
+    /**
+     * Get a list of GroupedHotelRooming, grouped into arrays based on hotel ID
+     *
+     * @return array<int, GroupedHotelRooming[]>
+     */
+    public function getHotelGroups(): array
+    {
+        /** @var array<int, GroupedHotelRooming[]> $hotelGroups */
+        $hotelGroups = [];
+        foreach ($this->tour->accommodationInventoryTours as $inventoryTour) {
+            $found = false;
+            $inventory = $inventoryTour->inventory;
+            if (array_key_exists($inventory->accommodation_id, $hotelGroups)) {
+                foreach ($hotelGroups[$inventory->accommodation_id] as $key => $hotelGroup) {
+                    if ($hotelGroup->add($inventoryTour)) {
+                        $found = true;
+                        $hotelGroups[$inventoryTour->inventory->accommodation_id][$key] = $hotelGroup;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    $hotelGroups[$inventoryTour->inventory->accommodation_id][] = GroupedHotelRooming::fromInventoryTour($inventoryTour);
+                }
+            } else {
+                $hotelGroups[$inventoryTour->inventory->accommodation_id] = [GroupedHotelRooming::fromInventoryTour($inventoryTour),];
+            }
+        }
+        return $hotelGroups;
+    }
+
+    /**
+     * Get a flattened list of GroupedHotelRooming, not grouped by hotel id
+     *
+     * @return GroupedHotelRooming[]
+     */
+    public function getFlattenedGroups(): array
+    {
+        $array = [];
+        foreach ($this->getHotelGroups() as $key => $hotelGroups) {
+            $array = [...$array, ...$hotelGroups];
+        }
+        return $array;
+    }
+
+    public function getDefaultHotelGroup(): GroupedHotelRooming|null
+    {
+        $groups = $this->getFlattenedGroups();
+        foreach ($groups as $key => $hotelGroup) {
+            if (!($hotelGroup->getUpgradeCost() > 0)) { return $hotelGroup; }
+        }
+        return $groups[0] ?? null;
+    }
+
+    public function getHotelGroup(Accommodation $hotel, RoomType $roomType, BoardType $boardType, RoomCategory|null $category): GroupedHotelRooming|null
+    {
+        foreach (($this->getHotelGroups()[$hotel->id] ?? []) as $hotelGroup) {
+            if ($hotelGroup->occupancy->id === $roomType->id
+                && $hotelGroup->board->id === $boardType->id
+                && $hotelGroup->category?->id === $category?->id) {
+                return $hotelGroup;
+            }
+        }
+        return null;
     }
 }

@@ -177,7 +177,8 @@ class OrderCustomer extends Model
 
     public function getCancelledAttribute(): bool
     {
-        return $this->order->cancelled;
+        // If order not found, assume cancelled
+        return $this->order?->cancelled ?? true;
     }
 
     public function getBookingReferenceAttribute(): string

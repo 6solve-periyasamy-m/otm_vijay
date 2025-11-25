@@ -74,3 +74,7 @@ npm run dev creates the files in public that the website can use
     font-size: 1.35rem;
     font-weight: 700 !important;
 }
+
+.custom-switch-size {  width: 2rem;  height: 0.96rem;  transform: scale(1.2);  cursor: pointer;}
+.custom-switch-size:checked {  background-color: #0d6efd;}
+.custom-switch-size:focus {  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);}

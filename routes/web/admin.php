@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\Voucher\VoucherCodeController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ECommDashboardController;
 
 Route::get('/login', [AuthenticationController::class, 'showLogin'])->name('show-login');
 Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
@@ -90,6 +91,7 @@ Route::middleware('auth:web')->group(function () {
     //     return view('pages.dash');
     // })->name('dash');
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dash');
+    Route::get('/edashboard', [ECommDashboardController::class, 'dashboard'])->name('edashboard');
 
     Route::get('/attributes', function () {
         return view('pages.admin.small-models');
@@ -102,6 +104,7 @@ Route::middleware('auth:web')->group(function () {
         });
         Route::get('/mail', [SettingsController::class, 'mail'])->name('settings.mail');
         Route::get('/import', [SettingsController::class, 'import'])->name('settings.import');
+        Route::get('/purge', [SettingsController::class, 'purge'])->name('settings.purge');
         Route::get('/template', [SettingsController::class, 'template'])->name('settings.template');
         Route::get('/template/edit/{template?}', [SettingsController::class, 'editTemplate'])->name('settings.template.form');
         Route::get('export/conversion-rates/{extension}', [SettingsController::class, 'exportConversionRates'])->name('export.conversion-rates');

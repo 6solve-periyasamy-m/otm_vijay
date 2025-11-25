@@ -60,10 +60,13 @@ class TransportManifestRepository implements HasTransportManifest
             if ($orderComponent->cancelled) continue;
             $row = collect();
             $row->reference = $orderComponent->orderCustomer->order->booking_reference;
+            $row->event = $orderComponent->orderCustomer->order->tour?->event?->name;
             $row->customer = $orderComponent->orderCustomer->customer_name;
             $row->orderInternal = $orderComponent->orderCustomer->order->internal_notes;
             $row->orderExternal = $orderComponent->orderCustomer->order->external_notes;
+            $row->travellers = $orderComponent->orderCustomer->order->orderCustomers()->where('is_travelling','=', true)->count();
             $row->passport = $orderComponent->orderCustomer->customer->passport_first_name . ' ' . $orderComponent->orderCustomer->customer->passport_middle_name . ' ' . $orderComponent->orderCustomer->customer->passport_last_name;
+            $row->transport = $orderComponent->transportInventoryTour->inventory->component->name;
             $row->operator = $orderComponent->tourComponent->inventory->component->operator->name;
             $row->departure = $orderComponent->tourComponent->inventory->component->departureAddress;
             $row->arrival = $orderComponent->tourComponent->inventory->component->arrivalAddress;

@@ -8,7 +8,7 @@
 @endphp
 <div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}" style="padding-left: 5px;">
     @if($attributes->get('label') !== null)
-    <label class="{{ $hasError ? 'text-danger' : '' }}">
+    <label class="{{ ($hasError && $attributes->has('required')) ? 'text-danger' : '' }}">
         {{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif
         @error($fieldName) <span class="text-danger">({{ $message }})</span> @enderror
     </label>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Booking\Booking;
 use App\Models\Tour\Tour;
 
 class SimpleBookingController extends Controller

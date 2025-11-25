@@ -8,6 +8,7 @@ use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Helper\Model;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\System\FellohLink;
 use App\Models\Tour\Tour;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
+use App\Models\Helper\Traits\HasNotifications;
 
 /**
  * App\Models\Booking\Booking
@@ -30,14 +32,19 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  * @property int $id
  * @property int $tour_id
  * @property int|null $lead_traveller_id
+ * @property int|null $booking_accommodation_id
+ * @property int|null $currency_id
  * @property int|null $order_id
+ * @property bool $pay_full
  * @property string|null $token
+ * @property Carbon|null $last_renewed
  * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property-read BookingTraveller|null $leadTraveller
  * @property-read Tour $tour
+ * @property-read Currency|null $currency
  * @property-read Collection|BookingGroup[] $groups
  * @property-read Collection|VoucherCode[] $vouchers
  * @property-read int|null $groups_count
@@ -81,14 +88,22 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
  */
 class Booking extends Model
 {
-    use HasDeepRelations;
+    use HasDeepRelations, HasNotifications;
+
+    public const DEFAULT_EXPIRY = 2 * 60;
 
     protected $guarded = [];
     private BookingRepository $internal_repository;
+    protected $casts = ['pay_full' => 'boolean', 'last_renewed' => 'datetime:Y-m-d H:i:s'];
 
     public function tour(): BelongsTo
     {
         return $this->belongsTo(Tour::class);
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function vouchers(): HasManyDeep
@@ -149,7 +164,7 @@ class Booking extends Model
 
     public function getTotalCostAttribute(): float
     {
-        return $this->tour?->base_price_per_person * $this->traveller_count;
+        return $this->repository->getTotalCost();
     }
 
     public function getTravellerCountAttribute(): int
@@ -175,6 +190,11 @@ class Booking extends Model
     public function getDueTodayAttribute(): float
     {
         return $this->repository->getDueTodayAmount();
+    }
+
+    public function getLink(): string
+    {
+        return route('admin.booking.view', ['booking' => $this->id]);
     }
 
     public function scopeConverted(Builder $query): void
