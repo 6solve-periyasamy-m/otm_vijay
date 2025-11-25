@@ -540,6 +540,8 @@
                         $balance_received = 0;
                         $balance_received_total = 0;
                     @endphp
+                    @if(!is_null($invoice->payment_schedule) && is_iterable($invoice->payment_schedule))
+
                     @foreach ($invoice->payment_schedule as $key => $installment)
                         @if($installment->type === ItineraryScheduleType::BOOKING_FEE)
                         <tr>
@@ -631,6 +633,9 @@
                             </tr>
                         @endif
                     @endforeach
+                    @else
+                        <tr><td colspan="4">No payment schedule available</td></tr>
+                    @endif
                 </table>
             </td>
             <td style="width:10%;">&nbsp;</td>
@@ -640,7 +645,7 @@
                     <tr>
                         <td>
                             <div class="full-btm-cls-mod" style="">
-                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important; font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency)}}</span></p>
+                                <p><span style="font-weight:700 !important;">Invoice Total:</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important; font-weight:700 !important;">{{fr_currency($invoice->total_cost + $invoice->commission_amount, $invoice->currency, false, 0)}}</span></p>
                                 @if($invoice->commission_amount > 0)
                                     <p><span>Commission ({{$invoice->commission_percentage}}%):</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->commission_amount, $invoice->currency)}}</span></p>
                                     <p><span>Booking Total: </span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->total_cost, $invoice->currency)}}</span></p>
@@ -651,7 +656,7 @@
                                     <p><span>Fees Paid:</span> <span style="font-family: 'DejaVu Sans', 'Noto Sans', sans-serif !important;">{{fr_currency($invoice->total_fees, $invoice->currency)}}</span></p>
                                 @endif
                             </div>
-                            <h4><span>Balance Due:</span> <span class="currency-symbol">{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency)}}</span></h4>
+                            <h4><span>Balance Due:</span> <span class="currency-symbol">{{fr_currency($invoice->total_cost - $invoice->total_paid, $invoice->currency, false,0)}}</span></h4>
                         </td>
                     </tr>
                 </table>
@@ -683,24 +688,5 @@
             </td>
         </tr>
     </table>
-    <!-- Footer Section -->
-    <!-- <div class="footer">
-        <div class="logo">
-          <img src="data:image/png;base64,<?php echo base64_encode(file_get_contents('https://qa.octopustravelmatrix.com/images/pdf_assets/images/KeithProwse_Logo.png'))?>"  alt="logo-ch">
-        </div>
-        <div class="phone">
-           <p>Phone</p>
-           <a href="tel:+{{$invoice->brand->telephone}}">{{$invoice->brand->telephone}}</a>
-        </div>
-        <div class="email">
-           <p>email</p>
-           <a href="mailto:{{$invoice->brand->email}}">{{$invoice->brand->email}}</a>
-        </div>
-        <div class="phone">
-           <p>website</p>
-           <a target="_blank" href="{{$invoice->brand->website}}">{{$invoice->brand->website}}</a>
-        </div>
-    </div>
-   </div> -->
 </body>
 </html>

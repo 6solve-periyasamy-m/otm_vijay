@@ -104,6 +104,9 @@ class Form extends Component
     public function save()
     {
         $this->validate();
+
+        $this->event->is_download_itinerary = (bool) $this->event->is_download_itinerary;
+
         if ($this->image !== null) {
             $this->event->image_url = store_file($this->image, $this->event->image_url);
         }
@@ -134,12 +137,14 @@ class Form extends Component
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:8192',
             'banner' => 'nullable|image|mimes:jpg,jpeg,png|max:8192',
             'event.booking_url' => 'nullable|string',
+            'event.is_download_itinerary' => 'nullable|boolean',
             'event.onsite_name' => 'nullable|string',
             'event.onsite_email' => 'nullable|string',
             'event.onsite_phone' => 'nullable|string',
             'event.final_terms' => 'nullable|string',
             'event.itinerary_email_subject' => 'nullable|string',
             'event.itinerary_email_template' => 'nullable|string',
+            'event.additional_description' => 'nullable|string',
         ];
     }
 }

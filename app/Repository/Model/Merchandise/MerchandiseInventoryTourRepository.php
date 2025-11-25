@@ -21,6 +21,7 @@ use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsMerchandise;
 use Auth;
+use DB;
 
 class MerchandiseInventoryTourRepository extends InventoryTourRepository
 {
@@ -52,12 +53,16 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderComponentRepository
     {
+        $cost = ($this->tourComponent->tour_sales_price ?? 0) * $rate;
+        if (flag('booking.round_to_five')) {
+            $cost = round_to_five($cost);
+        }
         $orderComponent = OrderMerchandise::make([
             'order_customer_id' => $orderCustomer->id,
             'merchandise_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price ?? 0,
+            'cost' => $cost,
             'estimated_purchase_price' => $this->tourComponent->inventory->local_purchase_price,
         ]);
         $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
@@ -292,7 +297,11 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
 
     public function getBookedCount(): int
     {
-        return $this->tourComponent->bookingComponents()->count();
+        return $this->tourComponent->bookingComponents()
+            ->leftJoin('booking_travellers', 'booking_travellers.id', '=', 'booking_merchandises.booking_traveller_id')
+            ->leftJoin('bookings', 'bookings.id', '=', 'booking_travellers.booking_id')
+            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
+            ->count();
     }
 
     public function getComponentInternalNotes(): string|null
@@ -313,5 +322,26 @@ class MerchandiseInventoryTourRepository extends InventoryTourRepository
     public function getInventoryExternalNotes(): string|null
     {
         return $this->tourComponent->inventory->external_notes;
+    }
+
+    public function removeFromAllTravellers(Booking $booking): void
+    {
+        foreach ($booking->travellers as $traveller) {
+            $traveller->merchandise()->where('merchandise_inventory_tour_id', '=', $this->tourComponent->id)->delete();
+        }
+    }
+
+    public function getQuantityOnBooking(Booking $booking): int
+    {
+        $count = 0;
+        foreach ($booking->travellers as $traveller) {
+            $count += $traveller->merchandise()->where('merchandise_inventory_tour_id', '=', $this->tourComponent->id)->count();
+        }
+        return $count;
+    }
+
+    public function hasAsUpgrade(MerchandiseInventoryTour $component): bool
+    {
+        return false;
     }
 }

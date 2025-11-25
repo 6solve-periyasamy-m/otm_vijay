@@ -12,6 +12,22 @@ if (!function_exists('sigfig')) {
         return ceil(($number * (10**$figures)))/(10**$figures);
     }
 }
+if (!function_exists('round_to_five')) {
+    /**
+     *  Rounds to the nearest 5 or 0 in final column
+     *
+     * @param int|float|null $number
+     * @return float
+     */
+    function round_to_five(int|float|null $number): float
+    {
+        $number = sigfig($number ?? 0, 0);
+        if ($number % 5 === 0) {
+            return $number;
+        }
+        return ($number + (5 - $number % 5));
+    }
+}
 if (!function_exists('days_until')) {
     /**
      * Calculates the number of days until/since now. Returns negative if in the past
@@ -178,5 +194,28 @@ if (!function_exists('div_id')) {
     function div_id(): string
     {
         return preg_replace("/\d/u", "", Str::random());
+    }
+}
+if (!function_exists('bleeding_edge')) {
+    /**
+     * Is BLEEDING_EDGE env set
+     *
+     * @return bool
+     */
+    function bleeding_edge(): bool
+    {
+        return config('app.features.bleeding-edge', false);
+    }
+}
+if (!function_exists('kpt')) {
+    /**
+     * Is IS_KPT env set
+     * @param bool $bleeding Should the BLEEDING_EDGE variable be assumed equal to IS_KPT
+     * @return bool
+     */
+    function kpt(bool $bleeding = true): bool
+    {
+        return config('app.features.kpt', false)
+            || ($bleeding && bleeding_edge());
     }
 }

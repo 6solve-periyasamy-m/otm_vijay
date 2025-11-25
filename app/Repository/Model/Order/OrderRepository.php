@@ -895,8 +895,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if ($traveller->id === $this->order->lead_booker_id) { continue; }
             $travellers[] = new ItineraryTraveller(
                 $traveller->customer,
-                $traveller->is_charged,
-                $traveller->is_travelling,
+                $traveller->is_charged ?? false,
+                $traveller->is_travelling ?? false,
             );
         }
         return $travellers;
@@ -973,7 +973,7 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             $this->order->tour->date_from,
             $this->order->tour->date_to,
             $this->order->ordered_on,
-            new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker->is_charged, $this->order->leadBooker->is_travelling),
+            new ItineraryTraveller($this->order->leadBooker->customer, $this->order->leadBooker?->is_charged ?? false, $this->order->leadBooker?->is_travelling ?? false),
             $this->order->tour->brand,
             $this->getTravellerItineraryArray(),
             $this->getReservationComponents(),
@@ -1042,13 +1042,36 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 // TODO: Fix. Should still show if it's been added as a component.
                 //continue;
             }
+
             $item = $component->repository->getItineraryItem($this->order);
-            if (!empty($component->departs_at_time_override)){
+            if (!empty($component->departs_at_time_override)) {
                 $item->details['Time'] = $component->departs_at_time_override->format('H:i');
             }
+
             $header = "Transfers";
-            if (!array_key_exists($header, $items)) { $items[$header] = []; }
-            $items[$header][] = $item;
+            if (!array_key_exists($header, $items)) {
+                $items[$header] = [];
+            }
+
+            $baseDate = $component->transportInventory?->departs_at ?? null;
+            if ($baseDate instanceof Carbon === false) {
+                $baseDate = Carbon::now();
+            }
+
+            if (!empty($component->departs_at_time_override)) {
+                $timeString = $component->departs_at_time_override->format('H:i');
+            } else {
+                $timeString = $baseDate->format('H:i');
+            }
+
+            [$hour, $minute] = explode(':', $timeString);
+            $sortDateTime = $baseDate->copy()->setTime((int)$hour, (int)$minute);
+            $sortTimestamp = $sortDateTime->timestamp;
+
+            $items[$header][] = [
+                'item' => $item,
+                'sort_ts' => $sortTimestamp,
+            ];
         }
 
         foreach ($this->order->orderMerchandise()->groupBy('merchandise_inventory_tour_id')->get() as  $component) {
@@ -1060,10 +1083,31 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
             if (!array_key_exists($header, $items)) { $items[$header] = []; }
             $items[$header][] = $item;
         }
-        foreach ($items as $header => $data) {
-            usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->compare($b); });
-            $items[$header] = $data;
+
+        if (!empty($items['Transfers'] ?? null)) {
+            foreach ($items as $header => $data) {
+                $first = reset($data);
+                if (is_array($first) && array_key_exists('item', $first) && array_key_exists('sort_ts', $first)) {
+                    usort($data, static function ($a, $b) {
+                        return $a['sort_ts'] <=> $b['sort_ts'];
+                    });
+                    $items[$header] = array_map(static function ($entry) {
+                        return $entry['item'];
+                    }, $data);
+                } else {
+                    usort($data, static function (ItineraryItem $a, ItineraryItem $b) {
+                        return $a->compare($b);
+                    });
+                    $items[$header] = $data;
+                }
+            }
+        } else {
+            foreach ($items as $header => $data) {
+                usort($data, static function (ItineraryItem $a, ItineraryItem $b) { return $a->compare($b); });
+                $items[$header] = $data;
+            }
         }
+
         return $items;
     }
 

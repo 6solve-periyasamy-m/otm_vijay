@@ -414,6 +414,7 @@
 
 </style>
             <!-- <- Rooming -->
+            @if($tour->accommodationInventoryTours()->count() > 0)
             <div class="second-block rme-det">
                 <div class="accommodation-detail">
                     <p class="acm_title">ACCOMMODATION</p>
@@ -504,7 +505,7 @@
                     </div>
                 </div>
             </div>
-            <div class="third-block">                
+            <div class="third-block">
                 @for($x = 0, $xMax = count($rooms); $x < $xMax; $x++)
                     <div class="first-bl" wire:key="{{Str::random()}}">                        
                         <div class="inn">
@@ -539,6 +540,7 @@
                     </div>
                 @endfor
             </div>
+            @endif
             <div class="submit-btn-cls">
                 <div class="inner">
                     <input type="submit" class="submit-btn" wire:click="proceed" value="Proceed">

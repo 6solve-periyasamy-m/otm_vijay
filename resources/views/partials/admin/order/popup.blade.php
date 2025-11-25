@@ -21,7 +21,7 @@
                             Tour Deleted
                         </x-admin.popup-button>
                     @endif
-                    @if(config('app.features.kpt') || config('app.features.bleeding-edge'))
+                    @if(kpt())
                     <x-admin.popup-button href="{{ route('orders.reservation', ['order' => $order,]) }}" class="color-info row-1">
                         <x-slot:icon>{{ Icon::view() }}</x-slot:icon>
                         View Reservation Document

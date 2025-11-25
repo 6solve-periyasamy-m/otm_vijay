@@ -27,6 +27,9 @@
                         <a href="{{ route('notifications.all') }}">{{ Icon::note() }}&nbsp;Notifications</a>
                     @endcan
                     <a href="{{ route('users.profile', ['user' => Auth::user(),]) }}">{{ Icon::view() }}&nbsp;View Profile</a>
+                    @can('update', \App\Models\System\Setting::class)
+                        <a href="{{ route('settings.edit') }}">{{ Icon::setting() }}&nbsp;Settings</a>
+                    @endcan
                     <a href="#" onclick="event.preventDefault();logout();">{{ Icon::logout() }}&nbsp;Logout</a>
                 </div>
             </div>

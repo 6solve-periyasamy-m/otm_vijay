@@ -57,6 +57,11 @@ abstract class Gateway
             $booking = Booking::where('token', $intention->reference)->first();
             if (isset($booking)) {
                 $order = $booking->repository->convertToOrder(now());
+                $order->external_notes = $booking->notes ?? ''; // Get the notes from the booking
+                $order->save();
+                $booking->updateBookingProgressNotification('Booking Completed', $intention->customer);
+                $booking->last_page = 'Booking Completed';
+                $booking->save();
                 $intention->customer_id = $order->leadBooker->customer_id;
                 $intention->save();
                 $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());
@@ -65,6 +70,12 @@ abstract class Gateway
                 $intention->save();
                 $order->createNotification(NotificationType::ORDER_CREATED, 'Booking confirmed', $intention->customer);
                 event(new OrderCreatedEvent($order));
+                // Confirm order email notification
+                // try {
+                //     $success =  $order->repository->mailer(true)->sendOrderConfirmation();
+                // } catch (MailFailedException $e) {
+                //     \Log::error($e);
+                // }
                 return $order;
             }
         }
@@ -73,11 +84,18 @@ abstract class Gateway
 
     public function success(Request $request): Factory|View|Application
     {
-        return view('pages.payments.success');
+        if (kpt()) {
+            return view('pages.payments.success');
+        }
+
+        return view('pages.payments.standard.success');
     }
 
     public function cancelled(Request $request): Factory|View|Application
     {
-        return view('pages.payments.cancelled');
+        if (kpt()) {
+            return view('pages.payments.cancelled');
+        }
+        return view('pages.payments.standard.cancelled');
     }
 }
