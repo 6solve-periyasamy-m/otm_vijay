@@ -5,16 +5,21 @@ namespace App\Http\Requests\Customer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
 /**
  * Basic Details
+ * @property string $id
  * @property string $title
  * @property string $first_name
  * @property string|null $middle_names
+ * @property string|null $email_address
  * @property string $last_name
  * @property string $date_of_birth
  * @property string $mobile_number
  * @property string|null $other_phone_number
+ * @property int  $billing_address_id
+ * @property int |null $home_address_id
  * Home Address
  * @property string|null $home_address_line_1
  * @property string|null $home_address_line_2
@@ -62,10 +67,13 @@ class DetailsRequest extends FormRequest
             'title' => $this->title,
             'first_name' => $this->first_name,
             'middle_names' => $this->middle_names,
+            'email_address' => $this->email_address,
             'last_name' => $this->last_name,
             'date_of_birth' => $this->date_of_birth,
             'mobile_number' => $this->mobile_number,
             'other_phone_number' => $this->other_phone_number,
+            'billing_address_id'    => $this->billing_address_id,
+            'home_address_id'    => $this->home_address_id,
             'gender' => $this->gender,
             'emergency_contact_name' => $this->emergency_contact_name,
             'emergency_contact_relationship' => $this->emergency_contact_relationship,
@@ -149,6 +157,11 @@ class DetailsRequest extends FormRequest
             'title' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
+           'email_address' => [
+                'required',
+                'email',
+                Rule::unique('customers', 'email_address')->ignore($this->id),
+            ],
             'date_of_birth' => 'required|date',
             'emergency_contact_name' => 'required',
             'emergency_contact_relationship' => 'required',

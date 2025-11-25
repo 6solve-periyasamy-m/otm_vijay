@@ -23,6 +23,7 @@ use App\Repository\Storage\ComponentInformation;
 use App\Repository\Storage\Itinerary\ItineraryItem;
 use App\Repository\Traits\Component\IsTransport;
 use Auth;
+use DB;
 use Icon;
 use Illuminate\Support\Collection;
 
@@ -59,12 +60,16 @@ class TransportInventoryTourRepository extends InventoryTourRepository
         return $components;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false): ?OrderTransportRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderTransportRepository
     {
+        $cost = ($this->tourComponent->tour_sales_price ?? 0) * $rate;
+        if (flag('booking.round_to_five')) {
+            $cost = round_to_five($cost);
+        }
         $orderComponent = OrderTransport::make([
             'order_customer_id' => $orderCustomer->id,
             'transport_inventory_tour_id' => $this->tourComponent->id,
-            'cost' => $this->tourComponent->tour_sales_price ?? 0,
+            'cost' => $cost,
             'estimated_purchase_price' => $this->tourComponent->inventory->local_purchase_price,
         ]);
         $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
@@ -337,7 +342,11 @@ class TransportInventoryTourRepository extends InventoryTourRepository
 
     public function getBookedCount(): int
     {
-        return $this->tourComponent->bookings()->count();
+        return $this->tourComponent->bookings()
+            ->leftJoin('booking_travellers', 'booking_travellers.id', '=', 'booking_transports.booking_traveller_id')
+            ->leftJoin('bookings', 'bookings.id', '=', 'booking_travellers.booking_id')
+            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
+            ->count();
     }
 
     public function getComponentInternalNotes(): string|null
@@ -358,5 +367,21 @@ class TransportInventoryTourRepository extends InventoryTourRepository
     public function getInventoryExternalNotes(): string|null
     {
         return $this->tourComponent->inventory->external_notes;
+    }
+
+    public function removeFromAllTravellers(Booking $booking): void
+    {
+        foreach ($booking->travellers as $traveller) {
+            $traveller->transport()->where('transport_inventory_tour_id', '=', $this->tourComponent->id)->delete();
+        }
+    }
+
+    public function getQuantityOnBooking(Booking $booking): int
+    {
+        $count = 0;
+        foreach ($booking->travellers as $traveller) {
+            $count += $traveller->transport()->where('transport_inventory_tour_id', '=', $this->tourComponent->id)->count();
+        }
+        return $count;
     }
 }

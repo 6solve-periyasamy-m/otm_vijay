@@ -17,13 +17,12 @@
         $create = "openModal('$createForm');";
     }
     $create = $create ?? $attributes->get('create');
-    
+
     // Get the field name for error checking
     $fieldName = $attributes->get('name');
     $hasError = $errors->has($fieldName);
-
 @endphp
-<div style="padding-left: 5px;" class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
+<div class="form-group col-6 col-xl-{{ $attributes->get('width', 6) }}">
     <label for="{{ $id }}" class="{{ $hasError ? 'text-danger' : '' }}">
         {{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif
         @error($attributes->get('name')) <span class="text-danger">({{ $message }})</span> @enderror
@@ -43,10 +42,17 @@
                     ajax: {
                         url: '{{ $allRoute }}',
                         data: function (params) {
-                            return {
+                            let request = {
                                 filter: params.term,
                                 __api_token: '{{ Auth::user()->getCurrentToken()->token }}',
                             };
+
+                            // Conditionally add filterType if it exists
+                            @if ($attributes->has('filterType'))
+                                request.filterType = '{{ $attributes->get("filterType") }}';
+                            @endif
+
+                            return request;
                         },
                         type: 'post',
                     }

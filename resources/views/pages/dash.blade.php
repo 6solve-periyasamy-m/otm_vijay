@@ -1,6 +1,6 @@
 @extends('layout.master')
 
-@if(config('app.features.kpt', false) || config('app.features.bleeding-edge'))
+@if(kpt())
     @section('upcoming')
         <div class="upcom-whol">
             <div class="upcom-cent">

@@ -14,6 +14,5 @@ enum NotificationType: int
     case PAYMENT_MADE = 3;
     case COMPONENTS_CHANGED = 4;
     case CUSTOMER_UPDATED = 5;
-    case UNKNOWN = 6; // TODO: Implement
-
+    case BOOKING_PROGRESS = 6;
 }

@@ -18,6 +18,10 @@ class ApiAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
+        if (auth()->guard('customer')->check()) {
+            return $next($request);
+        }
+        
         if (!$request->has('__api_token')) {
             abort(403, 'API Token is Required');
         }

@@ -122,4 +122,12 @@ class Notification extends Model
         }
         $this->save();
     }
+
+    public static function findBookingProgress($booking): ?self
+    {
+        return self::where('type', NotificationType::BOOKING_PROGRESS)
+            ->where('subject_type', get_class($booking))
+            ->where('subject_id', $booking->id)
+            ->first();
+    }
 }

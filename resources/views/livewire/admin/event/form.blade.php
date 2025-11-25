@@ -17,14 +17,17 @@
                 <x-livewire.input type="date" wire:model="event.ends_at" label="Ends At" width="4" required id="ends_at" :min="$minEndDate"/>
                 <x-livewire.input type="file" wire:model="image" label="Image" width="2" />
                 <x-livewire.input type="file" wire:model="banner" label="Banner" width="2" />
-                <x-livewire.input wire:model="event.booking_url" label="Booking URL" />
+                <x-livewire.input wire:model="event.booking_url" label="Booking URL" width="10" />
+                <x-livewire.input.checkbox wire:model="event.is_download_itinerary" label="Download Itinerary?" width="2" />
                 <x-livewire.input.text-area wire:model="event.notes" label="Notes" />
+                <h6 class="fs-5 fw-bold">e-Commerce</h6>
+                <x-livewire.ckeditor name="event.additional_description" value="{{ $event?->additional_description }}" label="Additional Description" />
             </div>
         </x-admin.section.card>
     </div>
     <div class="col-xl-4">
         <x-admin.section.card>
-            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" />
+            <x-livewire.input.select.large-text-template name="termsTemplate" label="Copy from Template" value="{{ $termsTemplate }}" :filterType="\App\Models\Helper\Enum\LargeTextType::TERMS->value" />
             <x-livewire.ckeditor name="event.final_terms" value="{{ $event?->final_terms }}" label="Final Terms and Conditions" />
         </x-admin.section.card>
     </div>

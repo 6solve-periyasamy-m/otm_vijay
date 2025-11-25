@@ -16,7 +16,29 @@ class CustomerFinancesController extends CustomerController
 {
     public function show()
     {
-        return view('pages.customer.finances', ['orders' => $this->user()?->orders()->orderBy('cancelled', 'asc')->orderBy('ordered_on', 'desc')->get() ]);
+
+        $search = request('search');
+
+        $ordersQuery = $this->user()?->orders()
+            ->with(['tour'])
+            ->orderBy('cancelled', 'asc')
+            ->orderBy('ordered_on', 'desc');
+
+        if (!empty($search)) {
+            $ordersQuery->where(function ($query) use ($search) {
+                $query->where('booking_reference', 'like', '%' . $search . '%')
+                    ->orWhereHas('tour', function ($q) use ($search) {
+                        $q->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $orders = $ordersQuery->get();
+
+        return view('pages.customer.finances', [
+            'orders' => $orders
+        ]);
+        // return view('pages.customer.finances', ['orders' => $this->user()?->orders()->orderBy('cancelled', 'asc')->orderBy('ordered_on', 'desc')->get() ]);
     }
 
     public function makePayment(FinancesRequest $request)
