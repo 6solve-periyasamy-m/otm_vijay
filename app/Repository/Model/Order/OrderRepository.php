@@ -484,6 +484,8 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
                 } else {
                     $status = OrderStatus::CANCELLED_REFUND_REQUIRED;
                 }
+            } else if ($this->order->calculated_deposit > $paidAmount) {
+                $status = OrderStatus::DEPOSIT_UNPAID;
             } else if ($total > $paidAmount) {
                 $next = $this->order->next_installment;
                 if (isset($next) && Carbon::now()->isAfter($next->due_on)) {
@@ -512,6 +514,20 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         if ($installment === null) { return null; }
         return $installment->remaining > 0 ? $installment : null;
+    }
+
+    public function getDepositInstallmentForReminder(): ?OrderInstallment
+    {
+        if ($this->order->calculated_deposit > $this->order->paid) {
+            return new OrderInstallment([
+                'id' => -1,
+                'order_id' => $this->order->id,
+                'amount' => $this->order->calculated_deposit,
+                'remaining' => min($this->order->calculated_deposit - $this->order->paid, 0),
+                'due_on' => $this->order->ordered_on,
+            ]);
+        }
+        return null;
     }
 
     public function resetInstallments(): void

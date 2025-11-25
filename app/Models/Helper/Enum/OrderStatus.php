@@ -19,6 +19,7 @@ enum OrderStatus: int
     case PAYMENT_OVERDUE = 2;
     case OVERPAID = 3;
     case OCCUPANCY_NOT_SET = 4;
+    case DEPOSIT_UNPAID = 5;
     case UNKNOWN = 999;
 
     public function description(): string
@@ -40,6 +41,7 @@ enum OrderStatus: int
             self::OCCUPANCY_NOT_SET => ['status' => trans('custom.order.status.occupancy'), 'color' => 'dark'],
             self::UNKNOWN => ['status' => 'Status Unknown', 'color' => 'dark'],
             self::CANCELLED_NO_REFUND => ['status' => trans('custom.order.status.cancelled.none'), 'color' => 'secondary',],
+            self::DEPOSIT_UNPAID => ['status' => trans('custom.order.status.deposit_unpaid'), 'color' => 'danger'],
         };
     }
 

@@ -58,7 +58,7 @@ class OrderMailer
      */
     public function sendReminderMail(string $email = null, OrderInstallment|null $next = null): bool
     {
-        $next = $next ?? $this->order->repository->getNextPaymentDetails();
+        $next = $next ?? $this->order->repository->getDepositInstallmentForReminder() ?? $this->order->repository->getNextPaymentDetails();
 
         if (($next === null) || ($next->remaining < setting('order.reminders.minimum', 1.0))) { return false; }
 
@@ -66,11 +66,18 @@ class OrderMailer
             if ($next->id === null || $next->id === 0) {
                 return $this->sendFinalPaymentDue($email);
             }
+            if ($next->id === -1) {
+                return $this->sendDepositDue($email);
+            }
             return $this->sendPaymentDue($email);
         }
 
         if ($next->id === null || $next->id === 0) {
             return $this->sendFinalPaymentOverdue($email);
+        }
+        
+        if ($next->id === -1) {
+            return $this->sendDepositOverdue($email);
         }
 
         return $this->sendPaymentOverdue($email);
@@ -96,6 +103,28 @@ class OrderMailer
     public function sendPaymentOverdue(string $email = null): bool
     {
         return $this->sendMail('payment-overdue', $email, true);
+    }
+
+    /**
+     * Sends a Deposit Due email for the order
+     * @param string|null $email Email to send the mail to. Defaults to lead booker if null
+     * @return bool Did the mail send successfully?
+     * @throws MailFailedException
+     */
+    public function sendDepositDue(string $email = null): bool
+    {
+        return $this->sendMail('deposit-due', $email, true);
+    }
+
+    /**
+     * Sends a Deposit Overdue email for the order
+     * @param string|null $email Email to send the mail to. Defaults to lead booker if null
+     * @return bool Did the mail send successfully?
+     * @throws MailFailedException
+     */
+    public function sendDepositOverdue(string $email = null): bool
+    {
+        return $this->sendMail('deposit-overdue', $email, true);
     }
 
     /**
