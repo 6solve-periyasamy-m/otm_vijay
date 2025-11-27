@@ -11,7 +11,8 @@ use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use Settings;
-use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
+use Stripe\StripeClient;
 use Stripe\Exception\ApiErrorException;
 
 class StripeGateway extends Gateway implements SupportsRedirect
@@ -59,6 +60,8 @@ class StripeGateway extends Gateway implements SupportsRedirect
 
     /**
      * @inheritDoc
+     * @throws ApiErrorException
+     * @noinspection PhpArrayKeyDoesNotMatchArrayShapeInspection
      */
     public function getRedirect(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
@@ -82,6 +85,8 @@ class StripeGateway extends Gateway implements SupportsRedirect
     private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
     {
         $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currencyKeys = config('app.gateways.stripe.currencies.' . strtoupper($currency), []);
+        $secret = $currencyKeys['secret'] ?? config('app.gateways.stripe.secret');
         $currency = strtolower(empty($currency) ? Settings::currency()?->code : $currency);
         $lineItems = [];
         $total = 0;
@@ -93,6 +98,8 @@ class StripeGateway extends Gateway implements SupportsRedirect
         if ($surchargePercent !== null) {
             $surcharge = sigfig($total * ($surchargePercent / 100));
         }
+
+        $stripe = new StripeClient($secret);
 
         $data = [
             'line_items' => $lineItems,
@@ -134,7 +141,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
             ];
         }
 
-        return Session::create($data);
+        return $stripe->checkout->sessions->create($data);
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
