@@ -11,9 +11,9 @@ use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use Settings;
+use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
-use Stripe\Exception\ApiErrorException;
 
 class StripeGateway extends Gateway implements SupportsRedirect
 {
