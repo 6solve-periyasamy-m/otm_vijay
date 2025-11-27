@@ -2,15 +2,25 @@
 
 namespace App\Http\Gateways;
 
+use App\Exceptions\InvalidDataException;
 use App\Http\Gateways\Interfaces\SupportsRedirect;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
+use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
+use Settings;
 use Stripe\Checkout\Session;
 
 class StripeGateway extends Gateway implements SupportsRedirect
 {
+    public const AVAILABLE_SURCHARGES = [
+        'USD' => 3.0,
+        'CAD' => 2.4,
+        'AUD' => 4.0,
+        'NZD' => 4.0,
+    ];
+
     private string $success;
     private string $cancelled;
 
@@ -18,6 +28,31 @@ class StripeGateway extends Gateway implements SupportsRedirect
     {
         $this->success = $success ?? route('payment.gateway.stripe.success');
         $this->cancelled = $cancelled ?? route('payment.gateway.stripe.cancelled');
+    }
+
+    public static function getStripeSurcharge(Currency|string $currency): string|null
+    {
+        $code = $currency instanceof Currency ? $currency->code : $currency;
+        $surcharge = (float)setting('currency.surcharge.stripe.' . $code, 0.0);
+        if (empty($surcharge)) { $surcharge = null; }
+        return $surcharge;
+    }
+
+    /**
+     * @throws InvalidDataException
+     */
+    public static function setStripeSurcharge(Currency|string $currency, float|null $surcharge): void
+    {
+        $code = strtoupper($currency instanceof Currency ? $currency->code : $currency);
+        $surcharge = empty($surcharge) ? null : (float)$surcharge;
+        if (!array_key_exists($code, self::AVAILABLE_SURCHARGES)) {
+            throw new InvalidDataException("Currency {$code} is not available for surcharges.");
+        }
+        $max = self::AVAILABLE_SURCHARGES[$code];
+        if ($surcharge !== null && $surcharge > $max) {
+            throw new InvalidDataException("Maximum surcharge for {$code} is {$max}%");
+        }
+        Settings::set('currency.surcharge.stripe.' . $code, $surcharge);
     }
 
     /**
@@ -36,7 +71,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
     private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
     {
         $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
-        $currency = strtolower(empty($currency) ? \Settings::currency()?->code : $currency);
+        $currency = strtolower(empty($currency) ? Settings::currency()?->code : $currency);
         $lineItems = [];
         foreach ($items as $item) { $lineItems[] = $item->toStripe($currency); }
 
