@@ -4,6 +4,7 @@ namespace App\Http\Gateways;
 
 use App\Exceptions\InvalidDataException;
 use App\Http\Gateways\Interfaces\SupportsRedirect;
+use App\Http\Gateways\Storage\LineItem;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
 use App\Models\Location\Currency;
@@ -11,6 +12,7 @@ use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use Settings;
 use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
 
 class StripeGateway extends Gateway implements SupportsRedirect
 {
@@ -68,12 +70,29 @@ class StripeGateway extends Gateway implements SupportsRedirect
         return $this->getCheckout($items, $intention, $customer, $success, 'custom')->client_secret;
     }
 
+    /**
+     * @param LineItem[] $items
+     * @param PaymentIntention $intention
+     * @param Customer|BookingTraveller $customer
+     * @param string|null $success
+     * @param string $ui
+     * @return Session
+     * @throws ApiErrorException
+     */
     private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
     {
         $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
         $currency = strtolower(empty($currency) ? Settings::currency()?->code : $currency);
         $lineItems = [];
-        foreach ($items as $item) { $lineItems[] = $item->toStripe($currency); }
+        $total = 0;
+        foreach ($items as $item) {
+            $lineItems[] = $item->toStripe($currency);
+            $total += (float)$item->quantity * $item->cost;
+        }
+        $surchargePercent = self::getStripeSurcharge($currency);
+        if ($surchargePercent !== null) {
+            $surcharge = sigfig($total * ($surchargePercent / 100));
+        }
 
         $data = [
             'line_items' => $lineItems,
@@ -102,6 +121,16 @@ class StripeGateway extends Gateway implements SupportsRedirect
                 ...$data,
                 'success_url' => $success ?? $this->success,
                 'cancel_url' => $this->cancelled,
+            ];
+        }
+        if (isset($surcharge)) {
+            $data = [
+                ...$data,
+                'payment_method_options' => [
+                    'card' => [
+                        'surcharge' => $surcharge * 100,
+                    ]
+                ]
             ];
         }
 
