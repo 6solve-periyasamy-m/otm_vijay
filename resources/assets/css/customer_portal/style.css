@@ -47,12 +47,12 @@
     display: inline-block;
 }
 .overview_title,.personal_details h3{font-family: 'PP NeueMontreal Medium';font-size: 24px;line-height: 32px;color: #000000;}
-.overview_top_bar .top_user_name{font-family: 'PP NeueMontreal Medium';font-size: 18px;line-height: 24px;color: #000000;}
+.overview_top_bar .top_user_name{font-family: 'PP NeueMontreal Medium';font-size: 18px;line-height: 24px;display: flex;gap: 8px;color: #000000;text-transform: capitalize;}
 .tours_list{padding: 138px 32px 32px 32px;}
 .event_image_title{display: flex;align-items:flex-start;}
 .event_list,.event_payment_list{display: flex;justify-content: space-between;align-items: center;padding-top: 24px;}
 .title_date{padding-left: 16px;}
-.title_date h4{font-family: 'PP NeueMontreal Medium';font-size: 24px;font-weight: 500;line-height: 32px;color: #000000;margin-right: 15px;}
+.title_date h4{font-family: 'PP NeueMontreal Medium';font-size: 24px;font-weight: 500;line-height: 32px;color: #000000;margin-right: 15px;margin-bottom: 16px;}
 .upcoming_tours h2,.upcoming_payments h2,.past_tours h2,.customer_details h2,.name_address_font h2,.upcoming_payments_finances h2{font-family:'PP Editorial New';font-size: 32px;color: #000000;line-height: 42px;display: flex;align-items: center;margin-bottom: 0px;}
 .upcoming_tours h2 span,.upcoming_payments h2 span,.past_tours h2 span,.upcoming_payments_finances h2 span{
     font-family:'PP NeueMontreal Medium';
@@ -96,11 +96,14 @@ hr{color: #F9F4EE;opacity: 1;}
 .event_title_date h4{
     padding-bottom: 0px;
     font-family: 'PP NeueMontreal Medium';
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 500;
-    line-height: 32px;
+    line-height: 30px;
     color: #000000;
     margin-bottom: 24px;
+    height: 62px;
+    display: flex;
+    align-items: center;
 }
 .event_title_date .view_details,.pst_tour_details{
      font-family: 'PP NeueMontreal Medium';
@@ -1442,3 +1445,102 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .two_input_field.full_width_field{flex-flow: column;}
 header.topbar{width: 20%;float: left;}
 .two_input_field.mobile_number .one_input_field{width: 50%;}
+.two_label_field.title_label{width: 16%;}
+.two_label_field.title_label input{padding-left: 12px;}
+.two_input_field.mobile_number .input-group{display: inline-block;}
+.two_input_field.mobile_number .iti.iti--allow-dropdown{width: 100%;}
+.personal_details_form .form-control:focus{box-shadow: unset;}
+.two_input_field.mobile_number .iti.iti--allow-dropdown input{padding-left:90px;}
+.two_input_field.mobile_number .iti__selected-country-primary{padding-left:24px;}
+.two_input_field.mobile_number .iti__selected-dial-code{font-family: 'PP NeueMontreal Medium';color:#721111;font-size: 14px; line-height: 16px;}
+.addr_country .select2-container--default .select2-selection--single{
+    background-color: #F9F4EE;
+    height: 50px;
+    width: 100%;
+    border-radius: 50px;
+    border: 2px solid #F9F4EE;
+    color: #721111;
+}
+.addr_country .select2-container--default .select2-selection--single .select2-selection__rendered{
+    font-family: 'PP NeueMontreal Medium';
+    color:#721111;
+    font-size: 14px; 
+    line-height:50px;
+    padding-left: 24px;
+}
+.personal_details .select2-container--default .select2-selection--single .select2-selection__placeholder,.select2-container.select2-container--default.select2-container--open{
+     font-family: 'PP NeueMontreal Medium';
+    color:#721111;
+    font-size: 14px; 
+}
+.addr_country .select2-container--default.select2-container--open.select2-container--below .select2-selection--single,
+.personal_details .select2-container--default.select2-container--open.select2-container--below .select2-selection--single{
+    border-bottom-left-radius: 50px !important;
+    border-bottom-right-radius: 50px !important;
+}
+.personal_details .select2-container--default.select2-container--open.select2-container--above .select2-selection--single{
+     border-top-left-radius: 50px !important;
+    border-top-right-radius: 50px !important;
+}
+.addr_country .select2-selection__clear,.addr_country .select2-selection__arrow b,
+.two_input_field.mobile_number .iti__search-icon,.personal_details .select2-selection__arrow b{display: none;}
+.addr_country .select2-container--default .select2-selection--single .select2-selection__arrow,.personal_details .select2-container--default .select2-selection--single .select2-selection__arrow {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("/images/customer/images/arrow-down.svg");
+    background-repeat: no-repeat;
+    background-position-x: 92%;
+    background-position-y: 20px;
+    height: 50px;
+    top: -3px;
+    right: 14px;
+}
+.select2-container--open .select2-dropdown--below{border: 1px solid #F9F4EE;border-top: 1px solid #F9F4EE;}
+.two_input_field.mobile_number .iti__country{padding: 8px 12px;}
+.two_input_field.mobile_number .iti__search-input{padding-left: 24px !important;border-radius: 0px;-webkit-appearance: none; -moz-appearance: none;}
+.your_details_row .two_input_field.mobile_number ul li::after{display: none;}
+.your_details_row .form-control:focus{box-shadow: unset;}
+.personal_details .select2-container--default .select2-selection--single{
+    background-color: #F9F4EE;
+    height: 50px;
+    width: 100%;
+    border-radius: 50px;
+    border: 2px solid #F9F4EE;
+    color: #721111;
+}
+.personal_details .select2-selection__rendered{padding-top: 10px;padding-bottom: 10px;padding-left: 16px !important;padding-right: 20px !important;}
+.personal_details .row{display: flex;row-gap: 15px;}
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
+    background-color: transparent !important;
+    color: #721111 !important;
+}
+.other_details_form{display: flex;gap: 10px;}
+.other_details_form .one_input_field{flex:1;}
+.other_details_form textarea{
+    font-family: "PP NeueMontreal Medium";
+    font-size: 16px;
+    color: #721111;
+    background-color: #F9F4EE;
+    border-radius: 10px;
+    border: 2px solid #F9F4EE;
+}
+.personal_details.loyalty_details textarea{
+    font-family: "PP NeueMontreal Medium";
+    font-size: 14px;
+    color: #721111;
+    background-color: #F9F4EE;
+    border-radius: 10px;
+    border: 2px solid #F9F4EE;
+}
+.other_details_form .two_input_field.full_width_field{margin-bottom: 16px;}
+.personal_details .icon-border{
+    background-color: #F9F4EE;
+    padding: 10px !important;
+    border-radius: 50px !important;
+}
+.personal_details .icon-border img{ width: 25px; height: 25px;}
+.personal_details .select2-container--default .select2-selection--single .select2-selection__rendered{
+    font-family: 'PP NeueMontreal Medium';
+    color: #721111;
+    font-size: 14px;
+}

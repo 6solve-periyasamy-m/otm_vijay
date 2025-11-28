@@ -22,7 +22,7 @@
     $fieldName = $attributes->get('name');
     $hasError = $errors->has($fieldName);
 @endphp
-<div class="form-group col-6 col-xl-{{ $attributes->get('width', 6) }}">
+<div class="form-group col-6 col-xl-{{ $attributes->get('width', 12) }}">
     <label for="{{ $id }}" class="{{ $hasError ? 'text-danger' : '' }}">
         {{ $attributes->get('label') }} @if($attributes->has('required')) <x-admin.required /> @endif
         @error($attributes->get('name')) <span class="text-danger">({{ $message }})</span> @enderror
