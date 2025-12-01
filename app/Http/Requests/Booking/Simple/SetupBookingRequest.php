@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $tour
  * @property string|null $token
  */
-class BookingRequest extends FormRequest
+class SetupBookingRequest extends FormRequest
 {
     public function getTour(): Tour|null
     {
@@ -32,7 +32,8 @@ class BookingRequest extends FormRequest
     {
         return [
             'tour' => 'required|string',
-            'token' => 'nullable|string',
+            'name' => 'required|string',
+            'email' => 'required|email:rfc,dns',
         ];
     }
 }

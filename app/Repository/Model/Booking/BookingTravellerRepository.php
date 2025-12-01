@@ -526,7 +526,7 @@ class BookingTravellerRepository extends ModelRepository
         return BookingTraveller::find($id);
     }
 
-    public function getData()
+    public function getData(): array
     {
         $source = $this->traveller->customer ?? $this->traveller;
         return [

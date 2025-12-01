@@ -878,8 +878,13 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return null;
     }
 
-    public function getDataForBooking(): array
+    public function getDataForBooking(string|null $currency = null): array
     {
+        $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
+        $basePrice = sigfig($this->tour->base_price_per_person * $rate);
+        if (flag('booking.round_to_five')) {
+            $basePrice = round_to_five($basePrice);
+        }
         return [
             'name' => $this->tour->name,
             'event' => [
@@ -887,6 +892,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'description' => $this->tour->event?->description,
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
             ],
+            'base_price' => $basePrice,
             'start' => $this->tour->date_from,
             'end' => $this->tour->date_to,
             'description' => $this->tour->description,

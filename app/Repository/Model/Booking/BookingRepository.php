@@ -806,8 +806,19 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $gateway?->getCheckoutSecret([$item,], $intention, $this->booking->leadTraveller, $redirect);
     }
 
+    public function roundValue(float $amount, float|null $rate = null): float
+    {
+        $rate = $rate ?? $this->getFXRate() ?? 1.0;
+        $amount = sigfig($amount, $rate);
+        if (flag('booking.round_to_five')) {
+            $amount = round_to_five($amount);
+        }
+        return $amount;
+    }
+
     public function getSimpleData(): array
     {
+        $rate = $this->getFXRate() ?? 1.0;
         $travellers = [];
         foreach ($this->booking->travellers as $traveller) {
             $travellers[] = $traveller->repository->getData();
@@ -824,23 +835,24 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 'telephone' => $this->booking->leadTraveller->mobile_number,
             ],
             'finances' => [
-                'currency' => setting('system.currency'),
-                'package' => $this->getBasePrice(),
-                'upgrade' => $this->getUpgradeCosts(),
-                'surcharge' => $this->getSingleOccupancyAmount(),
+                'currency' => $this->booking->currency?->code ?? Settings::currency()?->code,
+                'base' => $this->roundValue($this->booking->tour->base_price_per_person, $rate),
+                'package' => $this->roundValue($this->getBasePrice(), $rate),
+                'upgrade' => $this->roundValue($this->getUpgradeCosts(), $rate),
+                'surcharge' => $this->roundValue($this->getSingleOccupancyAmount(), $rate),
                 'tax' => [
                     'name' => $this->getTaxBracket()?->name ?? 'No Taxes',
                     'percentage' => $this->getTaxBracket()?->rate,
-                    'amount' => $this->getTaxes(),
+                    'amount' => $this->roundValue($this->getTaxes(), $rate),
                 ],
                 'total' => $this->getTotalCost(),
                 'due' => [
                     'deposit' => [
                         'percentage' => $this->booking->tour?->deposit_percentage,
-                        'amount' => ($this->booking->tour?->deposit_amount ?? 0.0) *
-                            ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count()),
+                        'amount' => $this->roundValue(($this->booking->tour?->deposit_amount ?? 0.0) *
+                            ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count()), $rate),
                     ],
-                    'amount' => $this->getDueTodayAmount(),
+                    'amount' => $this->roundValue($this->getDueTodayAmount(), $rate),
                 ]
             ],
             'travellers' => $travellers,
