@@ -6,9 +6,11 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\Booking\Simple\SetupBookingRequest;
 use App\Http\Requests\BookingOverviewRequest;
 use App\Http\Requests\TourOverviewRequest;
+use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Repository\Model\Booking\BookingRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class BookingController extends ApiController
 {
@@ -28,20 +30,13 @@ class BookingController extends ApiController
 
     public function booking(BookingOverviewRequest $request): JsonResponse
     {
-        $tour = $request->getTour();
-        if ($tour === null || !$tour->is_active) {
-            return response()->json(['success' => false, 'message' => 'A tour with that URL does not exist.',], 422);
-        }
-        $booking = $request->getBooking();
-        if ($booking === null) {
-            return response()->json(['success' => false, 'message' => 'A booking with that token does not exist.',], 422);
-        }
-        if ($booking->tour_id !== $tour->id) {
-            return response()->json(['success' => false, 'message' => 'The token does not match this tour',], 422);
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
         }
         return response()->json([
             'success' => true,
-            'booking' => $booking->repository->getSimpleData(),
+            'booking' => $request->getBooking()->repository->getSimpleData(),
         ]);
     }
 
@@ -57,5 +52,26 @@ class BookingController extends ApiController
         ]));
 
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
+    }
+
+    public function getStripePublishableKey(BookingOverviewRequest $request): JsonResponse
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        return response()->json(['success' => true, 'publishable' => config('app.gateways.stripe.publishable', null)]);
+    }
+
+    public function getStripeSecret(Request $request): JsonResponse
+    {
+        $booking = Booking::where('token', '=', $request->token)->first();
+        if ($booking === null) { return response()->json(['success' => false, 'message' => 'Requested booking was not for the selected tour'], 422); }
+        if ($request->full ?? false) {
+            $amount = $booking->repository->getTotalCost();
+        } else {
+            $amount = $booking->repository->getDueTodayAmount();
+        }
+        return response()->json(['success' => true, 'checkoutSessionClientSecret' => $booking->repository->getStripeKey($amount),]);
     }
 }
