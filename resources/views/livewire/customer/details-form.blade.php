@@ -115,25 +115,29 @@
                             <img src="{{ asset('images/customer/images/add_btn_color.svg') }}"  class="reservation_wht_icn plus-icon-size"  alt="Add" />
                         </div>
                     </div>
-                    
                     <div class="row">
                         @foreach($loyalty as $key => $loyaltyItem)
                         <div class="col-lg-6 col-12 mb-3">
                             <div class="card">
                                 <div class="card-body">
+                                    <span wire:click="removeLoyaltyNumber({{ $key }})"
+                                        class="remove-loyalty-btn"
+                                        title="Remove Loyalty Item"
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="Remove Loyalty Item">
+                                        <img src="{{ asset('images/customer/images/remove.png') }}"
+                                            class="reservation_wht_icn plus-icon-size"
+                                            alt="Remove" />
+                                    </span>
                                     <div class="row">
                                         <x-livewire.input.select.customer.loyalty-number-type 
                                             name="loyalty.{{ $key }}.type" 
                                             value="{{ $loyaltyItem['type'] }}" 
                                             label="Type" 
-                                            width="6" />
-                                        <x-livewire.input wire:model="loyalty.{{ $key }}.name" label="Loyalty Number" width="5" />
-                                        <div class="col-1 d-flex justify-content-end">
-                                            <div wire:click="removeLoyaltyNumber({{ $key }})" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-no-border" title="Remove Loyalty Item" role="button" tabindex="0" aria-label="Remove Loyalty Item">
-                                                <img src="{{ asset('images/customer/images/remove.png') }}"  class="reservation_wht_icn plus-icon-size"  alt="Remove" />
-                                            </div>
-                                        </div>
-                                        <x-livewire.input.text-area wire:model="loyalty.{{ $key }}.notes" label="Notes" width="12" />
+                                            width="4" />
+                                        <x-livewire.input wire:model="loyalty.{{ $key }}.name" label="Loyalty Number" width="4" />
+                                        <x-livewire.input wire:model="loyalty.{{ $key }}.notes" label="Details" width="4" />
                                     </div>
                                 </div>
                             </div>
@@ -156,19 +160,24 @@
                         <div class="col-lg-6 col-12 mb-3">
                             <div class="card">
                                 <div class="card-body">
+                                    <span wire:click="removeMerchandise({{ $key }})"
+                                        class="remove-merchandise-btn"
+                                        title="Remove Merchandise Item"
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="Remove Merchandise Item">
+                                        <img src="{{ asset('images/customer/images/remove.png') }}"
+                                            class="reservation_wht_icn plus-icon-size"
+                                            alt="Remove" />
+                                    </span>
                                     <div class="row">
                                         <x-livewire.input.select.customer.merchandise-category 
                                             name="merchandise.{{ $key }}.category" 
                                             value="{{ $item['category'] }}" 
                                             label="Category" 
-                                            width="6" />
-                                        <x-livewire.input wire:model="merchandise.{{ $key }}.size" label="Size" width="5" />
-                                        <div class="col-1 d-flex justify-content-end">
-                                            <div wire:click="removeMerchandise({{ $key }})" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-no-border" title="Remove Merchandise Item" role="button" tabindex="0" aria-label="Remove Merchandise Item">
-                                                <img src="{{ asset('images/customer/images/remove.png') }}"  class="reservation_wht_icn plus-icon-size"  alt="Remove" />
-                                            </div>    
-                                        </div>
-                                        <x-livewire.input.text-area wire:model="merchandise.{{ $key }}.other_details" label="Other Details" width="12" />
+                                            width="4" />
+                                        <x-livewire.input wire:model="merchandise.{{ $key }}.size" label="Size" width="4" />
+                                        <x-livewire.input wire:model="merchandise.{{ $key }}.other_details" label="Other Details" width="4" />
                                     </div>
                                 </div>
                             </div>

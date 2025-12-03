@@ -923,7 +923,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         <p class="notes_title">{!! $orderCustomer->external_notes ?? '' !!}</p>
                     </div> -->
                     <div class="notes_colm">
-                        <x-customer.input.text-area  id="extnt" name="external_notes" placeholder="Enter any special requests or additional instructions here…" value="{{ $order->external_notes }}">
+                        <x-customer.input.text-area  id="extnt" name="external_notes" placeholder="Share any special requests (aisle seats, accessible rooms, birthdays, etc.)" value="{{ $order->external_notes }}">
                         </x-customer.input.text-area>
                     </div>
                     {{-- <div  class="notes_colm">
@@ -944,13 +944,25 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
          <x-customer.overview-top-bar title="Tours" :search="false"  />
         @php
 
-            $upcomingOrders = $orders->filter(function ($order) {
-                return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isFuture();
-            });
+            $upcomingOrders = $orders
+                ->filter(function ($order) {
+                    if (! $order->tour || ! $order->tour->date_to) {
+                        return false;
+                    }
+                    return Carbon::parse($order->tour->date_to)->isFuture();
+                })
+                ->sortBy(fn($order) => Carbon::parse($order->tour->date_to))
+                ->values();
 
-            $pastOrders = $orders->filter(function ($order) {
-                return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isPast();
-            });
+            $pastOrders = $orders
+                ->filter(function ($order) {
+                    if (! $order->tour || ! $order->tour->date_to) {
+                        return false;
+                    }
+                    return Carbon::parse($order->tour->date_to)->isPast();
+                })
+                ->sortByDesc(fn($order) => Carbon::parse($order->tour->date_to))
+                ->values();
         @endphp
         <div class="tours_list">
             <div class="upcoming_tours">

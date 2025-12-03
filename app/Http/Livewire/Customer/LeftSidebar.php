@@ -17,7 +17,7 @@ class Leftsidebar extends Component
         $this->orderCustomer = CustomerAuthenticationRepository::getCustomer();
         if ($this->orderCustomer) {
             $this->upcomingOrders = $this->orderCustomer->orders()
-            ->where('cancelled', false)
+            // ->where('cancelled', true)
             ->whereHas('tour', function ($q) {
                 $q->where('date_to', '>=', now());
             })
