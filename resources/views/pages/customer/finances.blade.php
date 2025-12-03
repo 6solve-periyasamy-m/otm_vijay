@@ -21,9 +21,12 @@
                     $activeOrderCount = $orders->filter(function ($order) {
                             return $order->cache && ($order->cache->status->value != 0);
                         })->count();
+                    $ordersList = $orders
+                    ->sortByDesc(fn($order) => $order->tour->date_to)
+                    ->values();
                 @endphp
-                <h2>Upcoming Payments</h2>
-                 @foreach($orders as $k => $order)
+                <!-- <h2>Upcoming Payments</h2> -->
+                 @foreach($ordersList as $k => $order)
                     <div class="finances_event">
                         <div class="event_payment_list">
                             <div class="event_detail_top">

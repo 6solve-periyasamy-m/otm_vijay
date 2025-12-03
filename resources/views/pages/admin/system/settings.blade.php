@@ -94,7 +94,7 @@
     <!-- Faq's -->
      <div class="card">
         <div class="card-body" data-target="#faqs" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">{{ Icon::maximize() }} Faq's</h4>
+            <h4 class="fw-bold">{{ Icon::maximize() }} FAQ's</h4>
         </div>
     </div>
     <div class="collapse mx-1" id="faqs">

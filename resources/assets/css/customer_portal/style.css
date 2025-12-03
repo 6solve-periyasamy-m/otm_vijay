@@ -50,7 +50,7 @@
 .overview_top_bar .top_user_name{font-family: 'PP NeueMontreal Medium';font-size: 18px;line-height: 24px;display: flex;gap: 8px;color: #000000;text-transform: capitalize;}
 .tours_list{padding: 138px 32px 32px 32px;}
 .event_image_title{display: flex;align-items:flex-start;}
-.event_list,.event_payment_list{display: flex;justify-content: space-between;align-items: center;padding-top: 24px;}
+.event_list,.event_payment_list{display: flex; justify-content: space-between; align-items: center;padding-top: 24px;}
 .title_date{padding-left: 16px;}
 .title_date h4{font-family: 'PP NeueMontreal Medium';font-size: 24px;font-weight: 500;line-height: 32px;color: #000000;margin-right: 15px;margin-bottom: 16px;}
 .upcoming_tours h2,.upcoming_payments h2,.past_tours h2,.customer_details h2,.name_address_font h2,.upcoming_payments_finances h2{font-family:'PP Editorial New';font-size: 32px;color: #000000;line-height: 42px;display: flex;align-items: center;margin-bottom: 0px;}
@@ -100,8 +100,8 @@ hr{color: #F9F4EE;opacity: 1;}
     font-weight: 500;
     line-height: 30px;
     color: #000000;
-    margin-bottom: 24px;
-    height: 62px;
+    /* margin-bottom: 24px;
+    height: 62px; */
     display: flex;
     align-items: center;
 }
@@ -892,13 +892,19 @@ input[type=checkbox] { -webkit-appearance: checkbox;}
     .upcoming_tours h2, .upcoming_payments h2, .past_tours h2,.customer_details h2,.name_address_font h2,.upcoming_payments_finances h2{font-size: 25px !important;line-height: 32px;}
     .title_date h4{padding-top: 20px;font-size: 20px !important;line-height: 28px !important;}
     .event_image_title{flex-flow: column;align-items: center;}
-    .title_date{padding-left: 0px !important;}
+    .title_date{padding-left: 0px !important; margin-top:20px;}
     .search_field{width: 100% !important;margin-top: 20px;}
     #sidebar{width: 100% !important;height: auto !important;position: relative;}
     .past_tours_column{width: 100% !important;padding-bottom: 70px;}
     .past_tours_column:not(:nth-child(3)){margin-right: 0%;}
     header.topbar{width: 30% !important;}
     .overview_top_bar,.body_content .inner_content{width: 70%;}
+    .past_tour_img span {padding: 1px;}
+    .menu_list li img, .email_id img, .phone_no img{ display:none;}
+    .travel_sub_menu { padding-left: 10px; }
+    .travel_sub_menu li a { text-transform: capitalize !important;}
+    .brand-email {word-wrap: break-word;}
+    .social_media img { margin-right: 1px; }
 } 
 @media screen  and (min-width: 768px)  and (max-width: 980px) { 
     .order_value_amount{width: 80%; margin-top: 25px;margin-bottom: 10px;}
@@ -998,7 +1004,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .tour_event_img{height: 282px;}
 .tour_event_img img{width: 100%;height:100%;object-fit: cover;}
 .travel_sub_menu li::marker{
-    color:#F35B15;
+    color:#FFF;
 }
 .upcoming_payments_finances .order_value_amount_div .order_value_amount{width: unset !important;}
 .upcoming_payments_finances .order_value_amount_div {width: 40%;display:flex;flex-flow: wrap;justify-content: flex-end;height: 200px;}
@@ -1255,7 +1261,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
     color: #721111;
     margin-bottom: 0px;
 }
-.past_tours_column .past_image_title{margin-bottom: 24px;}
+.past_tours_column .past_image_title{margin-bottom: 15px;}
 
 .status-btn { border-radius: 28px; background-color: #ffc107; color: white; padding: 10px 20px; font-size: 16px; border: none; cursor: pointer; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); transition: background-color 0.3s ease, box-shadow 0.3s ease; letter-spacing: 1px; line-height: 15px; margin-left: 25px; }
 .status-btn:hover { box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);}
@@ -1356,7 +1362,7 @@ select.form-control:focus{box-shadow: unset;border-color: transparent;}
 .btn-warning{ background-color: #fb3 !important; border-radius: 40px !important;} 
 .title_date .btn{cursor:auto;}
 .title_date h6.btn,.past_tour_img span{font-family: 'Inter Medium';font-size: 12px;letter-spacing: 1.92px;font-weight: 500 !important;border-radius: 40px;line-height: 19px;cursor: auto;text-transform: uppercase;border: 0px;}
-.finances_event .event_detail_top,.event_image_title{max-width: 700px;width: 100%;}
+.finances_event .event_detail_top,.event_image_title{max-width: 750px;width: 100%;}
 .title_date .btn-success:hover{background-color: #00c851;border: 0px;}
 .title_date .btn-secondary:hover{background-color: #a6c;border: 0px;}
 .title_date .btn-danger{background-color: #ff3547 !important;}
@@ -1544,3 +1550,5 @@ header.topbar{width: 20%;float: left;}
     color: #721111;
     font-size: 14px;
 }
+.remove-loyalty-btn, .remove-merchandise-btn { position: absolute;  top: 10px; right: 10px; cursor: pointer; z-index: 10;}
+.card-body .row > * {padding-right: calc(var(--bs-gutter-x) * .19); padding-left: calc(var(--bs-gutter-x) * .1);}

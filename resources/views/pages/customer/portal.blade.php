@@ -18,14 +18,38 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
  <div class="inner_content">
     <x-customer.overview-top-bar title="Overview" :search="false" />
     @php
-        $upcomingOrders = $orders->filter(function ($order) {
-            return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isFuture();
-        })->sortBy(function ($order) {
-            return Carbon::parse($order->tour->date_to);
-        })->values();
-        $pastOrders = $orders->filter(function ($order) {
-            return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isPast();
-        });        
+        $upcomingOrders = $orders
+            ->filter(function ($order) {
+                if (! $order->tour || ! $order->tour->date_to) {
+                    return false;
+                }
+                return Carbon::parse($order->tour->date_to)->isFuture();
+            })
+            ->sortBy(fn($order) => Carbon::parse($order->tour->date_to))
+            ->values();
+
+        $upcomingPayments = $orders
+            ->filter(function ($order) {
+                if (! $order->tour || ! $order->tour->date_to) {
+                    return false;
+                }
+                if ($order->status?->value === 0) {
+                    return false;
+                }
+                return Carbon::parse($order->tour->date_to)->isFuture();
+            })
+            ->sortBy(fn($order) => Carbon::parse($order->tour->date_to))
+            ->values();
+
+        $pastOrders = $orders
+            ->filter(function ($order) {
+                if (! $order->tour || ! $order->tour->date_to) {
+                    return false;
+                }
+                return Carbon::parse($order->tour->date_to)->isPast();
+            })
+            ->sortByDesc(fn($order) => Carbon::parse($order->tour->date_to))
+            ->values();
     @endphp
     <div class="tours_list">
         <div class="upcoming_tours">
@@ -74,11 +98,11 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
             
         </div>
         <div class="upcoming_payments">
-            <h2>Upcoming Payments {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span>--}}</h2>
+            <h2>Upcoming Payments {{-- <span class="tours_count">{{ $upcomingPayments->count() }}</span>--}}</h2>
 
-                @if($upcomingOrders->count() > 0)
+                @if($upcomingPayments->count() > 0)
                 <div class="past_tour_row">
-                @foreach($upcomingOrders as $order)
+                @foreach($upcomingPayments as $order)
                     @php
                         $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency());
                         $nonSystem = $order->currency !== null && $order->currency !== Settings::currency();
