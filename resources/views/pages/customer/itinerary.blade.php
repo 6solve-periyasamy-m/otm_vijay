@@ -946,22 +946,22 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
 
             $upcomingOrders = $orders
                 ->filter(function ($order) {
-                    if (! $order->tour || ! $order->tour->date_to) {
+                    if (! $order->tour || ! $order->tour->date_from) {
                         return false;
                     }
-                    return Carbon::parse($order->tour->date_to)->isFuture();
+                    return Carbon::parse($order->tour->date_from)->isFuture();
                 })
-                ->sortBy(fn($order) => Carbon::parse($order->tour->date_to))
+                ->sortBy(fn($order) => Carbon::parse($order->tour->date_from))
                 ->values();
 
             $pastOrders = $orders
                 ->filter(function ($order) {
-                    if (! $order->tour || ! $order->tour->date_to) {
+                    if (! $order->tour || ! $order->tour->date_from) {
                         return false;
                     }
-                    return Carbon::parse($order->tour->date_to)->isPast();
+                    return Carbon::parse($order->tour->date_from)->isPast();
                 })
-                ->sortByDesc(fn($order) => Carbon::parse($order->tour->date_to))
+                ->sortByDesc(fn($order) => Carbon::parse($order->tour->date_from))
                 ->values();
         @endphp
         <div class="tours_list">
