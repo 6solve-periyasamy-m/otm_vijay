@@ -12,7 +12,9 @@
             <th scope="col">Check In Time</th>
             <th scope="col">Check Out Date</th>
             <th scope="col">Check Out Time</th>
+            <th scope="col">Purchase Currency</th>
             <th scope="col">Purchase Price</th>
+            <th scope="col">Sales Currency</th>
             <th scope="col">Sales Price</th>
             <th scope="col">Occupant Count</th>
             <th scope="col">Empty Beds</th>
@@ -45,8 +47,10 @@
                 <td>{{ f_time($row->from) }}</td>
                 <td>{{ f_date($row->to) }}</td>
                 <td>{{ f_time($row->to) }}</td>
-                <td>{{ f_currency($row->purchase) }}</td>
-                <td>{{ f_currency($row->sales) }}</td>
+                <td>{{ $row->purchase_currency }}</td>
+                <td>{{ fr_currency($row->purchase, $row->purchase_currency) }}</td>
+                <td>{{ $row->sales_currency }}</td>
+                <td>{{ f_currency($row->sales, $row->sales_currency) }}</td>
                 <td>{{ $row->occupants }}</td>
                 <td>{{ $row->empty_beds }}</td>
                 <td>{{ $row->reference }}</td>

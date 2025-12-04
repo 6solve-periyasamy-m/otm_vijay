@@ -17,7 +17,9 @@
         <th scope="col">Arrival Date</th>
         <th scope="col">Arrival Time</th>
         <th scope="col">Arrival Airport</th>
+        <th scope="col">Purchase Currency</th>
         <th scope="col">Purchase Price</th>
+        <th scope="col">Sales Currency</th>
         <th scope="col">Sales Price</th>
         <th scope="col">Component Type</th>
         <th scope="col">Customer Flight Notes</th>
@@ -42,8 +44,10 @@
             <td>{{ f_date($row->end)}}</td>
             <td>{{ f_time($row->end)}}</td>
             <td>{{ $row->arrival }}</td>
-            <td>{{ f_currency($row->purchase) }}</td>
-            <td>{{ f_currency($row->sales) }}</td>
+            <td>{{ $row->purchase_currency }}</td>
+            <td>{{ fr_currency($row->purchase, $row->purchase_currency) }}</td>
+            <td>{{ $row->sales_currency }}</td>
+            <td>{{ f_currency($row->sales, $row->sales_currency) }}</td>
             <td>{{ $row->component }}</td>
             <td>{{ $row->notes }}</td>
         </tr>
