@@ -911,8 +911,8 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         @endif
         <div class="notes_div">
             <h2>Special Requests</h2>
-            <p>Request for twin-share rooms for players, single occupancy for coaching staff. Prefer hotels with access to a gym or fitness center.
-                Rooms near each other or on the same floor for team coordination.</p>
+            <!-- <p>Request for twin-share rooms for players, single occupancy for coaching staff. Prefer hotels with access to a gym or fitness center.
+                Rooms near each other or on the same floor for team coordination.</p> -->
             <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
                  @csrf
                 <div class="notes_row">
