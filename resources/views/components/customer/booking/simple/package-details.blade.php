@@ -184,6 +184,11 @@
                 {{ f_currency_booking($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
             </div>
         </div>
+        @if(!empty($tour->description))
+            <div class="name_price_div">
+                <h4>{!! $tour->description !!}</h4>
+            </div>
+        @endif
         <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
         <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
