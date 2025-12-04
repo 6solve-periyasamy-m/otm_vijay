@@ -35,6 +35,7 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
+use App\Repository\Storage\Tour\GroupedHotelRooming;
 use Carbon\Carbon;
 use DB;
 use Gateway;
@@ -825,7 +826,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             $travellers[] = $traveller->repository->getData();
         }
 
-        return [
+        $data = [
             'token' => $this->booking->token,
             'url' => $this->booking->tour?->booking_form_url,
             'tour' => $this->booking->tour?->repository->getDataForBooking(),
@@ -858,6 +859,62 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             ],
             'travellers' => $travellers,
         ];
+
+        if (bleeding_edge()) {
+            $data = [
+                'debug_url' => route('admin.booking.view', ['booking' => $this->booking,]),
+                ...$data,
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * @throws RoomingFailedException
+     */
+    public function processRoomingFromApi(array $information): void
+    {
+        /** @var array<string, GroupedHotelRooming> $requiredRooms */
+        $requiredRooms = [];
+        foreach ($this->booking->tour->repository->getHotelGroups() as $groups) {
+            foreach ($groups as $group) {
+                $key = $group->getUniqueKey();
+                foreach ($information as $item) {
+                    if ($item['room'] === $key) {
+                        $requiredRooms[$key] = $group;
+                    }
+                }
+            }
+        }
+        $travellers = clone $this->booking->travellers;
+        $travellerRooms = [];
+        foreach ($information as $item) {
+            $room = $requiredRooms[$item['room']];
+            $travellerCount = $item['travellers'];
+            if ($travellerCount > $travellers->count()) {
+                throw new RoomingFailedException('More travellers are assigned to rooms than are on the booking.');
+            }
+            if ($room->occupancy->maximum_occupancy < $travellerCount) {
+                throw new RoomingFailedException('Too many travellers are assigned to a room.');
+            }
+            $travellersForRoom = [];
+            for ($i = 0; $i < $travellerCount; $i++) {
+                $traveller = $travellers->shift();
+                $travellersForRoom[] = $traveller;
+            }
+            $travellerRooms[] = ['room' => $room, 'travellers' => $travellersForRoom];
+        }
+        $this->wipeGroups();
+        foreach ($travellerRooms as $travellerRoom) {
+            $group = BookingGroup::create(['booking_id' => $this->booking->id,]);
+            foreach ($travellerRoom['travellers'] as $traveller) {
+                $group->repository->addTravellerToGroup($traveller);
+            }
+            foreach ($travellerRoom['room']->rooms as $room) {
+                $group->repository->addRoomToGroup($room);
+            }
+        }
     }
 
     public function getUpgradesForPackageDetails(): array

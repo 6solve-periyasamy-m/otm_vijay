@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
+use App\Exceptions\RoomingFailedException;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Booking\ApiRoomingRequest;
 use App\Http\Requests\Booking\BookingOverviewRequest;
 use App\Http\Requests\Booking\Simple\SetupBookingRequest;
 use App\Http\Requests\Booking\TourOverviewRequest;
@@ -51,6 +53,21 @@ class BookingController extends ApiController
             'email_address' => $request->email,
         ]));
 
+        return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
+    }
+
+    public function processRooming(ApiRoomingRequest $request)
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        $booking = $request->getBooking();
+        try {
+            $booking->repository->processRoomingFromApi($request->rooming);
+        } catch (RoomingFailedException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
     }
 
