@@ -186,7 +186,7 @@
         </div>
         @if(!empty($tour->description))
             <div class="description_div">
-                <h4>{!! $tour->description !!}</h4>
+                <p>{!! $tour->description !!}</p>
             </div>
         @endif
         <!-- <h6>{{ $tour->name }}</h6> -->
