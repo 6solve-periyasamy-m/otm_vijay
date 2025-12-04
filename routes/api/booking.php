@@ -11,6 +11,7 @@ Route::post('/rooming', [BookingController::class, 'processRooming'])->name('roo
 Route::post('/component', [BookingController::class, 'processComponents'])->name('component');
 Route::prefix('traveller')->name('traveller.')->group(function () {
    Route::post('/add', [BookingController::class, 'addTraveller'])->name('add');
+   Route::post('/set', [BookingController::class, 'setTravellers'])->name('set');
    Route::post('/remove', [BookingController::class, 'removeTraveller'])->name('remove');
 });
 Route::prefix('stripe')->name('stripe.')->group(function () {

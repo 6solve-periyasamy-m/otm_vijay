@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\Booking\ApiComponentRequest;
 use App\Http\Requests\Booking\ApiRoomingRequest;
 use App\Http\Requests\Booking\BookingOverviewRequest;
+use App\Http\Requests\Booking\SetTravellersRequest;
 use App\Http\Requests\Booking\Simple\SetupBookingRequest;
 use App\Http\Requests\Booking\TourOverviewRequest;
 use App\Models\Booking\Booking;
@@ -97,6 +98,27 @@ class BookingController extends ApiController
         }
         $booking = $request->getBooking();
         $booking->repository->addUnknownTraveller();
+        return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
+    }
+
+    public function setTravellers(SetTravellersRequest $request): JsonResponse
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        $booking = $request->getBooking();
+        $travellers = $booking->travellers()->count();
+        $diff = $request->quantity - $travellers;
+        if ($diff < 0) {
+            for ($i = 0; $i < abs($diff); $i++) {
+                $booking->repository->removeUnknownTraveller();
+            }
+        } else if ($diff > 0) {
+            for ($i = 0; $i < $diff; $i++) {
+                $booking->repository->addUnknownTraveller();
+            }
+        }
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
     }
 
