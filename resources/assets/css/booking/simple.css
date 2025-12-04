@@ -2831,6 +2831,14 @@ input::-webkit-inner-spin-button {
         padding-left: 0px !important;
     }
 }
+.description_div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    > h4 > p {
+        padding-left: 0px !important;
+    }
+}
 .base-price-div .base-price-span{
     font-weight: 500;
 }

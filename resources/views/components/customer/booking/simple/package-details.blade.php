@@ -185,7 +185,7 @@
             </div>
         </div>
         @if(!empty($tour->description))
-            <div class="name_price_div">
+            <div class="description_div">
                 <h4>{!! $tour->description !!}</h4>
             </div>
         @endif
