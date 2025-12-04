@@ -806,8 +806,9 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $gateway?->getCheckoutSecret([$item,], $intention, $this->booking->leadTraveller, $redirect);
     }
 
-    public function roundValue(float $amount, float|null $rate = null): float
+    public function roundValue(float|null $amount, float|null $rate = null): float|null
     {
+        if ($amount === null) { return null; }
         $rate = $rate ?? $this->getFXRate() ?? 1.0;
         $amount = sigfig($amount, $rate);
         if (flag('booking.round_to_five')) {
