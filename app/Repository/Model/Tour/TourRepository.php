@@ -682,8 +682,8 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 } else {
                     $components[$key] = $component->inventory->repository;
                 }
+                $seen[] = $key;
             }
-            $seen[] = $key;
         }
         foreach ($this->tour->activityInventoryTours as $component) {
             $key = "activity-{$component->activity_inventory_id}";
@@ -898,7 +898,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'description' => $this->tour->description,
             'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
             'inclusions' => $this->getInclusions(),
-            'rooms' => $this->getRoomsArrayForBooking(),
+            'components' => [
+                'rooms' => $this->getRoomsArrayForBooking(),
+            ],
         ];
     }
 

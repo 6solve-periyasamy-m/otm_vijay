@@ -177,6 +177,7 @@ class GroupedHotelRooming
             'room_size' => $this->occupancy->maximum_occupancy,
             'board_type' => $this->board->name,
             'category' => $this->category?->name,
+            'cost' => $this->getUpgradeCost(),
         ];
     }
 }
