@@ -100,7 +100,7 @@ hr{color: #F9F4EE;opacity: 1;}
     font-weight: 500;
     line-height: 30px;
     color: #000000;
-    /* margin-bottom: 24px;
+    /*margin-bottom: 15px;
     height: 62px; */
     display: flex;
     align-items: center;
@@ -1552,3 +1552,16 @@ header.topbar{width: 20%;float: left;}
 }
 .remove-loyalty-btn, .remove-merchandise-btn { position: absolute;  top: 10px; right: 10px; cursor: pointer; z-index: 10;}
 .card-body .row > * {padding-right: calc(var(--bs-gutter-x) * .19); padding-left: calc(var(--bs-gutter-x) * .1);}
+.modal-content {font-family: 'PP NeueMontreal Medium' !important;}
+.modal-title { color: #F35B15;}
+.btnstyle-cancel {
+  border-radius: 50px !important;
+  text-transform: uppercase !important;
+}
+.btnstyle-logout {
+    background-color: #F35B15 !important;
+    border-radius: 50px !important;
+    border: 1px solid #F35B15 !important;
+    text-transform: uppercase !important;
+}
+.modal-header .btn-close {border: 1px solid #F35B15 !important;}

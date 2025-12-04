@@ -12,12 +12,6 @@
             </div>
             <div class="your_details_colm_2">
             <!-- Personal Details Section -->
-                @if (session()->has('message'))
-                    <div class="alert alert-success">
-                        {{ session('message') }}
-                    </div>
-                @endif
-
                 @if (session()->has('error'))
                     <div class="alert alert-danger">
                         {{ session('error') }}
@@ -31,7 +25,7 @@
                         <div class="two_input_field">
                             <div class="two_label_field title_label"> <x-livewire.input wire:model="customer.title" label="Title" width="12" /></div>
                             <div class="two_label_field"><x-livewire.input wire:model="customer.first_name" label="First Name" required /></div>
-                            <div class="two_label_field"><x-livewire.input wire:model="customer.middle_names" label="Middle Names" /></div>
+                            <div class="two_label_field"><x-livewire.input wire:model="customer.middle_names" label="Middle Name" /></div>
                             <div class="two_label_field"><x-livewire.input wire:model="customer.last_name" label="Last Name" required /></div>
                         </div>
                         <div class="two_input_field">
@@ -194,9 +188,16 @@
                         <span wire:loading.remove>Save Changes</span>
                         <span wire:loading>Saving...</span>
                     </button>
-                </div>
+                </div>                
             <!-- EOD Save Button --> 
+                </br>
+                @if (session()->has('message'))
+                    <div class="alert alert-success">
+                        {{ session('message') }}
+                    </div>
+                @endif
             </div>
+            
         </div>
     </div>
 </div>

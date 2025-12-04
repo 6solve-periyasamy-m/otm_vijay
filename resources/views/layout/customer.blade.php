@@ -105,9 +105,9 @@
                     Are you sure you want to log out?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary btnstyle-cancel" data-bs-dismiss="modal">Cancel</button>
 
-                    <button type="button" class="btn btn-danger" id="confirmLogoutBtn">
+                    <button type="button" class="btn btn-danger btnstyle-logout" id="confirmLogoutBtn">
                         Logout
                     </button>
                 </div>
