@@ -858,6 +858,9 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 ]
             ],
             'travellers' => $travellers,
+            'components' => [
+                'rooming' => $this->getCurrentRoomingForApi(),
+            ]
         ];
 
         if (bleeding_edge()) {
@@ -868,6 +871,16 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         }
 
         return $data;
+    }
+
+    public function getCurrentRoomingForApi(): array
+    {
+        $rooms = [];
+        foreach ($this->booking->groups as $group) {
+            $groupedRoom = GroupedHotelRooming::fromInventoryTour($group->accommodation->first()->tourComponent);
+            $rooms[] = ['room' => $groupedRoom->getUniqueKey(), 'travellers' => $group->travellers->count(),];
+        }
+        return $rooms;
     }
 
     /**

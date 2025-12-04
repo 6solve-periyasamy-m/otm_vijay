@@ -68,6 +68,7 @@ class BookingController extends ApiController
         } catch (RoomingFailedException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
+        $booking = $booking->refresh();
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
     }
 
