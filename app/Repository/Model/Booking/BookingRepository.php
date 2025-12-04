@@ -872,6 +872,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'components' => [
                 'rooming' => $this->getCurrentRoomingForApi(),
                 'tickets' => $this->booking->tour->repository->getTicketsForBooking($this->booking),
+                'additional' => $this->booking->tour->repository->getAdditionalInclusionsForBooking($this->booking),
             ]
         ];
 
