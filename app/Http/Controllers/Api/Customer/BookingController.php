@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Booking\BookingOverviewRequest;
 use App\Http\Requests\Booking\Simple\SetupBookingRequest;
-use App\Http\Requests\BookingOverviewRequest;
-use App\Http\Requests\TourOverviewRequest;
+use App\Http\Requests\Booking\TourOverviewRequest;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Repository\Model\Booking\BookingRepository;
