@@ -11,12 +11,14 @@ use App\Models\Accommodation\RoomCategory;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Booking;
 use App\Models\Booking\Component\BookingActivity;
 use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
@@ -878,7 +880,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return null;
     }
 
-    public function getDataForBooking(string|null $currency = null): array
+    public function getDataForBooking(string|null $currency = null, Booking|null $booking = null): array
     {
         $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
         $basePrice = sigfig($this->tour->base_price_per_person * $rate);
@@ -900,8 +902,40 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'inclusions' => $this->getInclusions(),
             'components' => [
                 'rooms' => $this->getRoomsArrayForBooking(),
+                'tickets' => $this->getTicketsForBooking($booking),
             ],
         ];
+    }
+
+    public function getTicketsForBooking(Booking|null $booking = null): array
+    {
+        $components = [];
+        foreach ($this->tour->activityInventoryTours as $tourComponent) {
+            $inventory = $tourComponent->inventory;
+            $component = $inventory->component;
+            if ($component->activity_category !== ActivityCategory::MAIN) { continue; }
+            $key = "ticket-{$tourComponent->id}";
+            $data = [
+                'key' => $key,
+                'name' => $component->name,
+                'image' => $component->image_url !== null ? asset($component->image_url) : null,
+                'description' => $component->description,
+                'type' => $inventory->ticketType->name,
+                'cost' => $tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
+            ];
+            if ($booking !== null) {
+                $data['quantity'] = $tourComponent->repository->getQuantityOnBooking($booking);
+            }
+            if (!array_key_exists('quantity', $data) || $data['quantity'] > 0) {
+                $components[] = $data;
+            }
+        }
+        return $components;
+    }
+
+    public function getInclusionsForBooking(): array
+    {
+
     }
 
     public function getRoomsArrayForBooking(): array
