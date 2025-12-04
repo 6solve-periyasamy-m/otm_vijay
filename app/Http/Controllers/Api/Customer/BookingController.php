@@ -54,6 +54,28 @@ class BookingController extends ApiController
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
     }
 
+    public function addTraveller(BookingOverviewRequest $request): JsonResponse
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        $booking = $request->getBooking();
+        $booking->repository->addUnknownTraveller();
+        return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
+    }
+
+    public function removeTraveller(BookingOverviewRequest $request): JsonResponse
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        $booking = $request->getBooking();
+        $booking->repository->removeUnknownTraveller();
+        return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
+    }
+
     public function getStripePublishableKey(BookingOverviewRequest $request): JsonResponse
     {
         $valid = $request->validatePackage();
