@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
-use App\Exceptions\RoomingFailedException;
+use App\Exceptions\BookingApiException;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Booking\ApiComponentRequest;
 use App\Http\Requests\Booking\ApiRoomingRequest;
 use App\Http\Requests\Booking\BookingOverviewRequest;
 use App\Http\Requests\Booking\Simple\SetupBookingRequest;
@@ -56,7 +57,7 @@ class BookingController extends ApiController
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
     }
 
-    public function processRooming(ApiRoomingRequest $request)
+    public function processRooming(ApiRoomingRequest $request): JsonResponse
     {
         $valid = $request->validatePackage();
         if ($valid instanceof JsonResponse) {
@@ -65,8 +66,24 @@ class BookingController extends ApiController
         $booking = $request->getBooking();
         try {
             $booking->repository->processRoomingFromApi($request->rooming);
-        } catch (RoomingFailedException $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        } catch (BookingApiException $e) {
+            return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
+        }
+        $booking = $booking->refresh();
+        return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
+    }
+
+    public function processComponents(ApiComponentRequest $request): JsonResponse
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        $booking = $request->getBooking();
+        try {
+            $booking->repository->processComponentsFromApi($request->components);
+        } catch (BookingApiException $e) {
+            return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
         }
         $booking = $booking->refresh();
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);

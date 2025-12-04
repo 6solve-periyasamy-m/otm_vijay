@@ -8,6 +8,7 @@ Route::get('/tour', [BookingController::class, 'overview'])->name('tour');
 Route::get('/booking', [BookingController::class, 'booking'])->name('booking');
 Route::post('/setup', [BookingController::class, 'setup'])->name('setup');
 Route::post('/rooming', [BookingController::class, 'processRooming'])->name('rooming');
+Route::post('/component', [BookingController::class, 'processComponents'])->name('component');
 Route::prefix('traveller')->name('traveller.')->group(function () {
    Route::post('/add', [BookingController::class, 'addTraveller'])->name('add');
    Route::post('/remove', [BookingController::class, 'removeTraveller'])->name('remove');
