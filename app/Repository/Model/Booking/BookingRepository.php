@@ -403,6 +403,13 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $booking;
     }
 
+    public static function createForBookingApi(Tour $tour, BookingTraveller $leadTraveller): Booking
+    {
+        $booking = self::create($tour, $leadTraveller);
+        $booking->leadTraveller->repository->addAllIncluded();
+        return $booking;
+    }
+
     public function save(): bool
     {
         return $this->booking->save();
@@ -860,6 +867,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             'travellers' => $travellers,
             'components' => [
                 'rooming' => $this->getCurrentRoomingForApi(),
+                'tickets' => $this->booking->tour->repository->getTicketsForBooking($this->booking),
             ]
         ];
 

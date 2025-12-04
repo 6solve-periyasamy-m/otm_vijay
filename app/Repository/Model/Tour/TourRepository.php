@@ -880,7 +880,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return null;
     }
 
-    public function getDataForBooking(string|null $currency = null, Booking|null $booking = null): array
+    public function getDataForBooking(string|null $currency = null): array
     {
         $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
         $basePrice = sigfig($this->tour->base_price_per_person * $rate);
@@ -902,7 +902,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'inclusions' => $this->getInclusions(),
             'components' => [
                 'rooms' => $this->getRoomsArrayForBooking(),
-                'tickets' => $this->getTicketsForBooking($booking),
+                'tickets' => $this->getTicketsForBooking(),
             ],
         ];
     }

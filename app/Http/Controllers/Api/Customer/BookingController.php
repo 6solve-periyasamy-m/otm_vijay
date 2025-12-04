@@ -48,7 +48,7 @@ class BookingController extends ApiController
         if ($tour === null || !$tour->is_active) {
             return response()->json(['success' => false, 'message' => 'Could not find selected tour'], 404);
         }
-        $booking = BookingRepository::create($tour, new BookingTraveller([
+        $booking = BookingRepository::createForBookingApi($tour, new BookingTraveller([
             'first_name' => $request->name,
             'email_address' => $request->email,
         ]));
