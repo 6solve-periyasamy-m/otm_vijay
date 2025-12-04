@@ -191,11 +191,11 @@
         @endif
         <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
-        <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
+        <p class="para date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
         @foreach($tour->repository->getInclusions(4) as $inclusion)
             <p class="inclusion">{{ $inclusion }}</p>
         @endforeach
-        <p class="see-more">
+        <p class="para see-more">
             <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">MORE INFORMATION</a>
         </p>
     </div>
