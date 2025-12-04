@@ -898,8 +898,28 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'description' => $this->tour->description,
             'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
             'inclusions' => $this->getInclusions(),
-            'rooms' => $this->getRooms(),
+            'rooms' => $this->getRoomsArrayForBooking(),
         ];
+    }
+
+    public function getRoomsArrayForBooking(): array
+    {
+        $rooms = [];
+        foreach ($this->getHotelGroups() as $hotel => $groups) {
+            if (empty($groups)) { continue; }
+            foreach ($groups as $group) {
+                if (!array_key_exists($hotel, $rooms)) {
+                    $rooms[$hotel] = [
+                        'name' => $group->hotel->name,
+                        'description' => $group->hotel->description,
+                        'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
+                        'rooms' => [],
+                    ];
+                }
+                $rooms[$hotel]['rooms'][] = $group->getUniqueData();
+            }
+        }
+        return $rooms;
     }
 
     /**

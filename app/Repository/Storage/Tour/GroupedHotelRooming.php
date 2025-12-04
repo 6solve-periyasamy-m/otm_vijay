@@ -152,4 +152,31 @@ class GroupedHotelRooming
             $group->repository->addRoomToGroup($room);
         }
     }
+
+    public function getUniqueKey(): string
+    {
+        $catId = $this->category?->id ?? 0;
+        return "{$this->hotel->id}-{$this->occupancy->id}-{$this->board->id}-{$catId}";
+    }
+
+    public function getArrayForBooking(): array
+    {
+        return [
+            'hotel_id' => $this->hotel->id,
+            'name' => $this->hotel->name,
+            'description' => $this->hotel->description,
+            ...$this->getUniqueData(),
+        ];
+    }
+
+    public function getUniqueData(): array
+    {
+        return [
+            'key' => $this->getUniqueKey(),
+            'room_type' => $this->occupancy->name,
+            'room_size' => $this->occupancy->maximum_occupancy,
+            'board_type' => $this->board->name,
+            'category' => $this->category?->name,
+        ];
+    }
 }
