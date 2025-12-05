@@ -677,7 +677,7 @@ body .ma-block .row .left-col .contain .top-form-contain .form-field input:focus
     margin: 0 0 11.5px;
 }
 
-.ma-block .row .right-col .contain .snd-sec .right-col p {
+.ma-block .row .right-col .contain .snd-sec .right-col .para {
     font-family: "PP Neue Montreal Medium";
     font-weight: 500;
     font-size: 16px;
@@ -2827,6 +2827,19 @@ input::-webkit-inner-spin-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    > h4 > p {
+        padding-left: 0px !important;
+    }
+}
+.description_div {
+    font-family: "PP Neue Montreal Medium";
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #000;
+    > h4 > p {
+        padding-left: 0px !important;
+    }
 }
 .base-price-div .base-price-span{
     font-weight: 500;
