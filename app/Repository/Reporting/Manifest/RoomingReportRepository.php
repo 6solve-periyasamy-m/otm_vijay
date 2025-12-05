@@ -68,8 +68,8 @@ class RoomingReportRepository implements HasRoomingList
             $row->board = $orderAccommodation->accommodation_inventory->boardType->name;
             $row->reference = $orderAccommodation->group->orderCustomers[0]->order->booking_reference;
             $row->travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
-            $row->purchase_currency = $orderComponent->tourComponent->repository->getCurrency()->code;
-            $row->purchase = $orderComponent->tourComponent->repository->getPurchasePrice();
+            $row->purchase_currency = $orderAccommodation->tourComponent->repository->getCurrency()->code;
+            $row->purchase = $orderAccommodation->tourComponent->repository->getPurchasePrice();
             $row->sales_currency = $orderAccommodation->group->orderCustomers[0]->order->currency?->code ?? Settings::currency()->code;
             $row->sales = $orderAccommodation->cost ?? $orderAccommodation->accommodation_inventory->sales_price;
             $row->occupancy = $occupancy;
