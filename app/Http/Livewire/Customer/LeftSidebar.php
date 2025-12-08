@@ -17,10 +17,15 @@ class Leftsidebar extends Component
         $this->orderCustomer = CustomerAuthenticationRepository::getCustomer();
         if ($this->orderCustomer) {
             $this->upcomingOrders = $this->orderCustomer->orders()
-                ->with('tour')
-                ->where('cancelled', false)
-                ->orderBy('ordered_on')
-                ->get();            
+            // ->where('cancelled', true)
+            ->whereHas('tour', function ($q) {
+                $q->where('date_to', '>=', now());
+            })
+            ->with(['tour' => function ($q) {
+                $q->where('date_to', '>=', now());
+            }])
+            ->orderBy('ordered_on')
+            ->get();
         }
         $this->branding = \App\Models\System\Brand::getSystemBrand();
     }

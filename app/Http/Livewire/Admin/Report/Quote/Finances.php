@@ -9,6 +9,7 @@ use App\Models\Quote\Quote;
 use App\Models\Tour\Event;
 use App\Models\User;
 use Mediconesystems\LivewireDatatables\Column;
+use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\NumberColumn;
 
 class Finances extends ExportableDatatable
@@ -23,6 +24,21 @@ class Finances extends ExportableDatatable
             ->leftJoin('events', 'events.id', '=', 'quotes.event_id')
             ->leftJoin('organizations', 'organizations.id', '=', 'quotes.organization_id')
             ->leftJoin('orders', 'orders.id', '=', 'quotes.order_id');
+    }
+
+    public function initialiseDefaultFilters(): void
+    {
+        parent::initialiseDefaultFilters();
+
+        $columns = collect($this->columns);
+
+        $columnIndex = $columns->search(function ($column) {
+            return $column['name'] === 'quotes.date_from';
+        });
+
+        if ($columnIndex !== false) {
+            $this->doDateFilterStart($columnIndex, now()->format('Y-m-d'));
+        }
     }
 
     public function columns(): array
@@ -46,6 +62,14 @@ class Finances extends ExportableDatatable
                 ->searchable()
                 ->sortable()
                 ->filterable(Organization::pluck('name')),
+            DateColumn::name('quotes.date_from')
+                ->label('Event Start')
+                ->sortable()
+                ->filterable(),
+            DateColumn::name('quotes.date_to')
+                ->label('Event End')
+                ->sortable()
+                ->filterable(),
             // Final Booking Value
             CurrencyColumn::name('quote_caches.total')
                 ->label('Total')
@@ -63,12 +87,12 @@ class Finances extends ExportableDatatable
                 ->filterable(),
             // Profit
             CurrencyColumn::name('quote_caches.profit')
-                ->label('Total')
+                ->label('Profit')
                 ->sortable()
                 ->filterable(),
             // Margin
             NumberColumn::name('quote_caches.margin')
-                ->label('Margin')
+                ->label('Margin (%)')
                 ->sortable()
                 ->filterable(),
             Column::name('users.name')

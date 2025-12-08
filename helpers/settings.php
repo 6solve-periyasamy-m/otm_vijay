@@ -39,7 +39,7 @@ if (!function_exists('fx_convert')) {
         if ($value === null) { return null; }
         if ($from === null) { return $value * ($rate ?? 1.0); }
         if ($rate === null) {
-            $systemCurrency = Currency::fromCode(setting('system.currency', 'GBP'));
+            $systemCurrency = Settings::currency();
             if (is_string($from)) { $from = Currency::fromCode($from); }
             if (is_string($to)) { $to = Currency::fromCode($to); }
             $to = $to ?? $systemCurrency;

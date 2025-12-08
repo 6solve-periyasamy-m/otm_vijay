@@ -24,6 +24,7 @@ class MerchandiseManifestRepository implements HasMerchandiseManifest
         return [
             'orderCustomer',
             'orderCustomer.order',
+            'orderCustomer.order.currency',
             'orderCustomer.customer',
             'tourComponent',
             'tourComponent.inventory',
@@ -68,7 +69,8 @@ class MerchandiseManifestRepository implements HasMerchandiseManifest
             $row->size = $orderComponent->tourComponent->inventory->size?->name;
             $row->fulfilled = $orderComponent->fulfilled;
             $row->component = $orderComponent->tourComponent->tour_component_type;
-            $row->purchase = $orderComponent->repository->getCostToCompany();
+            $row->purchase = $orderComponent->tourComponent->repository->getPurchasePrice();
+            $row->sales_currency = $orderComponent->orderCustomer->order->currency?->code ?? \Settings::currency()->code;
             $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
             $row->status = $orderComponent->orderCustomer->order->status;
             $row->event = $orderComponent->orderCustomer->order->tour?->event?->name;

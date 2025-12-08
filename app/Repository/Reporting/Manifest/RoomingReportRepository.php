@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Settings;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class RoomingReportRepository implements HasRoomingList
@@ -67,7 +68,9 @@ class RoomingReportRepository implements HasRoomingList
             $row->board = $orderAccommodation->accommodation_inventory->boardType->name;
             $row->reference = $orderAccommodation->group->orderCustomers[0]->order->booking_reference;
             $row->travellers = $orderAccommodation->group->orderCustomers()->with('customer')->get();
-            $row->purchase = $orderAccommodation->repository->getCostToCompany();
+            $row->purchase_currency = $orderAccommodation->tourComponent->repository->getCurrency()->code;
+            $row->purchase = $orderAccommodation->tourComponent->repository->getPurchasePrice();
+            $row->sales_currency = $orderAccommodation->group->orderCustomers[0]->order->currency?->code ?? Settings::currency()->code;
             $row->sales = $orderAccommodation->cost ?? $orderAccommodation->accommodation_inventory->sales_price;
             $row->occupancy = $occupancy;
             $row->occupants = $orderAccommodation->group->orderCustomers()->count();
@@ -99,6 +102,9 @@ class RoomingReportRepository implements HasRoomingList
             $travellerNames = $travellers->map(fn($t) => $t->customer?->first_name . ' ' . $t->customer?->last_name)->sort()->toArray();
             $travellerKey = implode('|', $travellerNames);
 
+            $purchaseCurrency = $orderAccommodation->tourComponent->repository->getCurrency()->code;
+            $salesCurrency = $order->currency?->code ?? Settings::currency()->code;
+
             $key = implode('|', [
                 $orderAccommodation->accommodationInventoryTour->tour->name,
                 $orderAccommodation->accommodationInventoryTour->tour->event?->name,
@@ -125,6 +131,8 @@ class RoomingReportRepository implements HasRoomingList
                     'occupants' => $travellers->count(),
                     'empty_beds' => $occupancy - $travellers->count(),
                     'travellers' => $travellers,
+                    'purchase_currency' => $purchaseCurrency,
+                    'sales_currency' => $salesCurrency,
                 ];
             } else {
                 $groupedData[$key]['from'] = min($groupedData[$key]['from'], $orderAccommodation->accommodation_inventory->check_in);
