@@ -792,7 +792,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $gateway?->getApiKeys([$item,], $intention, $this->booking->leadTraveller, $redirect);
     }
 
-    public function getStripeKey(float $amount): string|null
+    public function getStripeKey(float $amount): array|null
     {
         $gateway = Gateway::getPaymentGateway('stripe');
         if (!($gateway instanceof StripeGateway)) {

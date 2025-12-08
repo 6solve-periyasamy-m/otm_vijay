@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Gateways\StripeGateway;
 use App\Http\Requests\Booking\Simple\BookingRequest;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
@@ -35,6 +36,16 @@ class SimpleBookingController extends ApiController
         } else {
             $amount = $booking->repository->getDueTodayAmount();
         }
-        return response()->json(['success' => true, 'checkoutSessionClientSecret' => $booking->repository->getStripeKey($amount),]);
+        $keys = $booking->repository->getStripeKey($amount);
+        return response()->json(['success' => true, 'intent' => $keys['intent'], 'checkoutSessionClientSecret' => $keys['secret'],]);
+    }
+
+    public function assignPaymentMethod(Request $request)
+    {
+        \Log::info($request);
+        $gateway = \Gateway::getPaymentGateway('stripe');
+        if ($gateway instanceof StripeGateway) {
+            $gateway->attachPaymentMethodToIntention($request->secret, $request->paymentMethod);
+        }
     }
 }

@@ -59,6 +59,7 @@ Route::prefix('/orders')->group(function () {
 //Route::stripeWebhooks('/stripe/webhooks');
 Route::post('/stripe/webhooks', [StripeController::class, 'webhook'])->name('api.stripe.webhook');
 Route::get('stripe/booking/checkout', [SimpleBookingController::class, 'getStripeSecret'])->name('api.stripe.checkout.secret.booking');
+Route::post('stripe/booking/attach', [SimpleBookingController::class, 'assignPaymentMethod'])->name('api.stripe.checkout.secret.attach');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 Route::post('/opayo/webhook', [OpayoGateway::class, 'webhook'])->name('api.opayo.webhook');
 Route::post('/airwallex/webhook', [AirwallexGateway::class, 'webhook'])->name('api.airwallex.webhook');

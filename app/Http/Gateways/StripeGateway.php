@@ -13,6 +13,7 @@ use App\Models\Order\Payment\PaymentIntention;
 use Settings;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
+use Stripe\PaymentIntent;
 use Stripe\StripeClient;
 
 class StripeGateway extends Gateway implements SupportsRedirect
@@ -35,7 +36,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
 
     public static function getStripeSurcharge(Currency|string $currency): string|null
     {
-        $code = $currency instanceof Currency ? $currency->code : $currency;
+        $code = strtoupper($currency instanceof Currency ? $currency->code : $currency);
         $surcharge = (float)setting('currency.surcharge.stripe.' . $code, 0.0);
         if (empty($surcharge)) { $surcharge = null; }
         return $surcharge;
@@ -68,9 +69,17 @@ class StripeGateway extends Gateway implements SupportsRedirect
         return $this->getCheckout($items, $intention, $customer, $success)->url;
     }
 
-    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
+    /**
+     * @param array $items
+     * @param PaymentIntention $intention
+     * @param Customer|BookingTraveller $customer
+     * @param string|null $success
+     * @return array{intent: string, secret: string}
+     */
+    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): array
     {
-        return $this->getCheckout($items, $intention, $customer, $success, 'custom')->client_secret;
+        $intent = $this->getStripePaymentIntent($items, $intention, $customer, $success);
+        return ['intent' => $intent->id, 'secret' => $intent->client_secret,];
     }
 
     /**
@@ -90,13 +99,10 @@ class StripeGateway extends Gateway implements SupportsRedirect
         $currency = strtolower(empty($currency) ? Settings::currency()?->code : $currency);
         $lineItems = [];
         $total = 0;
+
         foreach ($items as $item) {
             $lineItems[] = $item->toStripe($currency);
             $total += (float)$item->quantity * $item->cost;
-        }
-        $surchargePercent = self::getStripeSurcharge($currency);
-        if ($surchargePercent !== null) {
-            $surcharge = sigfig($total * ($surchargePercent / 100));
         }
 
         $stripe = new StripeClient($secret);
@@ -130,18 +136,44 @@ class StripeGateway extends Gateway implements SupportsRedirect
                 'cancel_url' => $this->cancelled,
             ];
         }
-        if (isset($surcharge)) {
-            $data = [
-                ...$data,
-                'payment_method_options' => [
-                    'card' => [
-                        'surcharge' => $surcharge * 100,
-                    ]
-                ]
-            ];
-        }
 
         return $stripe->checkout->sessions->create($data);
+    }
+
+    private function getStripePaymentIntent(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): PaymentIntent
+    {
+        $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currencyKeys = config('app.gateways.stripe.currencies.' . strtoupper($currency), []);
+        $secret = $currencyKeys['secret'] ?? config('app.gateways.stripe.secret');
+        $currency = strtolower(empty($currency) ? Settings::currency()?->code : $currency);
+        $total = 0;
+
+        foreach ($items as $item) {
+            $total += (float)$item->quantity * $item->cost;
+        }
+
+        $stripe = new StripeClient($secret);
+
+        $data = [
+            'amount' => $total * 100,
+            'currency' => $currency,
+        ];
+        return $stripe->paymentIntents->create($data);
+    }
+
+    public function attachPaymentMethodToIntention(string $secret, string $paymentMethod)
+    {
+        $stripe = new StripeClient(config('app.gateways.stripe.secret'));
+
+        $stripe->paymentIntents->update($secret, ['payment_method' => $paymentMethod,]);
+        $intent = $stripe->paymentIntents->retrieve($secret);
+        \Log::info($intent);
+        if ($intent->payment_method_options['card']['surcharge']['status'] === 'available') {
+            $surcharge = self::getStripeSurcharge($intent->currency);
+            if (!empty($surcharge)) {
+                $stripe->paymentIntents->update($secret, ['amount_surcharge' => sigfig($intent->amount * ($surcharge / 100), 0),]);
+            }
+        }
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
