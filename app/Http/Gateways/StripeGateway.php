@@ -11,7 +11,8 @@ use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use Settings;
-use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
+use Stripe\StripeClient;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Stripe\StripeClient;
@@ -76,7 +77,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
      * @param string|null $success
      * @return array{intent: string, secret: string}
      */
-    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): array
+    public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string|null $currency = null): array
     {
         $intent = $this->getStripePaymentIntent($items, $intention, $customer, $success);
         return ['intent' => $intent->id, 'secret' => $intent->client_secret,];
@@ -91,9 +92,11 @@ class StripeGateway extends Gateway implements SupportsRedirect
      * @return Session
      * @throws ApiErrorException
      */
-    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted'): Session
+    private function getCheckout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string $ui = 'hosted', string|null $currency = null): Session
     {
-        $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currency = $currency ?? (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currencyKeys = config('app.gateways.stripe.currencies.' . strtoupper($currency), []);
+        $secret = $currencyKeys['secret'] ?? config('app.gateways.stripe.secret');
         $currencyKeys = config('app.gateways.stripe.currencies.' . strtoupper($currency), []);
         $secret = $currencyKeys['secret'] ?? config('app.gateways.stripe.secret');
         $currency = strtolower(empty($currency) ? Settings::currency()?->code : $currency);
@@ -136,6 +139,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
                 'cancel_url' => $this->cancelled,
             ];
         }
+        $stripe = new StripeClient($secret);
 
         return $stripe->checkout->sessions->create($data);
     }

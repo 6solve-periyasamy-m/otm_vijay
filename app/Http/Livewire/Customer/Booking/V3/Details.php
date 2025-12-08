@@ -286,6 +286,11 @@ class Details extends V3BookingComponent
 
     private function popupStripe(bool $full = false): void
     {
-        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full,]);
+        $currencyKey = config('app.gateways.stripe.currencies.' . $this->getCurrency()->code, []);
+        $this->dispatchBrowserEvent('popupStripeCheckout', [
+            'full' => $full,
+            'currency' => $this->getCurrency()->code,
+            'publishable' => $currencyKey['client'] ?? config('app.gateways.stripe.publishable'),
+        ]);
     }
 }

@@ -54,7 +54,15 @@
     </script>
 
     <script type="text/javascript">
-        const stripe = Stripe('{{ config('app.gateways.stripe.publishable') }}');
+        function getPublishable(currency) {
+            switch (currency) {
+                case 'USD': return '{{ config('app.gateways.stripe.currencies.USD.client', config('app.gateways.stripe.publishable')) }}';
+                case 'GBP': return '{{ config('app.gateways.stripe.currencies.GBP.client', config('app.gateways.stripe.publishable')) }}';
+                case 'EUR': return '{{ config('app.gateways.stripe.currencies.EUR.client', config('app.gateways.stripe.publishable')) }}';
+                case 'AUD': return '{{ config('app.gateways.stripe.currencies.AUD.client', config('app.gateways.stripe.publishable')) }}';
+                default: return '{{config('app.gateways.stripe.publishable')}}';
+            }
+        }
         window.addEventListener('popupCheckout', (event) => {
             Airwallex.init({
                 env: '{{ config('app.gateways.airwallex.live', false) ? 'prod' : 'demo' }}',
@@ -71,16 +79,17 @@
             });
         });
         const fetchClientSecretFull = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) }}')
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true])  !!}')
                 .then((response) => response.json())
                 .then((json) => json.checkoutSessionClientSecret)
         }
         const fetchClientSecretToday = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) }}', {method: 'GET'})
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false])  !!}', {method: 'GET'})
                 .then((response) => response.json())
                 .then((json) => json.checkoutSessionClientSecret)
         }
         window.addEventListener('popupStripeCheckout', (event) => {
+            let stripe = Stripe();
             if (event.detail.checkout !== null) {
                 let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
                 stripe.initCheckout({fetchClientSecret: fn}).then((checkout) => {

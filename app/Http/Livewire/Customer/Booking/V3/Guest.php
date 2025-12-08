@@ -24,7 +24,7 @@ class Guest extends V3BookingComponent
     ];
     public BookingTraveller|null $lead = null;
 
-    public $listeners = ['advanceWithRecaptcha' => 'advanceWithRecaptcha'];
+    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advanceWithRecaptcha' => 'advanceWithRecaptcha',];
 
     public function mount($tour = null, $booking = null, $quote = null)
     {        

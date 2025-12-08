@@ -2,6 +2,7 @@
 
 namespace App\Models\Location;
 
+use App\Models\Helper\Traits\MountsLivewire;
 use Database\Factories\Location\CurrencyFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,7 +45,7 @@ use Illuminate\Support\Carbon;
  */
 class Currency extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, MountsLivewire;
 
     protected $guarded = [];
     protected $casts = ['priority' => 'boolean'];

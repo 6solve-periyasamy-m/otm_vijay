@@ -7,7 +7,7 @@ use App\Http\Livewire\Abstract\V3BookingComponent;
 class Ticket extends V3BookingComponent
 {
     public array $ticketUpgrades = [];
-    public $listeners = ['advanceWithRecaptcha' => 'advanceWithRecaptcha'];
+    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advanceWithRecaptcha' => 'advanceWithRecaptcha'];
     public function mount($tour = null, $booking = null, $quote = null)
     {
         parent::mount($tour, $booking, $quote);

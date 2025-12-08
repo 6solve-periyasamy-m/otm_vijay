@@ -181,7 +181,7 @@
         <div class="name_price_div">
             <h4>{{$tour->name}}</h4>
             <div class="base-price-div">
-                {{ f_currency_booking($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
+                {{ $this->formatCurrency($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
             </div>
         </div>
         @if(!empty($tour->description))
@@ -203,22 +203,23 @@
 
 <div class="additional-inclusions">
     <div class="select-currency">
+        <livewire:customer.booking.v3.currency-selector :currency="$this->booking->currency?->code" />
         <div class="single">
             <p></p>          
         </div>
         <div class="single">
             <p class="font-weight-bold">Package price</p>
-            <p class="font-weight-bold">{{ f_currency_booking($booking->repository->getBasePrice()) }}</p>
+            <p class="font-weight-bold">{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
         </div>
         <div class="cart_sub_title">
             <p>Price per Person</p>
-            <p>{{ f_currency_booking($tour->base_price_per_person) }}</p>
+            <p>{{ $this->formatCurrency($tour->base_price_per_person) }}</p>
         </div>
         {{-- @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         @if($singleOccupancy > 0 || $singleOccupancy < 0)
         <div class="single">
             <p>Single Occupancy</p>
-            <p>{{ f_currency_booking($singleOccupancy) }}</p>
+            <p>{{ $this->formatCurrency($singleOccupancy) }}</p>
         </div>
         @endif --}}
     </div>
@@ -232,7 +233,7 @@
     <div class="total">
         <div class="single">
             <p>Total ({{ $currencyCode }})</p>
-            <p>{{ f_currency_booking($booking->repository->getTotalCost()) }}</p>
+            <p>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</p>
             <p style="display:none">
                 <span class="currency-code">{{ $currencyCode }} </span>
                 <span class="total-cost">{{ $rawAmount }} </span>
@@ -246,31 +247,31 @@
                     ({{ $booking->tour->deposit_percentage }}%)
                 @endif
             </p>
-            <p class="fw-bold cart_sub_title_color">{{ f_currency_booking($booking->repository->getDueTodayAmount()) }}</p>
+            <p class="fw-bold cart_sub_title_color">{{ $this->formatCurrency($booking->repository->getDueTodayAmount()) }}</p>
         </div>
         
         {{-- <div class="single">
             <p>Base Package Price</p>
-            <p>{{ f_currency_booking($booking->repository->getBasePrice()) }}</p>
+            <p>{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
         </div>
         @php $singleOccupancy = $booking->repository->getSingleOccupancyAmount(); @endphp
         @if($singleOccupancy > 0 || $singleOccupancy < 0)
         <div class="single">
             <p>Single Occupancy - {{ $booking->repository->getSingleOccupancyCount() }}</p>
-            <p>{{ f_currency_booking($singleOccupancy) }}</p>
+            <p>{{ $this->formatCurrency($singleOccupancy) }}</p>
         </div>
         @endif
         @if($booking->repository->getTaxes() !== null)
             <div class="single">
                 <p>{{ $tour->taxBracket()->name }} (Included)</p>
-                <p>{{ f_currency_booking($booking->repository->getTaxes()) }}</p>
+                <p>{{ $this->formatCurrency($booking->repository->getTaxes()) }}</p>
             </div>
         @endif
         @php $upgradePrice = $booking->repository->getUpgradeCosts(); @endphp
         @if($upgradePrice > 0 || $upgradePrice < 0)
             <div class="single">
                 <p>Upgrades Price</p>
-                <p>{{ f_currency_booking($upgradePrice) }}</p>
+                <p>{{ $this->formatCurrency($upgradePrice) }}</p>
             </div>
         @endif --}}
     </div>
@@ -279,9 +280,9 @@
 <div class="third-col">
     {{-- <div class="payable_dflex">
     <div class="payable_txt">Payable now </div>
-    <div class="payable_num">{{ f_currency_booking($booking->repository->getDueTodayAmount()) }}</div>
+    <div class="payable_num">{{ $this->formatCurrency($booking->repository->getDueTodayAmount()) }}</div>
     </div>
-    <div class="payable_fulltext sub-text-color">Balance {{ f_currency_booking($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by {{ $tour->final_payment->format('d M Y') }}</div> --}}
+    <div class="payable_fulltext sub-text-color">Balance {{ $this->formatCurrency($booking->repository->getTotalCost() - $booking->repository->getDueTodayAmount() ) }} payable by {{ $tour->final_payment->format('d M Y') }}</div> --}}
     {{ $slot }}
     @error('common')
     <div class="submit-btn-cls add-on">
@@ -319,7 +320,7 @@
                     <div class="upp-block-two">
                         <div class="snd-sec">
                             <div class="left-col">
-                                <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
+                                <img src="{{ asset($tour->event?->image_url) }}" class="package-image" alt="featured-img">
                             </div>
                             <div class="right-col">
                                 <h5>{{ $tour->name }}</h5>
