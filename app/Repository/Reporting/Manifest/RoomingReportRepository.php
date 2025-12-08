@@ -102,6 +102,9 @@ class RoomingReportRepository implements HasRoomingList
             $travellerNames = $travellers->map(fn($t) => $t->customer?->first_name . ' ' . $t->customer?->last_name)->sort()->toArray();
             $travellerKey = implode('|', $travellerNames);
 
+            $purchaseCurrency = $orderAccommodation->tourComponent->repository->getCurrency()->code;
+            $salesCurrency = $order->currency?->code ?? Settings::currency()->code;
+
             $key = implode('|', [
                 $orderAccommodation->accommodationInventoryTour->tour->name,
                 $orderAccommodation->accommodationInventoryTour->tour->event?->name,
@@ -128,6 +131,8 @@ class RoomingReportRepository implements HasRoomingList
                     'occupants' => $travellers->count(),
                     'empty_beds' => $occupancy - $travellers->count(),
                     'travellers' => $travellers,
+                    'purchase_currency' => $purchaseCurrency,
+                    'sales_currency' => $salesCurrency,
                 ];
             } else {
                 $groupedData[$key]['from'] = min($groupedData[$key]['from'], $orderAccommodation->accommodation_inventory->check_in);
