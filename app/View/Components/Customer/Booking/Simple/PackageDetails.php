@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Customer\Booking\Simple;
 
+use App\Http\Gateways\StripeGateway;
 use App\Models\Booking\Booking;
 use App\Models\Tour\Tour;
 use Closure;
@@ -32,6 +33,12 @@ class PackageDetails extends Component
     public function getCurrency()
     {
         return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getSurchargeAmount(bool $payFull): float|null
+    {
+        $amount = $payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
+        return StripeGateway::getAmountForSurcharge($this->booking->currency, $amount * 100) / 100;
     }
 
     public function getFXRate(): float

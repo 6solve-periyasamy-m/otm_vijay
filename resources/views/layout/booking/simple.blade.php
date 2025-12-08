@@ -54,6 +54,8 @@
     </script>
 
     <script type="text/javascript">
+        let elements;
+        let paymentElement;
         function getPublishable(currency) {
             switch (currency) {
                 case 'USD': return '{{ config('app.gateways.stripe.currencies.USD.client', config('app.gateways.stripe.publishable')) }}';
@@ -78,39 +80,78 @@
                 window.location = event.detail.intent.return_url;
             });
         });
+        window.addEventListener('surcharge-update', (event) => {
+            if (event.detail.amount > 0 || event.detail.amount < 0) {
+                document.getElementById('surcharge-warning').hidden = false
+                document.getElementById('surcharge-amount').innerHTML = event.detail.text;
+            } else {
+                document.getElementById('surcharge-warning').hidden = true
+            }
+        });
         const fetchClientSecretFull = () => {
-            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true])  !!}')
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) !!}')
                 .then((response) => response.json())
-                .then((json) => json.checkoutSessionClientSecret)
+                .then((json) => {
+                    return {intent: json.intent, secret: json.checkoutSessionClientSecret};
+                })
         }
         const fetchClientSecretToday = () => {
-            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false])  !!}', {method: 'GET'})
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) !!}', {method: 'GET'})
                 .then((response) => response.json())
-                .then((json) => json.checkoutSessionClientSecret)
+                .then((json) => {
+                    return {intent: json.intent, secret: json.checkoutSessionClientSecret};
+                })
         }
-        window.addEventListener('popupStripeCheckout', (event) => {
-            let stripe = Stripe();
+        window.addEventListener('popupStripeCheckout', async (event) => {
+            let stripe = Stripe(getPublishable(event.currency));
             if (event.detail.checkout !== null) {
                 let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
-                stripe.initCheckout({fetchClientSecret: fn}).then((checkout) => {
-                    let paymentElement = checkout.createPaymentElement();
-                    paymentElement.mount('#stripe-container');
+                let keys = await fn();
 
-                    document.getElementById('stripe-hidden').style.visibility = 'inherit';
+                elements = stripe.elements({clientSecret: keys.secret, paymentMethodCreation: 'manual'});
+                const elementOptions = {layout: 'accordion'};
 
-                    // Setup Buttons
-                    const button = document.getElementById('pay-button');
-                    const errors = document.getElementById('confirm-errors');
-                    button.addEventListener('click', () => {
-                        // Clear any validation errors
-                        errors.textContent = '';
+                paymentElement = elements.create("payment", elementOptions);
+                paymentElement.mount('#stripe-container');
+                document.getElementById('stripe-hidden').style.visibility = 'inherit';
 
-                        checkout.confirm().then((result) => {
-                            if (result.type === 'error') {
-                                errors.textContent = result.error.message;
-                            }
-                        });
+                const button = document.getElementById('pay-button');
+                const errors = document.getElementById('confirm-errors');
+
+                button.addEventListener('click', async () => {
+                    await elements.submit();
+                    // Clear any validation errors
+                    errors.textContent = '';
+
+                    const {pmErr, paymentMethod} = await stripe.createPaymentMethod({
+                        elements,
+                        params: {}
+                    })
+
+                    if (pmErr) {
+                        console.log(pmErr);
+                        return;
+                    }
+
+                    await fetch('{!! route('api.stripe.checkout.secret.attach') !!}', {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({secret: keys.intent, paymentMethod: paymentMethod.id}),
+                    }
+                )
+                    ;
+
+                    let {error} = await stripe.confirmPayment({
+                        elements,
+                        confirmParams: {
+                            return_url: "{{ setting('booking.success.redirect', route('payment.gateway.stripe.success')) }}",
+                        }
                     });
+                    if (error.type === "card_error" || error.type === "validation_error") {
+                        errors.textContent = error.message;
+                    } else {
+                        errors.textContent = "An unknown error occurred";
+                    }
                 });
             }
         });

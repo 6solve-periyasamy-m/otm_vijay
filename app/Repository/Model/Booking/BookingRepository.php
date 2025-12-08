@@ -803,7 +803,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
         $redirect = setting('booking.success.redirect', route('payment.gateway.stripe.success'));
 
-        return $gateway?->getCheckoutSecret([$item,], $intention, $this->booking->leadTraveller, $redirect, $this->booking->currency->code);
+        return $gateway?->getCheckoutSecret([$item,], $intention, $this->booking->leadTraveller, $redirect, $this->getCurrency()?->code);
     }
 
     public function getSimpleData(): array

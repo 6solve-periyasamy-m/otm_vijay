@@ -295,6 +295,9 @@
     <div style="padding-top: 1rem;">
         <div id="stripe-hidden" style="visibility: hidden">
             <div id="stripe-container"></div>
+            <div id="surcharge-warning">
+                A card surcharge of <span id="surcharge-amount">DATA NOT FILLED</span> will be added to card transactions
+            </div>
             <button id="pay-button">Pay</button>
             <div id="confirm-errors"></div>
         </div>
