@@ -11,8 +11,7 @@ use App\Models\Location\Currency;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\PaymentIntention;
 use Settings;
-use Stripe\Exception\ApiErrorException;
-use Stripe\StripeClient;
+use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Stripe\StripeClient;
@@ -60,6 +59,17 @@ class StripeGateway extends Gateway implements SupportsRedirect
         Settings::set('currency.surcharge.stripe.' . $code, $surcharge);
     }
 
+    public static function getAmountForSurcharge(Currency|string $currency, float|null $amount): float
+    {
+        $surcharge = self::getStripeSurcharge($currency);
+        if ($surcharge !== null) {
+            $sAmount = $amount * ($surcharge / 100);
+            $sAmount -= ($sAmount % 100);
+            return $sAmount;
+        }
+        return 0.0;
+    }
+
     /**
      * @inheritDoc
      * @throws ApiErrorException
@@ -75,11 +85,12 @@ class StripeGateway extends Gateway implements SupportsRedirect
      * @param PaymentIntention $intention
      * @param Customer|BookingTraveller $customer
      * @param string|null $success
+     * @param string|null $currency
      * @return array{intent: string, secret: string}
      */
     public function getCheckoutSecret(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string|null $currency = null): array
     {
-        $intent = $this->getStripePaymentIntent($items, $intention, $customer, $success);
+        $intent = $this->getStripePaymentIntent($items, $intention, $customer, $success, $currency);
         return ['intent' => $intent->id, 'secret' => $intent->client_secret,];
     }
 
@@ -89,6 +100,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
      * @param Customer|BookingTraveller $customer
      * @param string|null $success
      * @param string $ui
+     * @param string|null $currency
      * @return Session
      * @throws ApiErrorException
      */
@@ -139,14 +151,13 @@ class StripeGateway extends Gateway implements SupportsRedirect
                 'cancel_url' => $this->cancelled,
             ];
         }
-        $stripe = new StripeClient($secret);
 
         return $stripe->checkout->sessions->create($data);
     }
 
-    private function getStripePaymentIntent(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): PaymentIntent
+    private function getStripePaymentIntent(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null, string|null $currency = null): PaymentIntent
     {
-        $currency = (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
+        $currency = $currency ?? (($intention->getRelatedModel() instanceof Order) ? $intention->getRelatedModel()?->currency?->code : null);
         $currencyKeys = config('app.gateways.stripe.currencies.' . strtoupper($currency), []);
         $secret = $currencyKeys['secret'] ?? config('app.gateways.stripe.secret');
         $currency = strtolower(empty($currency) ? Settings::currency()?->code : $currency);
@@ -173,9 +184,9 @@ class StripeGateway extends Gateway implements SupportsRedirect
         $intent = $stripe->paymentIntents->retrieve($secret);
         \Log::info($intent);
         if ($intent->payment_method_options['card']['surcharge']['status'] === 'available') {
-            $surcharge = self::getStripeSurcharge($intent->currency);
+            $surcharge = self::getAmountForSurcharge($intent->currency, $intent->amount);
             if (!empty($surcharge)) {
-                $stripe->paymentIntents->update($secret, ['amount_surcharge' => sigfig($intent->amount * ($surcharge / 100), 0),]);
+                $stripe->paymentIntents->update($secret, ['amount_surcharge' => $surcharge,]);
             }
         }
     }

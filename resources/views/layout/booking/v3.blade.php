@@ -59,14 +59,14 @@
             });
         });
         const fetchClientSecretFull = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) }}')
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) !!}')
                 .then((response) => response.json())
                 .then((json) => {
                     return {intent: json.intent, secret: json.checkoutSessionClientSecret};
                 })
         }
         const fetchClientSecretToday = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) }}', {method: 'GET'})
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) !!}', {method: 'GET'})
                 .then((response) => response.json())
                 .then((json) => {
                     return {intent: json.intent, secret: json.checkoutSessionClientSecret};
@@ -107,8 +107,6 @@
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({secret: keys.intent, paymentMethod: paymentMethod.id}),
                     });
-
-                    await new Promise(r => setTimeout(r, 10000));
 
                     let {error} = await stripe.confirmPayment({
                         elements,
