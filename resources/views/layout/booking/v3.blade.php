@@ -111,8 +111,7 @@
                     let {error} = await stripe.confirmPayment({
                         elements,
                         confirmParams: {
-                            // TODO: Update
-                            return_url: window.location.href,
+                            return_url: "{{ setting('booking.success.redirect', route('payment.gateway.stripe.success')) }}",
                         }
                     });
                     if (error.type === "card_error" || error.type === "validation_error") {
