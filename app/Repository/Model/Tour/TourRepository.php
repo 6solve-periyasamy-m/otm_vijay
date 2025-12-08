@@ -888,12 +888,19 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             $basePrice = round_to_five($basePrice);
         }
         $taxes = $this->tour->taxBracket();
+        $brand = $this->tour->brand;
         return [
             'name' => $this->tour->name,
             'event' => [
                 'name' => $this->tour->event?->name,
                 'description' => $this->tour->event?->description,
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
+            ],
+            'brand' => [
+                'name' => $brand->name,
+                'email' => $brand->email,
+                'phone' => $brand->phone,
+                'address' => $brand->address,
             ],
             'base_price' => $basePrice,
             'tax' => [
