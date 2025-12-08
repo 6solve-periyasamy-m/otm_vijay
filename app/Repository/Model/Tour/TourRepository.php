@@ -887,6 +887,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         if (flag('booking.round_to_five')) {
             $basePrice = round_to_five($basePrice);
         }
+        $taxes = $this->tour->taxBracket();
         return [
             'name' => $this->tour->name,
             'event' => [
@@ -895,6 +896,10 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
             ],
             'base_price' => $basePrice,
+            'tax' => [
+                'name' => $taxes->name,
+                'percentage' => $taxes->rate
+            ],
             'start' => $this->tour->date_from,
             'end' => $this->tour->date_to,
             'description' => $this->tour->description,
