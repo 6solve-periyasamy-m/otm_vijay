@@ -116,9 +116,9 @@
                         }
                     });
                     if (error.type === "card_error" || error.type === "validation_error") {
-                        console.log(error.message);
+                        errors.textContent = error.message;
                     } else {
-                        console.log("An unexpected error occurred.");
+                        errors.textContent = "An unknown error occurred";
                     }
                 });
             }
