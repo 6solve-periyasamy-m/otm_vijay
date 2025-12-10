@@ -28,7 +28,6 @@ class SimpleBookingController extends ApiController
 
     public function assignPaymentMethod(Request $request)
     {
-        \Log::info($request);
         $gateway = \Gateway::getPaymentGateway('stripe');
         if ($gateway instanceof StripeGateway) {
             $gateway->attachPaymentMethodToIntention($request->secret, $request->paymentMethod);
