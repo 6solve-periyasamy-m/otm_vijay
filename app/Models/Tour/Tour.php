@@ -66,6 +66,8 @@ use Illuminate\Support\Carbon;
  * @property bool $transport_stock_control
  * @property bool $merchandise_stock_control
  * @property int|null $stock
+ * @property string|null $city
+ * @property int|null $country_id
  * @property string|null $booking_form_url
  * @property int|null $tour_category_id
  * @property int|null $tour_merchandise_id
@@ -91,6 +93,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $activity_inventory_tours_count
  * @property-read TourCategory|null $category
  * @property-read Event|null $event
+ * @property-read Country|null $country
  * @property-read Collection|FlightInventory[] $flightInventory
  * @property-read int|null $flight_inventory_count
  * @property-read Collection|FlightInventoryTour[] $flightInventoryTours
@@ -361,6 +364,11 @@ class Tour extends Model
         return $this->belongsToMany(VoucherCode::class, 'voucher_tours')->withPivot(['invert']);
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
     public function includedVouchers(): BelongsToMany
     {
         return $this->vouchers()->where(['invert' => 0,]);
@@ -472,11 +480,6 @@ class Tour extends Model
     public function getDepositAmountAttribute(): ?float
     {
         return $this->is_deposit_percentage ? sigfig($this->base_price_per_person * ($this->deposit / 100)) : $this->deposit;
-    }
-
-    public function country(): BelongsTo
-    {
-        return $this->belongsTo(Country::class, 'country_id');
     }
 
     public function getBookingPackageNameAttribute(): string

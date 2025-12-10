@@ -2,9 +2,12 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use App\Http\Helper\ApiErrorCode;
 
-class NotOnTourException extends Exception
+class NotOnTourException extends BookingApiException
 {
-    //
+    public function getErrorCode(): ApiErrorCode
+    {
+        return ApiErrorCode::NOT_ON_TOUR;
+    }
 }
