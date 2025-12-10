@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property string $booking_url
  * @property string|null $token
+ * @property string|null $currency
  */
 class SetupBookingRequest extends FormRequest
 {
@@ -34,6 +35,7 @@ class SetupBookingRequest extends FormRequest
             'booking_url' => 'required|string',
             'name' => 'required|string',
             'email' => 'required|email:rfc,dns',
+            'currency' => 'nullable|string|max:3',
         ];
     }
 }

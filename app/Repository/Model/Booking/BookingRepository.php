@@ -840,7 +840,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $data = [
             'token' => $this->booking->token,
             'url' => $this->booking->tour?->booking_form_url,
-            'tour' => $this->booking->tour?->repository->getDataForBooking(),
+            'tour' => $this->booking->tour?->repository->getDataForBooking($this->getCurrency()),
             'lead' => [
                 'first_name' => $this->booking->leadTraveller->first_name,
                 'last_name' => $this->booking->leadTraveller->last_name,
@@ -848,7 +848,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 'telephone' => $this->booking->leadTraveller->mobile_number,
             ],
             'finances' => [
-                'currency' => $this->booking->currency?->code ?? Settings::currency()?->code,
+                'currency' => $this->getCurrency()?->code,
                 'base' => $this->roundValue($this->booking->tour->base_price_per_person, $rate),
                 'package' => $this->roundValue($this->getBasePrice(), $rate),
                 'upgrade' => $this->roundValue($this->getUpgradeCosts(), $rate),

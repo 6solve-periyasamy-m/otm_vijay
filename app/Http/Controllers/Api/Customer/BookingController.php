@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Customer;
 
 use App\Exceptions\BookingApiException;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Customer\BookingV3Controller;
 use App\Http\Gateways\StripeGateway;
 use App\Http\Requests\Booking\ApiComponentRequest;
 use App\Http\Requests\Booking\ApiRoomingRequest;
@@ -13,6 +14,7 @@ use App\Http\Requests\Booking\Simple\SetupBookingRequest;
 use App\Http\Requests\Booking\TourOverviewRequest;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
+use App\Models\Location\Currency;
 use App\Repository\Model\Booking\BookingRepository;
 use Gateway;
 use Illuminate\Http\JsonResponse;
@@ -57,6 +59,11 @@ class BookingController extends ApiController
             'first_name' => $request->name,
             'email_address' => $request->email,
         ]));
+
+        if (in_array(strtoupper($request->currency), BookingV3Controller::ALLOWED_CURRENCIES)) {
+            $booking->currency_id = Currency::where('code', '=', $request->currency)->first()?->id;
+            $booking->save();
+        }
 
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
     }
