@@ -896,6 +896,10 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'description' => $this->tour->event?->description,
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
             ],
+            'location' => [
+                'city' => $this->tour->city,
+                'country' => $this->tour->country?->name,
+            ],
             'brand' => [
                 'name' => $brand->name,
                 'email' => $brand->email,
