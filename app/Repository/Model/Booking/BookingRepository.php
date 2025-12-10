@@ -2,6 +2,10 @@
 
 namespace App\Repository\Model\Booking;
 
+use App\Exceptions\Booking\ComponentNotFoundException;
+use App\Exceptions\Booking\IncorrectQuantityException;
+use App\Exceptions\Booking\Rooming\IncorrectRoomSizeException;
+use App\Exceptions\Booking\Rooming\TravellerQuantityExceededException;
 use App\Exceptions\NotOnTourException;
 use App\Exceptions\RemoteGatewayError;
 use App\Exceptions\RoomingFailedException;
@@ -35,6 +39,7 @@ use App\Repository\Abstracts\ModelRepository;
 use App\Repository\Interfaces\GeneratesFellohData;
 use App\Repository\RoomingRepository;
 use App\Repository\Storage\Rooming\RemoteBookingGroup;
+use App\Repository\Storage\Tour\GroupedHotelRooming;
 use Carbon\Carbon;
 use DB;
 use Gateway;
@@ -399,6 +404,13 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $booking->travellers()->save($leadTraveller);
         $booking->lead_traveller_id = $leadTraveller->id;
         $booking->save();
+        return $booking;
+    }
+
+    public static function createForBookingApi(Tour $tour, BookingTraveller $leadTraveller): Booking
+    {
+        $booking = self::create($tour, $leadTraveller);
+        $booking->leadTraveller->repository->addAllIncluded();
         return $booking;
     }
 
@@ -806,14 +818,26 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         return $gateway?->getCheckoutSecret([$item,], $intention, $this->booking->leadTraveller, $redirect, $this->getCurrency()?->code);
     }
 
+    public function roundValue(float|null $amount, float|null $rate = null): float|null
+    {
+        if ($amount === null) { return null; }
+        $rate = $rate ?? $this->getFXRate() ?? 1.0;
+        $amount = sigfig($amount, $rate);
+        if (flag('booking.round_to_five')) {
+            $amount = round_to_five($amount);
+        }
+        return $amount;
+    }
+
     public function getSimpleData(): array
     {
+        $rate = $this->getFXRate() ?? 1.0;
         $travellers = [];
         foreach ($this->booking->travellers as $traveller) {
             $travellers[] = $traveller->repository->getData();
         }
 
-        return [
+        $data = [
             'token' => $this->booking->token,
             'url' => $this->booking->tour?->booking_form_url,
             'tour' => $this->booking->tour?->repository->getDataForBooking(),
@@ -824,27 +848,140 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 'telephone' => $this->booking->leadTraveller->mobile_number,
             ],
             'finances' => [
-                'currency' => setting('system.currency'),
-                'package' => $this->getBasePrice(),
-                'upgrade' => $this->getUpgradeCosts(),
-                'surcharge' => $this->getSingleOccupancyAmount(),
+                'currency' => $this->booking->currency?->code ?? Settings::currency()?->code,
+                'base' => $this->roundValue($this->booking->tour->base_price_per_person, $rate),
+                'package' => $this->roundValue($this->getBasePrice(), $rate),
+                'upgrade' => $this->roundValue($this->getUpgradeCosts(), $rate),
+                'surcharge' => $this->roundValue($this->getSingleOccupancyAmount(), $rate),
                 'tax' => [
                     'name' => $this->getTaxBracket()?->name ?? 'No Taxes',
                     'percentage' => $this->getTaxBracket()?->rate,
-                    'amount' => $this->getTaxes(),
+                    'amount' => $this->roundValue($this->getTaxes(), $rate),
                 ],
                 'total' => $this->getTotalCost(),
                 'due' => [
                     'deposit' => [
                         'percentage' => $this->booking->tour?->deposit_percentage,
-                        'amount' => ($this->booking->tour?->deposit_amount ?? 0.0) *
-                            ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count()),
+                        'amount' => $this->roundValue(($this->booking->tour?->deposit_amount ?? 0.0) *
+                            ($this->booking->travellers()->where('role', '!=', BookingTravellerRole::NOT_TRAVELLING)->count()), $rate),
                     ],
-                    'amount' => $this->getDueTodayAmount(),
+                    'amount' => $this->roundValue($this->getDueTodayAmount(), $rate),
                 ]
             ],
             'travellers' => $travellers,
+            'components' => [
+                'rooming' => $this->getCurrentRoomingForApi(),
+                'tickets' => $this->booking->tour->repository->getTicketsForBooking($this->booking),
+                'additional' => $this->booking->tour->repository->getAdditionalInclusionsForBooking($this->booking),
+            ]
         ];
+
+        if (bleeding_edge()) {
+            $data = [
+                'debug_url' => route('admin.booking.view', ['booking' => $this->booking,]),
+                ...$data,
+            ];
+        }
+
+        return $data;
+    }
+
+    public function getCurrentRoomingForApi(): array
+    {
+        $rooms = [];
+        foreach ($this->booking->groups as $group) {
+            $groupedRoom = GroupedHotelRooming::fromInventoryTour($group->accommodation->first()->tourComponent);
+            $rooms[] = ['room' => $groupedRoom->getUniqueKey(), 'travellers' => $group->travellers->count(),];
+        }
+        return $rooms;
+    }
+
+    /**
+     * @throws TravellerQuantityExceededException
+     * @throws IncorrectRoomSizeException
+     */
+    public function processRoomingFromApi(array $information): void
+    {
+        /** @var array<string, GroupedHotelRooming> $requiredRooms */
+        $requiredRooms = [];
+        foreach ($this->booking->tour->repository->getHotelGroups() as $groups) {
+            foreach ($groups as $group) {
+                $key = $group->getUniqueKey();
+                foreach ($information as $item) {
+                    if ($item['room'] === $key) {
+                        $requiredRooms[$key] = $group;
+                    }
+                }
+            }
+        }
+        $travellers = clone $this->booking->travellers;
+        $travellerRooms = [];
+        foreach ($information as $item) {
+            $room = $requiredRooms[$item['room']];
+            $travellerCount = $item['travellers'];
+            if ($travellerCount > $travellers->count()) {
+                throw new TravellerQuantityExceededException('More travellers are assigned to rooms than are on the booking.');
+            }
+            if ($room->occupancy->maximum_occupancy < $travellerCount) {
+                throw new IncorrectRoomSizeException('Too many travellers are assigned to a room.');
+            }
+            $travellersForRoom = [];
+            for ($i = 0; $i < $travellerCount; $i++) {
+                $traveller = $travellers->shift();
+                $travellersForRoom[] = $traveller;
+            }
+            $travellerRooms[] = ['room' => $room, 'travellers' => $travellersForRoom];
+        }
+        $this->wipeGroups();
+        foreach ($travellerRooms as $travellerRoom) {
+            $group = BookingGroup::create(['booking_id' => $this->booking->id,]);
+            foreach ($travellerRoom['travellers'] as $traveller) {
+                $group->repository->addTravellerToGroup($traveller);
+            }
+            foreach ($travellerRoom['room']->rooms as $room) {
+                $group->repository->addRoomToGroup($room);
+            }
+        }
+    }
+
+    /**
+     * @throws NotOnTourException
+     * @throws ComponentNotFoundException
+     * @throws IncorrectQuantityException
+     */
+    public function processComponentsFromApi(array $information): void
+    {
+        $components = [];
+        foreach ($information as $data) {
+            $tData = explode('-', $data['component']);
+            if (count($tData) < 2) {
+                throw new ComponentNotFoundException('Component not found');
+            }
+            $component = InventoryTourRepository::getComponent($tData[0], $tData[1]);
+            if ($component === null) {
+                throw new ComponentNotFoundException('Component not found');
+            }
+            if ($component->get()->tour_id !== $this->booking->tour_id) {
+                throw new NotOnTourException('Component is not on this tour');
+            }
+            if ($data['travellers'] > $this->booking->travellers()->count()) {
+                throw new IncorrectQuantityException('Quantity set higher than traveller count');
+            }
+            $components[] = ['component' => $component, 'quantity' => $data['travellers']];
+        }
+        foreach ($components as $data) {
+            $quantity = $data['quantity'];
+            /** @var InventoryTourRepository $component */
+            $component = $data['component'];
+            $component->removeFromAllTravellers($this->booking);
+            foreach ($this->booking->travellers as $traveller) {
+                if ($quantity <= 0) { break; }
+                if ($traveller->role !== BookingTravellerRole::NOT_TRAVELLING) {
+                    $component->grantToBookingTraveller($traveller);
+                    $quantity--;
+                }
+            }
+        }
     }
 
     public function getUpgradesForPackageDetails(): array

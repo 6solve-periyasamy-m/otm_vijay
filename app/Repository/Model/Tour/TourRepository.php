@@ -11,12 +11,14 @@ use App\Models\Accommodation\RoomCategory;
 use App\Models\Accommodation\RoomType;
 use App\Models\Activity\ActivityInventoryTour;
 use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Booking;
 use App\Models\Booking\Component\BookingActivity;
 use App\Models\Booking\Component\BookingFlight;
 use App\Models\Booking\Component\BookingMerchandise;
 use App\Models\Booking\Component\BookingTransport;
 use App\Models\Flight\FlightInventoryTour;
 use App\Models\Flight\FlightInventoryTourUpgrade;
+use App\Models\Helper\Enum\ActivityCategory;
 use App\Models\Merchandise\MerchandiseInventoryTour;
 use App\Models\Order\Component\OrderActivity;
 use App\Models\Order\Component\OrderFlight;
@@ -878,8 +880,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return null;
     }
 
-    public function getDataForBooking(): array
+    public function getDataForBooking(string|null $currency = null): array
     {
+        $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
+        $basePrice = sigfig($this->tour->base_price_per_person * $rate);
+        if (flag('booking.round_to_five')) {
+            $basePrice = round_to_five($basePrice);
+        }
+        $taxes = $this->tour->taxBracket();
+        $brand = $this->tour->brand;
         return [
             'name' => $this->tour->name,
             'event' => [
@@ -887,13 +896,128 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'description' => $this->tour->event?->description,
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
             ],
+            'location' => [
+                'city' => $this->tour->city,
+                'country' => $this->tour->country?->name,
+            ],
+            'brand' => [
+                'name' => $brand->name,
+                'email' => $brand->email,
+                'phone' => $brand->phone,
+                'address' => $brand->address,
+            ],
+            'base_price' => $basePrice,
+            'tax' => [
+                'name' => $taxes->name,
+                'percentage' => $taxes->rate
+            ],
             'start' => $this->tour->date_from,
             'end' => $this->tour->date_to,
             'description' => $this->tour->description,
             'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
             'inclusions' => $this->getInclusions(),
-            'rooms' => $this->getRooms(),
+            'components' => [
+                'rooms' => $this->getRoomsArrayForBooking(),
+                'tickets' => $this->getTicketsForBooking(),
+                'additional' => $this->getAdditionalInclusionsForBooking(),
+            ],
         ];
+    }
+
+    public function getTicketsForBooking(Booking|null $booking = null): array
+    {
+        $components = [];
+        foreach ($this->tour->activityInventoryTours as $tourComponent) {
+            $inventory = $tourComponent->inventory;
+            $component = $inventory->component;
+            if ($component->activity_category !== ActivityCategory::MAIN) { continue; }
+            $key = "ticket-{$tourComponent->id}";
+            $data = [
+                'key' => $key,
+                'name' => $component->name,
+                'image' => $component->image_url !== null ? asset($component->image_url) : null,
+                'description' => $component->description,
+                'type' => $inventory->ticketType->name,
+                'cost' => $tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
+            ];
+            if ($booking !== null) {
+                $data['quantity'] = $tourComponent->repository->getQuantityOnBooking($booking);
+            }
+            if (!array_key_exists('quantity', $data) || $data['quantity'] > 0) {
+                $components[] = $data;
+            }
+        }
+        return $components;
+    }
+
+    public function getAdditionalInclusionsForBooking(Booking|null $booking = null): array
+    {
+        $components = [];
+        foreach ($this->tour->activityInventoryTours as $tourComponent) {
+            $inventory = $tourComponent->inventory;
+            $component = $inventory->component;
+            if ($component->activity_category !== ActivityCategory::NORMAL) { continue; }
+            $key = "activity-{$tourComponent->id}";
+            $data = [
+                'key' => $key,
+                'name' => $component->name,
+                'image' => $component->image_url !== null ? asset($component->image_url) : null,
+                'description' => $component->description,
+                'type' => $inventory->ticketType->name,
+                'cost' => $tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
+            ];
+            if ($booking !== null) {
+                $data['quantity'] = $tourComponent->repository->getQuantityOnBooking($booking);
+            }
+            if (!array_key_exists('quantity', $data) || $data['quantity'] > 0) {
+                $components[] = $data;
+            }
+        }
+        foreach ($this->tour->merchandise as $tourComponent) {
+            $inventory = $tourComponent->inventory;
+            $component = $inventory->component;
+            $key = "merchandise-{$tourComponent->id}";
+            $data = [
+                'key' => $key,
+                'name' => $component->name,
+                'image' => $component->image_url !== null ? asset($component->image_url) : null,
+                'description' => null,
+                'type' => $component->type->name,
+                'cost' => $tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
+            ];
+            if ($booking !== null) {
+                $data['quantity'] = $tourComponent->repository->getQuantityOnBooking($booking);
+            }
+            if (!array_key_exists('quantity', $data) || $data['quantity'] > 0) {
+                $components[] = $data;
+            }
+        }
+        return $components;
+    }
+
+    public function getInclusionsForBooking(): array
+    {
+
+    }
+
+    public function getRoomsArrayForBooking(): array
+    {
+        $rooms = [];
+        foreach ($this->getHotelGroups() as $hotel => $groups) {
+            if (empty($groups)) { continue; }
+            foreach ($groups as $group) {
+                if (!array_key_exists($hotel, $rooms)) {
+                    $rooms[$hotel] = [
+                        'name' => $group->hotel->name,
+                        'description' => $group->hotel->description,
+                        'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
+                        'rooms' => [],
+                    ];
+                }
+                $rooms[$hotel]['rooms'][] = $group->getUniqueData();
+            }
+        }
+        return $rooms;
     }
 
     /**

@@ -8,14 +8,14 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property string $tour
+ * @property string $booking_url
  * @property string|null $token
  */
-class BookingRequest extends FormRequest
+class SetupBookingRequest extends FormRequest
 {
     public function getTour(): Tour|null
     {
-        return Tour::where('booking_form_url', '=', $this->tour)->first();
+        return Tour::where('booking_form_url', '=', $this->booking_url)->first();
     }
 
     public function getBooking(): Booking|null
@@ -31,8 +31,9 @@ class BookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tour' => 'required|string',
-            'token' => 'nullable|string',
+            'booking_url' => 'required|string',
+            'name' => 'required|string',
+            'email' => 'required|email:rfc,dns',
         ];
     }
 }

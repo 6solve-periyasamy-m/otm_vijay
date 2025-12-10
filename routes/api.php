@@ -186,9 +186,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
     });
 });
 
-Route::prefix('booking')->middleware([ExpectsJson::class,])->name('booking.')->group(function () {
-    Route::post('setup', [SimpleBookingController::class, 'setup'])->name('setup');
-});
+Route::prefix('booking')->middleware([ExpectsJson::class,])->name('api.booking.')->group(__DIR__ . '/api/booking.php');
 
 Route::prefix('tour')->middleware([ExpectsJson::class,])->name('tour.')->group(function () {
     Route::get('cost', [TourController::class, 'getTourCost'])->name('cost');
