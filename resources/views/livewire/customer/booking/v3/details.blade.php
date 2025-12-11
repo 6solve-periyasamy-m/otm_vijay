@@ -198,9 +198,9 @@
             <div style="padding-top: 1rem;">
                 <div id="stripe-hidden" style="visibility: hidden">
                     <div id="stripe-container"></div>
-                    @if($this->getSurchargeAmount() !== null)
+                    @if($this->getSurchargeAmount() !== null || $this->getSurchargeAmount() > 0 || $this->getSurchargeAmount() < 0)
                         <div id="surcharge-warning">
-                            A card surcharge of {{ fr_currency($this->getSurchargeAmount(), $this->booking->currency) }} will be added to card transactions
+                            A card surcharge of {{ fr_currency($this->getSurchargeAmount(), $this->booking->currency) }} ({{ $this->getSurchargePercent() }}%) will be added to card transactions
                         </div>
                     @endif
                     <button type="submit" class="next-button" id="pay-button">
