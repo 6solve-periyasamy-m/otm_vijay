@@ -39,13 +39,18 @@ class Checkout extends Component
     private function updateSurchargeAmount(): void
     {
         $amount = $this->getSurchargeAmount();
-        $this->dispatchBrowserEvent('surcharge-update', ['amount' => $amount, 'text' => fr_currency($amount, $this->booking->currency)]);
+        $this->dispatchBrowserEvent('surcharge-update', ['amount' => $amount, 'text' => fr_currency($amount, $this->booking->currency), 'percent' => $this->getSurchargePercentage(),]);
     }
 
     public function getSurchargeAmount(): float|null
     {
         $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
         return StripeGateway::getAmountForSurcharge($this->getCurrency(), $amount * 100) / 100;
+    }
+
+    public function getSurchargePercentage(): float|null
+    {
+        return StripeGateway::getStripeSurcharge($this->getCurrency());
     }
 
     public function toggleLeadPaying(): void

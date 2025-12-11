@@ -81,9 +81,10 @@
             });
         });
         window.addEventListener('surcharge-update', (event) => {
-            if (event.detail.amount > 0 || event.detail.amount < 0) {
+            if (event.detail.percent > 0 || event.detail.percent < 0) {
                 document.getElementById('surcharge-warning').hidden = false
                 document.getElementById('surcharge-amount').innerHTML = event.detail.text;
+                document.getElementById('surcharge-percent').innerHTML = event.detail.percent;
             } else {
                 document.getElementById('surcharge-warning').hidden = true
             }

@@ -88,12 +88,12 @@ class Details extends V3BookingComponent
     public function getSurchargeAmount(): float|null
     {
         $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
-        return StripeGateway::getAmountForSurcharge($this->booking->currency, $amount * 100) / 100;
+        return StripeGateway::getAmountForSurcharge($this->getCurrency(), $amount * 100) / 100;
     }
 
     public function getSurchargePercentage(): float|null
     {
-        return StripeGateway::getStripeSurcharge($this->booking->currency);
+        return StripeGateway::getStripeSurcharge($this->getCurrency());
     }
 
     public function leadIsNotTravelling()
