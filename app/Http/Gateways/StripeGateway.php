@@ -59,15 +59,15 @@ class StripeGateway extends Gateway implements SupportsRedirect
         Settings::set('currency.surcharge.stripe.' . $code, $surcharge);
     }
 
-    public static function getAmountForSurcharge(Currency|string $currency, float|null $amount): float
+    public static function getAmountForSurcharge(Currency|string $currency, float|null $amount): int
     {
         $surcharge = self::getStripeSurcharge($currency);
         if ($surcharge !== null) {
             $sAmount = $amount * ($surcharge / 100);
             $sAmount -= ($sAmount % 100);
-            return $sAmount;
+            return (int)$sAmount;
         }
-        return 0.0;
+        return 0;
     }
 
     /**
@@ -172,6 +172,10 @@ class StripeGateway extends Gateway implements SupportsRedirect
         $data = [
             'amount' => $total * 100,
             'currency' => $currency,
+            'metadata' => [
+                'intention_id' => $intention->id,
+                'booking_reference' => $intention->reference,
+            ],
         ];
         return $stripe->paymentIntents->create($data);
     }
@@ -182,7 +186,6 @@ class StripeGateway extends Gateway implements SupportsRedirect
 
         $stripe->paymentIntents->update($secret, ['payment_method' => $paymentMethod,]);
         $intent = $stripe->paymentIntents->retrieve($secret);
-        \Log::info($intent);
         if ($intent->payment_method_options['card']['surcharge']['status'] === 'available') {
             $surcharge = self::getAmountForSurcharge($intent->currency, $intent->amount);
             if (!empty($surcharge)) {
@@ -191,16 +194,21 @@ class StripeGateway extends Gateway implements SupportsRedirect
         }
     }
 
+    public static function getPaymentIntent($secret)
+    {
+        return (new StripeClient(config('app.gateways.stripe.secret')))->paymentIntents->retrieve($secret);
+    }
+
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string
     {
         return $this->getRedirect($items, $intention, $customer, $success);
     }
 
-    public function process(string $reference, float $amount, mixed $created = null, string|null $currency = null): void
+    public function process(string $reference, float $amount, mixed $created = null, string|null $currency = null, float|null $surcharge = null): void
     {
         $currency = $currency ?? config('app.currency');
         $intention = PaymentIntention::fetch($reference);
         if (!isset($intention)) return;
-        $this->processIntention($intention, $amount, 'Stripe', $created, $currency);
+        $this->processIntention($intention, $amount - ($surcharge ?? 0.0), 'Stripe', $created, $currency, $surcharge);
     }
 }

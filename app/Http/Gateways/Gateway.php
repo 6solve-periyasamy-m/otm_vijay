@@ -36,12 +36,15 @@ abstract class Gateway
 
     abstract public function process(string $reference, float $amount, string $created = null, string|null $currency = null): void;
 
-    public function processIntention(PaymentIntention $intention, float $amount, string $gateway, string $created = null, string|null $currency = null): ?Order
+    public function processIntention(PaymentIntention $intention, float $amount, string $gateway, string $created = null, string|null $currency = null, float|null $surcharge = null): ?Order
     {
         if (!$intention->processed) {
             $order = OrderRepository::getFromBookingReference($intention->reference);
             if (isset($order)) {
                 $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());
+                if ($surcharge !== null) {
+                    $payment->payment_fee = $surcharge / 100;
+                }
                 $order->payments()->save($payment);
                 $intention->process();
                 $intention->processed = true;
@@ -65,6 +68,9 @@ abstract class Gateway
                 $intention->customer_id = $order->leadBooker->customer_id;
                 $intention->save();
                 $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());
+                if ($surcharge !== null) {
+                    $payment->payment_fee = $surcharge / 100;
+                }
                 $order->payments()->save($payment);
                 $intention->processed = true;
                 $intention->save();

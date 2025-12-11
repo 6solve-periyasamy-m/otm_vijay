@@ -35,8 +35,13 @@ class StripeController extends ApiController
         if ($event->type === 'charge.succeeded') {
             $data = $event->data->toArray()['object'];
             $metadata = $data['metadata'];
+            $intent = StripeGateway::getPaymentIntent($data['payment_intent']);
+            $surcharge = 0;
+            if ($intent !== null) {
+                $surcharge = $intent->amount_details->toArray()['surcharge']['amount'];
+            }
             if (array_key_exists('intention_id', $metadata)) {
-                (new StripeGateway())->process($metadata['intention_id'], $data['amount'], Carbon::createFromTimestamp($data['created']));
+                (new StripeGateway())->process($metadata['intention_id'], $data['amount'], Carbon::createFromTimestamp($data['created']), null, $surcharge);
             }
         }
     }
