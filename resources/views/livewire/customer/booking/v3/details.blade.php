@@ -200,7 +200,7 @@
                     <div id="stripe-container"></div>
                     @if($this->getSurchargeAmount() !== null || $this->getSurchargeAmount() > 0 || $this->getSurchargeAmount() < 0)
                         <div id="surcharge-warning">
-                            A card surcharge of {{ $this->getSurchargePercent() }}% ({{ fr_currency($this->getSurchargeAmount(), $this->booking->currency) }}) will be added to card transactions
+                            A card surcharge of {{ $this->getSurchargePercentage() }}% ({{ fr_currency($this->getSurchargeAmount(), $this->booking->currency) }}) will be added to card transactions
                         </div>
                     @endif
                     <button type="submit" class="next-button" id="pay-button">
