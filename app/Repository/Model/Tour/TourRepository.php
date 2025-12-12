@@ -995,11 +995,6 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return $components;
     }
 
-    public function getInclusionsForBooking(): array
-    {
-
-    }
-
     public function getRoomsArrayForBooking(): array
     {
         $rooms = [];
@@ -1007,10 +1002,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             if (empty($groups)) { continue; }
             foreach ($groups as $group) {
                 if (!array_key_exists($hotel, $rooms)) {
+                    $gallery = [];
+                    foreach ($group->hotel->gallery as $media) {
+                        $gallery[] = $media->getApiArray();
+                    }
                     $rooms[$hotel] = [
                         'name' => $group->hotel->name,
                         'description' => $group->hotel->description,
                         'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
+                        'gallery' => $gallery,
                         'rooms' => [],
                     ];
                 }
