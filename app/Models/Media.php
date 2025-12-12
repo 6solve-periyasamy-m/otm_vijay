@@ -36,4 +36,13 @@ class Media extends Model
     {
         return $this->morphTo();
     }
+
+    public function getApiArray(): array
+    {
+        return [
+            'url' => asset($this->file_path),
+            'type' => $this->type,
+            'description' => $this->description,
+        ];
+    }
 }
