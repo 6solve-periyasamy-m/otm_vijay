@@ -59,7 +59,7 @@
             });
         });
         const fetchClientSecretFull = () => {
-            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) !!}')
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) !!}')
                 .then((response) => response.json())
                 .then((json) => {
                     return {intent: json.intent, secret: json.checkoutSessionClientSecret};
