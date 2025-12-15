@@ -156,6 +156,7 @@
             <livewire:admin.system.conversion.table/>
         </x-admin.section.card>
     </div>
+    @if(kpt())
     <!-- Available Surcharges -->
     <x-admin.section.accordion>
         <x-slot:title>Card Surcharges</x-slot:title>
@@ -187,4 +188,5 @@
             </table>
         </x-admin.section.card>
     </x-admin.section.accordion>
+    @endif
 @endsection
