@@ -5,12 +5,8 @@ namespace App\Models\Accommodation;
 use App\Models\Helper\SimpleModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Accommodation\Amenity
@@ -39,5 +35,13 @@ class Amenity extends SimpleModel
     public function accommodations()
     {
         return $this->belongsToMany(Accommodation::class, 'accommodation_amenities');
+    }
+
+    public function getApiArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'image' => asset($this->image_url),
+        ];
     }
 }

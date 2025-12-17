@@ -1006,11 +1006,16 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                     foreach ($group->hotel->gallery as $media) {
                         $gallery[] = $media->getApiArray();
                     }
+                    $amenities = [];
+                    foreach ($group->hotel->amenities as $amenity) {
+                        $amenities[] = $amenity->getApiArray();
+                    }
                     $rooms[$hotel] = [
                         'name' => $group->hotel->name,
                         'description' => $group->hotel->description,
                         'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
                         'gallery' => $gallery,
+                        'amenities' => $amenities,
                         'rooms' => [],
                     ];
                 }
