@@ -938,6 +938,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'image' => $component->image_url !== null ? asset($component->image_url) : null,
                 'description' => $component->description,
                 'type' => $inventory->ticketType->name,
+                'labels' => [
+                    1 => $component->field1,
+                    2 => $component->field2,
+                ],
+                'seating' => [
+                    'name' => $component->seating?->name,
+                    'description' => $component->seating?->description,
+                    'map' => $component->seatingMap?->asset,
+                ],
                 'cost' => $tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
             ];
             if ($booking !== null) {
@@ -964,6 +973,15 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'image' => $component->image_url !== null ? asset($component->image_url) : null,
                 'description' => $component->description,
                 'type' => $inventory->ticketType->name,
+                'labels' => [
+                    1 => $component->field1,
+                    2 => $component->field2,
+                ],
+                'seating' => [
+                    'name' => $component->seating?->name,
+                    'description' => $component->seating?->description,
+                    'map' => $component->seatingMap?->asset,
+                ],
                 'cost' => $tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
             ];
             if ($booking !== null) {
