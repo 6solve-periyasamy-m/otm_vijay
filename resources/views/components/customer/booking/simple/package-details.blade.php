@@ -203,7 +203,7 @@
 
 <div class="additional-inclusions">
     <div class="select-currency">
-        <livewire:customer.booking.v3.currency-selector :currency="$this->booking->currency?->code" />
+        {{-- <livewire:customer.booking.v3.currency-selector :currency="$this->booking->currency?->code" /> --}}
         <div class="single">
             <p></p>          
         </div>

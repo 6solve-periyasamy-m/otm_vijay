@@ -43,7 +43,7 @@ class PackageDetails extends Component
 
     public function getFXRate(): float
     {
-        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
     }
 
     public function formatCurrency(int|float|null $value, bool $round = true): string
@@ -53,6 +53,6 @@ class PackageDetails extends Component
         if ($round && flag('booking.round_to_five')) {
             $value = round_to_five($value);
         }
-        return f_currency_booking($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+        return f_currency_booking($value, $this->getCurrency(), true);
     }
 }
