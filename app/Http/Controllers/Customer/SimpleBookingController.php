@@ -15,7 +15,7 @@ class SimpleBookingController extends Controller
         if ($token !== null) {
             $booking = $tour->bookings()->where('token', '=', $token)->firstOrFail();
         } else if ($request->currency !== null && in_array($request->currency, BookingV3Controller::ALLOWED_CURRENCIES)) {
-            $currency = Currency::fromCode($request->currency) ?? Currency::fromCode('USD');
+            $currency = Currency::fromCode($request->currency) ?? Currency::fromCode('AUD');
         }
         return view('customer.booking.simple.index', ['tour' => $tour, 'booking' => $booking ?? null, 'currency' => $currency ?? null]);
     }
