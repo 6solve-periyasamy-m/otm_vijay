@@ -891,6 +891,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         $brand = $this->tour->brand;
         return [
             'name' => $this->tour->name,
+            'currency' => $currency ?? setting('system.currency'),
             'event' => [
                 'name' => $this->tour->event?->name,
                 'description' => $this->tour->event?->description,
