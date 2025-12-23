@@ -50,6 +50,7 @@ use App\Repository\RoomingRepository;
 use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
 use App\Repository\Storage\Tour\GroupedHotelRooming;
+use App\Http\Resources\AddressResource;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -1033,6 +1034,8 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                         'name' => $group->hotel->name,
                         'description' => $group->hotel->description,
                         'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
+                        'type' => $group->hotel->accommodationType?->name,
+                        'address' => new AddressResource($group->hotel?->address),
                         'gallery' => $gallery,
                         'amenities' => $amenities,
                         'rooms' => [],
