@@ -1037,7 +1037,6 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                         'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
                         'type' => $group->hotel->accommodationType?->name,
                         'is_default'  => $hotel === $defaultHotelId,
-                        'no_of_nights'  => $this->tour->repository->getTourNights(),
                         'address' => new AddressResource($group->hotel?->address),
                         'gallery' => $gallery,
                         'amenities' => $amenities,
