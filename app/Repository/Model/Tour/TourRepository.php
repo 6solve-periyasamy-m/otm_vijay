@@ -1017,6 +1017,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function getRoomsArrayForBooking(): array
     {
+        $defaultHotelId = $this->getDefaultHotel();
         $rooms = [];
         foreach ($this->getHotelGroups() as $hotel => $groups) {
             if (empty($groups)) { continue; }
@@ -1035,6 +1036,8 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                         'description' => $group->hotel->description,
                         'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
                         'type' => $group->hotel->accommodationType?->name,
+                        'is_default'  => $hotel === $defaultHotelId,
+                        'no_of_nights'  => $this->tour->repository->getTourNights(),
                         'address' => new AddressResource($group->hotel?->address),
                         'gallery' => $gallery,
                         'amenities' => $amenities,
@@ -1046,6 +1049,16 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         }
         return $rooms;
     }
+
+    /**
+     * Single responsibility: resolve default hotel ID
+     */
+    private function getDefaultHotel()
+    {
+        $defaultHotel = $this->tour->accommodationInventoryTours()->where('tour_component_type', '=', 'Included')->first()?->inventory;
+        return $defaultHotel?->accommodation_id;
+    }
+
 
     /**
      * Get a list of GroupedHotelRooming, grouped into arrays based on hotel ID
