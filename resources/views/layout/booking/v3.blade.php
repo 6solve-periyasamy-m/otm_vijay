@@ -152,13 +152,13 @@
         @font-face { font-family: "PP Neue Montreal Bold"; src: url("{{ asset('fonts/ppneuemontreal-bold.otf') }}"); } 
         @font-face { font-family: "PlayfairDisplay-Regular"; src: url("{{ asset('fonts/PlayfairDisplay-Regular.ttf') }}"); } 
         @font-face { font-family: "Inter-Medium"; src: url("{{ asset('fonts/Inter-Medium.ttf') }}"); } 
-        header { background-color: var(--primary-color); } 
+        header { position: sticky; top: 0; z-index: 1000; background-color: var(--primary-color); } 
         header .container { display: flex; justify-content: space-between; align-items: center; } 
         header .column { display: flex; } 
         header .column.right { display: flex; align-items: center; column-gap: 16px; } 
         header .column.right p { font-family: "PP Neue Montreal Medium"; font-weight: 500; font-size: 14px; line-height: 20px; color: var(--white); text-transform: uppercase; letter-spacing: 2.24px; margin: 0; } 
         header .column.right a { background-color: var(--white); padding: 12px 16px; border-radius: 40px; font-family: "PP Neue Montreal Medium"; font-weight: 500; color: var(--primary-color); display: flex; column-gap: 8px; align-items: center; text-decoration: unset; font-size: 14px; line-height: 18px; letter-spacing: 2.24px; } 
-        header .container { padding: 15px 0px; }
+        header .container { padding: 8px 0px; }
         body main { padding-bottom: 100px; } 
         footer { width: 100%; background-color: rgba(59, 59, 59, 0.97); position: fixed; bottom: 0; z-index: 9; } 
         footer .container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0px; }
@@ -185,7 +185,7 @@
             .timeline a{z-index:1}
         }
 
-        .secure-booking{padding:24px 0;background:#f9f4ee}
+        .secure-booking{position: sticky; top: 64px; z-index: 999; padding:15px 0;background:#f9f4ee}
         h1{font-family:PlayfairDisplay-Regular;text-align:center;font-size:40px;margin:0;line-height:40px;color:var(--primary-color);font-weight:400;text-transform:uppercase;margin-bottom:24px}
         .breadcrumbs{display:flex;align-items:center;column-gap:8px}
         .breadcrumbs span:first-child{height:16px}
@@ -196,7 +196,7 @@
         .step{display:flex;flex-direction:column;align-items:center;position:relative;flex:1;text-align:center;color:var(--text-light-dark)}
         .step:not(:last-child)::after{content:'';position:absolute;top:16px;height:2px;background:var(--text-light-dark);z-index:0;left:calc(50% + calc(var(--circle-size)/ 2) + var(--line-gap));width:calc(100% - var(--circle-size) - calc(var(--line-gap) * 2))}
         .step.completed:not(:last-child)::after{background:var(--primary-color)}
-        .step .circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--text-light-dark);display:flex;align-items:center;justify-content:center;z-index:1;margin-bottom:10px;background:#f9f4ee}
+        .step .circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--text-light-dark);display:flex;align-items:center;justify-content:center;z-index:1;margin-bottom:5px;background:#f9f4ee}
         .step.completed .circle{background:var(--primary-color);border-color:var(--primary-color);color:var(--white)}
         .step.active .circle{border-color:var(--primary-color);color:var(--primary-color);font-weight:700}
         .step.completed .circle::before{content:'';width:24px;height:24px;background-image:url('/icons/Correct-vector.svg');background-repeat:no-repeat;position:relative;top:6px;left:4px}
@@ -209,7 +209,7 @@
         @media only screen and (max-width:767.98px){
             .step:not(.active) .label{display:none!important}
             .step:not(:last-child)::after{left:50%!important;width:100%!important;top:10px}
-            .step{min-height:80px}
+            .step{min-height:72px}
             .step:not(.active) span{display:inline!important}
             .step.active span,.step.completed span{display:none!important}
             .step:not(.completed):not(.active) span{display:inline!important}
@@ -217,6 +217,8 @@
             .step.active .circle::before{width:8px;height:8px}
             .step.completed .circle{position:relative}
             .timeline .step.active .label{position:absolute;bottom:20px}
+            .package-container{padding:30px 0 !important;}
+            .secure-booking { top: 56px; }
         }
 
         .timeline .step .circle span,.timeline .step .label{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:13px;line-height:16px;color:var(--text-light-dark)}
@@ -327,12 +329,12 @@
         .next-button>span>span{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:16px;line-height:20px;letter-spacing:2.24px;color:var(--white)}
         @media only screen and (min-width:768px) and (max-width:980px){
             .package-container .container{flex-wrap:wrap;row-gap:60px}
-            .package-container .container>.left,.package-container .container>.right{width:100%;margin-right:0}
+            .package-container .container>.left,.package-container .container>.right{width:100%;margin-right:0; padding-bottom: 30px;}
         }
         .hide-package-detail{display:none}
         @media only screen and (max-width:767.98px){
             .package-container .container{flex-wrap:wrap;row-gap:60px}
-            .package-container .container>.left,.package-container .container>.right{width:100%;margin-right:0}
+            .package-container .container>.left,.package-container .container>.right{width:100%;margin-right:0; padding-bottom: 30px;}
             h1{margin-top:12px;font-size:32px;line-height:40px}
             .sub-heading-2{font-size:24px;line-height:32px}
             .sub-heading-3{font-size:20px;line-height:32px}
@@ -352,7 +354,13 @@
             .package-container .container .column.right{display:none}
             .email-quote input{width:100%}
             .email-quote{flex-flow:column}
-            .top-form-contain .email-quote p{width:60%}
+            .top-form-contain {padding-top: 25px;}
+            .top-form-contain .email-quote p{width:80%}
+            .location-dollar-value {padding-bottom: 25px;}
+            .top-form-contain .email-quote {gap:1px;}
+            .no-of-travellers {margin: 25px 0 35px 0;}
+            .room-selection .room-listing-module .bed-configuration-h { width: 100% !important;}
+            .room-selection .room-listing-module .bed-configuration-h .radio_txt {width: 75px !important; max-width: 75px;}
         }
         .sub-heading-2-p{font-family:PlayfairDisplay-Regular;font-weight:400;font-size:40px;line-height:54px;color:var(--text-light-dark);margin:40px 0 24px 0;text-transform:uppercase}
         .accommodation-detail>p{font-size:20px;line-height:28px;color:#605b5b;margin:0 0 40px 0}
@@ -695,7 +703,15 @@
         .event-additional-description ol, .event-additional-description ul { list-style: none; padding-inline-start: 0px; padding:5px 0px 5px 0px;}
         .event-additional-description ol li, .event-additional-description ul li {position: relative;  margin-bottom: 10px; padding-left: 30px; }
         .event-additional-description ol li::before, .event-additional-description ul li::before {content: '✓'; position: absolute; left: 0; top: 0; width: 20px; height: 20px; border: 2px solid #143e34; border-radius: 50%; color: #143e34; text-align: center; line-height: 18px;  font-weight: bold; background-color: white;}
-
+        .booking-heading { position: relative; display: flex; justify-content: center; align-items: center; margin: 0px 0px 15px 0px; }
+        .booking-heading h1 { margin: 0; text-align: center; }
+        .booking-heading .back-link { position: absolute; right: 0; display: flex; align-items: center; column-gap: 0px; cursor: pointer; }
+        @media only screen and (max-width: 767.98px) {
+            .booking-heading { flex-direction: column; align-items: center; gap: 8px; }
+            .booking-heading h1 { font-size: 28px; line-height: 34px; text-align: center;}
+            .booking-heading .back-link { position: static;order: -1; align-self: flex-start; display:none;}
+            .breadcrumbs span { font-family: Inter-Medium; font-size: 12px; }
+        }
     </style>
 </head>
 <body>

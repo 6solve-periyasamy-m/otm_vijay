@@ -25,9 +25,9 @@
     <main>
         <section class="secure-booking">
             <div class="container">
-                <div class="heading">
-                    <div class="breadcrumbs" wire:click="back"><span><img src="{{ asset('icons/Arrow-left.svg') }}" alt="left-arrow"></span><span>BACK</span></div>
+                <div class="heading booking-heading">
                     <h1>Secure Booking</h1>
+                    <div class="breadcrumbs back-link" wire:click="back"><span><img src="{{ asset('icons/Arrow-left.svg') }}" alt="left-arrow"></span><span>BACK</span></div>
                 </div>
                 <div class="timeline text-dark">
                     @foreach ($this->steps as $step => $data)
