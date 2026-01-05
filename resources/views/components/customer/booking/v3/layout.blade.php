@@ -64,7 +64,7 @@
                                 <p class="location">{{ $location }}</p>
                                 <span></span>
                             @endif
-                            <p class="dollar">From {{ strtoupper($this->getCurrency()?->code) }} {{ $this->formatCurrency($tour->base_price_per_person + 0.5) }} / person twin share</p>
+                            <p class="dollar">From {{ strtoupper($this->getCurrency()?->code) }} {{ $this->formatCurrency($tour->base_price_per_person) }} / person twin share</p>
                         </div>
                     </div>
                     {{ $left }}
