@@ -31,6 +31,7 @@ class Rooming extends Component
     public BookingTraveller|null $lead = null;
     public array $rooms = [];
     public int $maxTravellers;
+    public string|null $selectedCurrency = null;
 
     public function mount(Tour|int $tour, Booking|int|null $booking = null, Currency|int|null $currency = null): void
     {
@@ -63,6 +64,7 @@ class Rooming extends Component
             $this->renewRooming();
         }
         $this->validateRoomCount();
+        $this->selectedCurrency = $this->getCurrency()?->code;
     }
 
     public function renew()

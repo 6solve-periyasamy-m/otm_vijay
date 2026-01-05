@@ -27,6 +27,7 @@ class Checkout extends Component
 
     public bool $payFull = true;
     public bool $terms = false;
+    public string|null $selectedCurrency = null;
 
     public function mount(Booking|int $booking)
     {
@@ -34,6 +35,7 @@ class Checkout extends Component
         $this->payer = $this->booking->leadTraveller;
         $this->payerAddress = $this->payer->billingAddress ?? new Address();
         $this->updateSurchargeAmount();
+        $this->selectedCurrency = $this->getCurrency()?->code;
     }
 
     private function updateSurchargeAmount(): void
