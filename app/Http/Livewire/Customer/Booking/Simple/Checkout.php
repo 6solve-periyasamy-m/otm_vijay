@@ -157,6 +157,7 @@ class Checkout extends Component
 
     public function render()
     {
+        $this->booking = Booking::find($this->booking->id);
         return view('livewire.customer.booking.simple.checkout');
     }
 
