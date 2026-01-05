@@ -50,6 +50,7 @@ use App\Repository\RoomingRepository;
 use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
 use App\Repository\Storage\Tour\GroupedHotelRooming;
+use App\Http\Resources\AddressResource;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -891,6 +892,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         $brand = $this->tour->brand;
         return [
             'name' => $this->tour->name,
+            'currency' => $currency ?? setting('system.currency'),
             'event' => [
                 'name' => $this->tour->event?->name,
                 'description' => $this->tour->event?->description,
@@ -1015,6 +1017,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function getRoomsArrayForBooking(): array
     {
+        $defaultHotelId = $this->getDefaultHotel();
         $rooms = [];
         foreach ($this->getHotelGroups() as $hotel => $groups) {
             if (empty($groups)) { continue; }
@@ -1032,6 +1035,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                         'name' => $group->hotel->name,
                         'description' => $group->hotel->description,
                         'image' => $group->hotel->image_url !== null ? asset($group->hotel->image_url) : null,
+                        'type' => $group->hotel->accommodationType?->name,
+                        'is_default'  => $hotel === $defaultHotelId,
+                        'address' => new AddressResource($group->hotel?->address),
                         'gallery' => $gallery,
                         'amenities' => $amenities,
                         'rooms' => [],
@@ -1042,6 +1048,16 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         }
         return $rooms;
     }
+
+    /**
+     * Single responsibility: resolve default hotel ID
+     */
+    private function getDefaultHotel()
+    {
+        $defaultHotel = $this->tour->accommodationInventoryTours()->where('tour_component_type', '=', 'Included')->first()?->inventory;
+        return $defaultHotel?->accommodation_id;
+    }
+
 
     /**
      * Get a list of GroupedHotelRooming, grouped into arrays based on hotel ID

@@ -144,12 +144,16 @@ class Rooming extends Component
 
     public function updated($name, $value): void
     {
-        $this->validateOnly($name);
-        $this->booking->save();
-        $this->lead->save();
-        $this->validateRoomCount();
-        $this->renew();
-        $this->render();
+        if (str_starts_with($name, 'rooms')) {
+            $this->validateOnly($name);
+            $this->validateRoomCount();
+        }
+        // $this->validateOnly($name);
+        // $this->booking->save();
+        // $this->lead->save();
+        // $this->validateRoomCount();
+        // $this->renew();
+        // $this->render();
     }
 
     public function addRoom(): void
@@ -208,20 +212,18 @@ class Rooming extends Component
     // }
     public function rules()
     {
-        if ($this->tour->accommodationInventoryTours()->count() > 0) {
-            return [
-                'lead.email_address' => 'required|email:rfc,dns',
-                'rooms.*.room' => 'required|integer',
-                'selectedHotel' => 'required|integer',
-                //'rooms.*.travellers' => 'required|integer|min:1',
-            ];
-        }
-
         return [
-            'lead.email_address' => 'required|email:rfc,dns',
-            'rooms.*.room' => 'nullable|integer',
-            'selectedHotel' => 'nullable|integer',
-            //'rooms.*.travellers' => 'required|integer|min:1',
+            'lead.email_address' => [
+                'required',
+                'email:rfc',
+                'regex:/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/'
+            ],
+            'rooms.*.room' => $this->tour->accommodationInventoryTours()->count() > 0
+                ? 'required|integer'
+                : 'nullable|integer',
+            'selectedHotel' => $this->tour->accommodationInventoryTours()->count() > 0
+                ? 'required|integer'
+                : 'nullable|integer',
         ];
     }
 

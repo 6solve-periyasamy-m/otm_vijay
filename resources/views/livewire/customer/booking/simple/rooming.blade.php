@@ -19,7 +19,7 @@
             <p class="psg-det">PASSENGER DETAILS</p>
             <div class="top-form-contain">
                 <div class="form-field">
-                    <input type="email" wire:model="lead.email_address" placeholder="Email*" required>
+                    <input type="email" wire:model.defer="lead.email_address" placeholder="Email*" required>
                     @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
                 </div>
             </div>

@@ -169,6 +169,15 @@ class GroupedHotelRooming
         ];
     }
 
+    public function getRoomDescription(): ?string
+    {
+        return collect($this->rooms)
+            ->pluck('inventory.category_description')
+            ->filter()
+            ->unique()
+            ->implode("\n");
+    }
+
     public function getUniqueData(): array
     {
         return [
@@ -178,6 +187,7 @@ class GroupedHotelRooming
             'board_type' => $this->board->name,
             'category' => $this->category?->name,
             'cost' => $this->getUpgradeCost(),
+            'room_desc'  => $this->getRoomDescription(),
         ];
     }
 }
