@@ -50,6 +50,6 @@ class Layout extends Component
         if ($round && flag('booking.round_to_five')) {
             $value = round_to_five($value);
         }
-        return fr_currency($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+        return f_currency_booking($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
     }
 }

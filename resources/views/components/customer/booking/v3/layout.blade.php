@@ -110,7 +110,7 @@
                                     <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
                                 @endif --}}
                                 <div class="select-currency">
-                                    {{-- @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector')) --}}
+                                    @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                     <div class="single">
                                         <p class="font-weight-bold">Package price</p>
                                         <p class="font-weight-bold">{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>
