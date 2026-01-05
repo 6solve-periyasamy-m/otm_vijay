@@ -94,6 +94,7 @@ class DatabaseSeeder extends Seeder
             $this->call(OrderCachesTableSeeder::class);
             $this->call(TaxBracketsTableSeeder::class);
             $this->call(LargeTextTemplatesTableSeeder::class);
+            $this->call(ConversionRatesTableSeeder::class);
     } else {
             Artisan::call('countries:update');
         }
