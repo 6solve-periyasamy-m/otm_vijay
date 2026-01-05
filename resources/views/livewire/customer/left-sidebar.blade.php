@@ -45,31 +45,35 @@
                   <li>
                       <a href="{{ route('customer.faq') }}" class="{{ Route::currentRouteName() == 'customer.faq' ? 'active' : '' }}"><img src="/images/customer/images/message-question.svg" alt="faqs" />FAQ's</a>
                   </li>
-                  <li>
-                      <a href="logout" onclick="event.preventDefault();logout();"><img src="/images/customer/images/login.svg" alt="logout" />LOGOUT</a>
+                  <li>                      
+                    <a href="logout" onclick="event.preventDefault(); showLogoutModal();">
+                        <img src="/images/customer/images/login.svg" alt="logout" />LOGOUT
+                    </a>
                   </li>
                   @endif
               </ul>
       </div>
       <div class="contact_details">
           <div class="email_id">
-              <img src="/images/customer/images/sms.svg" alt="sms icon"><a href="mailto:{{ $branding->email }}"><span>{{ $branding->email }}</span></a>
+              <img src="/images/customer/images/sms.svg" alt="sms icon"><a href="mailto:{{ $branding->email }}"><span class="brand-email">{{ $branding->email }}</span></a>
           </div>
           <div class="phone_no">
               <img src="/images/customer/images/call.svg" alt="call icon"><a href="tel:{{ $branding->phone }}"><span>{{ $branding->phone }}</span></a>
           </div>
-          <div class="social_media">
-            @if(!empty($branding->facebook))
-              <span class="facebook_icon"><a href="{{ $branding->facebook }}"><img src="/images/customer/images/facebook.svg" alt="facebook icon"></a></span>
-            @endif
-            @if(!empty($branding->twitter))
-              <span class="twitter_icon"><a href="{{ $branding->twitter }}"><img src="/images/customer/images/twitter.svg" alt="twitter icon"></a></span>
-            @endif  
-            @if(!empty($branding->instagram))
-              <span class="instagram_icon"><a href="{{ $branding->instagram }}"><img src="/images/customer/images/instagram.svg" alt="instagram icon"></a></span>
-            @endif
-              <span class="linkedin_icon"><a href=""><img src="/images/customer/images/linkedin.svg" alt="linkedin icon"></a></span>
-          </div>
+          @if(!empty($branding->facebook) || !empty($branding->twitter) || !empty($branding->instagram) || !empty($branding->linkedin))
+            <div class="social_media">
+                @if(!empty($branding->facebook))
+                    <span class="facebook_icon"><a href="{{ $branding->facebook }}"><img src="/images/customer/images/facebook.svg" alt="facebook icon"></a></span>
+                @endif
+                @if(!empty($branding->twitter))
+                    <span class="twitter_icon"><a href="{{ $branding->twitter }}"><img src="/images/customer/images/twitter.svg" alt="twitter icon"></a></span>
+                @endif  
+                @if(!empty($branding->instagram))
+                    <span class="instagram_icon"><a href="{{ $branding->instagram }}"><img src="/images/customer/images/instagram.svg" alt="instagram icon"></a></span>
+                @endif
+                <span class="linkedin_icon"><a href=""><img src="/images/customer/images/linkedin.svg" alt="linkedin icon"></a></span>
+            </div>
+          @endif
           <p><a href="#">Terms & Conditions</a></p>
       </div> 
   </nav>
@@ -115,5 +119,19 @@
                 event.stopPropagation();
             });
         });
+
+        function showLogoutModal() {
+            const modal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            modal.show();
+        }
+
+        document.getElementById('confirmLogoutBtn').addEventListener('click', function () {
+            $.post('{{ route('customer.logout') }}', {
+                '_token': '{{ csrf_token() }}'
+            }).then(function () {
+                window.location = '{{ route('customer.login') }}';
+            });
+        });
+
     </script>
 @endpush

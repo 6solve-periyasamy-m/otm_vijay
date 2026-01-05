@@ -184,13 +184,18 @@
                 {{ f_currency_booking($tour->base_price_per_person) }}<span class="base-price-span"> / person </span>
             </div>
         </div>
+        @if(!empty($tour->description))
+            <div class="description_div">
+                <p>{!! $tour->description !!}</p>
+            </div>
+        @endif
         <!-- <h6>{{ $tour->name }}</h6> -->
         <!--<p class="location"></p> TODO: Implement Location on Event -->
-        <p class="date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
+        <p class="para date">{{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
         @foreach($tour->repository->getInclusions(4) as $inclusion)
             <p class="inclusion">{{ $inclusion }}</p>
         @endforeach
-        <p class="see-more">
+        <p class="para see-more">
             <a href="#" class="seemore-href" data-action="popup" data-target="see-more-popup">MORE INFORMATION</a>
         </p>
     </div>
@@ -198,6 +203,7 @@
 
 <div class="additional-inclusions">
     <div class="select-currency">
+        {{-- <livewire:customer.booking.v3.currency-selector :currency="$this->booking->currency?->code" /> --}}
         <div class="single">
             <p></p>          
         </div>
@@ -289,6 +295,9 @@
     <div style="padding-top: 1rem;">
         <div id="stripe-hidden" style="visibility: hidden">
             <div id="stripe-container"></div>
+            <div id="surcharge-warning">
+                A card surcharge of <span id="surcharge-percent"></span>% (<span id="surcharge-amount"></span>) will be added to card transactions
+            </div>
             <button id="pay-button">Pay</button>
             <div id="confirm-errors"></div>
         </div>
@@ -314,7 +323,7 @@
                     <div class="upp-block-two">
                         <div class="snd-sec">
                             <div class="left-col">
-                                <img src="{{ asset($tour->event->image_url) }}" class="package-image" alt="featured-img">
+                                <img src="{{ asset($tour->event?->image_url) }}" class="package-image" alt="featured-img">
                             </div>
                             <div class="right-col">
                                 <h5>{{ $tour->name }}</h5>

@@ -34,6 +34,9 @@ class FlightManifestRepository implements HasFlightManifest
             'tourComponent.inventory.component.departureAirport',
             'tourComponent.inventory.component.arrivalAirport',
             'tourComponent.inventory.component.airline',
+            'orderCustomer.order.currency',
+            'tourComponent.inventory.currency',
+            'tourComponent.inventory.component.currency',
         ];
     }
 
@@ -75,7 +78,9 @@ class FlightManifestRepository implements HasFlightManifest
             $row->component = $orderComponent->tourComponent->tour_component_type;
             $row->start = $orderComponent->tourComponent->inventory->departs_at;
             $row->end = $orderComponent->tourComponent->inventory->arrives_at;
-            $row->purchase = $orderComponent->repository->getCostToCompany();
+            $row->purchase_currency = $orderComponent->tourComponent->repository->getCurrency()->code;
+            $row->purchase = $orderComponent->tourComponent->repository->getPurchasePrice();
+            $row->sales_currency = $orderComponent->orderCustomer->order->currency?->code ?? \Settings::currency()->code;
             $row->sales = $orderComponent->cost ?? $orderComponent->tourComponent->inventory->sales_price;
             $row->notes = $orderComponent->orderCustomer->flight_notes;
             $data[] = $row;

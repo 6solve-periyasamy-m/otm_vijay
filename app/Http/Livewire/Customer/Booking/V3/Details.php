@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Customer\Booking\V3;
 
+use App\Http\Gateways\StripeGateway;
 use App\Http\Livewire\Abstract\V3BookingComponent;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Customer\Customer;
@@ -82,6 +83,17 @@ class Details extends V3BookingComponent
         $this->leadIsTravelling = true;
         if ($this->booking->leadTraveller->role === BookingTravellerRole::NORMAL) { return; }
         $this->payer = $this->booking->leadTraveller;
+    }
+
+    public function getSurchargeAmount(): float|null
+    {
+        $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
+        return StripeGateway::getAmountForSurcharge($this->getCurrency(), $amount * 100) / 100;
+    }
+
+    public function getSurchargePercentage(): float|null
+    {
+        return StripeGateway::getStripeSurcharge($this->getCurrency());
     }
 
     public function leadIsNotTravelling()
@@ -286,6 +298,11 @@ class Details extends V3BookingComponent
 
     private function popupStripe(bool $full = false): void
     {
-        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full,]);
+        $currencyKey = config('app.gateways.stripe.currencies.' . $this->getCurrency()->code, []);
+        $this->dispatchBrowserEvent('popupStripeCheckout', [
+            'full' => $full,
+            'currency' => $this->getCurrency()->code,
+            'publishable' => $currencyKey['client'] ?? config('app.gateways.stripe.publishable'),
+        ]);
     }
 }

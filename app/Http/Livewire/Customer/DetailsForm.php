@@ -91,11 +91,11 @@ class DetailsForm extends Component
     {
         if (array_key_exists($key, $this->loyalty)) {
             if ($this->loyalty[$key]['id'] !== null) {
-                $this->loyaltyToDelete[] = $key;
+                $this->loyaltyToDelete[] = $this->loyalty[$key]['id'];
             }
             unset($this->loyalty[$key]);
+            $this->loyalty = array_values($this->loyalty);
         }
-        $this->render();
     }
 
     public function addMerchandise(): void

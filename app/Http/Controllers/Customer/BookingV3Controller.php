@@ -4,20 +4,30 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking\Booking;
+use App\Models\Location\Currency;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
 use Cookie;
 use Illuminate\Http\Request;
+use Settings;
 
 class BookingV3Controller extends Controller
 {
+    public const ALLOWED_CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD'];
     public function guest(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         $booking = $this->getBooking($tour, $booking);
         if ($booking === null) {
             $booking = BookingRepository::make($tour);
+            if ($request->currency !== null && in_array(strtoupper($request->currency), self::ALLOWED_CURRENCIES)) {
+                $booking->currency_id = Currency::where('code', '=', $request->currency)->first()?->id;
+            }
+            // As requested, default back to USD
+            if ($booking->currency_id === null) {
+                $booking->currency_id =  Settings::currency()?->id ?? Currency::where('code', '=', 'AUD')->first()?->id;
+            }
             $booking->save();
             $this->setupCookie($tour, $booking);
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => $booking->token]);
@@ -32,7 +42,7 @@ class BookingV3Controller extends Controller
         $token = $booking ?? $request->cookie($tour->booking_form_url);
         $booking = $this->getBooking($tour, $token);
         if ($booking === null) {
-            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null, 'currency' => $request->currency,]);
         }
         $this->setupCookie($tour, $booking);
         if ($tour->accommodationInventoryTours()->count() === 0) {
@@ -48,7 +58,7 @@ class BookingV3Controller extends Controller
         $token = $booking ?? $request->cookie($tour->booking_form_url);
         $booking = $this->getBooking($tour, $token);
         if ($booking === null) {
-            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null, 'currency' => $request->currency,]);
         }
         $quote = Quote::find($booking->quote_id);
         $this->setupCookie($tour, $booking);
@@ -61,7 +71,7 @@ class BookingV3Controller extends Controller
         $token = $booking ?? $request->cookie($tour->booking_form_url);
         $booking = Booking::where('tour_id', '=', $tour->id)->where('token', '=', $token)->firstOrFail();
         if ($booking === null) {
-            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null, 'currency' => $request->currency,]);
         }
         $quote = Quote::find($booking->quote_id);
         $this->setupCookie($tour, $booking);
@@ -74,7 +84,7 @@ class BookingV3Controller extends Controller
         $token = $booking ?? $request->cookie($tour->booking_form_url);
         $booking = $this->getBooking($tour, $token);
         if ($booking === null) {
-            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+            return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null, 'currency' => $request->currency,]);
         }
         $quote = Quote::find($booking->quote_id);
         $this->setupCookie($tour, $booking);
@@ -85,7 +95,7 @@ class BookingV3Controller extends Controller
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
         Booking::where('tour_id', '=', $tour->id)->where('token', '=', $booking)->first()?->repository->forceDelete();
-        return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null]);
+        return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => null, 'currency' => $request->currency,]);
     }
 
     private function setupCookie(Tour $tour, Booking $booking): void

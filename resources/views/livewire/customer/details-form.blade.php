@@ -12,12 +12,6 @@
             </div>
             <div class="your_details_colm_2">
             <!-- Personal Details Section -->
-                @if (session()->has('message'))
-                    <div class="alert alert-success">
-                        {{ session('message') }}
-                    </div>
-                @endif
-
                 @if (session()->has('error'))
                     <div class="alert alert-danger">
                         {{ session('error') }}
@@ -28,12 +22,10 @@
                     <p>Manage your personal details</p>
                     <div class="personal_details_form">
                         <h5>User Details</h5>
-                        <div class="one_input_field">
-                            <x-livewire.input wire:model="customer.title" label="Title" width="12" />
-                        <div>
                         <div class="two_input_field">
+                            <div class="two_label_field title_label"> <x-livewire.input wire:model="customer.title" label="Title" width="12" /></div>
                             <div class="two_label_field"><x-livewire.input wire:model="customer.first_name" label="First Name" required /></div>
-                            <div class="two_label_field"><x-livewire.input wire:model="customer.middle_names" label="Middle Names" /></div>
+                            <div class="two_label_field"><x-livewire.input wire:model="customer.middle_names" label="Middle Name" /></div>
                             <div class="two_label_field"><x-livewire.input wire:model="customer.last_name" label="Last Name" required /></div>
                         </div>
                         <div class="two_input_field">
@@ -62,7 +54,7 @@
                             <div class="one_input_field"><x-livewire.input wire:model="home.address_line_2" label="Address Line 2" /></div>
                             <div class="one_input_field"><x-livewire.input wire:model="home.town" label="Town" required /></div>
                             <div class="one_input_field"><x-livewire.input wire:model="home.region" label="Region" required /></div>
-                            <div class="one_input_field"><x-livewire.input.select.country name="home.country_id" value="{{ $home->country_id }}" label="Country" required /></div>
+                            <div class="one_input_field addr_country"><x-livewire.input.select.country name="home.country_id" value="{{ $home->country_id }}" label="Country" required /></div>
                             <div class="one_input_field"><x-livewire.input wire:model="home.postcode" label="Postcode" required /></div>
                         </div>
                         <div class="address_detail_colm_2">
@@ -76,7 +68,7 @@
                             <div class="one_input_field"><x-livewire.input wire:model="billing.address_line_2" label="Address Line 2" /></div>
                             <div class="one_input_field"><x-livewire.input wire:model="billing.town" label="Town" required /></div>
                             <div class="one_input_field"><x-livewire.input wire:model="billing.region" label="Region" required /></div>
-                            <div class="one_input_field"><x-livewire.input.select.country name="billing.country_id" value="{{ $billing->country_id }}" label="Country" required /></div>
+                            <div class="one_input_field addr_country"><x-livewire.input.select.country name="billing.country_id" value="{{ $billing->country_id }}" label="Country" required /></div>
                             <div class="one_input_field"><x-livewire.input wire:model="billing.postcode" label="Postcode" required /></div>
                             <div class="one_input_field"></div>
                         </div>
@@ -117,25 +109,29 @@
                             <img src="{{ asset('images/customer/images/add_btn_color.svg') }}"  class="reservation_wht_icn plus-icon-size"  alt="Add" />
                         </div>
                     </div>
-                    
                     <div class="row">
                         @foreach($loyalty as $key => $loyaltyItem)
                         <div class="col-lg-6 col-12 mb-3">
                             <div class="card">
                                 <div class="card-body">
+                                    <span wire:click="removeLoyaltyNumber({{ $key }})"
+                                        class="remove-loyalty-btn"
+                                        title="Remove Loyalty Item"
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="Remove Loyalty Item">
+                                        <img src="{{ asset('images/customer/images/remove.png') }}"
+                                            class="reservation_wht_icn plus-icon-size"
+                                            alt="Remove" />
+                                    </span>
                                     <div class="row">
                                         <x-livewire.input.select.customer.loyalty-number-type 
                                             name="loyalty.{{ $key }}.type" 
                                             value="{{ $loyaltyItem['type'] }}" 
                                             label="Type" 
-                                            width="5" />
+                                            width="4" />
                                         <x-livewire.input wire:model="loyalty.{{ $key }}.name" label="Loyalty Number" width="4" />
-                                        <div class="col-3 d-flex align-items-end">
-                                            <div wire:click="removeLoyaltyNumber({{ $key }})" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-no-border" title="Remove Loyalty Item" role="button" tabindex="0" aria-label="Remove Loyalty Item">
-                                                <img src="{{ asset('images/customer/images/remove.png') }}"  class="reservation_wht_icn plus-icon-size"  alt="Remove" />
-                                            </div>
-                                        </div>
-                                        <x-livewire.input.text-area wire:model="loyalty.{{ $key }}.notes" label="Notes" width="12" />
+                                        <x-livewire.input wire:model="loyalty.{{ $key }}.notes" label="Details" width="4" />
                                     </div>
                                 </div>
                             </div>
@@ -158,19 +154,24 @@
                         <div class="col-lg-6 col-12 mb-3">
                             <div class="card">
                                 <div class="card-body">
+                                    <span wire:click="removeMerchandise({{ $key }})"
+                                        class="remove-merchandise-btn"
+                                        title="Remove Merchandise Item"
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="Remove Merchandise Item">
+                                        <img src="{{ asset('images/customer/images/remove.png') }}"
+                                            class="reservation_wht_icn plus-icon-size"
+                                            alt="Remove" />
+                                    </span>
                                     <div class="row">
                                         <x-livewire.input.select.customer.merchandise-category 
                                             name="merchandise.{{ $key }}.category" 
                                             value="{{ $item['category'] }}" 
                                             label="Category" 
-                                            width="5" />
+                                            width="4" />
                                         <x-livewire.input wire:model="merchandise.{{ $key }}.size" label="Size" width="4" />
-                                        <div class="col-3 d-flex align-items-end">
-                                            <div wire:click="removeMerchandise({{ $key }})" class="cursor-pointer d-flex align-items-center justify-content-center rounded p-1 icon-no-border" title="Remove Merchandise Item" role="button" tabindex="0" aria-label="Remove Merchandise Item">
-                                                <img src="{{ asset('images/customer/images/remove.png') }}"  class="reservation_wht_icn plus-icon-size"  alt="Remove" />
-                                            </div>    
-                                        </div>
-                                        <x-livewire.input.text-area wire:model="merchandise.{{ $key }}.other_details" label="Other Details" width="12" />
+                                        <x-livewire.input wire:model="merchandise.{{ $key }}.other_details" label="Other Details" width="4" />
                                     </div>
                                 </div>
                             </div>
@@ -187,9 +188,16 @@
                         <span wire:loading.remove>Save Changes</span>
                         <span wire:loading>Saving...</span>
                     </button>
-                </div>
+                </div>                
             <!-- EOD Save Button --> 
+                </br>
+                @if (session()->has('message'))
+                    <div class="alert alert-success">
+                        {{ session('message') }}
+                    </div>
+                @endif
             </div>
+            
         </div>
     </div>
 </div>

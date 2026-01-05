@@ -9,9 +9,9 @@ use Carbon\Exceptions\InvalidFormatException;
 class StringFormatter
 {
     public function formatCurrency($value, $currentCurrency = null, $conversion = null, $toCurrency = null) : string {
-        $systemCurrency = Currency::fromCode(setting('system.currency', 'GBP'));
-        if (is_string($currentCurrency)) { $currentCurrency = Currency::fromCode($currentCurrency); }
-        if (is_string($toCurrency)) { $toCurrency = Currency::fromCode($toCurrency); }
+        $systemCurrency = \Settings::currency();
+        if (is_string($currentCurrency) && $currentCurrency !== $systemCurrency?->code) { $currentCurrency = Currency::fromCode($currentCurrency); }
+        if (is_string($toCurrency) && $toCurrency !== $systemCurrency?->code) { $toCurrency = Currency::fromCode($toCurrency); }
         $currentCurrency = $currentCurrency ?? $systemCurrency;
         $toCurrency = $toCurrency ?? $systemCurrency;
         if ($currentCurrency !== $toCurrency) {

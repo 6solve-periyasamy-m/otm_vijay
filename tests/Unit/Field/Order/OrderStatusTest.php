@@ -16,6 +16,15 @@ class OrderStatusTest extends DatabaseTestCase
     use TestsOrder;
     use RefreshDatabase;
 
+    public function testDepositNotPaid(): void
+    {
+        $order = $this->generateOrder();
+        $order->deposit = 100;
+        $order->save();
+        $order->repository->refresh();
+        $this->assertEquals(OrderStatus::DEPOSIT_UNPAID, $order->status);
+    }
+
     public function testBalanceOutstandingNoInstallments()
     {
         $order = $this->generateOrder();

@@ -24,7 +24,7 @@ class Guest extends V3BookingComponent
     ];
     public BookingTraveller|null $lead = null;
 
-    public $listeners = ['advanceWithRecaptcha' => 'advanceWithRecaptcha'];
+    public $listeners = ['currencyUpdated' => 'updateCurrency', 'advanceWithRecaptcha' => 'advanceWithRecaptcha',];
 
     public function mount($tour = null, $booking = null, $quote = null)
     {        
@@ -185,7 +185,11 @@ class Guest extends V3BookingComponent
     public function rules()
     {
         return [
-            'lead.email_address' => 'required|email',
+            'lead.email_address' => [
+                'required',
+                'email:rfc',
+                'regex:/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/'
+            ],
             'lead.first_name' => 'required|string|max:255',
             //'lead.last_name' => 'required|string|max:255',
             //'lead.mobile_number' => 'nullable|string|regex:/^[0-9+\-\s()]*$/|max:20',

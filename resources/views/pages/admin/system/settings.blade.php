@@ -8,6 +8,19 @@
         Livewire.emit('openModal', 'admin.system.brand.form', {!! json_encode(['brand' => null,]) !!});
         event.stopPropagation();
     }
+    function adjustSurcharge(currency) {
+        let surcharge = document.getElementById(currency).value;
+        $.post('{{ route('api.admin.system.surcharge.stripe.set') }}', {
+            '__api_token': '{{ Auth::user()->getCurrentToken()->token }}',
+            '_token': '{{ csrf_token() }}',
+            'currency': currency,
+            'surcharge': surcharge
+        }).done(function () { location.reload();})
+            .fail(function (xhr, textStatus, errorThrown) {
+                showToast('Could not set surcharge', xhr.responseJSON['message'], 'danger');
+                //alert(xhr.responseText);
+            });
+    }
 </script>
 @endpush
 
@@ -69,7 +82,7 @@
         </div>
     </div>
     <div class="collapse row mx-1" id="taxes">
-        <livewire:admin.system.tax-bracket.tiles />
+        <livewire:admin.system.tax-bracket.tiles/>
     </div>
     <!-- Brands -->
     <div class="card">
@@ -92,9 +105,9 @@
         <livewire:admin.system.brand.brand-list />
     </div>
     <!-- Faq's -->
-     <div class="card">
+    <div class="card">
         <div class="card-body" data-target="#faqs" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">{{ Icon::maximize() }} Faq's</h4>
+            <h4 class="fw-bold">{{ Icon::maximize() }} FAQ's</h4>
         </div>
     </div>
     <div class="collapse mx-1" id="faqs">
@@ -129,7 +142,8 @@
     <div class="collapse mx-1" id="conversions">
         <x-admin.section.card>
             <div class="flex float-end">
-                <a class="btn btn-primary float-end" href="{{ route('export.conversion-rates', ['extension' => 'csv']) }}" style="margin-right: 5px">
+                <a class="btn btn-primary float-end"
+                   href="{{ route('export.conversion-rates', ['extension' => 'csv']) }}" style="margin-right: 5px">
                     {{ Icon::csv() }}
                     <span>Export to CSV</span>
                 </a>
@@ -139,7 +153,40 @@
             </div>
         </x-admin.section.card>
         <x-admin.section.card>
-            <livewire:admin.system.conversion.table />
+            <livewire:admin.system.conversion.table/>
         </x-admin.section.card>
     </div>
+    @if(kpt())
+    <!-- Available Surcharges -->
+    <x-admin.section.accordion>
+        <x-slot:title>Card Surcharges</x-slot:title>
+        <x-admin.section.card>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Currency</th>
+                    <th scope="col">Surcharge</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach(\App\Http\Gateways\StripeGateway::AVAILABLE_SURCHARGES as $currency => $max)
+                    <tr>
+                        <th scope="row">{{strtoupper($currency)}} (Maximum: {{ $max }}%)</th>
+                        <td>
+                            <div class="row">
+                                <x-livewire.input append="%" id="{{strtoupper($currency)}}" name="surcharge" type="number" max="{{ $max }}" label="Surcharge Amount" width="8" value="{{ \App\Http\Gateways\StripeGateway::getStripeSurcharge($currency) }}" />
+                                <div class="col-xl-4">
+                                    <button class="btn btn-outline-success mb-1" onclick="adjustSurcharge('{{strtoupper($currency)}}')">
+                                        {{Icon::save()}}
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </x-admin.section.card>
+    </x-admin.section.accordion>
+    @endif
 @endsection

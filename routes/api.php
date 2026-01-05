@@ -11,13 +11,14 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\Admin\MerchandiseController;
 use App\Http\Controllers\Api\Admin\QuoteController;
 use App\Http\Controllers\Api\Admin\RevenueController;
-use App\Http\Controllers\Api\Customer\SimpleBookingController;
+use App\Http\Controllers\Api\Customer\BookingController;
 use App\Http\Controllers\Api\CustomerBookingController;
 use App\Http\Controllers\Api\CustomerComponentController;
 use App\Http\Controllers\Api\DataTablesController;
 use App\Http\Controllers\Api\FlightController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SelectController;
+use App\Http\Controllers\Api\StripeController;
 use App\Http\Controllers\Api\TourComponentController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\TransportController;
@@ -38,7 +39,9 @@ Route::prefix('/admin')->middleware([ExpectsJson::class, ApiAuthenticate::class]
    Route::prefix('/transport')->name('transport.')->group(__DIR__ . '/api/admin/transport.php');
    Route::prefix('/merchandise')->name('merchandise.')->group(__DIR__ . '/api/admin/merchandise.php');
    Route::prefix('/order')->name('order.')->group(__DIR__ . '/api/admin/order.php');
+   Route::prefix('/system')->name('system.')->group(__DIR__ . '/api/admin/system.php');
 });
+
 
 Route::prefix('/orders')->group(function () {
     // existing components
@@ -53,8 +56,10 @@ Route::prefix('/orders')->group(function () {
     Route::post('/transport/add', [TourComponentController::class, 'addTransportAddon'])->name('addTransportAddon');
 });
 
-Route::stripeWebhooks('/stripe/webhooks');
-Route::get('stripe/booking/checkout', [SimpleBookingController::class, 'getStripeSecret'])->name('api.stripe.checkout.secret.booking');
+//Route::stripeWebhooks('/stripe/webhooks');
+Route::post('/stripe/webhooks', [StripeController::class, 'webhook'])->name('api.stripe.webhook');
+Route::get('stripe/booking/checkout', [BookingController::class, 'getStripeSecret'])->name('api.stripe.checkout.secret.booking');
+Route::post('stripe/booking/attach', [BookingController::class, 'assignPaymentMethod'])->name('api.stripe.checkout.secret.attach');
 Route::post('/felloh/webhook', [FellohGateway::class, 'webhook'])->name('api.felloh.webhook');
 Route::post('/opayo/webhook', [OpayoGateway::class, 'webhook'])->name('api.opayo.webhook');
 Route::post('/airwallex/webhook', [AirwallexGateway::class, 'webhook'])->name('api.airwallex.webhook');
@@ -181,9 +186,7 @@ Route::middleware('api.token.auth')->name('api.')->group(function () {
     });
 });
 
-Route::prefix('booking')->middleware([ExpectsJson::class,])->name('booking.')->group(function () {
-    Route::post('setup', [SimpleBookingController::class, 'setup'])->name('setup');
-});
+Route::prefix('booking')->middleware([ExpectsJson::class,])->name('api.booking.')->group(__DIR__ . '/api/booking.php');
 
 Route::prefix('tour')->middleware([ExpectsJson::class,])->name('tour.')->group(function () {
     Route::get('cost', [TourController::class, 'getTourCost'])->name('cost');

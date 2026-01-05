@@ -13,8 +13,8 @@
     </thead>
     <tbody>
     @foreach($orders as $order)
-        @php $next = $order->repository->getNextPaymentDetails() @endphp
-        @continue($next === null || $next->remaining < setting('order.reminders.minimum', 1.0))
+        @php $next = $order->repository->getDepositInstallmentForReminder() ?? $order->repository->getNextPaymentDetails() @endphp
+        @continue($order->cancelled || $next === null || $next->remaining < setting('order.reminders.minimum', 1.0))
         <tr order_id="{{ $order->id }}">
             <th scope="row">
                 <a href="{{ route('orders.view', ['order' => $order,]) }}">

@@ -2,14 +2,17 @@
 
 namespace App\Http\Livewire\Customer\Booking\Simple;
 
+use App\Http\Controllers\Customer\BookingV3Controller;
 use App\Models\Accommodation\RoomType;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\BookingTravellerRole;
+use App\Models\Location\Currency;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
 use App\Repository\Model\Booking\BookingTravellerRepository;
 use Livewire\Component;
+use Settings;
 
 class Rooming extends Component
 {
@@ -20,6 +23,8 @@ class Rooming extends Component
         'rooms.*.travellers.required' => "This field is required",
     ];
 
+    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
+
     public Tour|int $tour;
     public int|null $selectedHotel = null;
     public Booking|int|null $booking;
@@ -27,7 +32,7 @@ class Rooming extends Component
     public array $rooms = [];
     public int $maxTravellers;
 
-    public function mount(Tour|int $tour, Booking|int|null $booking = null): void
+    public function mount(Tour|int $tour, Booking|int|null $booking = null, Currency|int|null $currency = null): void
     {
         $this->tour = Tour::getForMount($tour);
         $this->booking = Booking::getForMount($booking);
@@ -38,6 +43,7 @@ class Rooming extends Component
 
         if ($this->booking->id === null) {
             $this->booking = BookingRepository::make($this->tour);
+            $this->booking->currency_id = Currency::getForMount($currency)?->id;
             $this->booking->save();
         }
 
@@ -66,6 +72,7 @@ class Rooming extends Component
         $this->tour = Tour::find($this->tour->id);
         /** @noinspection PhpSillyAssignmentInspection Seems to fix an issue with rooming caching */
         $this->rooms = $this->rooms;
+        $this->render();
     }
 
     private function renewRooming(): void
@@ -135,12 +142,16 @@ class Rooming extends Component
 
     public function updated($name, $value): void
     {
-        $this->validateOnly($name);
-        $this->booking->save();
-        $this->lead->save();
-        $this->validateRoomCount();
-        $this->renew();
-        $this->render();
+        if (str_starts_with($name, 'rooms')) {
+            $this->validateOnly($name);
+            $this->validateRoomCount();
+        }
+        // $this->validateOnly($name);
+        // $this->booking->save();
+        // $this->lead->save();
+        // $this->validateRoomCount();
+        // $this->renew();
+        // $this->render();
     }
 
     public function addRoom(): void
@@ -199,20 +210,47 @@ class Rooming extends Component
     // }
     public function rules()
     {
-        if ($this->tour->accommodationInventoryTours()->count() > 0) {
-            return [
-                'lead.email_address' => 'required|email:rfc,dns',
-                'rooms.*.room' => 'required|integer',
-                'selectedHotel' => 'required|integer',
-                //'rooms.*.travellers' => 'required|integer|min:1',
-            ];
-        }
-
         return [
-            'lead.email_address' => 'required|email:rfc,dns',
-            'rooms.*.room' => 'nullable|integer',
-            'selectedHotel' => 'nullable|integer',
-            //'rooms.*.travellers' => 'required|integer|min:1',
+            'lead.email_address' => [
+                'required',
+                'email:rfc',
+                'regex:/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/'
+            ],
+            'rooms.*.room' => $this->tour->accommodationInventoryTours()->count() > 0
+                ? 'required|integer'
+                : 'nullable|integer',
+            'selectedHotel' => $this->tour->accommodationInventoryTours()->count() > 0
+                ? 'required|integer'
+                : 'nullable|integer',
         ];
+    }
+
+    public function getCurrency()
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getFXRate(): float
+    {
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
+    }
+
+    public function formatCurrency(int|float|null $value, bool $round = true): string
+    {
+        $value = $value ?? 0.0;
+        $value *= $this->getFXRate();
+        if ($round && flag('booking.round_to_five')) {
+            $value = round_to_five($value);
+        }
+        return fr_currency($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+    }
+
+    public function updateCurrency(string $currency): void
+    {
+        if (in_array(strtoupper($currency), BookingV3Controller::ALLOWED_CURRENCIES)) {
+            $this->booking->currency_id = Currency::where('code', $currency)->first()?->id ?? Settings::currency()?->id;
+            $this->booking->repository->updateCurrency($currency);
+            $this->renew();
+        }
     }
 }

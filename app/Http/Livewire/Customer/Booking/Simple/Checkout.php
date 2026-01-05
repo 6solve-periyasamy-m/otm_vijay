@@ -2,18 +2,24 @@
 
 namespace App\Http\Livewire\Customer\Booking\Simple;
 
+use App\Http\Controllers\Customer\BookingV3Controller;
+use App\Http\Gateways\StripeGateway;
 use App\Http\Livewire\SendsEvents;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Helper\Enum\AddressParent;
 use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
+use App\Models\Location\Currency;
 use Carbon\Carbon;
 use Livewire\Component;
+use Settings;
 
 class Checkout extends Component
 {
     use SendsEvents;
+
+    protected $listeners = ['currencyUpdated' => 'updateCurrency'];
 
     public Booking|int $booking;
     public BookingTraveller $payer;
@@ -27,6 +33,24 @@ class Checkout extends Component
         $this->booking = Booking::getForMount($booking);
         $this->payer = $this->booking->leadTraveller;
         $this->payerAddress = $this->payer->billingAddress ?? new Address();
+        $this->updateSurchargeAmount();
+    }
+
+    private function updateSurchargeAmount(): void
+    {
+        $amount = $this->getSurchargeAmount();
+        $this->dispatchBrowserEvent('surcharge-update', ['amount' => $amount, 'text' => fr_currency($amount, $this->booking->currency), 'percent' => $this->getSurchargePercentage(),]);
+    }
+
+    public function getSurchargeAmount(): float|null
+    {
+        $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
+        return StripeGateway::getAmountForSurcharge($this->getCurrency(), $amount * 100) / 100;
+    }
+
+    public function getSurchargePercentage(): float|null
+    {
+        return StripeGateway::getStripeSurcharge($this->getCurrency());
     }
 
     public function toggleLeadPaying(): void
@@ -55,6 +79,7 @@ class Checkout extends Component
         } else {
             $this->payFull = $payFull;
         }
+        $this->updateSurchargeAmount();
     }
 
     private function saveAll()
@@ -94,6 +119,7 @@ class Checkout extends Component
         foreach ($this->booking->travellers as $traveller) {
             $traveller->repository->validateIncluded();
         }
+        $this->updateSurchargeAmount();
     }
 
     public function checkout()
@@ -172,6 +198,35 @@ class Checkout extends Component
 
     private function popupStripe(bool $full = false): void
     {
-        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full,]);
+        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full, 'currency' => $this->booking->currency?->code ?? Settings::currency()?->code,]);
+    }
+
+    public function getCurrency()
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
+
+    public function getFXRate(): float
+    {
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
+    }
+
+    public function formatCurrency(int|float|null $value, bool $round = true): string
+    {
+        $value = $value ?? 0.0;
+        $value *= $this->getFXRate();
+        if ($round && flag('booking.round_to_five')) {
+            $value = round_to_five($value);
+        }
+        return f_currency_booking($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+    }
+
+    public function updateCurrency(string $currency): void
+    {
+        if (in_array(strtoupper($currency), BookingV3Controller::ALLOWED_CURRENCIES)) {
+            $this->booking->currency_id = Currency::where('code', $currency)->first()?->id ?? Settings::currency()?->id;
+            $this->booking->repository->updateCurrency($currency);
+            $this->render();
+        }
     }
 }

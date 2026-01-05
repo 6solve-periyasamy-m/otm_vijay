@@ -911,8 +911,8 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
         @endif
         <div class="notes_div">
             <h2>Special Requests</h2>
-            <p>Request for twin-share rooms for players, single occupancy for coaching staff. Prefer hotels with access to a gym or fitness center.
-                Rooms near each other or on the same floor for team coordination.</p>
+            <!-- <p>Request for twin-share rooms for players, single occupancy for coaching staff. Prefer hotels with access to a gym or fitness center.
+                Rooms near each other or on the same floor for team coordination.</p> -->
             <form action="{{ route('customer.notes.update', ['reference' => $order->booking_reference, 'orderCustomer' => $orderCustomer,]) }}" method="post" class="form-horizontal form-material">
                  @csrf
                 <div class="notes_row">
@@ -923,7 +923,7 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
                         <p class="notes_title">{!! $orderCustomer->external_notes ?? '' !!}</p>
                     </div> -->
                     <div class="notes_colm">
-                        <x-customer.input.text-area  id="extnt" name="external_notes" placeholder="Enter any special requests or additional instructions here…" value="{{ $order->external_notes }}">
+                        <x-customer.input.text-area  id="extnt" name="external_notes" placeholder="Share any special requests (aisle seats, accessible rooms, birthdays, etc.)" value="{{ $order->external_notes }}">
                         </x-customer.input.text-area>
                     </div>
                     {{-- <div  class="notes_colm">
@@ -944,13 +944,25 @@ if (strpos($currentURL, $basePattern) !== false && strlen(str_replace($basePatte
          <x-customer.overview-top-bar title="Tours" :search="false"  />
         @php
 
-            $upcomingOrders = $orders->filter(function ($order) {
-                return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isFuture();
-            });
+            $upcomingOrders = $orders
+                ->filter(function ($order) {
+                    if (! $order->tour || ! $order->tour->date_from) {
+                        return false;
+                    }
+                    return Carbon::parse($order->tour->date_from)->isFuture();
+                })
+                ->sortBy(fn($order) => Carbon::parse($order->tour->date_from))
+                ->values();
 
-            $pastOrders = $orders->filter(function ($order) {
-                return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isPast();
-            });
+            $pastOrders = $orders
+                ->filter(function ($order) {
+                    if (! $order->tour || ! $order->tour->date_from) {
+                        return false;
+                    }
+                    return Carbon::parse($order->tour->date_from)->isPast();
+                })
+                ->sortByDesc(fn($order) => Carbon::parse($order->tour->date_from))
+                ->values();
         @endphp
         <div class="tours_list">
             <div class="upcoming_tours">

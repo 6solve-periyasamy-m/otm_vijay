@@ -1026,7 +1026,7 @@ figure.table {
 
 @if(!empty($itinerary->finances))
     @php
-      $currency = ($itinerary->finances->currency?->name) ? $itinerary->finances->currency : null;
+      $currency = ($itinerary->finances->currency?->name) ? $itinerary->finances->currency : setting('system.currency', '');
     @endphp
 <!-- <section class="pdf-individual-block"> -->
    <div class="row">
@@ -1208,7 +1208,8 @@ figure.table {
                 @if ($installment->type === ItineraryScheduleType::TOTAL)
                   {{ fr_currency($installment->amount, $currency) }}
                 @else
-                  {{ fr_currency($installment->amount, $itinerary->finances->currency) }}
+                  @php $currency = ($itinerary->finances?->currency && !empty($itinerary->finances->currency->code)) ? $itinerary->finances->currency : setting('system.currency', ''); @endphp
+                  {{ fr_currency($installment->amount, $currency) }}
                 @endif
               </td>
               <td>

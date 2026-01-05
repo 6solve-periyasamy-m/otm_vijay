@@ -54,7 +54,17 @@
     </script>
 
     <script type="text/javascript">
-        const stripe = Stripe('{{ config('app.gateways.stripe.publishable') }}');
+        let elements;
+        let paymentElement;
+        function getPublishable(currency) {
+            switch (currency) {
+                case 'USD': return '{{ config('app.gateways.stripe.currencies.USD.client', config('app.gateways.stripe.publishable')) }}';
+                case 'GBP': return '{{ config('app.gateways.stripe.currencies.GBP.client', config('app.gateways.stripe.publishable')) }}';
+                case 'EUR': return '{{ config('app.gateways.stripe.currencies.EUR.client', config('app.gateways.stripe.publishable')) }}';
+                case 'AUD': return '{{ config('app.gateways.stripe.currencies.AUD.client', config('app.gateways.stripe.publishable')) }}';
+                default: return '{{config('app.gateways.stripe.publishable')}}';
+            }
+        }
         window.addEventListener('popupCheckout', (event) => {
             Airwallex.init({
                 env: '{{ config('app.gateways.airwallex.live', false) ? 'prod' : 'demo' }}',
@@ -70,38 +80,79 @@
                 window.location = event.detail.intent.return_url;
             });
         });
+        window.addEventListener('surcharge-update', (event) => {
+            if (event.detail.percent > 0 || event.detail.percent < 0) {
+                document.getElementById('surcharge-warning').hidden = false
+                document.getElementById('surcharge-amount').innerHTML = event.detail.text;
+                document.getElementById('surcharge-percent').innerHTML = event.detail.percent;
+            } else {
+                document.getElementById('surcharge-warning').hidden = true
+            }
+        });
         const fetchClientSecretFull = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) }}')
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => true]) !!}')
                 .then((response) => response.json())
-                .then((json) => json.checkoutSessionClientSecret)
+                .then((json) => {
+                    return {intent: json.intent, secret: json.checkoutSessionClientSecret};
+                })
         }
         const fetchClientSecretToday = () => {
-            return fetch('{{ route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) }}', {method: 'GET'})
+            return fetch('{!! route('api.stripe.checkout.secret.booking', ['token' => $booking?->token, 'full' => false]) !!}', {method: 'GET'})
                 .then((response) => response.json())
-                .then((json) => json.checkoutSessionClientSecret)
+                .then((json) => {
+                    return {intent: json.intent, secret: json.checkoutSessionClientSecret};
+                })
         }
-        window.addEventListener('popupStripeCheckout', (event) => {
+        window.addEventListener('popupStripeCheckout', async (event) => {
+            let stripe = Stripe(getPublishable(event.currency));
             if (event.detail.checkout !== null) {
                 let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
-                stripe.initCheckout({fetchClientSecret: fn}).then((checkout) => {
-                    let paymentElement = checkout.createPaymentElement();
-                    paymentElement.mount('#stripe-container');
+                let keys = await fn();
 
-                    document.getElementById('stripe-hidden').style.visibility = 'inherit';
+                elements = stripe.elements({clientSecret: keys.secret, paymentMethodCreation: 'manual'});
+                const elementOptions = {layout: 'accordion'};
 
-                    // Setup Buttons
-                    const button = document.getElementById('pay-button');
-                    const errors = document.getElementById('confirm-errors');
-                    button.addEventListener('click', () => {
-                        // Clear any validation errors
-                        errors.textContent = '';
+                paymentElement = elements.create("payment", elementOptions);
+                paymentElement.mount('#stripe-container');
+                document.getElementById('stripe-hidden').style.visibility = 'inherit';
 
-                        checkout.confirm().then((result) => {
-                            if (result.type === 'error') {
-                                errors.textContent = result.error.message;
-                            }
-                        });
+                const button = document.getElementById('pay-button');
+                const errors = document.getElementById('confirm-errors');
+
+                button.addEventListener('click', async () => {
+                    await elements.submit();
+                    // Clear any validation errors
+                    errors.textContent = '';
+
+                    const {pmErr, paymentMethod} = await stripe.createPaymentMethod({
+                        elements,
+                        params: {}
+                    })
+
+                    if (pmErr) {
+                        console.log(pmErr);
+                        return;
+                    }
+
+                    await fetch('{!! route('api.stripe.checkout.secret.attach') !!}', {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({secret: keys.intent, paymentMethod: paymentMethod.id}),
+                    }
+                )
+                    ;
+
+                    let {error} = await stripe.confirmPayment({
+                        elements,
+                        confirmParams: {
+                            return_url: "{{ setting('booking.success.redirect', route('payment.gateway.stripe.success')) }}",
+                        }
                     });
+                    if (error.type === "card_error" || error.type === "validation_error") {
+                        errors.textContent = error.message;
+                    } else {
+                        errors.textContent = "An unknown error occurred";
+                    }
                 });
             }
         });

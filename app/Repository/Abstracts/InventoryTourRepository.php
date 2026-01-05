@@ -166,7 +166,7 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
     {
         return match ($type) {
             'accommodation' => AccommodationInventoryTour::find($id)?->repository,
-            'activity' => ActivityInventoryTour::find($id)?->repository,
+            'activity', 'ticket' => ActivityInventoryTour::find($id)?->repository,
             'flight' => FlightInventoryTour::find($id)?->repository,
             'transport' => TransportInventoryTour::find($id)?->repository,
             'merchandise' => MerchandiseInventoryTour::find($id)?->repository,

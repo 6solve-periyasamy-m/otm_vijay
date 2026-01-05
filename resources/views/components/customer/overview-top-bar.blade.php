@@ -5,7 +5,7 @@
         @endif
         {{ $title }} @if(isset($tourStatus)) <span class="status-btn status-btn-{{ $tourStatusColor }}"> {{ $tourStatus }} </span> @endif
     </p>
-    <p class="top_user_name">User : {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
+    <p class="top_user_name"><img src="/images/customer/images/profile_icn.svg" alt="profile icon"> {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
     @if(!isset($search) || $search)
     <div class="search_field">
         <p>

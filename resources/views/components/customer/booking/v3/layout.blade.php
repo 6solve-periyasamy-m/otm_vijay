@@ -84,6 +84,9 @@
                             <div class="base-package">
                                 <h6 class="sub-heading-6">BASE PACKAGE</h6>
                                 <h2>{{ $tour->booking_package_name }}</h2>
+                                @if(!empty($tour->description))
+                                <h4>{!! $tour->description !!}</h4>
+                                @endif
                                 <p class="date-align"><img src="{{ asset('icons/checkin.svg') }}" alt="calendar"> {{ $tour->date_from?->format('d M Y') }} - {{ $tour->date_to?->format('d M Y') }}</p>
                                 <ul>
                                     @foreach($tour->repository->getInclusions(4) as $inclusion)
@@ -107,7 +110,7 @@
                                     <h6 class="sub-heading-6">ADDITIONAL INCLUSIONS</h6>
                                 @endif --}}
                                 <div class="select-currency">
-                                    {{-- @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector')) --}}
+                                    @livewire("customer.booking.v3.currency-selector", ['currency' => $selectedCurrency], key('currency-selector'))
                                     <div class="single">
                                         <p class="font-weight-bold">Package price</p>
                                         <p class="font-weight-bold">{{ $this->formatCurrency($booking->repository->getBasePrice()) }}</p>

@@ -15,7 +15,7 @@ class CheckoutSuccessfulListener implements ShouldQueue
         $data = $payload['data']['object'];
         $metadata = $data['metadata'];
         if (key_exists('intention_id', $metadata)) {
-            (new StripeGateway())->process($metadata['intention_id'], $data['amount'], Carbon::createFromTimestamp($payload['created']));
+            (new StripeGateway())->process($metadata['intention_id'], $data['amount'], Carbon::createFromTimestamp($payload['created']), $data['currency'] ?? null);
         }
     }
 }

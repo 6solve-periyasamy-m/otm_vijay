@@ -18,14 +18,38 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
  <div class="inner_content">
     <x-customer.overview-top-bar title="Overview" :search="false" />
     @php
-        $upcomingOrders = $orders->filter(function ($order) {
-            return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isFuture();
-        })->sortBy(function ($order) {
-            return Carbon::parse($order->tour->date_to);
-        })->values();
-        $pastOrders = $orders->filter(function ($order) {
-            return optional($order->tour)->date_to && Carbon::parse($order->tour->date_to)->isPast();
-        });        
+        $upcomingOrders = $orders
+            ->filter(function ($order) {
+                if (! $order->tour || ! $order->tour->date_from) {
+                    return false;
+                }
+                return Carbon::parse($order->tour->date_from)->isFuture();
+            })
+            ->sortBy(fn($order) => Carbon::parse($order->tour->date_from))
+            ->values();
+
+        $upcomingPayments = $orders
+            ->filter(function ($order) {
+                if (! $order->tour || ! $order->tour->date_from) {
+                    return false;
+                }
+                if ($order->status?->value === 0) {
+                    return false;
+                }
+                return Carbon::parse($order->tour->date_from)->isFuture();
+            })
+            ->sortBy(fn($order) => Carbon::parse($order->tour->date_from))
+            ->values();
+
+        $pastOrders = $orders
+            ->filter(function ($order) {
+                if (! $order->tour || ! $order->tour->date_from) {
+                    return false;
+                }
+                return Carbon::parse($order->tour->date_from)->isPast();
+            })
+            ->sortByDesc(fn($order) => Carbon::parse($order->tour->date_from))
+            ->values();
     @endphp
     <div class="tours_list">
         <div class="upcoming_tours">
@@ -74,11 +98,11 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
             
         </div>
         <div class="upcoming_payments">
-            <h2>Upcoming Payments {{-- <span class="tours_count">{{ $upcomingOrders->count() }}</span>--}}</h2>
+            <h2>Upcoming Payments {{-- <span class="tours_count">{{ $upcomingPayments->count() }}</span>--}}</h2>
 
-                @if($upcomingOrders->count() > 0)
+                @if($upcomingPayments->count() > 0)
                 <div class="past_tour_row">
-                @foreach($upcomingOrders as $order)
+                @foreach($upcomingPayments as $order)
                     @php
                         $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency());
                         $nonSystem = $order->currency !== null && $order->currency !== Settings::currency();
@@ -98,7 +122,7 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
                                     <span class="status-btn status-btn-{{ $order->status->color() }}">{{ $order->status->description() }}</span>
                                 {{-- @endif --}}
                             </div>
-                            <div class="event_title_date pb-0">
+                            <div class="event_title_date">
                                 <h4>{{ $order->tour?->event?->name}}</h4>                                
                                 {{-- @if($order->tour)
                                     <a href="itinerary/{{$order->booking_reference }}/{{$orderCustomer->customer_id }}" class="view_details">
@@ -239,7 +263,7 @@ p.calendar_date,.no_upcoming_trips{font-family: 'PP NeueMontreal Medium';}
                                 <div class="event_title_date">
                                     <h4>{{ $vpast->tour?->event?->name}}</h4>
 										{{-- <p class="pst_tour_details">{{ $vpast->tour->name }}</p> --}}
-                                    <p class="calendar_date"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
+                                    <p class="calendar_date lh-lg d-flex"><img src="{{ asset('images/customer/images/calendar.svg') }}" />
                                     {{ Carbon::parse($vpast->tour->date_from)->format('d M Y') }}  - {{ Carbon::parse($vpast->tour->date_to)->format('d M Y')}}
                                     </p>
                                     {{-- @if($vpast->tour->city != '' && optional(Country::find($vpast->tour->country_id))->name != '' )
