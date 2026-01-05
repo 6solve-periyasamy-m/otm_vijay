@@ -1,5 +1,6 @@
 {{-- resources/views/components/customer/booking/v3/tour-info.blade.php --}}
 @php
+    /** @var \App\Models\Booking\Booking $booking */
     $location = collect([$tour->city, $tour->country?->name])->filter()->implode(', ');
 @endphp
 <div class="tour-details">
@@ -10,6 +11,6 @@
             <p class="location">{{ $location }}</p>
             <span></span>
         @endif                    
-        <p class="dollar">From {{ f_currency($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency) , $selectedCurrency) }} / person twin share</p>
+        <p class="dollar">From {{ strtoupper($booking->repository->getCurrency()?->code) }} {{ f_currency_booking($booking->repository->convertBookingCurrency($booking->repository->getBasePrice(), $selectedCurrency) , $selectedCurrency) }} / person twin share</p>
     </div>
 </div>

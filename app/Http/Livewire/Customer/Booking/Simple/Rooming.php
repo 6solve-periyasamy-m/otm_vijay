@@ -233,14 +233,9 @@ class Rooming extends Component
         return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
-    public function formatCurrency(int|float|null $value, bool $round = true): string
+    public function formatCurrency(int|float|null $value, int $decimalPrecision = 0): string
     {
-        $value = $value ?? 0.0;
-        $value *= $this->getFXRate();
-        if ($round && flag('booking.round_to_five')) {
-            $value = round_to_five($value);
-        }
-        return fr_currency($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+        return f_currency_booking($value, $this->getCurrency(), $this->getFXRate(), $decimalPrecision);
     }
 
     public function updateCurrency(string $currency): void

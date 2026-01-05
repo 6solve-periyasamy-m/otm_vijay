@@ -13,7 +13,7 @@
                         <p class="location">{{ $location }}</p>
                         <span></span>
                     @endif
-                    <p class="dollar">From {{ $this->formatCurrency($tour->base_price_per_person) }} / person twin share</p>
+                    <p class="dollar">From {{ strtoupper($booking->repository->getCurrency()?->code) }} {{ $this->formatCurrency($tour->base_price_per_person) }} / person twin share</p>
                 </div>
             </div>
             <p class="psg-det">PASSENGER DETAILS</p>
