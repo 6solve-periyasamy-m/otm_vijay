@@ -185,7 +185,7 @@
             .timeline a{z-index:1}
         }
 
-        .secure-booking{position: sticky; top: 64px; z-index: 999; padding:15px 0;background:#f9f4ee}
+        .secure-booking{position: sticky; top: 58px; z-index: 999; padding:15px 0;background:#f9f4ee}
         h1{font-family:PlayfairDisplay-Regular;text-align:center;font-size:40px;margin:0;line-height:40px;color:var(--primary-color);font-weight:400;text-transform:uppercase;margin-bottom:24px}
         .breadcrumbs{display:flex;align-items:center;column-gap:8px}
         .breadcrumbs span:first-child{height:16px}
@@ -218,7 +218,7 @@
             .step.completed .circle{position:relative}
             .timeline .step.active .label{position:absolute;bottom:20px}
             .package-container{padding:30px 0 !important;}
-            .secure-booking { top: 56px; }
+            .secure-booking { top: 61px; }
         }
 
         .timeline .step .circle span,.timeline .step .label{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:13px;line-height:16px;color:var(--text-light-dark)}
