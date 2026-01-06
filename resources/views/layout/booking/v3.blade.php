@@ -218,7 +218,7 @@
             .step.completed .circle{position:relative}
             .timeline .step.active .label{position:absolute;bottom:20px}
             .package-container{padding:30px 0 !important;}
-            .secure-booking { top: 61px; }
+            .secure-booking { top: 58px; }
         }
 
         .timeline .step .circle span,.timeline .step .label{font-family:"PP Neue Montreal Medium";font-weight:500;font-size:13px;line-height:16px;color:var(--text-light-dark)}
