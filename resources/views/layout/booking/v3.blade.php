@@ -40,7 +40,6 @@
         }
     </script>
     <script type="text/javascript">
-        const stripe = Stripe('{{ config('app.gateways.stripe.publishable') }}');
         let elements;
         let paymentElement;
         window.addEventListener('popupCheckout', (event) => {
@@ -74,6 +73,7 @@
         }
         window.addEventListener('popupStripeCheckout', async (event) => {
             if (event.detail.checkout !== null) {
+                let stripe = Stripe(event.detail.publishable);
                 let fn = (event.detail.full ?? false) ? fetchClientSecretFull : fetchClientSecretToday;
                 let keys = await fn();
 
