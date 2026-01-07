@@ -50,23 +50,34 @@ if (!function_exists('fr_currency')) {
 }
 if (!function_exists('f_currency_booking')) {
     /**
-     * Format currency for booking form pages — show symbol only (no code)
+     * Format currency for booking form pages
      *
-     * @param float|null $amount
-     * @param Currency|string|null $currency
+     * @param float|null $amount Amount to format
+     * @param Currency|string|null $currency Currency to format in (defaults to system)
+     * @param float|null $fxRate Exchange rate for currency if known (looks up if not found)
+     * @param int $decimalPrecision Precision for decimals (defaults to showing no decimals)
      * @return string
      */
-    function f_currency_booking(?float $amount, Currency|string|null $currency = null): string
+    function f_currency_booking(?float $amount, Currency|string|null $currency = null, float|null $fxRate = null, int $decimalPrecision = 0): string
     {
-        $currencyCode = is_string($currency) ? $currency : ($currency?->code ?? Settings::currency()?->code);
         $amount = $amount ?? 0.0;
-        $formatter = new NumberFormatter(App::currentLocale(), NumberFormatter::CURRENCY);
-        $formatted = $formatter->formatCurrency($amount, $currencyCode);
-        $formatted = preg_replace('/^[A-Z]{0,2}\$/', '$', $formatted);
+        $amount *= ($fxRate ?? Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0);
+
+        // Round booking currency if system is configured to
+        if (flag('booking.round_to_five')) {
+            $amount = round_to_five($amount);
+        }
+
+        $formatted = fr_currency($amount, $currency, true, $decimalPrecision);
+
+        // Remove currency code from formatted string
+        $currencyCode = $currency?->code;
         if (preg_match("/^{$currencyCode}\s+([^\d]+)/", $formatted, $matches)) {
             $formatted = trim(str_replace("{$currencyCode} ", '', $formatted));
         }
-        return $formatted;
+
+        // Remove any prefixes from $ sign
+        return preg_replace('/^[A-Z]{0,2}\$/', '$', $formatted);
     }
 }
 if (!function_exists('f_date')) {

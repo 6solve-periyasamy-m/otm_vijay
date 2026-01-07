@@ -27,6 +27,7 @@ class Checkout extends Component
 
     public bool $payFull = true;
     public bool $terms = false;
+    public string|null $selectedCurrency = null;
 
     public function mount(Booking|int $booking)
     {
@@ -34,6 +35,7 @@ class Checkout extends Component
         $this->payer = $this->booking->leadTraveller;
         $this->payerAddress = $this->payer->billingAddress ?? new Address();
         $this->updateSurchargeAmount();
+        $this->selectedCurrency = $this->getCurrency()?->code;
     }
 
     private function updateSurchargeAmount(): void
@@ -157,6 +159,7 @@ class Checkout extends Component
 
     public function render()
     {
+        $this->booking = Booking::find($this->booking->id);
         return view('livewire.customer.booking.simple.checkout');
     }
 
@@ -211,14 +214,9 @@ class Checkout extends Component
         return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
-    public function formatCurrency(int|float|null $value, bool $round = true): string
+    public function formatCurrency(int|float|null $value, bool $round = true, int $decimalPrecision = 0): string
     {
-        $value = $value ?? 0.0;
-        $value *= $this->getFXRate();
-        if ($round && flag('booking.round_to_five')) {
-            $value = round_to_five($value);
-        }
-        return f_currency_booking($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+        return f_currency_booking($value, $this->getCurrency(), $this->getFXRate(), $decimalPrecision);
     }
 
     public function updateCurrency(string $currency): void

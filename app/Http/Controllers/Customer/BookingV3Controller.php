@@ -10,7 +10,6 @@ use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
 use Cookie;
 use Illuminate\Http\Request;
-use Settings;
 
 class BookingV3Controller extends Controller
 {
@@ -26,7 +25,7 @@ class BookingV3Controller extends Controller
             }
             // As requested, default back to USD
             if ($booking->currency_id === null) {
-                $booking->currency_id =  Settings::currency()?->id ?? Currency::where('code', '=', 'AUD')->first()?->id;
+                $booking->currency_id = Currency::where('code', '=', 'USD')->first()?->id;
             }
             $booking->save();
             $this->setupCookie($tour, $booking);

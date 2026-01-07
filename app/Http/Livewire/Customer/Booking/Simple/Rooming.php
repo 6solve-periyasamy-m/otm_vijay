@@ -31,6 +31,7 @@ class Rooming extends Component
     public BookingTraveller|null $lead = null;
     public array $rooms = [];
     public int $maxTravellers;
+    public string|null $selectedCurrency = null;
 
     public function mount(Tour|int $tour, Booking|int|null $booking = null, Currency|int|null $currency = null): void
     {
@@ -63,6 +64,7 @@ class Rooming extends Component
             $this->renewRooming();
         }
         $this->validateRoomCount();
+        $this->selectedCurrency = $this->getCurrency()?->code;
     }
 
     public function renew()
@@ -232,17 +234,12 @@ class Rooming extends Component
 
     public function getFXRate(): float
     {
-        return Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
-    public function formatCurrency(int|float|null $value, bool $round = true): string
+    public function formatCurrency(int|float|null $value, int $decimalPrecision = 0): string
     {
-        $value = $value ?? 0.0;
-        $value *= $this->getFXRate();
-        if ($round && flag('booking.round_to_five')) {
-            $value = round_to_five($value);
-        }
-        return fr_currency($value, $this->getCurrency(), true) . " " . $this->getCurrency()->code;
+        return f_currency_booking($value, $this->getCurrency(), $this->getFXRate(), $decimalPrecision);
     }
 
     public function updateCurrency(string $currency): void
