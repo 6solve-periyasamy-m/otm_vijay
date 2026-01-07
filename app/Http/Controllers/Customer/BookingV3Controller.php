@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class BookingV3Controller extends Controller
 {
-    public const ALLOWED_CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD'];
+    public const ALLOWED_CURRENCIES = ['AUD', 'USD', 'EUR', 'GBP',];
     public function guest(Request $request, string $tour, string|null $booking = null)
     {
         $tour = Tour::where('booking_form_url', '=', $tour)->firstOrFail();
