@@ -41,7 +41,7 @@ abstract class Gateway
         if (!$intention->processed) {
             $order = OrderRepository::getFromBookingReference($intention->reference);
             if (isset($order)) {
-                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());
+                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode(strtoupper($currency))->first());
                 if ($surcharge !== null) {
                     $payment->payment_fee = $surcharge / 100;
                 }
@@ -67,7 +67,7 @@ abstract class Gateway
                 $booking->save();
                 $intention->customer_id = $order->leadBooker->customer_id;
                 $intention->save();
-                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode($currency)->first());
+                $payment = $intention->makePayment($amount / 100, PaymentMethod::findOrCreate($gateway), $created ?? now(), Currency::whereCode(strtoupper($currency))->first());
                 if ($surcharge !== null) {
                     $payment->payment_fee = $surcharge / 100;
                 }
