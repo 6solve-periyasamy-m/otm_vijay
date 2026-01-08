@@ -132,7 +132,7 @@ class Checkout extends Component
         }
         if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
         $this->preCheckout();
-        $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
+        $amount = ($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()) * $this->getFXRate();
         try {
             $keys = $this->booking->repository->getAirwallexKeys($amount);
             if (\Gateway::getPaymentGateway('stripe') !== null) {
@@ -201,7 +201,12 @@ class Checkout extends Component
 
     private function popupStripe(bool $full = false): void
     {
-        $this->dispatchBrowserEvent('popupStripeCheckout', ['full' => $full, 'currency' => $this->booking->currency?->code ?? Settings::currency()?->code,]);
+        $currencyKey = config('app.gateways.stripe.currencies.' . $this->getCurrency()->code, []);
+        $this->dispatchBrowserEvent('popupStripeCheckout', [
+            'full' => $full,
+            'currency' => $this->getCurrency()->code,
+            'publishable' => $currencyKey['client'] ?? config('app.gateways.stripe.publishable'),
+        ]);
     }
 
     public function getCurrency()
