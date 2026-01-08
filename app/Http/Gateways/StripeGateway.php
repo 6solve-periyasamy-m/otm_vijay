@@ -210,7 +210,7 @@ class StripeGateway extends Gateway implements SupportsRedirect
     private static function getIntent($intent, $secret) : PaymentIntent|null
     {
        try {
-           $found = new StripeClient(config('app.gateways.stripe.secret'))->paymentIntents->retrieve($secret);
+           $found = (new StripeClient(config('app.gateways.stripe.secret')))->paymentIntents->retrieve($secret);
            if ($found instanceof PaymentIntent) {
                return $found;
            }
