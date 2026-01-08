@@ -54,12 +54,12 @@
                         <label>Is purchaser the same person as lead traveller</label>
                         <div class="radio-group">
                             <label class="radio-option">
-                                <input type="radio" wire:click="leadIsTravelling()" name="lead" value="day" @if($this->leadIsTravelling) checked="" @endif>
+                                <input type="radio" wire:click="setLeadPaying(false)" name="lead" value="day" @if($this->leadIsTravelling) checked="" @endif>
                                 <span class="custom-radio"></span>
                                 <span class="option-title">Yes</span>
                             </label>
                             <label class="radio-option">
-                                <input type="radio" name="lead" wire:click="leadIsNotTravelling()" value="night" @if(!$this->leadIsTravelling) checked="" @endif>
+                                <input type="radio" name="lead" wire:click="setLeadPaying(true)" value="night" @if(!$this->leadIsTravelling) checked="" @endif>
                                 <span class="custom-radio"></span>
                                 <span class="option-title">No</span>
                             </label>
