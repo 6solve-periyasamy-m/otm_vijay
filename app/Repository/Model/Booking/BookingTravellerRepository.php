@@ -220,8 +220,14 @@ class BookingTravellerRepository extends ModelRepository
             'single_occupancy_surcharge' => $singleOccupancy,
         ]);
         $order->orderCustomers()->saveQuietly($orderCustomer);
-        foreach ($this->getComponents(false) as $componentRepository) {
-            $componentRepository->getTourComponent()->grantToCustomer($orderCustomer, true, $this->traveller->booking->repository->getFXRate());
+        if ($this->traveller->role !== BookingTravellerRole::NOT_TRAVELLING) {
+            foreach ($this->getComponents(false) as $componentRepository) {
+                $componentRepository->getTourComponent()->grantToCustomer($orderCustomer, true, $this->traveller->booking->repository->getFXRate());
+            }
+        } else {
+            $orderCustomer->is_charged = false;
+            $orderCustomer->is_travelling = false;
+            $orderCustomer->save();
         }
         foreach ($this->traveller->vouchers as $voucher) {
             $orderCustomer->repository->applyVoucher($voucher);
@@ -584,6 +590,36 @@ class BookingTravellerRepository extends ModelRepository
         foreach ($this->traveller->booking->tour->repository->getComponents(false, true, true, true, true, ['Included',]) as $inventoryTourRepository) {
             if (!$inventoryTourRepository->isBookable()) continue;
             $inventoryTourRepository->grantToBookingTraveller($this->traveller);
+        }
+    }
+
+    /**
+     * Move all components owned to another traveller
+     *
+     * @param BookingTraveller $traveller
+     * @return void
+     */
+    public function moveComponents(BookingTraveller $traveller)
+    {
+        foreach ($this->traveller->activities as $component) {
+            $component->booking_traveller_id = $traveller->id;
+            $component->save();
+        }
+        foreach ($this->traveller->flights as $component) {
+            $component->booking_traveller_id = $traveller->id;
+            $component->save();
+        }
+        foreach ($this->traveller->transport as $component) {
+            $component->booking_traveller_id = $traveller->id;
+            $component->save();
+        }
+        foreach ($this->traveller->merchandise as $component) {
+            $component->booking_traveller_id = $traveller->id;
+            $component->save();
+        }
+        foreach ($this->traveller->bookingTravellerGroups as $group) {
+            $group->booking_traveller_id = $traveller->id;
+            $group->save();
         }
     }
 }

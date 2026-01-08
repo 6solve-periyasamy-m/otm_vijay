@@ -64,6 +64,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelation;
  * @property-read Collection|BookingMerchandise[] $merchandise
  * @property-read int|null $merchandise_count
  * @property-read Collection|BookingTransport[] $transport
+ * @property-read Collection|BookingTravellerGroup[] $bookingTravellerGroups
  * @property-read Collection|VoucherCode[] $vouchers
  * @property-read int|null $transport_count
  * @property-read BookingTravellerRepository $repository
@@ -175,6 +176,12 @@ class BookingTraveller extends Model
     {
         return $this->belongsToMany(BookingGroup::class, BookingTravellerGroup::class)->using(BookingTravellerGroup::class);
     }
+
+    public function bookingTravellerGroups(): HasMany
+    {
+        return $this->hasMany(BookingTravellerGroup::class, 'booking_traveller_id');
+    }
+
 
     public function getRepositoryAttribute(): BookingTravellerRepository
     {
