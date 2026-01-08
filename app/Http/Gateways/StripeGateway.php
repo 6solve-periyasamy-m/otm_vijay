@@ -15,6 +15,7 @@ use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Stripe\StripeClient;
+use Throwable;
 
 class StripeGateway extends Gateway implements SupportsRedirect
 {
@@ -194,9 +195,27 @@ class StripeGateway extends Gateway implements SupportsRedirect
         }
     }
 
-    public static function getPaymentIntent($secret)
+    public static function getPaymentIntent($intentSecret): PaymentIntent|null
     {
-        return (new StripeClient(config('app.gateways.stripe.secret')))->paymentIntents->retrieve($secret);
+        $keys = config('app.gateways.stripe.currencies', []);
+        $default = self::getIntent($intentSecret, config('app.gateways.stripe.secret'));
+        if ($default !== null) { return $default; }
+        foreach ($keys as $key) {
+            $intent = self::getIntent($intentSecret, $key['secret']);
+            if ($intent !== null) { return $intent; }
+        }
+        return null;
+    }
+
+    private static function getIntent($intent, $secret) : PaymentIntent|null
+    {
+       try {
+           $found = new StripeClient(config('app.gateways.stripe.secret'))->paymentIntents->retrieve($secret);
+           if ($found instanceof PaymentIntent) {
+               return $found;
+           }
+       } catch (Throwable) {}
+       return null;
     }
 
     public function checkout(array $items, PaymentIntention $intention, Customer|BookingTraveller $customer, string $success = null): string

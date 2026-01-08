@@ -41,7 +41,7 @@ class StripeController extends ApiController
                 $surcharge = $intent->amount_details->toArray()['surcharge']['amount'];
             }
             if (array_key_exists('intention_id', $metadata)) {
-                (new StripeGateway())->process($metadata['intention_id'], $data['amount'], Carbon::createFromTimestamp($data['created']), null, $surcharge);
+                (new StripeGateway())->process($metadata['intention_id'], $data['amount'], Carbon::createFromTimestamp($data['created']), $data['currency'], $surcharge);
             }
         }
     }
