@@ -51,6 +51,7 @@ use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
 use App\Repository\Storage\Tour\GroupedHotelRooming;
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\EventContentResource;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -883,11 +884,17 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function getDataForBooking(string|null $currency = null): array
     {
+        $this->tour->load([
+            'event.faqs' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
+            'event.importantInfos' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
+        ]);
+
         $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
         $basePrice = sigfig($this->tour->base_price_per_person * $rate);
         if (flag('booking.round_to_five')) {
             $basePrice = round_to_five($basePrice);
         }
+        $event = $this->tour->event;
         $taxes = $this->tour->taxBracket();
         $brand = $this->tour->brand;
         return [
@@ -897,6 +904,8 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'name' => $this->tour->event?->name,
                 'description' => $this->tour->event?->description,
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
+                'faqs' => $event ? EventContentResource::collection($event->faqs) : [],
+                'important_information' => $event ? EventContentResource::collection($event->importantInfos) : [],
             ],
             'location' => [
                 'city' => $this->tour->city,
