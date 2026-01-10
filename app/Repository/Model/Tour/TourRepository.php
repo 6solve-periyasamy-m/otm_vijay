@@ -883,6 +883,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
 
     public function getDataForBooking(string|null $currency = null): array
     {
+        dd($this->getTicketsForBooking());
         $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
         $basePrice = sigfig($this->tour->base_price_per_person * $rate);
         if (flag('booking.round_to_five')) {
@@ -942,6 +943,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'type' => $inventory->ticketType->name,
                 'starts_at' => $inventory->starts_at,
                 'ends_at' => $inventory->ends_at,
+                'whats_included' => $inventory->additional_inclusions,
                 'labels' => [
                     1 => $component->field1,
                     2 => $component->field2,
