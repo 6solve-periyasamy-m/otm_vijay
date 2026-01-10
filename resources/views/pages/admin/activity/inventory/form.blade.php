@@ -46,6 +46,7 @@
     @include('partials.fields.ckeditor', ['name' => 'Itinerary Description', 'field' => 'inventory_description', 'value' => $inventory?->inventory_description, 'width' => 12])
     <h6 class="fs-5 fw-bold">e-Commerce</h6>  
     @include('partials.fields.ckeditor', ['name' => 'Description', 'field' => 'description', 'value' => $inventory?->description, 'width' => 12])
+    @include('partials.fields.ckeditor', ['name' => 'Inclusions', 'field' => 'additional_inclusions', 'value' => $inventory?->additional_inclusions, 'width' => 12])
     
     @include('partials.fields.submit')
 @endsection

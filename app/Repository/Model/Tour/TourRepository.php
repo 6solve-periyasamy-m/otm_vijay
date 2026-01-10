@@ -940,6 +940,9 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'image' => $component->image_url !== null ? asset($component->image_url) : null,
                 'description' => $component->description,
                 'type' => $inventory->ticketType->name,
+                'starts_at' => $inventory->starts_at,
+                'ends_at' => $inventory->ends_at,
+                'whats_included' => $inventory->additional_inclusions,
                 'labels' => [
                     1 => $component->field1,
                     2 => $component->field2,
