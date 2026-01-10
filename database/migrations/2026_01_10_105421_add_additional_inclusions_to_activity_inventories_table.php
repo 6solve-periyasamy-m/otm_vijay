@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('activity_inventories', function (Blueprint $table) {
-            $table->longText('additional_inclusions')->nullable()->after('additional_description');
+            $table->longText('additional_inclusions')->nullable();
         });
     }
 
