@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use App\Models\Helper\Enum\EventContentType;
 use Illuminate\Support\Carbon;
 use Settings;
 
@@ -154,5 +155,20 @@ class Event extends Model
     public function __toString()
     {
         return $this->repository->__toString();
+    }
+
+    public function contents(): HasMany
+    {
+        return $this->hasMany(EventContent::class)->orderBy('sort_order');
+    }
+
+    public function faqs(): HasMany
+    {
+        return $this->contents()->where('type', EventContentType::FAQ);
+    }
+
+    public function importantInfos(): HasMany
+    {
+        return $this->contents()->where('type', EventContentType::IMPORTANT_INFO);
     }
 }

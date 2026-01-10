@@ -99,6 +99,7 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
             </div>
         </div>
     </div>
+
     <hr class="splitter"/>
     <div class="row">
         <div class="col-xl-{{ $event->event_category === \App\Models\Helper\Enum\EventType::MAIN ? 12 : 6 }}">
@@ -225,5 +226,23 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
             </x-admin.section.card>
         </div>
         @endif
+    </div>
+
+        @php //dd($event); @endphp
+    <hr class="splitter"/>
+    <h6 class="fs-5 fw-bold">e-Commerce</h6>
+
+    <div class="row">
+        <div class="col-xl-6">
+            <x-admin.section.card>
+                <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::IMPORTANT_INFO->value"/>
+            </x-admin.section.card>
+        </div>
+
+        <div class="col-xl-6">
+            <x-admin.section.card>
+                <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::FAQ->value"/>
+            </x-admin.section.card>
+        </div>
     </div>
 @endsection
