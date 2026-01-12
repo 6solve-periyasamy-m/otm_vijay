@@ -12,6 +12,7 @@ use App\Http\Requests\Booking\BookingOverviewRequest;
 use App\Http\Requests\Booking\SetTravellersRequest;
 use App\Http\Requests\Booking\Simple\SetupBookingRequest;
 use App\Http\Requests\Booking\TourOverviewRequest;
+use App\Http\Requests\Booking\ApiDetailsRequest;
 use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Location\Currency;
@@ -93,6 +94,34 @@ class BookingController extends ApiController
         $booking = $request->getBooking();
         try {
             $booking->repository->processComponentsFromApi($request->components);
+        } catch (BookingApiException $e) {
+            return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
+        }
+        $booking = $booking->refresh();
+        return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
+    }
+
+    public function processDetails(ApiDetailsRequest $request): JsonResponse
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        $booking = $request->getBooking();
+        $lead = $booking->leadTraveller;
+
+        if (!$lead) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lead traveller not found',
+            ], 422);
+        }
+        try {
+            $lead->update([
+                'last_name'       => $request->lead_last_name,
+                'date_of_birth'   => $request->lead_date_of_birth,
+                'mobile_number'   => $request->lead_mobile_number,
+            ]);
         } catch (BookingApiException $e) {
             return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
         }

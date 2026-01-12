@@ -9,6 +9,7 @@ Route::get('/booking', [BookingController::class, 'booking'])->name('booking');
 Route::post('/setup', [BookingController::class, 'setup'])->name('setup');
 Route::post('/rooming', [BookingController::class, 'processRooming'])->name('rooming');
 Route::post('/component', [BookingController::class, 'processComponents'])->name('component');
+Route::post('/details', [BookingController::class, 'processDetails'])->name('details');
 Route::prefix('traveller')->name('traveller.')->group(function () {
    Route::post('/add', [BookingController::class, 'addTraveller'])->name('add');
    Route::post('/set', [BookingController::class, 'setTravellers'])->name('set');
