@@ -134,6 +134,8 @@ class BookingController extends ApiController
         } catch (BookingApiException $e) {
             return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
         }
+        $booking->notes = $this->sanitizeHtml($request->special_notes);
+        $booking->save();
         $booking = $booking->refresh();
         return response()->json(['success' => true, 'booking' => $booking->repository->getSimpleData(),]);
     }
@@ -209,5 +211,16 @@ class BookingController extends ApiController
         if ($gateway instanceof StripeGateway) {
             $gateway->attachPaymentMethodToIntention($request->secret, $request->paymentMethod);
         }
+    }
+
+    protected function sanitizeHtml(?string $html): ?string
+    {
+        if (!$html) {
+            return null;
+        }
+        $html = preg_replace('#<(script|iframe|object|embed|style)[^>]*>.*?</\1>#is', '', $html); // Remove script, iframe, object, embed
+        $html = preg_replace('/(<[^>]+)\s+on\w+\s*=\s*(["\']).*?\2/i', '$1',$html);
+        $html = preg_replace('/javascript:/i', '', $html);   // Remove javascript: urls
+        return trim($html);
     }
 }
