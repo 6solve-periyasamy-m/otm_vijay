@@ -11,6 +11,7 @@ use App\Http\Requests\Booking\ApiRoomingRequest;
 use App\Http\Requests\Booking\BookingOverviewRequest;
 use App\Http\Requests\Booking\SetTravellersRequest;
 use App\Http\Requests\Booking\Simple\SetupBookingRequest;
+use App\Repository\Model\Booking\BookingTravellerRepository;
 use App\Http\Requests\Booking\TourOverviewRequest;
 use App\Http\Requests\Booking\ApiDetailsRequest;
 use App\Models\Booking\Booking;
@@ -117,11 +118,19 @@ class BookingController extends ApiController
             ], 422);
         }
         try {
+
+            if (empty($lead->email_address)) {
+                return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => 'Lead traveller missing email for booking'], 400);
+            }
             $lead->update([
                 'last_name'       => $request->lead_last_name,
                 'date_of_birth'   => $request->lead_date_of_birth,
                 'mobile_number'   => $request->lead_mobile_number,
             ]);
+            $repository = new BookingTravellerRepository($lead);
+            $customer = $repository->convertToCustomer();
+            $lead->customer_id = $customer->id;
+            $lead->save();
         } catch (BookingApiException $e) {
             return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
         }
