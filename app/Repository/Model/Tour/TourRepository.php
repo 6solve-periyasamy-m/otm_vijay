@@ -901,6 +901,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'currency' => $currency ?? setting('system.currency'),
             'deposit' => $this->tour?->deposit,
             'payment_type' => now()->gt($this->tour?->final_payment),
+            'final_payment' => $this->tour?->final_payment,
             'event' => [
                 'name' => $this->tour->event?->name,
                 'description' => $this->tour->event?->description,
