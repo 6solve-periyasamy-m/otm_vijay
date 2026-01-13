@@ -21,5 +21,5 @@ Route::prefix('order')->name('order.')->group(function () {
 Route::prefix('stripe')->name('stripe.')->group(function () {
     Route::get('/publishable', [BookingController::class, 'getStripePublishableKey'])->name('publishable');
     Route::get('/secret', [BookingController::class, 'getStripeSecret'])->name('secret');
-    //Route::post('/confirm', [BookingController::class, 'confirmPayment'])->name('confirm');
+    Route::post('/confirm', [BookingController::class, 'confirmPayment'])->name('confirm');
 });

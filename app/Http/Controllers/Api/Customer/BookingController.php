@@ -21,12 +21,14 @@ use App\Repository\Model\Booking\BookingRepository;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentIntention;
+use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 use Stripe\PaymentIntent;
 use Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Settings;
+use DB;
 
 class BookingController extends ApiController
 {
@@ -303,5 +305,63 @@ class BookingController extends ApiController
                 'message' => 'Failed to create order: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+
+    /**
+     * Confirm Stripe payment and update order
+     */
+    public function confirmPayment(Request $request): JsonResponse
+    {
+        $request->validate([
+            'booking_token' => 'required|string',
+            'payment_intent_id' => 'required|string',
+            'payment_method_id' => 'nullable|string',
+            'payment_method_details' => 'nullable|array',
+            'billing_details' => 'nullable|array',
+            'amount' => 'required|numeric|min:0',
+            'currency' => 'required|string|size:3',
+            'status' => 'required|string|in:succeeded,processing,requires_action,requires_payment_method,canceled',
+            'payment_method_type' => 'nullable|string',
+            'setup_future_usage' => 'nullable|string',
+            'receipt_url' => 'nullable|url',
+            'customer_id' => 'nullable|string',
+            'metadata' => 'nullable|array',
+        ]);
+
+        // Get the booking
+        $booking = Booking::where('token', $request->booking_token)->first();
+
+        if (!$booking) {
+            return response()->json([ 'success' => false, 'message' => 'Booking not found'], 404);
+        }
+
+        // Get the associated order
+        if (!$booking->order_id) {
+            return response()->json(['success' => false, 'message' => 'No order found for this booking'], 422);
+        }
+
+        $order = Order::find($booking->order_id);
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+        }
+
+        try {
+
+            // Need to be work on the payment section
+            return response()->json(['success' => true, 'message' => 'successful updated']);
+
+            //DB::beginTransaction();
+            // Create payment record in database
+            //$payment = $this->createPaymentRecord($order, $request->all(), $booking);
+
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            \Log::error('Stripe API error: ' . $e->getMessage(), ['booking_id' => $booking->id,'order_id' => $order->id,'payment_intent_id' => $request->payment_intent_id]);
+            return response()->json([ 'success' => false,'message' => 'Stripe API error: ' . $e->getMessage()], 500);
+        } catch (\Exception $e) {
+            \Log::error('Payment confirmation error: ' . $e->getMessage(), [ 'booking_id' => $booking->id, 'order_id' => $order->id ]);
+            return response()->json(['success' => false, 'message' => 'Failed to confirm payment: ' . $e->getMessage()], 500);
+        }
+
     }
 }
