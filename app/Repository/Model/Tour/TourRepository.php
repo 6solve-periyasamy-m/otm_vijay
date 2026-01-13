@@ -888,7 +888,6 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'event.faqs' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
             'event.importantInfos' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
         ]);
-
         $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
         $basePrice = sigfig($this->tour->base_price_per_person * $rate);
         if (flag('booking.round_to_five')) {
@@ -900,6 +899,8 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         return [
             'name' => $this->tour->name,
             'currency' => $currency ?? setting('system.currency'),
+            'deposit' => $this->tour?->deposit,
+            'payment_type' => now()->gt($this->tour?->final_payment),
             'event' => [
                 'name' => $this->tour->event?->name,
                 'description' => $this->tour->event?->description,
