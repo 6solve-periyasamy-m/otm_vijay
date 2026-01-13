@@ -15,7 +15,11 @@ Route::prefix('traveller')->name('traveller.')->group(function () {
    Route::post('/set', [BookingController::class, 'setTravellers'])->name('set');
    Route::post('/remove', [BookingController::class, 'removeTraveller'])->name('remove');
 });
+Route::prefix('order')->name('order.')->group(function () {
+    Route::post('/create', [BookingController::class, 'createOrder'])->name('create');
+});
 Route::prefix('stripe')->name('stripe.')->group(function () {
     Route::get('/publishable', [BookingController::class, 'getStripePublishableKey'])->name('publishable');
     Route::get('/secret', [BookingController::class, 'getStripeSecret'])->name('secret');
+    //Route::post('/confirm', [BookingController::class, 'confirmPayment'])->name('confirm');
 });
