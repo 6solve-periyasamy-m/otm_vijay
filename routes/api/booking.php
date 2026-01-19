@@ -2,7 +2,13 @@
 
 
 use App\Http\Controllers\Api\Customer\BookingController;
+use App\Http\Controllers\Api\AppConfigController;
 use Illuminate\Support\Facades\Route;
+
+
+Route::prefix('app-config')->name('app-config.')->group(function () {
+    Route::get('/', [AppConfigController::class, 'index'])->name('index');
+});
 
 Route::get('/tour', [BookingController::class, 'overview'])->name('tour');
 Route::get('/booking', [BookingController::class, 'booking'])->name('booking');
