@@ -67,8 +67,9 @@ class FlightInventoryTourRepository extends InventoryTourRepository implements H
      * @param bool $silent
      * @return OrderFlightRepository|null
      */
-    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderFlightRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float|null $rate = 1): ?OrderFlightRepository
     {
+        $rate = $rate ?? 1.0;
         $cost = ($this->tourComponent->tour_sales_price ?? 0) * $rate;
         if (flag('booking.round_to_five')) {
             $cost = round_to_five($cost);
