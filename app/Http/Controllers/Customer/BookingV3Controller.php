@@ -24,10 +24,10 @@ class BookingV3Controller extends Controller
             if ($request->currency !== null && in_array(strtoupper($request->currency), self::ALLOWED_CURRENCIES)) {
                 $booking->currency_id = Currency::where('code', '=', $request->currency)->first()?->id;
             }
-            // As requested, default back to USD
-            if ($booking->currency_id === null) {
-                $booking->currency_id = Currency::where('code', '=', 'USD')->first()?->id;
-            }
+            // As requested, default back to USD (Reverted to default to system)
+//            if ($booking->currency_id === null) {
+//                $booking->currency_id = Currency::where('code', '=', 'USD')->first()?->id;
+//            }
             $booking->save();
             $this->setupCookie($tour, $booking);
             return redirect()->route('booking.v3.guest', ['tour' => $tour->booking_form_url, 'booking' => $booking->token]);
