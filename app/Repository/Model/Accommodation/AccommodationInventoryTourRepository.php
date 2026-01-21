@@ -67,8 +67,9 @@ class AccommodationInventoryTourRepository extends InventoryTourRepository
         return $this->tourComponent;
     }
 
-    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderComponentRepository
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float|null $rate = 1): ?OrderComponentRepository
     {
+        $rate = $rate ?? 1.0;
         $orderComponent = $this->getOrderComponent($orderCustomer);
         if ($orderComponent !== null) return $orderComponent;
         $group = $orderCustomer->primary_group;

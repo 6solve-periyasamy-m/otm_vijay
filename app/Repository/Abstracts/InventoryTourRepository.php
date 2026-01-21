@@ -23,7 +23,7 @@ abstract class InventoryTourRepository extends InventoryContainerRepository impl
 {
     abstract public static function getAvailableAddons(Tour $tour, OrderCustomer|null $orderCustomer = null): array;
 
-    abstract public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float $rate = 1): ?OrderComponentRepository;
+    abstract public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float|null $rate = 1): ?OrderComponentRepository;
 
     abstract public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository;
 
