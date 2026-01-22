@@ -31,6 +31,10 @@ class AppConfigController extends ApiController
                 'rates' => $this->fxRates(),
             ],
 
+            'success_redirect' => [
+                'booking' => setting('booking.success.redirect', ''),
+            ],
+
             /*'stripe' => [
                 'publishable_key' => $this->stripeKey($defaultCurrency),
             ],
