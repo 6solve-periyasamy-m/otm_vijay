@@ -71,6 +71,7 @@ class SettingsController extends Controller
             'company.address.country' => $request->input('country'),
             'company.address.postcode' => $request->input('postcode'),
             'booking.prefix' => $request->input('booking_prefix'),
+            'booking.converted.prefix' => $request->input('converted_booking_prefix'),
             'quote.prefix' => $request->input('quote_prefix'),
             'booking.success.redirect' => $request->input('booking_redirect'),
             'payment.success.redirect' => $request->input('payment_redirect'),
