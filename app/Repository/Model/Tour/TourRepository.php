@@ -967,7 +967,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                    'name' => $component->session?->name,
                     'description' => $component->session?->description,
                 ],
-                'cost' => $tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
+                'cost' => $inventory->sales_price,  //$tourComponent->tour_component_type !== 'Included' ? $tourComponent->tour_sales_price : 0,
             ];
             if ($booking !== null) {
                 $data['quantity'] = $tourComponent->repository->getQuantityOnBooking($booking);
