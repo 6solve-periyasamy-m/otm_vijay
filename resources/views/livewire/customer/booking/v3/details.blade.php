@@ -50,6 +50,7 @@
                         <input type="text"  id="payer-dob" wire:model="payer_date_of_birth_formatted"  placeholder="DD-MM-YYYY"  class="form-control" />
                         @error('payer_date_of_birth_formatted') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+                    {{--
                     <div class="full-width">
                         <label>Is purchaser the same person as lead traveller</label>
                         <div class="radio-group">
@@ -65,6 +66,7 @@
                             </label>
                         </div>
                     </div>
+                    --}}
                 </div>
             </div>
             @if(!$this->leadIsTravelling)

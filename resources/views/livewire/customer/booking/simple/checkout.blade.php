@@ -99,6 +99,7 @@
                         <!--<input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
+                    {{--
                     <div class="lead-purchase-traveller-block">
                         <p>Is purchaser the same person as lead traveller</p>
                         <div class="cus-block-mod-ren">
@@ -112,7 +113,7 @@
                             </label> 
                         </div>   
                     </div>
-
+                    --}}
                 </div>
 
                 <script>
