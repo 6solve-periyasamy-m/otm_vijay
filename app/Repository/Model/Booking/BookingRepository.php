@@ -964,9 +964,9 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
             if ($component->get()->tour_id !== $this->booking->tour_id) {
                 throw new NotOnTourException('Component is not on this tour');
             }
-            if ($data['travellers'] > $this->booking->travellers()->count()) {
-                throw new IncorrectQuantityException('Quantity set higher than traveller count');
-            }
+            // if ($data['travellers'] > $this->booking->travellers()->count()) {
+            //     throw new IncorrectQuantityException('Quantity set higher than traveller count');
+            // }
             $components[] = ['component' => $component, 'quantity' => $data['travellers']];
         }
         foreach ($components as $data) {
