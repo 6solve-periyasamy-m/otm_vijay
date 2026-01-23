@@ -1006,12 +1006,12 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
         $currentCount = $this->booking->travellers()->count();
         $difference = $targetCount - $currentCount;
         DB::transaction(function () use ($difference) {
-            if ($difference > 1) {
+            if ($difference > 0) {
                 for ($i = 0; $i < $difference; $i++) {
                     $this->addUnknownTraveller();
                 }
             }
-            if ($difference < 1) {
+            if ($difference < 0) {
                 for ($i = 0; $i < abs($difference); $i++) {
                     $this->removeUnknownTraveller();
                 }
