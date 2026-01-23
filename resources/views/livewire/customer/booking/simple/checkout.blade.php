@@ -99,18 +99,9 @@
                         <!--<input id="custom-input-date" class="calendar hasDatepicker" type="text" name="upload-release" placeholder="DATE OF BIRTH*">-->
                         @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
                     </div>
+                    {{--
                     <div class="lead-purchase-traveller-block">
                         <p>Is purchaser the same person as lead traveller</p>
-                        <!-- <div class="cus-block-mod-ren">
-                            <label class="contain-vv"><span class="fnal-txt">Yes</span>
-                                <input type="checkbox" name="Yes" value="Yes" checked>                           
-                                <span class="checkmark"></span>
-                            </label> 
-                            <label class="contain-vv"><span class="fnal-txt">No</span>
-                                <input type="checkbox" name="No" value="No">
-                                <span class="checkmark"></span>
-                            </label> 
-                        </div> -->
                         <div class="cus-block-mod-ren">
                             <label class="contain-vv"><span class="fnal-txt">Yes</span>
                                 <input type="radio" wire:model="is_different_traveller" value="false" @checked($is_different_traveller == false)>                           
@@ -122,7 +113,7 @@
                             </label> 
                         </div>   
                     </div>
-
+                    --}}
                 </div>
 
                 <script>
@@ -147,36 +138,37 @@
                             </div> 
                             <div class="top-form-contain">
                                 <div class="form-field">
-                                    <input type="text" {{-- wire:model="payer.first_name1" --}} placeholder="First Name*" required>
-                                    @error('payer.first_name1') <label class="error-label">{{ $message }}</label> @enderror
+                                    <input type="text" wire:model="lead.first_name" placeholder="First Name*" required>
+                                    @error('lead.first_name') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <div class="form-field">
-                                    <input type="text"  {{-- wire:model="payer.last_name1" --}} placeholder="Last Name*">
-                                    @error('payer.last_name1') <label class="error-label">{{ $message }}</label> @enderror
+                                    <input type="text" wire:model="lead.last_name" placeholder="Last Name*">
+                                    @error('lead.last_name') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <div class="form-field">
-                                    <input type="email"  {{-- wire:model="payer.email_address1" --}} placeholder="Email" >
-                                    @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
+                                    <input type="email" wire:model="lead.email_address" placeholder="Email" >
+                                    @error('lead.email_address') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                                 <div class="form-field mobile_field">
-                                    <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1" --}} placeholder="Primary Phone" >
-                                    @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
-                                    <script type="text/javascript">
-                                    jQuery(document).ready(function () {
-                                        //     if (event.detail.key === 'payer.mobile_number1') {
-                                                let input = document.querySelector('#mobile_number1');
-                                        let iti = window.setupPhoneField(input);
+                                    <div wire:ignore>
+                                        <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->lead->mobile_number }}" placeholder="Primary Phone*" required>
+                                        <script type="text/javascript">
+                                            jQuery(document).ready(function () {
+                                                let input = document.querySelector('#mobile_number');
+                                                let iti = window.setupPhoneField(input);
 
-
-                                        // jQuery(input).on('change', function (event) {
-                                        //     @this.set('payer.mobile_number1', iti.getNumber());
-                                        // });
-                                        // document.addEventListener('updateValue', function (event) {
-                                    //         input.value = event.detail.value;
-                                        //     }
-                                        // });
-                                    });
-                                </script>
+                                                jQuery(input).on('change', function (event) {
+                                                    @this.set('lead.mobile_number', iti.getNumber());
+                                                });
+                                                document.addEventListener('updateValue', function (event) {
+                                                    if (event.detail.key === 'lead.mobile_number') {
+                                                        input.value = event.detail.value;
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                    @error('lead.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
                                 </div>
                             </div>
                         </div>
@@ -225,7 +217,7 @@
                                 </label>
                             </div>
                             <div class="right-assets">
-                                <p>{{ f_currency_booking($booking->repository->getTotalCost()) }}</p>
+                                <p>{{ $this->formatCurrency($booking->repository->getTotalCost()) }}</p>
                             </div>
                         </div>
                        
@@ -238,13 +230,13 @@
                             @endphp
                         <div class="form-field-checkbox" wire:click="setPayFull(0)">
                             <div class="left-ass">
-                                <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now. <br /> You will receive a reminder to pay the remaining balance of {{ f_currency_booking($remainingAmount) }} before {{ $booking->tour->final_payment->format('d M Y') }}</span></span>
+                                <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now. <br /> You will receive a reminder to pay the remaining balance of {{  $this->formatCurrency($remainingAmount) }} before {{ $booking->tour->final_payment->format('d M Y') }}</span></span>
                                     <input type="checkbox" @if(!$payFull) checked @endif>
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
                             <div class="right-assets">
-                                <p>{{ f_currency_booking($booking->repository->getDueTodayAmount()) }}</p>
+                                <p>{{ $this->formatCurrency($booking->repository->getDueTodayAmount()) }}</p>
                             </div>
                         </div>
 

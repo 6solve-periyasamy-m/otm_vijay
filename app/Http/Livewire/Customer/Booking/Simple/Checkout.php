@@ -12,7 +12,10 @@ use App\Models\Helper\Enum\BookingTravellerRole;
 use App\Models\Location\Address;
 use App\Models\Location\Currency;
 use Carbon\Carbon;
+use Exception;
+use Gateway;
 use Livewire\Component;
+use Log;
 use Settings;
 
 class Checkout extends Component
@@ -23,48 +26,52 @@ class Checkout extends Component
 
     public Booking|int $booking;
     public BookingTraveller $payer;
+    public BookingTraveller $lead;
     public Address $payerAddress;
 
     public bool $payFull = true;
     public bool $terms = false;
     public string|null $selectedCurrency = null;
+    public $is_different_traveller = false;
 
     public function mount(Booking|int $booking)
     {
         $this->booking = Booking::getForMount($booking);
         $this->payer = $this->booking->leadTraveller;
+        $this->lead = $this->booking->leadTraveller;
         $this->payerAddress = $this->payer->billingAddress ?? new Address();
         $this->updateSurchargeAmount();
         $this->selectedCurrency = $this->getCurrency()?->code;
     }
 
-    private function updateSurchargeAmount(): void
+    public function updated($key, $value): void
     {
-        $amount = $this->getSurchargeAmount();
-        $this->dispatchBrowserEvent('surcharge-update', ['amount' => $amount, 'text' => fr_currency($amount, $this->booking->currency), 'percent' => $this->getSurchargePercentage(),]);
+        $this->validateOnly($key);
+        if ($key === 'is_different_traveller') {
+            // Value is a string at this point, so needs converting
+            $this->setLeadPaying(filter_var($value, FILTER_VALIDATE_BOOLEAN));
+        }
+        $this->saveAll();
     }
 
-    public function getSurchargeAmount(): float|null
+    public function setLeadPaying(bool $areDifferent = false): void
     {
-        $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
-        return StripeGateway::getAmountForSurcharge($this->getCurrency(), $amount * 100) / 100;
-    }
-
-    public function getSurchargePercentage(): float|null
-    {
-        return StripeGateway::getStripeSurcharge($this->getCurrency());
-    }
-
-    public function toggleLeadPaying(): void
-    {
-        if ($this->payer->id === $this->booking->lead_traveller_id) {
-            $this->payer =
-                $this->booking->travellers()->where('role', '=', BookingTravellerRole::NOT_TRAVELLING)->first()
-                ?? $this->booking->repository->makeTraveller([
-                    'role' => BookingTravellerRole::NOT_TRAVELLING,
-                ]);
+        if ($areDifferent) {
+            if ($this->lead->id !== $this->payer->id) { return; }
+            $this->payer->repository->moveComponents($this->lead);
+            $this->payer->role = BookingTravellerRole::NOT_TRAVELLING;
+            $this->lead = BookingTraveller::make([
+                'role' => BookingTravellerRole::NORMAL,
+                'booking_id' => $this->booking->id,
+            ]);
+            $this->lead->save();
+            $this->payer->repository->moveComponents($this->lead);
         } else {
-            $this->payer = $this->booking->leadTraveller;
+            if ($this->lead->id === $this->payer->id) { return; }
+            $this->lead->repository->moveComponents($this->payer);
+            $this->lead->delete();
+            $this->payer->role = BookingTravellerRole::NORMAL;
+            $this->lead = $this->payer;
         }
         $this->updateValue('payer.mobile_number', $this->payer->mobile_number);
     }
@@ -84,77 +91,75 @@ class Checkout extends Component
         $this->updateSurchargeAmount();
     }
 
-    private function saveAll()
+    private function saveAll(): void
     {
         $this->booking->save();
         $this->payer->date_of_birth = Carbon::parse($this->payer->date_of_birth)->format('Y-m-d');
-        $this->payer->save();
-        $this->booking->lead_traveller_id = $this->payer->id;
-        if ($this->payer->homeAddress === null) {
-            $address = Address::create([
-                'name' => $this->payer->first_name . ' ' . $this->payer->last_name . ' Home Address',
-                'parent' => AddressParent::CUSTOMER,
-                'postcode' => $this->payerAddress->postcode,
-            ]);
-            $this->payer->homeAddress()->associate($address);
-            $this->payer->save();
+        $this->payer = $this->saveTraveller($this->payer, $this->payerAddress->postcode);
+        if ($this->payer->id !== $this->lead->id) {
+            $this->lead = $this->saveTraveller($this->lead);
         }
-        if ($this->payer->homeAddress === null) {
-            $address = Address::create([
-                'name' => $this->payer->first_name . ' ' . $this->payer->last_name . ' Billing Address',
-                'parent' => AddressParent::CUSTOMER,
-                'postcode' => $this->payerAddress->postcode,
-            ]);
-            $this->payer->billingAddress()->associate($address);
-            $this->payer->save();
-        }
-        $this->payer->homeAddress->postcode = $this->payerAddress->postcode;
-        $this->payer->homeAddress->save();
-        $this->payer->billingAddress->postcode = $this->payerAddress->postcode;
-        $this->payer->billingAddress->save();
     }
-
-    private function preCheckout(): void
+    
+    private function saveTraveller(BookingTraveller $traveller, string|null $postcode = null): BookingTraveller
     {
-        $this->validate();
-        $this->saveAll();
-        foreach ($this->booking->travellers as $traveller) {
-            $traveller->repository->validateIncluded();
+        $traveller->booking_id = $this->booking->id;
+        if ($traveller->homeAddress === null) {
+            $address = Address::create([
+                'name' => $traveller->first_name . ' ' . $traveller->last_name . ' Home Address',
+                'parent' => AddressParent::CUSTOMER,
+                'postcode' => $postcode,
+            ]);
+            $traveller->homeAddress()->associate($address);
+            $traveller->save();
         }
-        $this->updateSurchargeAmount();
+        if ($traveller->homeAddress === null) {
+            $address = Address::create([
+                'name' => $traveller->first_name . ' ' . $traveller->last_name . ' Billing Address',
+                'parent' => AddressParent::CUSTOMER,
+                'postcode' => $postcode,
+            ]);
+            $traveller->billingAddress()->associate($address);
+            $traveller->save();
+        }
+        $traveller->save();
+        return $traveller;
     }
 
     public function checkout()
     {
+        $this->validate();
+        $this->saveAll();
+        $this->updateSurchargeAmount();
+
+        if (!$this->terms) {
+            return $this->addError('common', 'You must accept terms and conditions.');
+        }
+
         if (!$this->booking->repository->validateStock()) {
             $bEmail = $this->booking->tour->brand->email;
             return $this->addError('common', "Some components in this package are out-of-stock. Please contact us at {$bEmail} for alternative options.");
         }
-        if (!$this->terms) { return $this->addError('common', 'You must accept terms and conditions.'); }
-        $this->preCheckout();
+
         $amount = ($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()) * $this->getFXRate();
         try {
-            $keys = $this->booking->repository->getAirwallexKeys($amount);
-            if (\Gateway::getPaymentGateway('stripe') !== null) {
+            if (Gateway::getPaymentGateway('stripe') !== null) {
                 $this->popupStripe($this->payFull);
                 return null;
-            } else if ($keys !== null && array_key_exists('id', $keys) && array_key_exists('secret', $keys)) {
+            }
+
+            $keys = $this->booking->repository->getAirwallexKeys($amount);
+            if ($keys !== null && array_key_exists('id', $keys) && array_key_exists('secret', $keys)) {
                 $this->popupAirwallex($keys['id'], $keys['secret']);
                 return null;
-            } else {
-                return redirect($this->booking->repository->getCheckoutLink($amount));
             }
-        } catch (\Exception $e) {
-            \Log::error($e);
+
+            return redirect($this->booking->repository->getCheckoutLink($amount));
+        } catch (Exception $e) {
+            Log::error($e);
             $this->addError('common', 'Something went wrong with our payment processing. Please try again later.');
             return null;
         }
-    }
-
-    public function updated($key, $value): void
-    {
-        $this->validateOnly($key);
-        $this->saveAll();
     }
 
     public function render()
@@ -163,8 +168,6 @@ class Checkout extends Component
         return view('livewire.customer.booking.simple.checkout');
     }
 
-    public $is_different_traveller = false;
-
     public function rules()
     {
         return [
@@ -172,26 +175,14 @@ class Checkout extends Component
             'payer.last_name' => 'required|string',
             'payer.email_address' => 'required|email:rfc,dns',
             'payer.mobile_number' => 'required|phone:INTERNATIONAL',
+            'lead.first_name' => 'required_with:is_different_traveller|string',
+            'lead.last_name' => 'required_with:is_different_traveller|string',
+            'lead.email_address' => 'required_with:is_different_traveller|email:rfc,dns',
+            'lead.mobile_number' => 'required_with:is_different_traveller|phone:INTERNATIONAL',
             'payer.date_of_birth' => 'nullable|date:d-m-Y',
             'payerAddress.postcode' => 'nullable|string',
             'booking.notes' => 'nullable|string',
         ];
-        // $rules = [
-        //     'payer.first_name' => 'required|string',
-        //     'payer.last_name' => 'required|string',
-        //     'payer.email_address' => 'required|email:rfc,dns',
-        //     'payer.mobile_number' => 'required|phone:INTERNATIONAL',
-        //     'payer.date_of_birth' => 'nullable|date:d-m-Y',
-        //     'payerAddress.postcode' => 'required|string',
-        //     'booking.notes' => 'nullable|string',
-        // ];
-        // if ($this->is_different_traveller) {
-        //     $rules['payer.first_name1'] = 'required|string';
-        //     $rules['payer.last_name1'] = 'required|string';
-        //     $rules['payer.email_address1'] = 'required|email:rfc,dns';
-        //     $rules['payer.mobile_number1'] = 'required|phone:INTERNATIONAL';
-        // }
-        // return $rules;
     }
 
     private function popupAirwallex(string $id, string $secret): void
@@ -231,5 +222,22 @@ class Checkout extends Component
             $this->booking->repository->updateCurrency($currency);
             $this->render();
         }
+    }
+
+    private function updateSurchargeAmount(): void
+    {
+        $amount = $this->getSurchargeAmount();
+        $this->dispatchBrowserEvent('surcharge-update', ['amount' => $amount, 'text' => fr_currency($amount, $this->booking->currency), 'percent' => $this->getSurchargePercentage(),]);
+    }
+
+    public function getSurchargeAmount(): float|null
+    {
+        $amount = $this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount();
+        return StripeGateway::getAmountForSurcharge($this->getCurrency(), $amount * 100) / 100;
+    }
+
+    public function getSurchargePercentage(): float|null
+    {
+        return StripeGateway::getStripeSurcharge($this->getCurrency());
     }
 }
