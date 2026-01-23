@@ -1,4 +1,5 @@
 <x-admin.section.card>
+    <x-slot:title>{{ $sales ? 'Sales' : 'Internal' }} Conversion Rate</x-slot:title>
     <div class="row">
         <x-livewire.input.select.currency name="rate.from_currency_id" value="{{ $rate?->from_currency_id }}" label="From Currency" width="2" />
         <x-livewire.input.select.currency name="rate.to_currency_id" value="{{ $rate?->to_currency_id }}" label="To Currency" width="2" />

@@ -15,6 +15,7 @@ class Form extends ModalComponent
     /** @var ConversionRate|null $rate */
     public ConversionRate|int|null $rate = null;
     public bool $estimateInverse = false;
+    public bool $sales = false;
 
     public function mount(ConversionRate|int|null $rate = null)
     {
@@ -49,12 +50,14 @@ class Form extends ModalComponent
     public function save()
     {
         $this->validate();
+        $this->rate->sales = $this->sales;
         $this->rate->save();
         if ($this->estimateInverse && $this->canEstimateInverse()) {
             $inverse = $this->getInverseRateObject() ??
                 ConversionRate::make([
                     'from_currency_id' => $this->rate->to_currency_id,
                     'to_currency_id' => $this->rate->from_currency_id,
+                    'sales' => $this->sales,
                 ]);
             $inverse->rate = sigfig($this->rate->rate == 0 ? 0 : (1.0 / $this->rate->rate));
             $inverse->save();
