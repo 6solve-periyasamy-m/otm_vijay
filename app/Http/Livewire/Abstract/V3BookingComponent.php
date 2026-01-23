@@ -189,9 +189,9 @@ abstract class V3BookingComponent extends Component
         return $this->booking->currency ?? Settings::currency();
     }
 
-    public function getFXRate()
+    public function getFXRate(): float
     {
-        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency(), true) ?? Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
     }
 
     public function formatCurrency(float|int|null $value, ?int $decimalPrecision = 0): string
