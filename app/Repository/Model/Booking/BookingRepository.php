@@ -952,6 +952,10 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
     public function processComponentsFromApi(array $information): void
     {
         $components = [];
+        $bookingTravellerCount = $this->booking->travellers()->count();
+        $selectedTravellerCount = $this->resolveSelectedTravellerCount($information);
+        $this->booking->repository->syncUnknownTravellers($selectedTravellerCount);
+        
         foreach ($information as $data) {
             $tData = explode('-', $data['component']);
             if (count($tData) < 2) {
@@ -982,6 +986,37 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
                 }
             }
         }
+    }
+
+    private function resolveSelectedTravellerCount(array $information): int
+    {
+        $counts = array_map(
+            fn ($item) => (int) ($item['travellers'] ?? 0),
+            $information
+        );
+        if (empty($counts)) {
+            throw new IncorrectQuantityException('No traveller selection found');
+        }
+        return count(array_unique($counts)) === 1 ? $counts[0] : max($counts);
+    }
+
+
+    public function syncUnknownTravellers(int $targetCount): void
+    {
+        $currentCount = $this->booking->travellers()->count();
+        $difference = $targetCount - $currentCount;
+        DB::transaction(function () use ($difference) {
+            if ($difference > 0) {
+                for ($i = 0; $i < $difference; $i++) {
+                    $this->addUnknownTraveller();
+                }
+            }
+            if ($difference < 0) {
+                for ($i = 0; $i < abs($difference); $i++) {
+                    $this->removeUnknownTraveller();
+                }
+            }
+        });
     }
 
     public function getUpgradesForPackageDetails(): array
