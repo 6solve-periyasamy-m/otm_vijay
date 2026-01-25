@@ -21,6 +21,8 @@ use App\Repository\Model\Booking\BookingRepository;
 use App\Models\Order\Order;
 use App\Models\Order\Payment\Payment;
 use App\Models\Order\Payment\PaymentIntention;
+use App\Models\Order\Payment\PaymentMethod;
+use App\Models\Customer\Customer;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 use Stripe\PaymentIntent;
@@ -244,10 +246,7 @@ class BookingController extends ApiController
         $booking = $request->getBooking();
         // Validate booking has required data
         if (!$booking->leadTraveller || !$booking->leadTraveller->email_address) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Lead traveller email is required to create order'
-            ], 422);
+            return response()->json(['success' => false, 'message' => 'Lead traveller email is required to create order'], 422);
         }
 
         // Check if order already exists
@@ -307,6 +306,19 @@ class BookingController extends ApiController
         }
     }
 
+    private function fetchStripePayment(string $paymentIntentId): PaymentIntent
+    {
+        $stripe = new StripeClient(config('app.gateways.stripe.secret'));
+        return $stripe->paymentIntents->retrieve(
+            $paymentIntentId,
+            ['expand' => [
+                'latest_charge',
+                'charges.data.balance_transaction'
+                ],
+            ]
+        );
+    }
+
 
     /**
      * Confirm Stripe payment and update order
@@ -318,14 +330,13 @@ class BookingController extends ApiController
             'payment_intent_id' => 'required|string',
             'payment_method_id' => 'nullable|string',
             'payment_method_details' => 'nullable|array',
+            'payment_type' => 'nullable|string',
             'billing_details' => 'nullable|array',
             'amount' => 'required|numeric|min:0',
             'currency' => 'required|string|size:3',
             'status' => 'required|string|in:succeeded,processing,requires_action,requires_payment_method,canceled',
             'payment_method_type' => 'nullable|string',
-            'setup_future_usage' => 'nullable|string',
             'receipt_url' => 'nullable|url',
-            'customer_id' => 'nullable|string',
             'metadata' => 'nullable|array',
         ]);
 
@@ -348,20 +359,60 @@ class BookingController extends ApiController
 
         try {
 
-            // Need to be work on the payment section
-            return response()->json(['success' => true, 'message' => 'successful updated']);
+            DB::beginTransaction();
+            $paymentIntent = $this->fetchStripePayment($request->payment_intent_id);
 
-            //DB::beginTransaction();
-            // Create payment record in database
-            //$payment = $this->createPaymentRecord($order, $request->all(), $booking);
+            if ($paymentIntent->status !== 'succeeded') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Payment not completed',
+                    'status'  => $paymentIntent->status
+                ], 422);
+            }
 
-        } catch (\Stripe\Exception\ApiErrorException $e) {
-            \Log::error('Stripe API error: ' . $e->getMessage(), ['booking_id' => $booking->id,'order_id' => $order->id,'payment_intent_id' => $request->payment_intent_id]);
-            return response()->json([ 'success' => false,'message' => 'Stripe API error: ' . $e->getMessage()], 500);
+            $charge = null;
+            if (!empty($paymentIntent->latest_charge)) {
+                $charge = is_string($paymentIntent->latest_charge)
+                    ? $stripe->charges->retrieve($paymentIntent->latest_charge)
+                    : $paymentIntent->latest_charge;
+            }
+
+            $gatewayType = 'stripe';
+            $paymentMethod = PaymentMethod::findOrCreate($gatewayType);
+
+            //Save Payment Intent snapshot
+            PaymentIntention::updateOrCreate(
+                ['id' => $paymentIntent->id],
+                [
+                    'customer_id' => $booking->leadTraveller?->customer_id,
+                    'type'        => $request->payment_type ?? 'Deposit',
+                    'reference'   => $order->booking_reference,
+                    'amount'      => $paymentIntent->amount_received / 100,
+                    'data'        => json_encode($paymentIntent->toArray()),
+                    'processed'   => $paymentIntent->status === 'succeeded',
+                ]
+            );
+
+            //Create Payment record
+            $payment = Payment::create([
+                'order_id'         => $order->id,
+                'payment_method_id'=> $paymentMethod->id,
+                'payer_id'         => $booking->leadTraveller?->customer_id,
+                'payer_type'       => Customer::class,
+                'amount'           => $paymentIntent->amount_received / 100,
+                'paid_on'          => now(),
+                'payment_fee'      => 0 / 100,
+                'currency_id'      => $order->currency_id,
+                'internal_notes'   => null,
+            ]);
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Payment confirmed successfully']);
         } catch (\Exception $e) {
             \Log::error('Payment confirmation error: ' . $e->getMessage(), [ 'booking_id' => $booking->id, 'order_id' => $order->id ]);
-            return response()->json(['success' => false, 'message' => 'Failed to confirm payment: ' . $e->getMessage()], 500);
+            return response()->json([ 'success' => false, 'message' => 'Payment confirmation failed', ], 500);
         }
 
     }
+
+
 }
