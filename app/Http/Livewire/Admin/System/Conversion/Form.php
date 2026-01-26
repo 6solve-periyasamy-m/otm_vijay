@@ -47,6 +47,14 @@ class Form extends ModalComponent
             ->where('to_currency_id', $this->rate->from_currency_id)->first();
     }
 
+    public function getEstimatedRate(): float
+    {
+        if (empty($this->rate->rate) || $this->rate->rate == 0) {
+            return 0.0;
+        }
+        return sigfig(1 / ($this->rate->rate ?? 1));
+    }
+
     public function save()
     {
         $this->validate();

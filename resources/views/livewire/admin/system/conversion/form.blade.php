@@ -10,7 +10,7 @@
             <x-livewire.input.checkbox wire:model="estimateInverse" label="Estimate inverse rate" width="2" disabled />
         @endif
         <div class="col-xl-2">
-            Est. Rate: {{ sigfig(1 / ($rate->rate ?? 1)) }}
+            Est. Rate: {{ $this->getEstimatedRate() }}
             <br />
             @if($this->getInverseRateObject() !== null)
                 Will Overwrite
