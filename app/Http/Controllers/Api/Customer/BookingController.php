@@ -104,12 +104,20 @@ class BookingController extends ApiController
         $booking = $request->getBooking();
         try {
             $components = $request->components();
+            dd([
+                'all' => $request->all(),
+                'json' => $request->json()->all(),
+                'input' => $request->input(),
+                'raw' => $request->getContent(),
+                'headers' => $request->headers->all(),
+            ]);
             if (!$components) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Components are missing'
                 ], 422);
             }
+            dd($components);
             $booking->repository->processComponentsFromApi($components);
         } catch (BookingApiException $e) {
             return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
