@@ -11,11 +11,15 @@ use App\Models\Location\Currency;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
 use App\Repository\Model\Booking\BookingTravellerRepository;
+use App\Models\Traits\CapturesBookingSource;
+use Illuminate\Http\Request;
 use Livewire\Component;
 use Settings;
 
 class Rooming extends Component
 {
+    use CapturesBookingSource;
+
     private const MAX_TRAVELLERS = 5;
 
     protected $messages = [
@@ -45,6 +49,7 @@ class Rooming extends Component
         if ($this->booking->id === null) {
             $this->booking = BookingRepository::make($this->tour);
             $this->booking->currency_id = Currency::getForMount($currency)?->id;
+            $this->captureBookingSource(request(), $this->booking, 'web_simple');
             $this->booking->save();
         }
 

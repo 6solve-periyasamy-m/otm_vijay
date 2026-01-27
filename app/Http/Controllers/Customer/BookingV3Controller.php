@@ -8,12 +8,15 @@ use App\Models\Location\Currency;
 use App\Models\Quote\Quote;
 use App\Models\Tour\Tour;
 use App\Repository\Model\Booking\BookingRepository;
+use App\Models\Traits\CapturesBookingSource;
 use Cookie;
 use Illuminate\Http\Request;
 use Settings;
 
 class BookingV3Controller extends Controller
 {
+    use CapturesBookingSource;
+
     public const ALLOWED_CURRENCIES = ['AUD', 'USD', /* 'EUR', 'GBP', */];
 
     public function guest(Request $request, string $tour, string|null $booking = null)
@@ -22,6 +25,7 @@ class BookingV3Controller extends Controller
         $booking = $this->getBooking($tour, $booking);
         if ($booking === null) {
             $booking = BookingRepository::make($tour);
+            $this->captureBookingSource($request, $booking, 'web_v3');
             if ($request->currency !== null && in_array(strtoupper($request->currency), self::ALLOWED_CURRENCIES)) {
                 $booking->currency_id = Currency::where('code', '=', $request->currency)->first()?->id;
             }
