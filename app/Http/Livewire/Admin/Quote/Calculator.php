@@ -96,16 +96,16 @@ class Calculator extends Component
             if ($this->fromRate === null) {
                 $this->profit = null;
             } else {
-                $this->profit = sigfig(sigfig($this->total * $this->fromRate) - $this->costToCompany);
+                $this->profit = sigfig(sigfig($this->total) - $this->costToCompany);
             }
         } else {
             $this->profit = sigfig($this->total - $this->costToCompany);
         }
-        $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total * $this->fromRate) - $this->costToCompany) / ($this->total * $this->fromRate)) * 100);
+        $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total) - $this->costToCompany) / ($this->total)) * 100);
 
-        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * $this->fromRate) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
+        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
 
-        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * ($this->toRate ?? 1.0));
+        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * $this->toRate);
 
         $roundValue = (float)setting('round.base_price', null);
         if (!empty($roundValue)) {
