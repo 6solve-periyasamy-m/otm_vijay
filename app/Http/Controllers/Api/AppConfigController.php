@@ -35,14 +35,16 @@ class AppConfigController extends ApiController
                 'booking' => setting('booking.success.redirect', ''),
             ],
 
-            /*'stripe' => [
-                'publishable_key' => $this->stripeKey($defaultCurrency),
+            'stripe' => [
+                'publishable_aud' => config('app.gateways.stripe.currencies.aud.client', config('app.gateways.stripe.publishable')),
+                'publishable_usd' => config('app.gateways.stripe.currencies.usd.client', config('app.gateways.stripe.publishable')),
             ],
 
-            'contact' => $this->contactDetails($defaultCurrency), */
+            /*'contact' => $this->contactDetails($defaultCurrency), */
         ]);
     }
 
+    
     /**
      * Currency list
      */
