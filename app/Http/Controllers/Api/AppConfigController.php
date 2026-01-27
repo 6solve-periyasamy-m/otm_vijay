@@ -36,8 +36,8 @@ class AppConfigController extends ApiController
             ],
 
             'stripe' => [
-                'publishable_aud' => config('app.gateways.stripe.currencies.aud.client', config('app.gateways.stripe.publishable')),
-                'publishable_usd' => config('app.gateways.stripe.currencies.usd.client', config('app.gateways.stripe.publishable')),
+                'publishable_aud' => config('app.gateways.stripe.currencies.AUD.client', config('app.gateways.stripe.publishable')),
+                'publishable_usd' => config('app.gateways.stripe.currencies.USD.client', config('app.gateways.stripe.publishable')),
             ],
 
             /*'contact' => $this->contactDetails($defaultCurrency), */
