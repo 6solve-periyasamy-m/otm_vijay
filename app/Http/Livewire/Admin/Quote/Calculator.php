@@ -41,7 +41,9 @@ class Calculator extends Component
     public string|float|null $markup = null;
     public float|null $commission = null;
     public bool $adjust = false;
+    /** @var float|null $fromRate The conversion rate when converting from the quote currency */
     public float|null $fromRate = null;
+    /** @var float|null $fromRate The conversion rate when converting to the quote currency */
     public float|null $toRate = null;
     public float $toBePaid;
     public float|string $marked_up_price = 0;
@@ -53,8 +55,8 @@ class Calculator extends Component
         $this->quote->repository->recache();
         $this->paying = $this->quote->paying ?? 0;
         $this->travelling = $this->quote->travelling ?? 0;
-        $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency, true) ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency) ?? 1;
-        $this->toRate = $this->quote->to_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
+        $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency(), true) ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
+        $this->toRate = $this->quote->to_rate ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency, true) ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency, true) ?? 1;
         $this->calculate(false);
     }
 
@@ -103,7 +105,7 @@ class Calculator extends Component
 
         $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * $this->fromRate) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
 
-        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))));
+        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * ($this->toRate ?? 1.0));
 
         $roundValue = (float)setting('round.base_price', null);
         if (!empty($roundValue)) {
