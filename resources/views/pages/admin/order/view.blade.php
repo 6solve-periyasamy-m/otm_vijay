@@ -5,9 +5,9 @@
 /** @var bool $nonSystem Is the order using a non-system currency */
 $nonSystem = $order->currency !== null && $order->currency !== Settings::currency();
 /** @var float|null $fromSystem conversion rate from system currency */
-$fromSystem = \Settings::getConversionRate(\Settings::currency(), $order->currency);
+$fromSystem = \Settings::getConversionRate(\Settings::currency(), $order->currency, true) ?? \Settings::getConversionRate(\Settings::currency(), $order->currency) ?? 1.0;
 /** @var float|null $toSystem conversion rate to system currency */
-$toSystem = \Settings::getConversionRate($order->currency, \Settings::currency());
+$toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()) ?? 1.0;
 @endphp
 
 @extends('layout.master')
