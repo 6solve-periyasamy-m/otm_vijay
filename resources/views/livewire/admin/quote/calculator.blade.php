@@ -210,8 +210,8 @@
                     @if($quote->currency !== null)
                         @if(!($adjust ?? false))
                             <div class="col-8 row">
-                                <x-livewire.input width="4" wire:model="fromRate" label="From {{$quote->currency?->code}}" disabled />
-                                <x-livewire.input width="4" wire:model="toRate" label="To {{$quote->currency?->code}}" disabled />
+                                <x-livewire.input width="4" wire:model="fromRate" label="{{$quote->currency?->code}} to {{ Settings::currency()->code }}" disabled />
+                                <x-livewire.input width="4" wire:model="toRate" label="{{Settings::currency()->code}} to {{ $quote->currency?->code }}" disabled />
                                 <div class="col-4">
                                     <button class="btn btn-warning" wire:click="enableEditing">Adjust</button>
                                 </div>
