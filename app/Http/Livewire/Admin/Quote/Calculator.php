@@ -96,10 +96,10 @@ class Calculator extends Component
             if ($this->fromRate === null) {
                 $this->profit = null;
             } else {
-                $this->profit = sigfig(sigfig($this->total) - $this->costToCompany);
+                $this->profit = sigfig(sigfig($this->total * $this->fromRate) - $this->costToCompany);
             }
         } else {
-            $this->profit = sigfig($this->total - $this->costToCompany);
+            $this->profit = sigfig(($this->total) - $this->costToCompany);
         }
         $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total) - $this->costToCompany) / ($this->total)) * 100);
 
