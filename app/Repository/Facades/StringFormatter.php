@@ -8,7 +8,7 @@ use Carbon\Exceptions\InvalidFormatException;
 
 class StringFormatter
 {
-    public function formatCurrency($value, $currentCurrency = null, $conversion = null, $toCurrency = null) : string {
+    public function formatCurrency($value, $currentCurrency = null, $conversion = null, $toCurrency = null, bool $flip = false) : string {
         $systemCurrency = \Settings::currency();
         if (is_string($currentCurrency) && $currentCurrency !== $systemCurrency?->code) { $currentCurrency = Currency::fromCode($currentCurrency); }
         if (is_string($toCurrency) && $toCurrency !== $systemCurrency?->code) { $toCurrency = Currency::fromCode($toCurrency); }
@@ -17,6 +17,9 @@ class StringFormatter
         if ($currentCurrency !== $toCurrency) {
             $rate = $conversion ?? \Settings::getConversionRate($currentCurrency, $toCurrency);
             if ($rate !== null && $rate != 1) {
+                if ($flip) {
+                    return $this->currency($value, $currentCurrency)  . " (" . $this->currency(sigfig($value * $rate), $toCurrency) . ")";
+                }
                 return $this->currency(sigfig($value * $rate), $toCurrency)  . " (" . $this->currency($value, $currentCurrency) . ")";
             }
         }

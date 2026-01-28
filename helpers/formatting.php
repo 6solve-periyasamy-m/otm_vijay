@@ -14,11 +14,12 @@ if (!function_exists('f_currency')) {
      * @param Currency|string|null $currency
      * @param float|null $conversion
      * @param Currency|string|null $toCurrency
+     * @param bool $flip Should the display order be flipped?
      * @return string
      */
-    function f_currency(?float $amount, Currency|string|null $currency = null, ?float $conversion = null, Currency|string|null $toCurrency = null): string
+    function f_currency(?float $amount, Currency|string|null $currency = null, ?float $conversion = null, Currency|string|null $toCurrency = null, bool $flip = false): string
     {
-        return StringFormatter::formatCurrency($amount, $currency, $conversion, $toCurrency);
+        return StringFormatter::formatCurrency($amount, $currency, $conversion, $toCurrency, $flip);
     }
 }
 if (!function_exists('fr_currency')) {
