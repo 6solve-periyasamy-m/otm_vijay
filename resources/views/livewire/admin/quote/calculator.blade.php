@@ -205,7 +205,7 @@
                 </div>
                 <div class="col-6 row">
                     <div class="col-4">
-                        <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>
+                        {{-- <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>--}}
                     </div>
                     @if($quote->currency !== null)
                         @if(!($adjust ?? false))
