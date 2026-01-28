@@ -401,6 +401,7 @@ class ReportRepository
             $row->contact_email = $cDetailsSource?->email_address ?? "Unknown";
             $row->contact_number = $cDetailsSource?->mobile_number ?? "Unknown";
             $row->last_page = $booking->last_page;
+            $row->created_ip = $booking->created_ip;
             if (isset($booking->tour?->booking_form_url)) {
                 $row->continue = $booking->tour?->getBookingFormUrl($booking, true);
             } else {

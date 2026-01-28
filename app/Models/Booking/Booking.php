@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships as HasDeepRelations;
 use App\Models\Helper\Traits\HasNotifications;
+use App\Models\Traits\CapturesBookingSource;
 
 /**
  * App\Models\Booking\Booking
@@ -88,7 +89,7 @@ use App\Models\Helper\Traits\HasNotifications;
  */
 class Booking extends Model
 {
-    use HasDeepRelations, HasNotifications;
+    use HasDeepRelations, HasNotifications, CapturesBookingSource;
 
     public const DEFAULT_EXPIRY = 2 * 60;
 
@@ -214,5 +215,12 @@ class Booking extends Model
             ->whereNull('booking_travellers.first_name')
             ->whereNull('booking_travellers.last_name')
             ->whereNull('booking_travellers.email_address');
+    }
+
+    protected static function booted()
+    {
+        static::creating(function (Booking $booking) {
+            $booking->captureBookingSource();
+        });
     }
 }

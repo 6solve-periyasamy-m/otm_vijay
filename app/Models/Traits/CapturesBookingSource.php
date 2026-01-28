@@ -7,15 +7,22 @@ use Illuminate\Http\Request;
 
 trait CapturesBookingSource
 {
-    protected function captureBookingSource(Request $request, Booking $booking,string $defaultSource): void 
+    public function captureBookingSource(): void
     {
-        if (!empty($booking->source)) { return; }
-        $booking->source = $request->header(
-            'X-Booking-Source',
-            $defaultSource
-        );
-        $booking->created_ip = $request->ip();
-        $booking->user_agent = substr((string) $request->userAgent(), 0, 255);
-        $booking->source_referrer = $request->headers->get('referer');
+        if (app()->runningInConsole() || !request() instanceof Request) {
+            return;
+        }
+        if (request()->is('api/*')) {
+            $this->source = request()->header('X-Booking-Source', 'web_tickets');
+        } elseif (request()->is('booking/simple/*')) {
+            $this->source = 'web_simple';
+        } elseif (request()->is('booking/v3/*')) {
+            $this->source = 'web_v3';
+        } else {
+            $this->source = 'unknown';
+        }
+        $this->source_referrer = request()->headers->get('referer');
+        $this->created_ip      = request()->ip();
+        $this->user_agent      = request()->userAgent();
     }
 }
