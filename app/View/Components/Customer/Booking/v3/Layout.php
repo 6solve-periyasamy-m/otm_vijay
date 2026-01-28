@@ -9,7 +9,6 @@ use App\Models\Tour\Tour;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Settings;
 
 class Layout extends Component
 {
@@ -35,12 +34,12 @@ class Layout extends Component
 
     public function getCurrency(): Currency
     {
-        return $this->booking->currency ?? Settings::currency();
+        return $this->booking->repository->getCurrency();
     }
 
-    public function getFXRate()
+    public function getFXRate(): float
     {
-        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
+        return $this->booking->repository->getFXRate();
     }
 
     public function formatCurrency(float|int|null $value, int $decimalPrecision = 0): string

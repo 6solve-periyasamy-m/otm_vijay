@@ -200,14 +200,14 @@ class Checkout extends Component
         ]);
     }
 
-    public function getCurrency()
+    public function getCurrency(): Currency
     {
-        return $this->booking->currency ?? Settings::currency();
+        return $this->booking->repository->getCurrency();
     }
 
     public function getFXRate(): float
     {
-        return Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
+        return $this->booking->repository->getFXRate();
     }
 
     public function formatCurrency(int|float|null $value, bool $round = true, int $decimalPrecision = 0): string
