@@ -17,7 +17,6 @@ use Illuminate\Support\Carbon;
  * @property int $to_currency_id
  * @property float $rate
  * @property boolean $automatic
- * @property boolean $sales Is this rate intended to be used for sales or internal
  * @property Carbon $changed
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

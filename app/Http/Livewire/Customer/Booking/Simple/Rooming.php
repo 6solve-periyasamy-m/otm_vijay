@@ -227,14 +227,14 @@ class Rooming extends Component
         ];
     }
 
-    public function getCurrency(): Currency
+    public function getCurrency()
     {
-        return $this->booking->repository->getCurrency();
+        return $this->booking->currency ?? Settings::currency();
     }
 
     public function getFXRate(): float
     {
-        return $this->booking->repository->getFXRate();
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
     }
 
     public function formatCurrency(int|float|null $value, int $decimalPrecision = 0): string
