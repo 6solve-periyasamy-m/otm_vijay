@@ -103,7 +103,7 @@ class Calculator extends Component
         }
         $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total) - $this->costToCompany) / ($this->total)) * 100);
 
-        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
+        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * ($this->fromRate ?? 1.0)) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
 
         $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * $this->toRate);
 
