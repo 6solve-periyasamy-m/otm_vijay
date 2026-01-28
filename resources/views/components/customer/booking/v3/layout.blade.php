@@ -4,7 +4,7 @@
     $captchaEnabled = setting('booking.captcha.key') && setting('booking.captcha.secret');
 @endphp
 <div>
-    <header>
+    <header wire:ignore>
         <div class="container">
             <div class="column">
                 @if(isset($this->brand))
