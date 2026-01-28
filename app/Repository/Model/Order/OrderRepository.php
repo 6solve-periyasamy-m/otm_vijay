@@ -1237,4 +1237,39 @@ class OrderRepository extends ModelRepository implements GeneratesFellohData
         }
         return $merged;
     }
+
+    public function getApiOrderData(): array
+    {
+        $order = $this->get();
+
+        return [
+            'id' => $order->id,
+            'booking_reference' => $order->booking_reference,
+            'status' => $order->status,
+            'ordered_on' => $order->ordered_on->toISOString(),
+            'deposit_paid_at' => $order->deposit_paid_at?->toISOString(),
+            'total_amount' => $order->total,
+            'deposit_amount' => $order->deposit,
+            'currency' => $order->currency?->code ?? 'USD',
+            'travellers' => $order->customers->map(function($customer) {
+                return [
+                    'id' => $customer->id,
+                    'name' => $customer->full_name,
+                    'email' => $customer->email_address,
+                    'role' => $customer->pivot?->role
+                ];
+            }),
+            'tour' => [
+                'id' => $order->tour->id,
+                'name' => $order->tour->name,
+                'date_from' => $order->tour->date_from->toISOString(),
+                'date_to' => $order->tour->date_to->toISOString()
+            ],
+            'lead_booker' => $order->leadBooker ? [
+                'id' => $order->leadBooker->id,
+                'name' => $order->leadBooker->full_name,
+                'email' => $order->leadBooker->email_address
+            ] : null
+        ];
+    }
 }

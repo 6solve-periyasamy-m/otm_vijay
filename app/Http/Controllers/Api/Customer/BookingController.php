@@ -18,10 +18,19 @@ use App\Models\Booking\Booking;
 use App\Models\Booking\BookingTraveller;
 use App\Models\Location\Currency;
 use App\Repository\Model\Booking\BookingRepository;
+use App\Models\Order\Order;
+use App\Models\Order\Payment\Payment;
+use App\Models\Order\Payment\PaymentIntention;
+use App\Models\Order\Payment\PaymentMethod;
+use App\Models\Customer\Customer;
+use Stripe\Exception\ApiErrorException;
+use Stripe\StripeClient;
+use Stripe\PaymentIntent;
 use Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Settings;
+use DB;
 
 class BookingController extends ApiController
 {
@@ -94,7 +103,14 @@ class BookingController extends ApiController
         }
         $booking = $request->getBooking();
         try {
-            $booking->repository->processComponentsFromApi($request->components);
+            $components = $request->components();
+            if (!$components) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Components are missing'
+                ], 422);
+            }
+            $booking->repository->processComponentsFromApi($components);
         } catch (BookingApiException $e) {
             return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
         }
@@ -120,7 +136,7 @@ class BookingController extends ApiController
         try {
 
             if (empty($lead->email_address)) {
-                return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => 'Lead traveller missing email for booking'], 400);
+                return response()->json(['success' => false, 'message' => 'Lead traveller missing email for booking'], 400);
             }
             $lead->update([
                 'last_name'       => $request->lead_last_name,
@@ -129,8 +145,9 @@ class BookingController extends ApiController
             ]);
             $repository = new BookingTravellerRepository($lead);
             $customer = $repository->convertToCustomer();
-            $lead->customer_id = $customer->id;
-            $lead->save();
+            $lead->update([
+                'customer_id'   => $customer->id,
+            ]);
         } catch (BookingApiException $e) {
             return response()->json(['success' => false, 'error' => $e->getErrorCode(), 'message' => $e->getMessage()], 400);
         }
@@ -223,4 +240,213 @@ class BookingController extends ApiController
         $html = preg_replace('/javascript:/i', '', $html);   // Remove javascript: urls
         return trim($html);
     }
+
+    /**
+     * Create order from booking (first step - before payment)
+     */
+    public function createOrder(BookingOverviewRequest $request): JsonResponse
+    {
+        $valid = $request->validatePackage();
+        if ($valid instanceof JsonResponse) {
+            return $valid;
+        }
+        $booking = $request->getBooking();
+        // Validate booking has required data
+        if (!$booking->leadTraveller || !$booking->leadTraveller->email_address) {
+            return response()->json(['success' => false, 'message' => 'Lead traveller email is required to create order'], 422);
+        }
+
+        // Check if order already exists
+        if ($booking->order_id) {
+            $existingOrder = Order::find($booking->order_id);
+            if ($existingOrder) {
+                return response()->json([
+                    'success' => true,
+                    'order' => $existingOrder->repository->getApiOrderData(),
+                    'booking' => $booking->repository->getSimpleData(),
+                    'message' => 'Order already exists for this booking'
+                ]);
+            }
+        }
+
+        try {
+            //dd("Start Order Convert");
+            // Convert booking to order
+            $order = $booking->repository->convertToOrder();
+
+            if (!$order) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to create order from booking'
+                ], 500);
+            }
+
+            // Get payment details
+            $dueToday = $booking->repository->getDueTodayAmount();
+            $totalAmount = $booking->repository->getTotalCost();
+            $currency = $booking->repository->getCurrency();
+
+            return response()->json([
+                'success' => true,
+                'order' => $order->repository->getApiOrderData(),
+                'payment' => [
+                    'due_today' => $dueToday,
+                    'total_amount' => $totalAmount,
+                    'currency' => $currency->code ?? 'USD',
+                    'currency_symbol' => $currency->symbol ?? '$',
+                    'order_id' => $order->id,
+                    'booking_reference' => $order->booking_reference
+                ],
+                'message' => 'Order created successfully. Proceed to payment.'
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Failed to create order: ' . $e->getMessage(), [
+                'booking_id' => $booking->id,
+                'error' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create order: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function fetchStripePayment(string $paymentIntentId): PaymentIntent
+    {
+        $stripe = new StripeClient(config('app.gateways.stripe.secret'));
+        return $stripe->paymentIntents->retrieve(
+            $paymentIntentId,
+            ['expand' => [
+                'latest_charge',
+                'charges.data.balance_transaction'
+                ],
+            ]
+        );
+    }
+
+
+    /**
+     * Confirm Stripe payment and update order
+     */
+    public function confirmPayment(Request $request): JsonResponse
+    {
+        $request->validate([
+            'booking_token' => 'required|string',
+            'payment_intent_id' => 'required|string',
+            'payment_method_id' => 'nullable|string',
+            'payment_method_details' => 'nullable|array',
+            'payment_type' => 'nullable|string',
+            'billing_details' => 'nullable|array',
+            'amount' => 'required|numeric|min:0',
+            'currency' => 'required|string|size:3',
+            'status' => 'required|string|in:succeeded,processing,requires_action,requires_payment_method,canceled',
+            'payment_method_type' => 'nullable|string',
+            'receipt_url' => 'nullable|url',
+            'metadata' => 'nullable|array',
+        ]);
+
+        // Get the booking
+        $booking = Booking::where('token', $request->booking_token)->first();
+
+        if (!$booking) {
+            return response()->json([ 'success' => false, 'message' => 'Booking not found'], 404);
+        }
+
+        // Get the associated order
+        if (!$booking->order_id) {
+            return response()->json(['success' => false, 'message' => 'No order found for this booking'], 422);
+        }
+
+        $order = Order::find($booking->order_id);
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+        }
+
+        try {
+
+            DB::beginTransaction();
+            $paymentIntent = $this->fetchStripePayment($request->payment_intent_id);
+
+            if ($paymentIntent->status !== 'succeeded') {
+                $error = $paymentIntent->last_payment_error;
+                $failurePayload = [
+                    'status'   => $paymentIntent->status,
+                    'amount'   => $paymentIntent->amount,
+                    'currency' => $paymentIntent->currency,
+                    'livemode' => $paymentIntent->livemode,
+                    'error'    => $error ? [
+                        'type'         => $error->type ?? null,
+                        'code'         => $error->code ?? null,
+                        'decline_code' => $error->decline_code ?? null,
+                        'message'      => $error->message ?? null,
+                        'doc_url'      => $error->doc_url ?? null,
+                    ] : null,
+                    'charge_id' => $error->charge ?? null,
+                ];
+                PaymentIntention::updateOrCreate(
+                    ['id' => $paymentIntent->id],
+                    [
+                        'customer_id' => $booking->leadTraveller?->customer_id,
+                        'type'        => $request->payment_type ?? 'Deposit',
+                        'reference'   => $order->booking_reference,
+                        'amount'      => $paymentIntent->amount_received / 100,
+                        'data'        => json_encode($failurePayload),
+                        'processed'   => 0,
+                    ]
+                );
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Payment not completed',
+                    'status'  => $paymentIntent->status
+                ], 422);
+            }
+
+            $charge = null;
+            if (!empty($paymentIntent->latest_charge)) {
+                $charge = is_string($paymentIntent->latest_charge)
+                    ? $stripe->charges->retrieve($paymentIntent->latest_charge)
+                    : $paymentIntent->latest_charge;
+            }
+
+            $gatewayType = 'stripe';
+            $paymentMethod = PaymentMethod::findOrCreate($gatewayType);
+
+            //Save Payment Intent snapshot
+            PaymentIntention::updateOrCreate(
+                ['id' => $paymentIntent->id],
+                [
+                    'customer_id' => $booking->leadTraveller?->customer_id,
+                    'type'        => $request->payment_type ?? 'Deposit',
+                    'reference'   => $order->booking_reference,
+                    'amount'      => $paymentIntent->amount_received / 100,
+                    'data'        => json_encode($paymentIntent->toArray()),
+                    'processed'   => $paymentIntent->status === 'succeeded',
+                ]
+            );
+
+            //Create Payment record
+            $payment = Payment::create([
+                'order_id'         => $order->id,
+                'payment_method_id'=> $paymentMethod->id,
+                'payer_id'         => $booking->leadTraveller?->customer_id,
+                'payer_type'       => Customer::class,
+                'amount'           => $paymentIntent->amount_received / 100,
+                'paid_on'          => now(),
+                'payment_fee'      => 0 / 100,
+                'currency_id'      => $order->currency_id,
+                'internal_notes'   => null,
+            ]);
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Payment confirmed successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Payment confirmation error: ' . $e->getMessage(), [ 'booking_id' => $booking->id, 'order_id' => $order->id ]);
+            return response()->json([ 'success' => false, 'message' => 'Payment confirmation failed', ], 500);
+        }
+
+    }
+
+
 }

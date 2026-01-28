@@ -901,9 +901,12 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'currency' => $currency ?? setting('system.currency'),
             'deposit' => $this->tour?->deposit,
             'payment_type' => now()->gt($this->tour?->final_payment),
+            'final_payment' => $this->tour?->final_payment,
             'event' => [
                 'name' => $this->tour->event?->name,
                 'description' => $this->tour->event?->description,
+                'starts_date' => $this->tour->event?->starts_at,
+                'ends_date' => $this->tour->event?->ends_at,
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
                 'faqs' => $event ? EventContentResource::collection($event->faqs) : [],
                 'important_information' => $event ? EventContentResource::collection($event->importantInfos) : [],
@@ -953,6 +956,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'starts_at' => $inventory->starts_at,
                 'ends_at' => $inventory->ends_at,
                 'whats_included' => $inventory->additional_inclusions,
+                'stock' => $inventory->stock,
                 'labels' => [
                     1 => $component->field1,
                     2 => $component->field2,

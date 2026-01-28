@@ -2,7 +2,13 @@
 
 
 use App\Http\Controllers\Api\Customer\BookingController;
+use App\Http\Controllers\Api\AppConfigController;
 use Illuminate\Support\Facades\Route;
+
+
+Route::prefix('app-config')->name('app-config.')->group(function () {
+    Route::get('/', [AppConfigController::class, 'index'])->name('index');
+});
 
 Route::get('/tour', [BookingController::class, 'overview'])->name('tour');
 Route::get('/booking', [BookingController::class, 'booking'])->name('booking');
@@ -15,7 +21,11 @@ Route::prefix('traveller')->name('traveller.')->group(function () {
    Route::post('/set', [BookingController::class, 'setTravellers'])->name('set');
    Route::post('/remove', [BookingController::class, 'removeTraveller'])->name('remove');
 });
+Route::prefix('order')->name('order.')->group(function () {
+    Route::post('/create', [BookingController::class, 'createOrder'])->name('create');
+});
 Route::prefix('stripe')->name('stripe.')->group(function () {
     Route::get('/publishable', [BookingController::class, 'getStripePublishableKey'])->name('publishable');
     Route::get('/secret', [BookingController::class, 'getStripeSecret'])->name('secret');
+    Route::post('/confirm', [BookingController::class, 'confirmPayment'])->name('confirm');
 });
