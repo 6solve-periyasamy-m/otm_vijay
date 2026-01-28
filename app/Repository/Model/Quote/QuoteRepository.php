@@ -166,7 +166,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $paying = $lead->paying ? 1 : 0;
         foreach ($travellers as $traveller) { $paying += $traveller->paying ? 1 : 0; }
-        $pricePerPerson = $this->getPricePerPerson($paying)->price_per_person * $this->getToRate();
+        $pricePerPerson = $this->getPricePerPerson($paying)->price_per_person;
         $lead->data['tour_cost'] = $pricePerPerson;
         $lead->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge;
         foreach ($this->quote->travellers as $traveller) {
@@ -179,7 +179,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
         $tour = $this->convertToTour($paying);
         $data = [
-            'deposit' => $this->quote->getDepositAmount($paying) * $this->getToRate(),
+            'deposit' => $this->quote->getDepositAmount($paying),
             'ordered_on' => now(),
             'organization_id' => $this->quote->organization_id,
             'commission' => $this->quote->commission,
@@ -226,7 +226,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'terms' => $this->quote->terms,
             'final_payment' => $this->quote->final_payment,
             'stock_control_active' => false,
-            'base_price_per_person' => $this->getPricePerPerson($customerCount)->price_per_person * $this->getToRate(),
+            'base_price_per_person' => $this->getPricePerPerson($customerCount)->price_per_person,
             'single_occupancy_surcharge' => $this->quote->single_occupancy_surcharge,
             'deposit' => $this->quote->deposit,
             'is_deposit_percentage' => $this->quote->is_deposit_percentage,
@@ -1027,7 +1027,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'agent_id' => $this->quote->agent_id,
             'consultant_id' => $this->quote->consultant_id,
             'tax_bracket_id' => $this->quote->tax_bracket_id,
-            'deposit' => $this->quote->getDepositAmount() * $this->getToRate(),
+            'deposit' => $this->quote->getDepositAmount(),
             'commission' => $this->quote->commission,
             'ordered_on' => now(),
             'currency_id' => $this->quote->currency_id,
