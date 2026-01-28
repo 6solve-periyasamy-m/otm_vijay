@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('conversion_rates', static function (Blueprint $table) {
-            $table->boolean('sales')->default(false);
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('confirmed_ip', 45)->nullable();
+            $table->string('confirmed_user_agent')->nullable();
         });
     }
 
@@ -21,8 +22,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('conversion_rates', static function (Blueprint $table) {
-            $table->boolean('sales')->default(false);
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn([
+                'confirmed_ip',
+                'confirmed_user_agent',
+            ]);
         });
     }
 };

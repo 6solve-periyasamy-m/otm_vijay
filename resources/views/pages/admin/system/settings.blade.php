@@ -136,7 +136,7 @@
     <!-- Conversion Rates -->
     <div class="card">
         <div class="card-body" data-target="#conversions" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">{{ Icon::maximize() }} Internal Conversion Rates</h4>
+            <h4 class="fw-bold">{{ Icon::maximize() }} Conversion Rates</h4>
         </div>
     </div>
     <div class="collapse mx-1" id="conversions">
@@ -154,29 +154,6 @@
         </x-admin.section.card>
         <x-admin.section.card>
             <livewire:admin.system.conversion.table/>
-        </x-admin.section.card>
-    </div>
-    <!-- Sales Conversion Rates -->
-    <div class="card">
-        <div class="card-body" data-target="#sales-conversions" onclick="toggleAccordion(this)">
-            <h4 class="fw-bold">{{ Icon::maximize() }} Sales Conversion Rates</h4>
-        </div>
-    </div>
-    <div class="collapse mx-1" id="sales-conversions">
-        <x-admin.section.card>
-            <div class="flex float-end">
-                <a class="btn btn-primary float-end"
-                   href="{{ route('export.conversion-rates', ['extension' => 'csv']) }}" style="margin-right: 5px">
-                    {{ Icon::csv() }}
-                    <span>Export to CSV</span>
-                </a>
-                <button class="btn btn-success" onclick="openModal('admin.system.conversion.form', {'sales': true})">
-                    {{ Icon::create() }}Create New
-                </button>
-            </div>
-        </x-admin.section.card>
-        <x-admin.section.card>
-            <livewire:admin.system.conversion.table :sales="true"/>
         </x-admin.section.card>
     </div>
     @if(kpt())

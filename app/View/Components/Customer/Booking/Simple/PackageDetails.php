@@ -4,11 +4,11 @@ namespace App\View\Components\Customer\Booking\Simple;
 
 use App\Http\Gateways\StripeGateway;
 use App\Models\Booking\Booking;
-use App\Models\Location\Currency;
 use App\Models\Tour\Tour;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Settings;
 
 class PackageDetails extends Component
 {
@@ -30,6 +30,10 @@ class PackageDetails extends Component
     {
         return view('components.customer.booking.simple.package-details');
     }
+    public function getCurrency()
+    {
+        return $this->booking->currency ?? Settings::currency();
+    }
 
     public function getSurchargeAmount(bool $payFull): float|null
     {
@@ -37,14 +41,9 @@ class PackageDetails extends Component
         return StripeGateway::getAmountForSurcharge($this->booking->currency, $amount * 100) / 100;
     }
 
-    public function getCurrency(): Currency
-    {
-        return $this->booking->repository->getCurrency();
-    }
-
     public function getFXRate(): float
     {
-        return $this->booking->repository->getFXRate();
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency());
     }
 
     public function formatCurrency(int|float|null $value, int $decimalPrecision = 0): string

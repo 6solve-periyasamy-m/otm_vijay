@@ -120,7 +120,7 @@ class Settings
         return TaxBracket::find($this->get('system.tax.bracket')) ?? $this->getNullTaxBracket();
     }
     
-    public function getConversionRate(Currency|string|null $from, Currency|string|null $to, bool $sales = false): float|null
+    public function getConversionRate(Currency|string|null $from, Currency|string|null $to): float|null
     {
         if (is_string($from)) { $from = Currency::where('code', '=', $from)->first(); }
         if (is_string($to)) { $to = Currency::where('code', '=', $to)->first(); }
@@ -130,7 +130,6 @@ class Settings
 
         return ConversionRate::where('from_currency_id', '=', $from->id)
             ->where('to_currency_id', '=', $to->id)
-            ->where('sales', '=', $sales)
             ->first()?->rate;
     }
 

@@ -11,14 +11,12 @@ use Mediconesystems\LivewireDatatables\NumberColumn;
 class Table extends LivewireDatatable
 {
     public $name = 'conversion-table';
-    public bool $sales = false;
 
     public function builder()
     {
         return ConversionRate::query()
             ->join('currencies as from_currency', 'conversion_rates.from_currency_id', '=', 'from_currency.id')
-            ->join('currencies as to_currency', 'conversion_rates.to_currency_id', '=', 'to_currency.id')
-            ->where('sales', '=', $this->sales);
+            ->join('currencies as to_currency', 'conversion_rates.to_currency_id', '=', 'to_currency.id');
     }
 
     public function columns()
