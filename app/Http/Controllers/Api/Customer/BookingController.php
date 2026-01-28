@@ -370,6 +370,33 @@ class BookingController extends ApiController
             $paymentIntent = $this->fetchStripePayment($request->payment_intent_id);
 
             if ($paymentIntent->status !== 'succeeded') {
+                $error = $paymentIntent->last_payment_error;
+                $failurePayload = [
+                    'status'   => $paymentIntent->status,
+                    'amount'   => $paymentIntent->amount,
+                    'currency' => $paymentIntent->currency,
+                    'livemode' => $paymentIntent->livemode,
+                    'error'    => $error ? [
+                        'type'         => $error->type ?? null,
+                        'code'         => $error->code ?? null,
+                        'decline_code' => $error->decline_code ?? null,
+                        'message'      => $error->message ?? null,
+                        'doc_url'      => $error->doc_url ?? null,
+                    ] : null,
+                    'charge_id' => $error->charge ?? null,
+                ];
+                PaymentIntention::updateOrCreate(
+                    ['id' => $paymentIntent->id],
+                    [
+                        'customer_id' => $booking->leadTraveller?->customer_id,
+                        'type'        => $request->payment_type ?? 'Deposit',
+                        'reference'   => $order->booking_reference,
+                        'amount'      => $paymentIntent->amount_received / 100,
+                        'data'        => json_encode($failurePayload),
+                        'processed'   => 0,
+                    ]
+                );
+
                 return response()->json([
                     'success' => false,
                     'message' => 'Payment not completed',
