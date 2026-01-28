@@ -26,6 +26,7 @@ class Form extends ModalComponent
             $rate = new ConversionRate();
         }
         $this->rate = $rate;
+        $this->sales = $rate->sales ?? $this->sales;
     }
 
     public function canEstimateInverse(): bool
@@ -44,7 +45,9 @@ class Form extends ModalComponent
     public function getInverseRateObject(): ConversionRate|null
     {
         return ConversionRate::where('from_currency_id', $this->rate->to_currency_id)
-            ->where('to_currency_id', $this->rate->from_currency_id)->first();
+            ->where('to_currency_id', $this->rate->from_currency_id)
+            ->where('sales', '=', $this->sales)
+            ->first();
     }
 
     public function getEstimatedRate(): float
