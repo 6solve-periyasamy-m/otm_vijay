@@ -103,9 +103,15 @@ class Calculator extends Component
         }
         $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total) - $this->costToCompany) / ($this->total)) * 100);
 
-        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * ($this->fromRate ?? 1.0)) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
+        if ($this->markup === null) {
+            $this->marked_up_price = $this->total;
+            $this->markup = sigfig(((($this->marked_up_price / ($this->toRate ?? 1.0)) - $costPerPerson) / $costPerPerson) * 100, 6);
+        } else {
+            $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * ($this->fromRate ?? 1.0)) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
 
-        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * $this->toRate);
+            $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))) * $this->toRate);
+        }
+
 
         $roundValue = (float)setting('round.base_price', null);
         if (!empty($roundValue)) {
