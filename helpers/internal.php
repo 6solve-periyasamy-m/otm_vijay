@@ -6,7 +6,7 @@ use Carbon\Exceptions\InvalidFormatException;
 if (!function_exists('sigfig')) {
     function sigfig($number, $figures = 2, bool $floor = false): float
     {
-        $number = floor($number * (10**($figures+1)));
+        $number = floor($number * (10**($figures+1)))/(10**($figures+1));
         $value = ($number * (10**$figures));
         if ($floor) {
             return floor($value)/(10**$figures);
