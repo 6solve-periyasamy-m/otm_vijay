@@ -47,14 +47,4 @@ class EventContent extends Model
     {
         return $this->belongsTo(Event::class);
     }
-
-    protected static function booted()
-    {
-        static::deleting(function ($content) {
-            if ($content->icon) {
-                Storage::disk('public')->delete($content->icon);
-            }
-        });
-    }
-
 }

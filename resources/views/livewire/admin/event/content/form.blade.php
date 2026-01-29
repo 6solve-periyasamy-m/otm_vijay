@@ -6,10 +6,12 @@
     <div class="row">
         <x-livewire.input wire:model.defer="content.question" required width="6" label="Question" />
         <x-livewire.input.checkbox wire:model="content.active" width="3" label="Active" />
-        <div class="col-xl-3">
-            <label class="form-label">Icon (SVG / JPG / PNG)</label>
-            <input type="file" class="form-control" wire:model="icon">
-            <div class="mt-2">
+        <div class="col-xl-3 d-flex align-items-center gap-2">
+            <div class="flex-grow-1">
+                <label class="form-label">Icon (SVG / JPG / PNG)</label>
+                <input type="file" class="form-control" wire:model="icon">
+            </div>
+            <div>
                 {{-- Preview new upload --}}
                 @if ($icon)
                     <img src="{{ $icon->temporaryUrl() }}" alt="Icon Preview" width="32">
