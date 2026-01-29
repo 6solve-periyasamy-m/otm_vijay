@@ -55,7 +55,7 @@ class Form extends ModalComponent
         if (empty($this->rate->rate) || $this->rate->rate == 0) {
             return 0.0;
         }
-        return sigfig(1 / ($this->rate->rate ?? 1));
+        return sigfig(1 / ($this->rate->rate ?? 1), 4);
     }
 
     public function save()
@@ -70,7 +70,7 @@ class Form extends ModalComponent
                     'to_currency_id' => $this->rate->from_currency_id,
                     'sales' => $this->sales,
                 ]);
-            $inverse->rate = sigfig($this->rate->rate == 0 ? 0 : (1.0 / $this->rate->rate));
+            $inverse->rate = sigfig($this->rate->rate == 0 ? 0 : (1.0 / $this->rate->rate), 4);
             $inverse->save();
         }
         $this->refreshTables();
