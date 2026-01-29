@@ -28,7 +28,8 @@ class StringFormatter
 
     private function currency($value, $currency): string
     {
-        return fr_currency($value, $currency);
+        // TODO: Remove potentially?
+        return fr_currency(sigfig($value), $currency);
     }
 
     public function formatDate($date) : string {
