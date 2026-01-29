@@ -16,6 +16,7 @@ use App\Models\Helper\Enum\EventContentType;
  * @property int $id
  * @property int $event_id
  * @property EventContentType $type
+ * @property string $icon
  * @property string $question
  * @property string|null $answer
  * @property bool $active
@@ -30,6 +31,7 @@ class EventContent extends Model
     protected $fillable = [
         'event_id',
         'type',
+        'icon',
         'question',
         'answer',
         'active',
@@ -45,4 +47,14 @@ class EventContent extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($content) {
+            if ($content->icon) {
+                Storage::disk('public')->delete($content->icon);
+            }
+        });
+    }
+
 }
