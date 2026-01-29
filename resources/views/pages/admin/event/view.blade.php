@@ -231,11 +231,11 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
     <x-admin.section.accordion color="#a3caee">
         <x-slot:title>e-Commerce</x-slot:title>
         <div class="row">
-            <div class="col-xl-12">
+            {{-- <div class="col-xl-12">
                 <x-admin.section.card>
                     <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::OUR_SERVICE_PROMISE->value"/>
                 </x-admin.section.card>
-            </div>
+            </div> --}}
             <div class="col-xl-6">
                 <x-admin.section.card>
                     <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::FAQ->value"/>
