@@ -10,7 +10,6 @@ use App\Models\Quote\Quote;
 use App\Models\Quote\QuotePricePoint;
 use Exception;
 use Livewire\Component;
-use Settings;
 
 class Calculator extends Component
 {
@@ -41,7 +40,7 @@ class Calculator extends Component
     public string|float|null $markup = null;
     public float|null $commission = null;
     public bool $adjust = false;
-    public float|null $fromRate = null;
+    /** @var float|null $toRate The conversion rate when converting to the quote currency */
     public float|null $toRate = null;
     public float $toBePaid;
     public float|string $marked_up_price = 0;
@@ -53,8 +52,7 @@ class Calculator extends Component
         $this->quote->repository->recache();
         $this->paying = $this->quote->paying ?? 0;
         $this->travelling = $this->quote->travelling ?? 0;
-        $this->fromRate = $this->quote->from_rate ?? Settings::getConversionRate($this->quote->currency, Settings::currency()) ?? 1;
-        $this->toRate = $this->quote->to_rate ?? Settings::getConversionRate(Settings::currency(), $this->quote->currency) ?? 1;
+        $this->toRate = $this->quote->repository->getToRate();
         $this->calculate(false);
     }
 
@@ -90,20 +88,20 @@ class Calculator extends Component
         $costPerPerson = $totalTravellerCount > 0 ? sigfig($this->costToCompany / $totalTravellerCount) : 0;
         $paying = $this->paying + ($this->quote->leadTraveller->paying);
         $this->total = ($this->quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0) * $paying;
-        if ($this->quote->currency !== null && $this->quote->currency_id !== Settings::currency()?->id) {
-            if ($this->fromRate === null) {
-                $this->profit = null;
-            } else {
-                $this->profit = sigfig(sigfig($this->total * $this->fromRate) - $this->costToCompany);
-            }
+
+        $this->profit = sigfig(($this->total) - $this->costToCompany);
+
+        $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total) - $this->costToCompany) / ($this->total)) * 100);
+
+        if ($this->markup === null) {
+            $this->marked_up_price = $this->total;
+            $this->markup = sigfig(((($this->marked_up_price) - $costPerPerson) / $costPerPerson) * 100, 6);
         } else {
-            $this->profit = sigfig($this->total - $this->costToCompany);
+            $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
+
+            $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))));
         }
-        $this->margin = $this->total == 0 ? 100 : sigfig(((($this->total * $this->fromRate) - $this->costToCompany) / ($this->total * $this->fromRate)) * 100);
 
-        $this->markup = sigfig($this->markup ?? ($this->costToCompany == 0 ? 100 : (((($this->total * $this->fromRate) - $this->costToCompany) / $this->costToCompany) * 100)), 6);
-
-        $this->marked_up_price = sigfig(($costPerPerson + ($costPerPerson * ($this->markup / 100))));
 
         $roundValue = (float)setting('round.base_price', null);
         if (!empty($roundValue)) {
@@ -210,7 +208,6 @@ class Calculator extends Component
 
     public function saveConversion(): void
     {
-        $this->quote->from_rate = $this->fromRate;
         $this->quote->to_rate = $this->toRate;
         $this->quote->save();
         $this->refresh();

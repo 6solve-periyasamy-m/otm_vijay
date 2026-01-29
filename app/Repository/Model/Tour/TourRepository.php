@@ -3,6 +3,8 @@
 namespace App\Repository\Model\Tour;
 
 use App\Exceptions\CannotDeleteException;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\EventContentResource;
 use App\Models\Accommodation\Accommodation;
 use App\Models\Accommodation\AccommodationInventoryTour;
 use App\Models\Accommodation\AccommodationInventoryTourUpgrade;
@@ -50,8 +52,6 @@ use App\Repository\RoomingRepository;
 use App\Repository\Storage\BookingComponentStorage;
 use App\Repository\Storage\OrderComponentStorage;
 use App\Repository\Storage\Tour\GroupedHotelRooming;
-use App\Http\Resources\AddressResource;
-use App\Http\Resources\EventContentResource;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -889,7 +889,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
             'event.importantInfos' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
             'event.ourServicePromise' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
         ]);
-        $rate = Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
+        $rate = Settings::getConversionRate(Settings::currency(), $currency, true) ?? Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
         $basePrice = sigfig($this->tour->base_price_per_person * $rate);
         if (flag('booking.round_to_five')) {
             $basePrice = round_to_five($basePrice);

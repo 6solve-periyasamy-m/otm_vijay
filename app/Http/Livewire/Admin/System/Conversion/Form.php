@@ -15,6 +15,7 @@ class Form extends ModalComponent
     /** @var ConversionRate|null $rate */
     public ConversionRate|int|null $rate = null;
     public bool $estimateInverse = false;
+    public bool $sales = false;
 
     public function mount(ConversionRate|int|null $rate = null)
     {
@@ -25,6 +26,7 @@ class Form extends ModalComponent
             $rate = new ConversionRate();
         }
         $this->rate = $rate;
+        $this->sales = $rate->sales ?? $this->sales;
     }
 
     public function canEstimateInverse(): bool
@@ -43,20 +45,32 @@ class Form extends ModalComponent
     public function getInverseRateObject(): ConversionRate|null
     {
         return ConversionRate::where('from_currency_id', $this->rate->to_currency_id)
-            ->where('to_currency_id', $this->rate->from_currency_id)->first();
+            ->where('to_currency_id', $this->rate->from_currency_id)
+            ->where('sales', '=', $this->sales)
+            ->first();
+    }
+
+    public function getEstimatedRate(): float
+    {
+        if (empty($this->rate->rate) || $this->rate->rate == 0) {
+            return 0.0;
+        }
+        return sigfig(1 / ($this->rate->rate ?? 1), 4);
     }
 
     public function save()
     {
         $this->validate();
+        $this->rate->sales = $this->sales;
         $this->rate->save();
         if ($this->estimateInverse && $this->canEstimateInverse()) {
             $inverse = $this->getInverseRateObject() ??
                 ConversionRate::make([
                     'from_currency_id' => $this->rate->to_currency_id,
                     'to_currency_id' => $this->rate->from_currency_id,
+                    'sales' => $this->sales,
                 ]);
-            $inverse->rate = sigfig($this->rate->rate == 0 ? 0 : (1.0 / $this->rate->rate));
+            $inverse->rate = sigfig($this->rate->rate == 0 ? 0 : (1.0 / $this->rate->rate), 4);
             $inverse->save();
         }
         $this->refreshTables();

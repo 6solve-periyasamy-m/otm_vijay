@@ -1139,7 +1139,7 @@ class BookingRepository extends ModelRepository implements GeneratesFellohData
 
     public function getFXRate(): float
     {
-        return Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
+        return Settings::getConversionRate(Settings::currency(), $this->getCurrency(), true) ?? Settings::getConversionRate(Settings::currency(), $this->getCurrency()) ?? 1.0;
     }
 
     public function validateStock(): bool

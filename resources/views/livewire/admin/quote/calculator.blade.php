@@ -200,26 +200,24 @@
                 <div class="col-6">
                     <x-admin.section.otm-text class="ctc-updater">
                         <x-slot:header>{{ __('quotes.view.cards.quick.calculator.ctc') }} <span style="text-decoration-line: underline; text-decoration-style: dotted;" title="{{ __('quotes.view.cards.quick.calculator.components.approximate') }}">*</span></x-slot:header>
-                        {{ f_currency($costToCompany / $fromRate, $quote->currency, $fromRate, Settings::currency()) }}
+                        {{ f_currency($costToCompany, Settings::currency(), $toRate, $quote->currency) }}
                     </x-admin.section.otm-text>
                 </div>
                 <div class="col-6 row">
                     <div class="col-4">
-                        <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>
+                        {{-- <button class="btn btn-info" wire:click="calculate">{{ Icon::refresh() }} Refresh Data</button>--}}
                     </div>
                     @if($quote->currency !== null)
                         @if(!($adjust ?? false))
                             <div class="col-8 row">
-                                <x-livewire.input width="4" wire:model="fromRate" label="From {{$quote->currency?->code}}" disabled />
-                                <x-livewire.input width="4" wire:model="toRate" label="To {{$quote->currency?->code}}" disabled />
+                                <x-livewire.input width="4" wire:model="toRate" label="{{Settings::currency()->code}} to {{ $quote->currency?->code }}" disabled />
                                 <div class="col-4">
                                     <button class="btn btn-warning" wire:click="enableEditing">Adjust</button>
                                 </div>
                             </div>
                         @else
                             <div class="col-8 row">
-                                <x-livewire.input width="4" wire:model="fromRate" label="From {{$quote->currency?->code}}" />
-                                <x-livewire.input width="4" wire:model="toRate" label="To {{$quote->currency?->code}}" />
+                                <x-livewire.input width="4" wire:model="toRate" label="{{Settings::currency()->code}} to {{ $quote->currency?->code }}" />
                                 <div class="col-4">
                                     <button class="btn btn-success" wire:click="saveConversion">Save</button>
                                 </div>
@@ -235,7 +233,7 @@
                                 @if($profit == null)
                                     Conversion Rate Not Set
                                 @else
-                                    {{ f_currency($profit / $fromRate, $quote->currency, $fromRate, Settings::currency()) }}
+                                    {{ f_currency($profit, Settings::currency(), $toRate, $quote->currency) }}
                                 @endif
                             </x-admin.section.otm-text>
                         </div>
@@ -243,7 +241,7 @@
                             <div class="col-6">
                                 <x-admin.section.otm-text class="cost-updater">
                                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.taxes') }}</x-slot:header>
-                                    {{ f_currency($taxes, $quote->currency, $fromRate, Settings::currency()) }}
+                                    {{ f_currency($taxes, Settings::currency(), $toRate, $quote->currency) }}
                                 </x-admin.section.otm-text>
                             </div>
                         @endif
@@ -259,7 +257,7 @@
                             <div class="col-3">
                                 <x-admin.section.otm-text class="cost-updater">
                                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.cost') }}</x-slot:header>
-                                    {{ f_currency($total, $quote->currency, $fromRate, Settings::currency()) }}
+                                    {{ f_currency($total, Settings::currency(), $toRate, $quote->currency) }}
                                 </x-admin.section.otm-text>
                             </div>
                         @endif
@@ -267,20 +265,20 @@
                             <div class="col-3">
                                 <x-admin.section.otm-text class="cost-updater">
                                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.commission') }}</x-slot:header>
-                                    {{ f_currency($commission, $quote->currency, $fromRate, Settings::currency()) }}
+                                    {{ f_currency($commission, Settings::currency(), $toRate, $quote->currency) }}
                                 </x-admin.section.otm-text>
                             </div>
                         @endif
                         <div class="col-3">
                             <x-admin.section.otm-text class="cost-updater">
                                 <x-slot:header>{{ __('quotes.view.cards.quick.calculator.final') }}</x-slot:header>
-                                {{ f_currency($toBePaid, $quote->currency, $fromRate, Settings::currency()) }}
+                                {{ f_currency($toBePaid, Settings::currency(), $toRate, $quote->currency) }}
                             </x-admin.section.otm-text>
                         </div>
                     </div>
                 </div>
                 <div class="col-6 row">
-                    <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person ({{ $quote->currency?->code ?? Settings::currency()?->code }})" width="8" />
+                    <x-livewire.input wire:model.debounce.300ms="marked_up_price" key="marked_up_price" label="Price per Person ({{ Settings::currency()?->code }}) (In System Currency, Not Quote Currency)" width="8" />
                     <div class="col-4">
                         <label></label>
                         <button class="btn btn-warning" wire:click="updatePricePoint(true)" title="Update the price point for a single traveller, and update the others to have the same percentage difference">Save Changes</button>

@@ -6,10 +6,12 @@ use Carbon\Exceptions\InvalidFormatException;
 if (!function_exists('sigfig')) {
     function sigfig($number, $figures = 2, bool $floor = false): float
     {
+        $number = floor($number * (10**($figures+1)))/(10**($figures+1));
+        $value = ($number * (10**$figures));
         if ($floor) {
-            return floor(($number * (10**$figures)))/(10**$figures);
+            return floor($value)/(10**$figures);
         }
-        return ceil(($number * (10**$figures)))/(10**$figures);
+        return ceil($value)/(10**$figures);
     }
 }
 if (!function_exists('round_to_five')) {
