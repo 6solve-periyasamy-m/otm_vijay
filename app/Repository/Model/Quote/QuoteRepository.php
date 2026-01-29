@@ -952,7 +952,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
                 $cost += $additional->amount;
             }
         }
-        return $cost;
+        return sigfig($cost);
     }
 
     /**
