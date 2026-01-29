@@ -127,7 +127,7 @@ class Calculator extends Component
         }
 
         if ($this->quote->taxBracket()?->rate !== null) {
-            $this->taxes = sigfig($this->quote->taxBracket()?->calculate($this->total));
+            $this->taxes = sigfig($this->quote->taxBracket()?->calculate($this->total * ($this->fromRate ?? 1.0)));
         }
 
         $this->profit -= $this->commission;
