@@ -13,10 +13,7 @@
             </div>
             <div>
                 {{-- Preview new upload --}}
-                @if ($icon)
-                    <img src="{{ $icon->temporaryUrl() }}" alt="Icon Preview" width="32">
-                {{-- Show existing icon only on edit --}}
-                @elseif ($content->exists && $content->icon)
+                @if ($content->exists && $content->icon)
                     <img src="{{ asset($content->icon) }}" alt="{{$content->question}}" class="img-fluid" style="max-width: 32px; max-height: 32px;"/>
                 @endif
             </div>
