@@ -166,9 +166,9 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     {
         $paying = $lead->paying ? 1 : 0;
         foreach ($travellers as $traveller) { $paying += $traveller->paying ? 1 : 0; }
-        $pricePerPerson = $this->getPricePerPerson($paying)->price_per_person;
+        $pricePerPerson = $this->getPricePerPerson($paying)->price_per_person * $this->getToRate();
         $lead->data['tour_cost'] = $pricePerPerson;
-        $lead->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge;
+        $lead->data['single_occupancy_surcharge'] = $this->quote->single_occupancy_surcharge * $this->getToRate();
         foreach ($this->quote->travellers as $traveller) {
             if ($traveller->is_lead) { continue; }
             $travellers[] = new ConvertedCustomer($traveller->customer, $traveller->paying, $traveller->travelling);
@@ -179,7 +179,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         }
         $tour = $this->convertToTour($paying);
         $data = [
-            'deposit' => $this->quote->getDepositAmount($paying),
+            'deposit' => $this->quote->getDepositAmount($paying) * $this->getToRate(),
             'ordered_on' => now(),
             'organization_id' => $this->quote->organization_id,
             'commission' => $this->quote->commission,
@@ -226,7 +226,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'terms' => $this->quote->terms,
             'final_payment' => $this->quote->final_payment,
             'stock_control_active' => false,
-            'base_price_per_person' => $this->getPricePerPerson($customerCount)->price_per_person,
+            'base_price_per_person' => $this->getPricePerPerson($customerCount)->price_per_person * $this->getToRate(),
             'single_occupancy_surcharge' => $this->quote->single_occupancy_surcharge,
             'deposit' => $this->quote->deposit,
             'is_deposit_percentage' => $this->quote->is_deposit_percentage,
@@ -1027,7 +1027,7 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
             'agent_id' => $this->quote->agent_id,
             'consultant_id' => $this->quote->consultant_id,
             'tax_bracket_id' => $this->quote->tax_bracket_id,
-            'deposit' => $this->quote->getDepositAmount(),
+            'deposit' => $this->quote->getDepositAmount() * $this->getToRate(),
             'commission' => $this->quote->commission,
             'ordered_on' => now(),
             'currency_id' => $this->quote->currency_id,
@@ -1282,15 +1282,15 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         $price = sigfig($this->getTotalCost($paying) / $paying);
         $schedule = [];
         if ($this->quote->getDepositAmount($paying) > 0) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->quote->getDepositAmount($paying), $this->quote->getDepositPercentage($paying));
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::DEPOSIT, null, $this->quote->getDepositAmount($paying) * $this->getToRate(), $this->quote->getDepositPercentage($paying));
         }
         foreach ($this->quote->installments as $installment) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying, $price), $installment->getPercentage($paying, $price));
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::INSTALLMENT, $installment->due_on, $installment->getAmount($paying, $price) * $this->getToRate(), $installment->getPercentage($paying, $price));
         }
         if ($this->getRemainingInstallment($paying, $price) > 0) {
-            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price), $this->quote->getRemainingPercentage());
+            $schedule[] = new ItinerarySchedule(ItineraryScheduleType::REMAINING, $this->quote->final_payment, $this->getRemainingInstallment($paying, $price) * $this->getToRate(), $this->quote->getRemainingPercentage());
         }
-        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getTotalCost($paying), null);
+        $schedule[] = new ItinerarySchedule(ItineraryScheduleType::TOTAL, null, $this->getTotalCost($paying) * $this->getToRate(), null);
         return $schedule;
     }
 
@@ -1307,11 +1307,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
     public function getItineraryFinances(int $paying): ItineraryPaymentDetails
     {
         return new ItineraryPaymentDetails(
-            $this->getTotalCost($paying),
-            $this->getTaxAmount($paying),
-            $this->getCommission($paying),
-            $this->quote->commission,
-            $this->getFinalCost($paying),
+            $this->getTotalCost($paying) * $this->getToRate(),
+            $this->getTaxAmount($paying) * $this->getToRate(),
+            $this->getCommission($paying) * $this->getToRate(),
+            $this->quote->commission * $this->getToRate(),
+            $this->getFinalCost($paying) * $this->getToRate(),
             $this->getScheduleItineraryArray($paying),
             [], // No Payments on Quotes
             is_array($this->quote->currency) ? Currency::make($this->quote->currency) : $this->quote->currency,
@@ -1354,11 +1354,11 @@ class QuoteRepository extends ComponentPackageRepository implements SerializesTo
         );
     }
 
-    public function getTaxAmount(int $paying): float|null
+    public function getTaxAmount(int $paying, float $rate = 1.0): float|null
     {
         $bracket = $this->quote->taxBracket();
         if ($bracket === null || $bracket->rate === null) { return null; }
-        return $bracket->calculate($this->getTotalCost($paying));
+        return $bracket->calculate($this->getTotalCost($paying) * $rate);
     }
 
     private function getTravellerArray(int $paying, int $travelling): array
