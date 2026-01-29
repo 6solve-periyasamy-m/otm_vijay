@@ -152,7 +152,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
             <p>Current Profit</p>
             <h6 class="fw-bold">
                 @if($order->cache->profit !== null)
-                    {{ fr_currency($order->cache->profit * ($fromSystem ?? 1), $order->currency) }}
+                    {{ fr_currency(sigfig($order->cache->profit * ($fromSystem ?? 1)), $order->currency) }}
                     @if($nonSystem) ({{ f_currency($order->cache->profit)}}) @endif
                 @else
                     No FX Rate for Conversion
