@@ -172,7 +172,7 @@ class Event extends Model
         return $this->contents()->where('type', EventContentType::IMPORTANT_INFO);
     }
 
-    public function OurServicePromise(): HasMany
+    public function ourServicePromise(): HasMany
     {
         return $this->contents()->where('type', EventContentType::OUR_SERVICE_PROMISE);
     }

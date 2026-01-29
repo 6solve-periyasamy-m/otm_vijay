@@ -60,8 +60,7 @@ class Form extends ModalComponent
         $this->content->event_id = $this->eventId;
         $this->content->type     = EventContentType::from($this->type);
         $this->content->save();
-
-        $this->emit('refreshLivewireDatatable');
+        $this->emit('refreshLivewireDatatable-'.$this->type.'-'.$this->eventId);
         $this->closeModal();
     }
 
