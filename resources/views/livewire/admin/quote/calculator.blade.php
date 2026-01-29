@@ -243,7 +243,7 @@
                             <div class="col-6">
                                 <x-admin.section.otm-text class="cost-updater">
                                     <x-slot:header>{{ __('quotes.view.cards.quick.calculator.taxes') }}</x-slot:header>
-                                    {{ f_currency($taxes, Settings::currency(), $toRate, $quote->currency) }}
+                                    {{ f_currency($taxes, $quote->currency, $fromRate, Settings::currency(), true) }}
                                 </x-admin.section.otm-text>
                             </div>
                         @endif
