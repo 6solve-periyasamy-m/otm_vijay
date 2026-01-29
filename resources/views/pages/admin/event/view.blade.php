@@ -227,22 +227,26 @@ if (!($activityFilter instanceof ActivitySortFilter)) {
         </div>
         @endif
     </div>
-
-        @php //dd($event); @endphp
     <hr class="splitter"/>
-    <h6 class="fs-5 fw-bold">e-Commerce</h6>
+    <x-admin.section.accordion color="#a3caee">
+        <x-slot:title>e-Commerce</x-slot:title>
+        <div class="row">
+            {{-- <div class="col-xl-12">
+                <x-admin.section.card>
+                    <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::OUR_SERVICE_PROMISE->value"/>
+                </x-admin.section.card>
+            </div> --}}
+            <div class="col-xl-6">
+                <x-admin.section.card>
+                    <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::FAQ->value"/>
+                </x-admin.section.card>
+            </div>
 
-    <div class="row">
-        <div class="col-xl-6">
-            <x-admin.section.card>
-                <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::IMPORTANT_INFO->value"/>
-            </x-admin.section.card>
+            <div class="col-xl-6">
+                <x-admin.section.card>
+                    <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::IMPORTANT_INFO->value"/>
+                </x-admin.section.card>
+            </div>
         </div>
-
-        <div class="col-xl-6">
-            <x-admin.section.card>
-                <livewire:admin.event.content.section :eventId="$event->id" :type="\App\Models\Helper\Enum\EventContentType::FAQ->value"/>
-            </x-admin.section.card>
-        </div>
-    </div>
+    </x-admin.section.accordion>
 @endsection

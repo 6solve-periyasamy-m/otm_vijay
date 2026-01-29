@@ -887,6 +887,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
         $this->tour->load([
             'event.faqs' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
             'event.importantInfos' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
+            'event.ourServicePromise' => fn($q) => $q->where('active', true)->orderBy('sort_order'),
         ]);
         $rate = Settings::getConversionRate(Settings::currency(), $currency, true) ?? Settings::getConversionRate(Settings::currency(), $currency) ?? 1.0;
         $basePrice = sigfig($this->tour->base_price_per_person * $rate);
@@ -910,6 +911,7 @@ class TourRepository extends ComponentPackageRepository implements HasStockContr
                 'image' => $this->tour->event?->image_url !== null ? asset($this->tour->event?->image_url) : null,
                 'faqs' => $event ? EventContentResource::collection($event->faqs) : [],
                 'important_information' => $event ? EventContentResource::collection($event->importantInfos) : [],
+                'our_service_promise' => $event ? EventContentResource::collection($event->ourServicePromise) : [],
             ],
             'location' => [
                 'city' => $this->tour->city,

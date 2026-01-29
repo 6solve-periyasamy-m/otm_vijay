@@ -18,6 +18,7 @@ class EventContentResource extends JsonResource
             'id'       => $this->id,
             'question' => $this->question,
             'answer'   => $this->answer,
+            'icon'     => $this->icon_url,
         ];
     }
 }

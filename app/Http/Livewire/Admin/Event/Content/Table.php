@@ -12,8 +12,6 @@ class Table extends LivewireDatatable
     public int $eventId;
     public int $type;
 
-    protected $listeners = ['toggleActive' => 'toggleActive'];
-
     public function builder()
     {
         return EventContent::query()
@@ -51,7 +49,15 @@ class Table extends LivewireDatatable
     {
         if ($content = EventContent::find($id)) {
             $content->update(['active' => ! $content->active]);
-            $this->emit('refreshLivewireDatatable');
+            $this->emit('refreshLivewireDatatable-' . $this->type . '-' . $this->eventId);
         }
+    }
+
+    public function getListeners()
+    {
+        return [
+            'toggleActive' => 'toggleActive',
+            'refreshLivewireDatatable-' . $this->type . '-' . $this->eventId => '$refresh',
+        ];
     }
 }

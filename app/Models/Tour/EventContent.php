@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Helper\Enum\EventContentType;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Tour\EventContent
@@ -16,6 +17,7 @@ use App\Models\Helper\Enum\EventContentType;
  * @property int $id
  * @property int $event_id
  * @property EventContentType $type
+ * @property string $icon
  * @property string $question
  * @property string|null $answer
  * @property bool $active
@@ -27,9 +29,11 @@ use App\Models\Helper\Enum\EventContentType;
  */
 class EventContent extends Model
 {
+    protected $appends = ['icon_url'];
     protected $fillable = [
         'event_id',
         'type',
+        'icon',
         'question',
         'answer',
         'active',
@@ -44,5 +48,16 @@ class EventContent extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function getIconUrlAttribute(): ?string
+    {
+        if (! $this->icon) {
+            return null;
+        }
+        if (str_starts_with($this->icon, 'http')) {
+            return $this->icon;
+        }
+        return asset($this->icon);
     }
 }
