@@ -1097,7 +1097,7 @@ figure.table {
                 <td>{{ $loop->iteration }}</td>
                 <td class="currency-symbol">{{ fr_currency($installment->amount, $currency) }}</td>
                 <td class="currency-symbol">
-                    {{ fr_currency(min($installment->amount, $installment->received), $currency) }}
+                    {{ fr_currency(min($installment->amount, $installment->received), $currency, false, 0) }}
                     @php $balance_received = $balance_received + min($installment->amount, $installment->received) @endphp
                 </td>
                 <td class="currency-symbol">
@@ -1117,10 +1117,10 @@ figure.table {
                 <td class="currency-symbol">
                   @php $amount = $installment->amount - min(($installment->received - ($installment->balance ?? 0)), $installment->amount); @endphp
                   @if($amount <= 0)
-                      {{ fr_currency($installment->amount, $currency) }}
+                      {{ fr_currency($installment->amount, $currency, false, 0) }}
                       @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
-                      {{ fr_currency($installment->received, $currency) }}
+                      {{ fr_currency($installment->received, $currency, false, 0) }}
                       @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
@@ -1128,7 +1128,7 @@ figure.table {
                   @if($amount <= 0)
                     Paid
                   @else
-                      {{ fr_currency($amount, $currency) }}
+                      {{ fr_currency($amount, $currency, false, 0) }}
                   @endif
                 </td>
                 <td>With Order</td>
@@ -1138,13 +1138,13 @@ figure.table {
               @php $amount = $installment->amount - $installment->received; @endphp
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td class="currency-symbol">{{ fr_currency($installment->amount, $currency) }}</td>
+                <td class="currency-symbol">{{ fr_currency($installment->amount, $currency, false, 0) }}</td>
                 <td class="currency-symbol">
                   @if($amount <= 0)
-                      {{ fr_currency($installment->amount, $currency) }}
+                      {{ fr_currency($installment->amount, $currency, false, 0) }}
                       @php $balance_received = $balance_received + $installment->amount @endphp
                   @else
-                      {{ fr_currency($installment->received, $currency) }}
+                      {{ fr_currency($installment->received, $currency, false, 0) }}
                       @php $balance_received = $balance_received + $installment->received @endphp
                   @endif
                 </td>
@@ -1152,7 +1152,7 @@ figure.table {
                   @if($amount <= 0)
                       Paid
                   @else
-                      {{ fr_currency($amount, $currency) }}
+                      {{ fr_currency($amount, $currency, false, 0) }}
                   @endif
                 </td>
                 <td>
@@ -1165,7 +1165,7 @@ figure.table {
             @if ($installment->type === ItineraryScheduleType::REMAINING)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td class="currency-symbol">{{ fr_currency($installment->amount, $currency) }}</td>
+                <td class="currency-symbol">{{ fr_currency($installment->amount, $currency, false, 0) }}</td>
                 <td class="currency-symbol">
                   @php $balance_received_total = $installment->received - $balance_received; @endphp
                   {{ fr_currency($balance_received_total, $currency) }}
@@ -1175,7 +1175,7 @@ figure.table {
                   @if($amount <= 0)
                       Paid
                   @else
-                      {{ fr_currency($amount, $currency) }}
+                      {{ fr_currency($amount, $currency, false, 0) }}
                   @endif
                 </td>
                 <td>
@@ -1206,10 +1206,10 @@ figure.table {
               </td>
               <td class="currency-symbol">
                 @if ($installment->type === ItineraryScheduleType::TOTAL)
-                  {{ fr_currency($installment->amount, $currency) }}
+                  {{ fr_currency($installment->amount, $currency, false, 0) }}
                 @else
                   @php $currency = ($itinerary->finances?->currency && !empty($itinerary->finances->currency->code)) ? $itinerary->finances->currency : setting('system.currency', ''); @endphp
-                  {{ fr_currency($installment->amount, $currency) }}
+                  {{ fr_currency($installment->amount, $currency, false, 0) }}
                 @endif
               </td>
               <td>
