@@ -140,7 +140,9 @@ class Checkout extends Component
             $bEmail = $this->booking->tour->brand->email;
             return $this->addError('common', "Some components in this package are out-of-stock. Please contact us at {$bEmail} for alternative options.");
         }
-
+        foreach ($this->booking->travellers as $traveller) {
+            $traveller->repository->validateIncluded();
+        }
         $amount = ($this->payFull ? $this->booking->repository->getTotalCost() : $this->booking->repository->getDueTodayAmount()) * $this->getFXRate();
         try {
             if (Gateway::getPaymentGateway('stripe') !== null) {
