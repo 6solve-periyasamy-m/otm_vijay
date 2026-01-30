@@ -68,9 +68,9 @@ class AppConfigController extends ApiController
                     'from' => $rate->from->code,
                     'to' => $rate->to->code,
                     'rate' => (float) $rate->rate,
+                    'sales' => $rate->sales,
                 ])
                 ->toArray();
         });
-    }   
-
+    }
 }
