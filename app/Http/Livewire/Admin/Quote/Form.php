@@ -13,7 +13,6 @@ use App\Models\Quote\QuoteProspect;
 use App\Models\System\LargeTextTemplate;
 use Carbon\Carbon;
 use Livewire\Component;
-use Settings;
 
 class Form extends Component
 {
@@ -108,13 +107,6 @@ class Form extends Component
         $this->prospect->save();
         $this->quote->reference = $this->quote->reference ?? $this->quote->repository->generateReference();
         $this->quote->invoice_footer = $this->quote->invoice_footer ?? "";
-        if ($this->quote->id === null ||
-            $this->quote->currency_id !== null ||
-            Quote::find($this->quote->id)?->currency_id !== $this->quote->currency_id)
-        {
-            $this->quote->from_rate = Settings::getConversionRate($this->quote->currency, Settings::currency());
-            $this->quote->to_rate = Settings::getConversionRate(Settings::currency(), $this->quote->currency);
-        }
         $this->quote->save();
 
         $pricePoint = $this->quote->pricePoints()->where('quantity', '=', 1)->first() ?? QuotePricePoint::make(['quantity' => 1,]);
