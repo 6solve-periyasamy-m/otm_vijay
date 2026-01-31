@@ -61,16 +61,14 @@ class AppConfigController extends ApiController
      */
     protected function fxRates(): array
     {
-        return Cache::remember('fx_matrix', 3600, function () {
-            return ConversionRate::query()
-                ->get()
-                ->map(fn ($rate) => [
-                    'from' => $rate->from->code,
-                    'to' => $rate->to->code,
-                    'rate' => (float) $rate->rate,
-                    'sales' => $rate->sales,
-                ])
-                ->toArray();
-        });
+        return ConversionRate::query()
+            ->get()
+            ->map(fn ($rate) => [
+                'from' => $rate->from->code,
+                'to' => $rate->to->code,
+                'rate' => (float) $rate->rate,
+                'sales' => $rate->sales,
+            ])
+            ->toArray();
     }
 }
