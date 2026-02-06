@@ -73,7 +73,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     .view_order_row .blue_div_row {
         display: flex;
         padding-bottom: 16px;
-        padding-bottom:unset;
+        padding-bottom: unset;
 
     }
 
@@ -130,12 +130,14 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         padding: 8px;
         height: 100%;
         display: flex;
-        flex-direction: column; 
+        flex-direction: column;
         justify-content: center;
     }
-    .view_order_coltwo .container .button_row_class:last-child{
-        margin-bottom:unset !important;
+
+    .view_order_coltwo .container .button_row_class:last-child {
+        margin-bottom: unset !important;
     }
+
     .view_order_row .right_blue_section {
         width: 46.16%;
         background-color: #A3CAEE;
@@ -145,6 +147,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         justify-content: space-between;
 
     }
+
     /* .left_blue_section .col-md-6{
     width: 49%;
         word-break: break-word;
@@ -1002,23 +1005,26 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                     </table>
                 </div>
             </x-admin.section.card>
+
             <x-admin.section.card>
-                <x-slot:title>
-                    Schedule
-                </x-slot:title>
-                <div class="pb-3 text-end">
-                    @can('update', \App\Models\Order\Order::class)
-                    <a href="{{ route('order-installments.create', ['order' => $order, ]) }}"
-                        class="btn btn-success text-white mb-1">
-                        {{ Icon::create() }}
-                        New Installment
-                    </a>
-                    <a href="{{ route('order-installments.resync', ['order' => $order, ]) }}"
-                        class="btn btn-warning mb-1">
-                        {{ Icon::refresh() }}
-                        Refresh from Tour
-                    </a>
-                    @endcan
+                <div class="d-flex justify-content-between align-items-center pb-3">
+                    <div class="fw-bold">
+                        <h4 class="fw-bold">Schedule</h4>
+                    </div>
+                    <div class="d-flex gap-2">
+                        @can('update', \App\Models\Order\Order::class)
+                        <a href="{{ route('order-installments.create', ['order' => $order, ]) }}"
+                            class="btn btn-success text-white mb-1">
+                            {{ Icon::create() }}
+                            New Installment
+                        </a>
+                        <a href="{{ route('order-installments.resync', ['order' => $order, ]) }}"
+                            class="btn btn-warning mb-1">
+                            {{ Icon::refresh() }}
+                            Refresh from Tour
+                        </a>
+                        @endcan
+                    </div>
                 </div>
                 <div>
                     <table class="datatable table table-striped" id="schedule-table">
@@ -1161,18 +1167,27 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         </div>
         <div class="col-xl-6">
             <x-admin.section.card>
-                <x-slot:title>
-                    Order Adjustments
-                </x-slot:title>
-                @can('create', \App\Models\Order\Adjustment\ManualAdjustment::class)
-                <div class="pb-3 text-end">
-                    <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}"
-                        class="btn btn-success text-white">
-                        {{ Icon::create() }}
-                        Add Adjustment
-                    </a>
+
+
+
+                <div class="d-flex justify-content-between align-items-center pb-3">
+                    <div class="fw-bold">
+                        <h4 class="fw-bold">Order Adjustments</h4>
+                    </div>
+                    <div class="d-flex gap-2">
+                        @can('create', \App\Models\Order\Adjustment\ManualAdjustment::class)
+                        <div class="pb-3 text-end">
+                            <a href="{{ route('manual-adjustments.create', ['order' => $order, ]) }}"
+                                class="btn btn-success text-white">
+                                {{ Icon::create() }}
+                                Add Adjustment
+                            </a>
+                        </div>
+                        @endcan
+                    </div>
                 </div>
-                @endcan
+
+
                 <div class="pt-2">
                     <table class="datatable table table-striped" id="order-adjustment-table">
                         <thead>
