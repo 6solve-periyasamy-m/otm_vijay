@@ -362,7 +362,6 @@
                         <div class="row ">
 
                             <h4 class="fw-bold">{{ __('quotes.view.cards.quick.calculator.count') }}</h4>
-
                             {{-- <div class="col-12 row gx-2 mb-3">
 
                                 <div class="col-12 text-center">
