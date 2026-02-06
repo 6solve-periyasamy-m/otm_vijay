@@ -1,0 +1,425 @@
+<?php
+
+namespace App\Repository\Model\Activity;
+
+use App\Events\Order\Customer\Component\OrderCustomerComponentAddedEvent;
+use App\Models\Activity\ActivityInventory;
+use App\Models\Activity\ActivityInventoryTour;
+use App\Models\Activity\ActivityInventoryTourUpgrade;
+use App\Models\Booking\Booking;
+use App\Models\Booking\BookingTraveller;
+use App\Models\Booking\Component\BookingActivity;
+use App\Models\Order\Component\OrderActivity;
+use App\Models\Order\OrderCustomer;
+use App\Models\Quote\Component\QuoteActivity;
+use App\Models\Quote\Quote;
+use App\Models\Tour\Tour;
+use App\Repository\Abstracts\BookingComponentRepository;
+use App\Repository\Abstracts\ComponentUpgradeRepository;
+use App\Repository\Abstracts\InventoryTourRepository;
+use App\Repository\Abstracts\OrderComponentRepository;
+use App\Repository\Interfaces\Manifest\HasActivityManifest;
+use App\Repository\Model\Order\Component\OrderActivityRepository;
+use App\Repository\Model\Quote\Component\QuoteActivityRepository;
+use App\Repository\Reporting\Manifest\ActivityManifestRepository;
+use App\Repository\Storage\ComponentInformation;
+use App\Repository\Storage\Itinerary\ItineraryItem;
+use App\Repository\Traits\Component\IsActivity;
+use Auth;
+use DB;
+use Icon;
+use Illuminate\Support\Collection;
+
+class ActivityInventoryTourRepository extends InventoryTourRepository implements HasActivityManifest
+{
+    use IsActivity;
+
+    private ActivityInventoryTour $tourComponent;
+
+    public function __construct(ActivityInventoryTour $tourComponent)
+    {
+        $this->tourComponent = $tourComponent;
+    }
+
+    public static function getAvailableAddons(Tour $tour, OrderCustomer|null $orderCustomer = null): array
+    {
+        $components = [];
+        foreach ($tour->activityInventoryTours as $component) {
+            if ($component->tour_component_type !== "Upgrade") {
+                if ($component->available_stock <= 0) continue;
+                $components[$component->id] = [];
+                $components[$component->id]['id'] = $component->id;
+                $components[$component->id]['name'] = $component->activityInventory->activity->name;
+                $components[$component->id]['activity_type'] = $component->activityInventory->activity->activityType->name;
+            }
+        }
+        if ($orderCustomer != null) {
+            // Remove all components the customer already has
+            foreach ($orderCustomer->orderActivities as $oComponent) {
+                $component = $oComponent->activityInventoryTour;
+                unset($components[$component->id]);
+            }
+        }
+        return $components;
+    }
+
+    public function grantToCustomer(OrderCustomer $orderCustomer, bool $silent = false, float|null $rate = 1): ?OrderActivityRepository
+    {
+        $rate = $rate ?? 1.0;
+        $cost = ($this->tourComponent->tour_sales_price ?? 0) * $rate;
+        if (flag('booking.round_to_five')) {
+            $cost = round_to_five($cost);
+        }
+        $orderComponent = OrderActivity::make([
+            'order_customer_id' => $orderCustomer->id,
+            'activity_inventory_tour_id' => $this->tourComponent->id,
+            'cost' =>  $cost,
+            'estimated_purchase_price' => $this->tourComponent->inventory->local_purchase_price,
+        ]);
+        $silent ? $orderComponent->saveQuietly() : $orderComponent->save();
+        event(new OrderCustomerComponentAddedEvent($orderComponent));
+        return $orderComponent->repository;
+    }
+
+    public function getUpgradeParent(): ActivityInventoryTour
+    {
+        $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
+        if (!isset($upgrade)) return $this->tourComponent;
+        return $upgrade->base;
+    }
+
+    public function onUpgradeTree(ComponentUpgradeRepository $upgradeRepository): bool
+    {
+        $upgrade = $upgradeRepository->get();
+        if (!($upgrade instanceof ActivityInventoryTourUpgrade)) return false;
+        if ($upgrade->base_id == $this->tourComponent->id) return true;
+        foreach ($this->tourComponent->parent()->upgrades as $inventoryTourUpgrade) {
+            if ($inventoryTourUpgrade->id == $upgrade->id) return true;
+        }
+        return false;
+    }
+
+    public function hasAsUpgrade(ActivityInventoryTour $activityInventoryTour): bool
+    {
+        foreach ($this->tourComponent->upgrades as $upgrade) {
+            if ($upgrade->upgrade_id === $activityInventoryTour->id) return true;
+        }
+        return false;
+    }
+
+    public function get(): ActivityInventoryTour
+    {
+        return $this->tourComponent;
+    }
+
+    public function update(array $data): ActivityInventoryTour
+    {
+        $this->tourComponent->update($data);
+        $this->save();
+        return $this->get();
+    }
+
+    public function save(): bool
+    {
+        return $this->tourComponent->save();
+    }
+
+    public function delete(): bool
+    {
+        if ($this->canDelete()) {
+            // Will eventually move away from soft-deletes. TODO: Switch to delete when occurs
+            return $this->tourComponent->forceDelete();
+        }
+        return false;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->tourComponent->id === null || $this->tourComponent->trashed();
+    }
+
+    public function __toString(): string
+    {
+        $inventory = $this->tourComponent->activityInventory;
+        $component = $inventory->activity;
+        $dateString = "";
+        if ($inventory->starts_at !== null && $inventory->ends_at !== null) {
+            $dateString = " (" . f_datetime($inventory->starts_at) . " to " . f_datetime($inventory->ends_at) . ")";
+        }
+        return $component->name . $dateString . '(' . $inventory->ticketType->name . ')';
+    }
+
+    public function grantToBookingTraveller(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $active = $this->getActiveComponent($this, $traveller);
+        if ($active !== null) return $active;
+        $this->getActiveUpgrade($traveller)?->getBookingComponent($traveller)?->delete();
+        $bookingComponent = BookingActivity::create([
+            'booking_traveller_id' => $traveller->id,
+            'activity_inventory_tour_id' => $this->tourComponent->id,
+        ]);
+        return $bookingComponent->repository;
+    }
+
+    public function getUsedStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getUsedStock();
+    }
+
+    public function getTotalStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getTotalStock();
+    }
+
+    public function getAvailableStock(): int
+    {
+        return $this->tourComponent->inventory->repository->getAvailableStock();
+    }
+
+    public function getOrderComponent(OrderCustomer $orderCustomer): ?OrderComponentRepository
+    {
+        $component = $orderCustomer->orderActivities()->where('activity_inventory_tour_id', $this->tourComponent->id)->first();
+        return $component?->repository;
+    }
+
+    public function getBookingComponent(BookingTraveller $traveller): ?BookingComponentRepository
+    {
+        $component = $traveller->activities()->where('activity_inventory_tour_id', $this->tourComponent->id)->first();
+        return $component?->repository;
+    }
+
+    public function getCost(): float
+    {
+        return $this->tourComponent->tour_sales_price ?? 0.0;
+    }
+
+    public function getTourComponentType(): string
+    {
+        return $this->tourComponent->tour_component_type;
+    }
+
+    /**
+     * @return Collection<ActivityInventory>
+     */
+    public function getAvailableForUpgrade(): Collection
+    {
+        $tour = $this->tourComponent->tour;
+        return ActivityInventoryRepository::getBetweenDates($tour->date_from->setTime(0,0), $tour->date_to->setTime(23,59,59), $tour->repository);
+    }
+
+    public function getUpgradeId(): int
+    {
+        $upgrade = ActivityInventoryTourUpgrade::where('base_id', '=', $this->tourComponent->id)->first();
+        if (isset($upgrade)) return 0;
+        $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $this->tourComponent->id)->first();
+        return isset($upgrade) ? $upgrade->id : -1;
+    }
+
+    public function isBookable(): bool
+    {
+        return $this->tourComponent->is_bookable;
+    }
+
+    public function getInventory(): ?ActivityInventoryRepository
+    {
+        return $this->tourComponent->inventory->repository;
+    }
+
+    public function getUsedOnOrderCount(): int
+    {
+        $used = 0;
+        foreach ($this->tourComponent->orders as $orderComponent) {
+            if (!$orderComponent->cancelled) $used++;
+        }
+        return $used;
+    }
+
+    public function addToQuote(Quote $quote): ?QuoteActivityRepository
+    {
+        $component = QuoteActivity::create([
+            'activity_inventory_id' => $this->tourComponent->activity_inventory_id,
+            'quote_id' => $quote->id,
+            'tour_component_type' => $this->tourComponent->tour_component_type,
+            'tour_sales_price' => $this->tourComponent->tour_sales_price,
+            'document_order' => $this->tourComponent->document_order,
+        ]);
+        return $component->repository;
+    }
+
+    public function isStockControlActive(): bool
+    {
+        return $this->tourComponent->stock_control_active ?? false;
+    }
+
+    public function hasEnoughStock(int $amount = 1): bool
+    {
+        return !($this->isStockControlActive() && $this->getAvailableStock() < $amount);
+    }
+
+    public function getBookingUpgradeKeyMap(int $required = 1): array
+    {
+        $upgrades = $this->tourComponent->upgrades;
+        $included = $this->tourComponent;
+        $keys = [];
+        if (empty($upgrades->all())) {
+            $upgrades = $this->tourComponent->parent()->upgrades;
+            $included = $this->tourComponent->parent();
+        }
+        $disabled = $included->available_stock <= $required - 1;
+        if ($included->is_bookable) {
+            $keys[0] = ['name' => 'Included - ' . ($disabled ? 'Out of Stock' : f_currency(0)), 'disabled' => $disabled,];
+        }
+
+        foreach ($upgrades as $upgrade) {
+            if (!$upgrade->upgrade->is_bookable) continue;
+            $disabled = $upgrade->upgrade->available_stock <= $required - 1;
+            $keys[$upgrade->id] = ['name' => $upgrade->description . ' - ' . ($disabled ? 'Out of Stock' : f_currency($upgrade->upgrade->tour_sales_price)), 'disabled' => $disabled,];
+        }
+        return $keys;
+    }
+
+    public function getActivityManifest(): Collection|array
+    {
+        return $this->tourComponent->orders()->with(ActivityManifestRepository::getRelations())->get();
+    }
+
+    public function getComponentInformation(): ComponentInformation
+    {
+        $tourComponent = $this->tourComponent;
+        $inventory = $tourComponent->inventory;
+        $component = $inventory->component;
+        if ($tourComponent->tour_component_type === 'Add-on') {
+            $upgradeName = "Add-on";
+        } elseif ($tourComponent->tour_component_type === 'Included') {
+            $upgradeName = "Included";
+        } else {
+            $upgrade = ActivityInventoryTourUpgrade::where('upgrade_id', '=', $tourComponent->id)->first();
+            $upgradeName = "$upgrade->description - " . f_currency($tourComponent->tour_sales_price);
+        }
+        return new ComponentInformation(
+            $component->name,
+            $component->description,
+            $component->image_url,
+            $inventory->starts_at,
+            $inventory->ends_at,
+            Icon::baseball(),
+            $inventory->external_notes,
+            $upgradeName,
+            [
+                'Starts At' => f_datetime($inventory->starts_at),
+                'Ends At' => f_datetime($inventory->ends_at),
+                'Ticket Type' => $inventory->ticketType,
+            ]
+        );
+    }
+
+    public function getStockUsedOnBooking(Booking $booking): int
+    {
+        return $booking->activities()->where('activity_inventory_tour_id', '=', $this->tourComponent->id)->count();
+    }
+
+    public function getCostToCustomer(): float
+    {
+        return $this->tourComponent->tour_component_type === 'Included' ? 0 : ($this->tourComponent->tour_sales_price ?? 0.0);
+    }
+
+    public static function find($id): ActivityInventoryTour|null
+    {
+        return ActivityInventoryTour::find($id);
+    }
+
+    public function getItineraryItem(int|null $quantity = null): ItineraryItem
+    {
+        return $this->getInventory()?->getItineraryItem($quantity, $this->tourComponent->order);
+    }
+
+    public function getOverview(): string
+    {
+        return $this->tourComponent->inventory->activity->name . ' - ' . $this->tourComponent->inventory->ticketType;
+    }
+
+    public function getUpdateLink(): string|null
+    {
+        if (Auth::user()?->can('update', $this->tourComponent)) {
+            return route('activity-inventory-tours.edit', [
+                'tour' => $this->tourComponent->tour_id,
+                'inventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getDeleteLink(): string|null
+    {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('activity-inventory-tours.delete', [
+                'tour' => $this->tourComponent->tour_id,
+                'inventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getRestoreLink(): string|null
+    {
+        if (Auth::user()?->can('delete', $this->tourComponent)) {
+            return route('activity-inventory-tours.restore', [
+                'tour' => $this->tourComponent->tour_id,
+                'inventoryTour' => $this->tourComponent
+            ]);
+        }
+        return null;
+    }
+
+    public function getOrderedCount(): int
+    {
+        return $this->tourComponent->orders()->count();
+    }
+
+    public function getBookedCount(): int
+    {
+        return $this->tourComponent->bookings()
+            ->leftJoin('booking_travellers', 'booking_travellers.id', '=', 'booking_activities.booking_traveller_id')
+            ->leftJoin('bookings', 'bookings.id', '=', 'booking_travellers.booking_id')
+            ->where(DB::raw('COALESCE(`bookings`.`last_renewed`, `bookings`.`created_at`)'), '>', now()->subMinutes(setting('booking.expiry', Booking::DEFAULT_EXPIRY)))
+            ->count();
+    }
+
+    public function getComponentInternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->component->internal_notes;
+    }
+
+    public function getComponentExternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->component->external_notes;
+    }
+
+    public function getInventoryInternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->internal_notes;
+    }
+
+    public function getInventoryExternalNotes(): string|null
+    {
+        return $this->tourComponent->inventory->external_notes;
+    }
+
+    public function removeFromAllTravellers(Booking $booking): void
+    {       
+        dd($this->tourComponent); 
+        foreach ($booking->travellers as $traveller) {
+            
+            //$traveller->activities()->where('activity_inventory_tour_id', '=', $this->tourComponent->id)->delete();
+        }
+    }
+
+    public function getQuantityOnBooking(Booking $booking): int
+    {
+        $count = 0;
+        foreach ($booking->travellers as $traveller) {
+            $count += $traveller->activities()->where('activity_inventory_tour_id', '=', $this->tourComponent->id)->count();
+        }
+        return $count;
+    }
+}

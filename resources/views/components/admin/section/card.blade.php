@@ -2,7 +2,7 @@
 @if($attributes->has('width'))
 <div class="col-xl-{{ $attributes->get('width', 12) }}">
 @endif
-    <div class="card {{ $attributes->get('cardClass', '') }}" >
+    <div class="card  {{ $attributes->get('cardClass', '') }}" >
         <div {{ $attributes->class(['card-body']) }}>
             @if(isset($header) || isset($title))
                 <div class="card-title">

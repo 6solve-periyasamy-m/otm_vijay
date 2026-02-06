@@ -1,3 +1,6 @@
+
+
+
 @php
 /**
 * @param \App\Models\Order\Order $order;
@@ -73,7 +76,6 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     .view_order_row .blue_div_row {
         display: flex;
         padding-bottom: 16px;
-        padding-bottom:unset;
 
     }
 
@@ -84,10 +86,9 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         background-color: #A3CAEE;
         border-radius: 11px;
         box-shadow: 0px 4px 4px 0px #67676740;
-        display: flex;
+        display: flex;  
         flex-direction: column;
         justify-content: space-between;
-
     }
 
     .view_order_row .view-cust-mail-addr {
@@ -128,14 +129,9 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         box-shadow: 0px 3.88px 3.88px -2px #67676740;
         border-radius: 10px;
         padding: 8px;
-        height: 100%;
-        display: flex;
-        flex-direction: column; 
-        justify-content: center;
+        height: 96.5%;
     }
-    .view_order_coltwo .container .button_row_class:last-child{
-        margin-bottom:unset !important;
-    }
+
     .view_order_row .right_blue_section {
         width: 46.16%;
         background-color: #A3CAEE;
@@ -143,19 +139,13 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         border-radius: 11px;
         box-shadow: 0px 4px 4px 0px #67676740;
         justify-content: space-between;
-
     }
-    /* .left_blue_section .col-md-6{
-    width: 49%;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-    } */
+
     .left_blue_section .single_div_inner {
-        /* display: flex;
+        display: flex;
         gap: 20px;
-        justify-content: space-between; */
+        /* justify-content: space-between; */
     }
-
     .single_div_right .single_div,
     .single_div_left .single_div {
         display: flex;
@@ -333,7 +323,6 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     .right_blue_section .single_div_left .single_div h6 {
         margin-bottom: unset !important;
     }
-
     .single_div p,
     .single_div h6 {
         margin-bottom: unset !important;
@@ -390,6 +379,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     {{ $order->tour?->name ?? 'Tour Deleted' }}
                                 </h6>
                             </div>
+
                             <div class="single_div">
                                 <p>Tour Date</p>
                                 <h6 class="fw-bold">
@@ -401,7 +391,6 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 </h6>
                             </div>
 
-
                             <div class="single_div">
                                 <p>Lead Booker</p>
                                 <h6 class="fw-bold">
@@ -412,7 +401,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
 
                         <div class="col-md-6 single_div_right">
                             <div class="single_div">
-                                <p class="text-nowrap">Consultant</p>
+                                <p>Consultant</p>
                                 <h6 class="fw-bold">
                                     {{ $order->consultant
                                     ? $order->consultant->name . ' (' . $order->consultant->email . ')'
@@ -423,19 +412,24 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                         </div>
                     </div>
                 </div>
-                <div class="row text-break">
+
+                <div class="row">
                     <div class="col-md-6 mb-0">
-                        <span>Internal Notes</span>
-                        <h6 class="fw-bold">{!! nl2br($order->internal_notes ?? 'No Internal Notes') !!}</h6>
+                            <span>Internal Notes</span>
+                            <h6 class="fw-bold">{!! nl2br($order->internal_notes ?? 'No Internal Notes') !!}</h6>
                     </div>
                     <div class="col-md-6">
-                        <span>External Notes</span>
-                        <h6 class="fw-bold mb-1">{!! nl2br($order->external_notes ?? 'No External Notes') !!}</h6>
+                            <span>External Notes</span>
+                            <h6 class="fw-bold mb-1">{!! nl2br($order->external_notes ?? 'No External Notes') !!}</h6>
 
                     </div>
                 </div>
             </div>
-            <div class="right_blue_section d-flex  flex-column">
+
+
+
+             <div class="right_blue_section d-flex  flex-column">
+
                 <div class="single_div_inner">
                     <div class="single_div_left">
                         <div class="single_div">
@@ -483,6 +477,9 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 ({{ fr_currency($order->remaining * ($toSystem ?? 1), Settings::currency()) }}) @endif
                             </h6>
                         </div>
+
+
+
                     </div>
                     <div class="single_div_right">
                         <div class="single_div">
@@ -524,41 +521,32 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 No FX Rate for Conversion
                                 @endif
                             </h6>
-
-
-
-
-
-
                         </div>
+
+
                     </div>
                 </div>
-
+               
                 <div class="d-flex gap-3 flex-wrap mt-3 button_div">
                     <a href="{{ route('orders.edit', ['order' => $order,]) }}" class="btn btn-success">
                         <div class="d-inline-flex align-content-center justify-content-center">
                             <i class="fas fa-edit"></i>
                         </div>
+
                         Edit Order
                     </a>
                     <a class="view_tour" href="{{ route('tours.view', ['tour' => $order->tour_id]) }}">
                         <div class="icon">
                             <div class="d-inline-flex align-content-center justify-content-center">
                                 <i class="fas fa-globe"></i>
-
                             </div>
-
-
-
                         </div>
                         <div class="text">
                             View Tour
-
                         </div>
                     </a>
                     <a class="edit_occupancy" href="{{ route('orders.occupancy', ['order' => $order,]) }}">
                         <div class="icon">
-
                             <div class="d-inline-flex align-content-center justify-content-center">
                                 <i class="fas fa-edit"></i>
                             </div>
@@ -571,135 +559,136 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                         <div class="icon">
                             <div class="d-inline-flex align-content-center justify-content-center">
                                 <i class="fas fa-edit"></i>
-
                             </div>
                         </div>
                         <div class="text">
                             Change Tour
                         </div>
                     </a>
-
                 </div>
-            </div>
+
 
         </div>
     </div>
-    <div class="view_order_coltwo d-flex flex-colum">
 
-        <div class="container">
+</div>
 
-            <!-- Row 1 -->
-            <div class="button_row_class">
-                <div class="">
-                    <a class="popup-grid-item color-info row-1"
-                        href="{{ route('orders.reservation', ['order' => $order,]) }}" target="_blank">
-                        <div class="icon">
-                            <div class="d-inline-flex align-content-center justify-content-center">
-                                <i class="fas fa-search"></i>
-                            </div>
-                        </div>
-                        <div class="text">
-                            View Reservation Document
-                        </div>
-                    </a>
-                </div>
+<div class="view_order_coltwo d-flex flex-colum">
 
-                <div class="">
-                    <a class="popup-grid-item color-info row-1"
-                        href="{{ route('orders.itinerary', ['order' => $order,]) }}" target="_blank">
-                        <div class="icon">
-                            <div class="d-inline-flex align-content-center justify-content-center">
-                                <i class="fas fa-search"></i>
-                            </div>
+    <div class="container">
+
+        <!-- Row 1 -->
+        <div class="button_row_class">
+            <div class="">
+                <a class="popup-grid-item color-info row-1"
+                    href="{{ route('orders.reservation', ['order' => $order,]) }}" target="_blank">
+                    <div class="icon">
+                        <div class="d-inline-flex align-content-center justify-content-center">
+                            <i class="fas fa-search"></i>
                         </div>
-                        <div class="text">
-                            View Itinerary Document
-                        </div>
-                    </a>
-                </div>
+                    </div>
+                    <div class="text">
+                        View Reservation Document
+                    </div>
+                </a>
             </div>
 
-            <!-- Row 2 -->
-            <div class="button_row_class">
-                <div class="">
-                    <a class="popup-grid-item color-mint row-4" href="#"
-                        onclick="event.preventDefault(); if(confirm('Are you sure you want to send the Reservation document to email?')) { Livewire.emit('sendReservationToEmail'); }">
-                        <div class="icon">
-                            <div class="d-inline-flex align-content-center justify-content-center">
-                                <i class="fas fa-envelope"></i>
-                            </div>
+            <div class="">
+                <a class="popup-grid-item color-info row-1" href="{{ route('orders.itinerary', ['order' => $order,]) }}"
+                    target="_blank">
+                    <div class="icon">
+                        <div class="d-inline-flex align-content-center justify-content-center">
+                            <i class="fas fa-search"></i>
                         </div>
-                        <div class="text">
-                            Send Reservation Document
-                        </div>
-                    </a>
-                </div>
-
-                <div class="">
-                    <a class="popup-grid-item color-mint row-4" href="#"
-                        onclick="event.preventDefault(); if(confirm('Are you sure you want to send the booking confirmation email?')) { Livewire.emit('sendBookingConfirmation'); }">
-                        <div class="icon">
-                            <div class="d-inline-flex align-content-center justify-content-center">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                        </div>
-                        <div class="text">
-                            Send Booking Confirmation
-                        </div>
-                    </a>
-                </div>
-
-                <div class="">
-                    <a class="popup-grid-item color-mint row-4" href="#"
-                        wire:click.prevent="openPopupEmailForm('itinerary')">
-                        <div class="icon">
-                            <div class="d-inline-flex align-content-center justify-content-center">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                        </div>
-                        <div class="text">
-                            Send Itinerary Document
-                        </div>
-                    </a>
-                </div>
-
-                <div class="">
-                    <a class="popup-grid-item color-mint row-4" href="#"
-                        wire:click.prevent="openPopupEmailForm('itinerary')">
-                        <div class="icon">
-                            <div class="d-inline-flex align-content-center justify-content-center">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                        </div>
-                        <div class="text">
-                            Send Final Payment Overdue Mail
-                        </div>
-                    </a>
-                </div>
+                    </div>
+                    <div class="text">
+                        View Itinerary Document
+                    </div>
+                </a>
             </div>
-
-            <!-- Row 3 -->
-            <div class="button_row_class">
-                <div class="">
-                    <a class="popup-grid-item color-danger row-5" href="#" onclick="$('#order-delete').submit()">
-                        <div class="icon">
-                            <div class="d-inline-flex align-content-center justify-content-center">
-                                <i class="fas fa-trash-alt"></i>
-                            </div>
-                        </div>
-                        <div class="text">
-                            Cancel Order
-                        </div>
-                    </a>
-                </div>
-            </div>
-
         </div>
 
+        <!-- Row 2 -->
+        <div class="button_row_class">
+            <div class="">
+                <a class="popup-grid-item color-mint row-4" href="#"
+                    onclick="event.preventDefault(); if(confirm('Are you sure you want to send the Reservation document to email?')) { Livewire.emit('sendReservationToEmail'); }">
+                    <div class="icon">
+                        <div class="d-inline-flex align-content-center justify-content-center">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="text">
+                        Send Reservation Document
+                    </div>
+                </a>
+            </div>
 
+            <div class="">
+                <a class="popup-grid-item color-mint row-4" href="#"
+                    onclick="event.preventDefault(); if(confirm('Are you sure you want to send the booking confirmation email?')) { Livewire.emit('sendBookingConfirmation'); }">
+                    <div class="icon">
+                        <div class="d-inline-flex align-content-center justify-content-center">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="text">
+                        Send Booking Confirmation
+                    </div>
+                </a>
+            </div>
 
+            <div class="">
+                <a class="popup-grid-item color-mint row-4" href="#"
+                    wire:click.prevent="openPopupEmailForm('itinerary')">
+                    <div class="icon">
+                        <div class="d-inline-flex align-content-center justify-content-center">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="text">
+                        Send Itinerary Document
+                    </div>
+                </a>
+            </div>
+
+            <div class="">
+                <a class="popup-grid-item color-mint row-4" href="#"
+                    wire:click.prevent="openPopupEmailForm('itinerary')">
+                    <div class="icon">
+                        <div class="d-inline-flex align-content-center justify-content-center">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="text">
+                        Send Final Payment Overdue Mail
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="button_row_class">
+            <div class="">
+                <a class="popup-grid-item color-danger row-5" href="#" onclick="$('#order-delete').submit()">
+                    <div class="icon">
+                        <div class="d-inline-flex align-content-center justify-content-center">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    </div>
+                    <div class="text">
+                        Cancel Order
+                    </div>
+                </a>
+            </div>
+        </div>
 
     </div>
+
+
+
+
+</div>
 
 </div>
 
@@ -735,8 +724,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                 <div class="otm-card">
                     <p class="d-flex justify-content-between align-items-center">
                         <span>
-                            {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : 'Additional
-                            Customer'
+                            {{ ($order->lead_booker_id == $ordersCustomer->id) ? 'Lead Booker' : 'Additional Customer'
                             }}
                         </span>
                         <span>
@@ -825,8 +813,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                     @endif
                     @if(in_array('emergency_contact_telephone', $orderCustomerFields))
                     <p>Contact telephone (Emergency)</p>
-                    <h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_telephone ?? 'Not set' }}
-                    </h6>
+                    <h6 class="fw-bold">{{ $ordersCustomer->customer->emergency_contact_telephone ?? 'Not set' }}</h6>
                     @endif
                     @if(in_array('loyalty_number', $orderCustomerFields))
                     <p>Loyalty Number</p>
@@ -931,8 +918,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 @endcan
                                 @can('delete', \App\Models\Order\Payment\Payment::class)
                                 <a href="#" onclick="$('#payment-{{$payment->id}}-delete').submit()"
-                                    class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete()
-                                    }}</a>
+                                    class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                 <form
                                     action="{{ route('payments.delete', ['order' => $order, 'payment' => $payment,]) }}"
                                     method="post" id="payment-{{$payment->id}}-delete">
@@ -982,8 +968,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                         @if($ordersCustomer->has_surcharge)
                         <tr>
                             <td>Single Occupancy Surcharge: {{ $ordersCustomer->customer->full_name }}</td>
-                            <td>{{ fr_currency($ordersCustomer->single_occupancy_surcharge, $order->currency) }}
-                            </td>
+                            <td>{{ fr_currency($ordersCustomer->single_occupancy_surcharge, $order->currency) }}</td>
                         </tr>
                         @endif
                         @endforeach
@@ -1068,8 +1053,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <td>{{ fr_currency($order->calculated_deposit, $order->currency) }} ({{
                                 $order->deposit_percentage }}%)</td>
                             <td>
-                                @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee
-                                ??
+                                @php $amount = $order->calculated_deposit - min(($order->paid - ($order->booking_fee ??
                                 0)), $order->calculated_deposit); @endphp
                                 @if($amount <= 0) {{ fr_currency($order->calculated_deposit, $order->currency) }}
                                     @else
@@ -1102,8 +1086,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             <td>{{ fr_currency($installment->calculated_amount, $order->currency) }} ({{
                                 $installment->percentage }}%)</td>
                             <td>
-                                @if($amount <= 0) {{ fr_currency($installment->calculated_amount, $order->currency)
-                                    }}
+                                @if($amount <= 0) {{ fr_currency($installment->calculated_amount, $order->currency) }}
                                     @else
                                     {{ fr_currency($installment->repository->getAmountPaid(), $order->currency) }}
                                     @endif
@@ -1214,8 +1197,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 @endcan
                                 @can('delete', \App\Models\Order\Adjustment\ManualAdjustment::class)
                                 <a href="#" onclick="$('#madjustment-{{$adjustment->id}}-delete').submit()"
-                                    class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete()
-                                    }}</a>
+                                    class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                 <form
                                     action="{{ route('manual-adjustments.delete', ['order' => $order, 'manualAdjustment' => $adjustment,]) }}"
                                     method="post" id="madjustment-{{$adjustment->id}}-delete">
@@ -1250,8 +1232,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                         @foreach($order->orderCustomers as $ordersCustomer)
                         @foreach($ordersCustomer->adjustments as $adjustment)
                         <tr>
-                            <td>{{ $ordersCustomer->customer->first_name . " " .
-                                $ordersCustomer->customer->last_name }}
+                            <td>{{ $ordersCustomer->customer->first_name . " " . $ordersCustomer->customer->last_name }}
                             </td>
                             <td>{{ fr_currency($adjustment->amount, $order->currency) }}</td>
                             <td>{{ $adjustment->reason }}</td>
@@ -1267,8 +1248,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 @endcan
                                 @can('delete', \App\Models\Order\Adjustment\OrderCustomerAdjustment::class)
                                 <a href="#" onclick="$('#oadjustment-{{$adjustment->id}}-delete').submit()"
-                                    class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete()
-                                    }}</a>
+                                    class="btn btn-outline-danger btn-sm mb-1" title="Delete">{{ Icon::delete() }}</a>
                                 <form
                                     action="{{ route('order-customer-adjustments.delete', ['order' => $order, 'orderCustomer' => $ordersCustomer, 'orderCustomerAdjustment' => $adjustment,]) }}"
                                     method="post" id="oadjustment-{{$adjustment->id}}-delete">

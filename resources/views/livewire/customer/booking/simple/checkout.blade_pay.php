@@ -1,0 +1,355 @@
+@php
+    $is_different_traveller = $is_different_traveller === 'true' ? true : false;
+@endphp
+
+<div class="row">
+    <div class="second-form">
+        <div class="left-col">
+            <div class="contain">
+                <h3>Enter your details</h3>
+                @yield('check_out_event_name')
+                <div class="purchase-info-block">
+                    <h3>Enter purchaser information</h3>
+                </div>
+                <div class="top-form-contain">
+                    <div class="form-field">
+                        <input type="text" wire:model="payer.first_name" placeholder="First Name*" required>
+                        @error('payer.first_name') <label class="error-label">{{ $message }}</label> @enderror
+                    </div>
+                    <div class="form-field">
+                        <input type="text" wire:model="payer.last_name" placeholder="Last Name*">
+                        @error('payer.last_name') <label class="error-label">{{ $message }}</label> @enderror
+                    </div>
+                    <div class="form-field">
+                        <input type="email" wire:model="payer.email_address" placeholder="Email*" required>
+                        @error('payer.email_address') <label class="error-label">{{ $message }}</label> @enderror
+                    </div>
+                    <div class="form-field mobile_field">
+                        <div wire:ignore>
+                            <input type="tel" id="mobile_number" name="mobile_number" value="{{ $this->payer->mobile_number }}" placeholder="Primary Phone*" required>
+                            <script type="text/javascript">
+                                jQuery(document).ready(function () {
+                                    let input = document.querySelector('#mobile_number');
+                                    let iti = window.setupPhoneField(input);
+
+                                    jQuery(input).on('change', function (event) {
+                                        @this.set('payer.mobile_number', iti.getNumber());
+                                    });
+                                    document.addEventListener('updateValue', function (event) {
+                                        if (event.detail.key === 'payer.mobile_number') {
+                                            input.value = event.detail.value;
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                        @error('payer.mobile_number') <label class="error-label">{{ $message }}</label> @enderror
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="postal-code" name="postal-code" wire:model="payerAddress.postcode" placeholder="Post code" required>
+                        @error('payerAddress.postcode') <label class="error-label">{{ $message }}</label> @enderror
+                    </div>
+                    <div class="form-field rap-las-cls">
+                        <div wire:ignore>
+                            <input type="text" id="custom-input-date"  class="calendar hasDatepicker" data-picker name="upload-release" placeholder="DATE OF BIRTH">
+                            <script type="text/javascript">
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const initialDOB = @this.payer?.date_of_birth ? new Date(@this.payer.date_of_birth) : null;
+                                    const datePickerElement = document.querySelector('[data-picker]');
+                                    if (datePickerElement) {
+                                        const picker = new Pikaday({
+                                            field: datePickerElement,
+                                            format: 'DD/MM/YYYY', 
+                                            minDate: new Date(1900, 0, 1), 
+                                            maxDate: new Date(),
+                                            yearRange: [1900, new Date().getFullYear()],
+                                            onSelect: function(date) {
+                                                const formattedDate = formatDate(date);
+                                                datePickerElement.value = formattedDate;
+                                                @this.set('payer.date_of_birth', formattedDate);
+                                            }
+                                        });
+
+                                        // Format date as Y-m-d'
+                                        function formatDate(date) {
+                                            const day = ('0' + date.getDate()).slice(-2);
+                                            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                                            const year = date.getFullYear();
+                                            return `${day}-${month}-${year}`;
+                                        }
+                                    }
+                                });
+                            </script>
+                        </div>
+                        @error('payer.date_of_birth') <label class="error-label">{{ $message }}</label> @enderror
+                    </div>
+                    <div class="lead-purchase-traveller-block">
+                        <p>Is purchaser the same person as lead traveller</p>
+                        <div class="cus-block-mod-ren">
+                            <label class="contain-vv"><span class="fnal-txt">Yes</span>
+                                <input type="radio" wire:model="is_different_traveller" value="false" @checked($is_different_traveller == false)>                           
+                                <span class="checkmark"></span>
+                            </label> 
+                            <label class="contain-vv"><span class="fnal-txt">No</span>
+                                <input type="radio" wire:model="is_different_traveller" value="true" @checked($is_different_traveller == true)>
+                                <span class="checkmark"></span>
+                            </label> 
+                        </div>   
+                    </div>
+                </div>
+
+                <script>
+                    jQuery(document).ready(function ($) {
+                      var chval = @json($is_different_traveller); 
+                      setTimeout(() => {
+                        if (chval) {
+                          // If chval is true or a truthy value
+                          jQuery('.contain-vv input:radio[value=true]').click(); // No quotes around true for boolean
+                        } else {
+                          // If chval is false or a falsy value
+                          jQuery('.contain-vv input:radio[value=false]').click(); // Assuming there's a radio input with value false
+                        }
+                      }, 2000);
+                    });
+                  </script>
+
+                @if ($is_different_traveller)
+                    <div class="class-test">
+                        <div class="purchase-info-block">
+                            <h3>lead passenger details</h3>
+                        </div> 
+                        <div class="top-form-contain">
+                            <div class="form-field">
+                                <input type="text" {{-- wire:model="payer.first_name1" --}} placeholder="First Name*" required>
+                                @error('payer.first_name1') <label class="error-label">{{ $message }}</label> @enderror
+                            </div>
+                            <div class="form-field">
+                                <input type="text"  {{-- wire:model="payer.last_name1" --}} placeholder="Last Name*">
+                                @error('payer.last_name1') <label class="error-label">{{ $message }}</label> @enderror
+                            </div>
+                            <div class="form-field">
+                                <input type="email"  {{-- wire:model="payer.email_address1" --}} placeholder="Email" >
+                                @error('payer.email_address1') <label class="error-label">{{ $message }}</label> @enderror
+                            </div>
+                            <div class="form-field mobile_field">
+                                <input type="tel" id="mobile_number1" {{-- wire:model="payer.mobile_number1" --}} placeholder="Primary Phone" >
+                                @error('payer.mobile_number1') <label class="error-label">{{ $message }}</label> @enderror
+                                <script type="text/javascript">
+                                jQuery(document).ready(function () {
+                                    let input = document.querySelector('#mobile_number1');
+                                    let iti = window.setupPhoneField(input);
+                                });
+                            </script>
+                            </div>
+                        </div>
+                    </div>
+                 @endif
+                  
+                <h3>Special requests</h3>
+                <div data-chk="{{$this->booking->notes}}" class="form-field-full-width" wire:ignore>
+                    <div id="summernote">{!! $this->booking->notes !!}</div>
+                    <script type="text/javascript">
+                        $('#summernote').summernote({
+                            placeholder: 'Message',
+                            tabsize: 2,
+                            height: 120,
+                            toolbar: [
+                                ['font', ['bold', 'italic', 'underline']],
+                                ['para', ['paragraph', 'ol']],
+                                ['insert', ['link', 'picture', 'emoji']],
+                            ],
+                            callbacks: {
+                                onChange: function (content, $editable) {
+                                    @this.set('booking.notes', content)
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+
+                @php $estimateSingleOccupancy = 0; @endphp
+                @if($this->booking->groups()->count() <= 0)
+                    @php $singleCount = $this->booking->travellers()?->count() % 2; @endphp
+                    @php $estimateSingleOccupancy = $this->tour->single_occupancy_surcharge * $singleCount; @endphp
+                @endif
+                <!-- Payment Section -->
+                <div class="payment-method desktop-view">
+                    <h5 class="sub-heading-6">PAYMENT METHOD</h5>
+                    <div class="option-wrapper">
+                        <label class="radio-option" wire:click="setPayFull(1)">
+                            <input type="radio" name="payment" @if($payFull) checked @endif>
+                            <span class="custom-radio"></span>
+                            <span class="option-title">Pay in full</span>
+                        </label>
+                        <div class="price">{{ f_currency_booking($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) }}</div>
+                    </div>
+                    @if(!$this->mustPayAll())
+                        @php
+                            $totalCost = $booking->repository->getTotalCost();
+                            $depositPercentage = $booking->tour?->deposit_percentage ?? 0;
+                            $depositAmount = ($totalCost * $depositPercentage) / 100;
+                            $remainingAmount = $totalCost - $depositAmount;
+                        @endphp
+                        <div class="option-wrapper">
+                            <div>
+                                <label class="radio-option" wire:click="setPayFull(0)">
+                                    <input type="radio" name="payment" @if(!$payFull) checked @endif>
+                                    <span class="custom-radio"></span>
+                                    <span class="option-title">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later</span>
+                                </label>
+                                <div class="option-subtext">
+                                    <p>You will receive a reminder to pay the remaining balance of {{ f_currency_booking(($this->booking->repository->getTotalCost() + $estimateSingleOccupancy) - $this->booking->repository->getDueTodayAmount()) }} before {{ $booking->tour->final_payment->format('d M Y') }}</p>
+                                </div>
+                            </div>
+                            <div class="price">{{ f_currency_booking($this->booking->repository->getDueTodayAmount()) }}</div>
+                        </div>
+                    @endif
+
+                    <div class="card-block">
+                        <div class="card-type active">
+                            <img src="{{ asset('icons/card.svg') }}" alt="Debit card">
+                            <p>Credit / Debit card</p>
+                        </div>
+                        {{--<div class="card-type">
+                            <img src="{{ asset('icons/document-text.svg') }}" alt="Direct Debit">
+                            <p>Invoice - Direct Debit</p>
+                        </div> --}}
+                    </div>
+
+                    <div class="acc-tp-cond">
+                        <input type="checkbox" wire:model="terms">
+                        <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <button type="submit" class="next-button" wire:click="checkout">
+                        <span>
+                            <span>CHECKOUT</span>
+                            <img src="{{ asset('icons/Right-arrow-mod.svg') }}" alt="right-arrow">
+                        </span>
+                    </button>
+                    @error('common')
+                    <div style="padding-top: 1rem; color: red;">
+                        {{ $message }}
+                    </div>
+                    @enderror
+
+                    <div class="payment-method desktop-view">
+                        <div id="payment-desktop-slot"></div>
+                    </div>
+
+                    {{-- <div style="padding-top: 1rem; padding-bottom: 2rem;">
+                        <div id="stripe-hidden" style="visibility: hidden">
+                            <div id="stripe-container"></div>
+                            @if($this->getSurchargeAmount() !== null || $this->getSurchargeAmount() > 0 || $this->getSurchargeAmount() < 0)
+                                <div id="surcharge-warning">
+                                    A card surcharge of {{ $this->getSurchargePercentage() }}% ({{ f_currency_booking($this->getSurchargeAmount(), $this->booking->currency) }}) will be added to card transactions
+                                </div>
+                            @endif
+                            <button type="submit" class="next-button" id="pay-button">
+                                <span>
+                                    <span>PAY</span>
+                                </span>
+                            </button>
+                            <div id="confirm-errors"></div>
+                        </div>
+                        <div id="airwallex-container" class="airwallex-content"></div>
+                    </div> --}}
+                </div>
+                <!-- End of Payment Section -->
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="contain">
+                <x-customer.booking.simple.package-details :booking="$booking" :tour="$this->booking->tour">
+                    <div class="mobile-view">
+                        <!-- Payment Method Section -->
+                        <div class="additional-block" id="">
+                            <h6>Payment method</h6>
+                            <div class="form-field-checkbox" wire:click="setPayFull(1)">
+                                <div class="left-ass">
+                                    <label class="containr"><span class="txt">Pay in full</span>
+                                        <input type="checkbox" @if($payFull) checked @endif>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="right-assets">
+                                    <p>{{ f_currency_booking($booking->repository->getTotalCost()) }}</p>
+                                </div>
+                            </div>
+                        
+                            @if(!$this->mustPayAll())
+                                @php
+                                    $totalCost = $booking->repository->getTotalCost();
+                                    $depositPercentage = $booking->tour?->deposit_percentage ?? 0;
+                                    $depositAmount = ($totalCost * $depositPercentage) / 100;
+                                    $remainingAmount = $totalCost - $depositAmount;
+                                @endphp
+                            <div class="form-field-checkbox" wire:click="setPayFull(0)">
+                                <div class="left-ass">
+                                    <label class="containr"><span class="txt">Pay a {{ $booking->tour?->deposit_percentage }}% deposit now. <br /> You will receive a reminder to pay the remaining balance of {{ f_currency_booking($remainingAmount) }} before {{ $booking->tour->final_payment->format('d M Y') }}</span></span>
+                                        <input type="checkbox" @if(!$payFull) checked @endif>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="right-assets">
+                                    <p>{{ f_currency_booking($booking->repository->getDueTodayAmount()) }}</p>
+                                </div>
+                            </div>
+
+                            {{--<div class="form-field-checkbox" wire:click="setPayFull(0)">
+                                <div class="left-ass">
+                                    <label class="containr">
+                                    <span class="txt">
+                                        Pay a {{ $booking->tour?->deposit_percentage }}% deposit now, and the rest later
+                                        <span class="inn-txt-cls">
+                                            You will receive a reminder to pay the balance amount before {{ f_date($booking->tour?->final_payment) }}
+                                        </span>
+                                    </span>
+                                        <input type="checkbox" @if(!$payFull) checked @endif>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="right-assets">
+                                    <p>{{ $this->formatCurrency($booking->repository->getDueTodayAmount()) }}</p>
+                                </div>
+                            </div> --}}
+                            @endif
+                            <div class="card-field-box">
+                                <div class="first-in active">
+                                    {{ Icon::regular('credit-card') }}
+                                    <p>Credit / Debit card</p>
+                                </div>
+                                {{--<div class="first-in">
+                                    {{ Icon::solid('file-invoice') }}
+                                    <p>Invoice – Direct Debit</p>
+                                </div>--}}
+                            </div>
+                        </div>
+                        <div class="wh-las-cls-con">
+                            <div class="acc-tp-cond">
+                                <label class="contain-v"><span class="fnal-txt">I accept the <a href="https://www.kpt.com.au/terms-and-conditions/" target="_blank">Terms & Conditions</a></span>
+                                    <input type="checkbox" wire:model="terms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="submit-btn-cls">
+                                <div class="inner">
+                                    <input class="submit-btn" wire:click="checkout" type="submit" value="Checkout">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- EOS Payment Method Section -->
+                    </div>
+                </x-customer.booking.simple.package-details>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+@endpush
+

@@ -51,7 +51,6 @@
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-doctrine": "^1.5",
         "phpunit/phpunit": "^10.0",
-        "psy/psysh": "0.11.2",
         "spatie/laravel-ignition": "^2.0"
     },
     "config": {

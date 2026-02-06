@@ -6,7 +6,7 @@
     $fieldName = $attributes->get('wire:model', $attributes->get('name'));
     $hasError = $errors->has($fieldName);
 @endphp
-<div class="form-group col-12 col-xl-{{ $attributes->get('width', 12) }}">
+<div class="form-group col-12 view_quote_input col-xl-{{ $attributes->get('width', 12) }}">
     @if($attributes->get('label') !== null)
     <label class="{{ ($hasError && $attributes->has('required')) ? 'text-danger' : '' }}">
         {{ $attributes->get('label', "") ?? $slot }} @if($attributes->has('required')) <x-admin.required /> @endif

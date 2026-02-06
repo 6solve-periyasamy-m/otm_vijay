@@ -1,4 +1,4 @@
-<div class="row w-100">
+<div class="row w-100 price_matrix" >
     <x-livewire.input wire:model="quantity" label="Quantity" width="5" />
     <x-livewire.input wire:model="amount" label="Price per Person" width="5" type="number" step="0.01" />
     <div class="col-2">
