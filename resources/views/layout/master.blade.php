@@ -20,6 +20,7 @@
     <link href="{{ asset('/css/mdb.css') }}" rel="stylesheet">
     <!-- App (including Lodash, jQuery, Bootstrap via NPM) -->
     <link href="{{ asset('/css/app.css?v=').time()}}" rel="stylesheet">
+       <link href="{{ asset('/css/admin/custom.css') }}" rel="stylesheet">
     @livewireStyles
     <script src="{{ asset('/js/app.js') }}"></script>
     <script src="{{ asset('js/ckeditor.js') }}"></script>
@@ -27,6 +28,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css" rel="stylesheet">
     {{-- Addons (fold): --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css" rel="stylesheet" />
+
     <style>
         .CodeMirror {
             border: 1px solid #ced4da;
