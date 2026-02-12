@@ -214,6 +214,7 @@ class Form extends Component
             'customer.external_notes' => 'nullable|string',
             'customer.dietary_notes' => 'nullable|string',
             'customer.mobility_notes' => 'nullable|string',
+                'customer.organization_id' => 'required|int|exists:organizations,id',
             'loyalty.*.type' => 'nullable|required_with:loyalty.*.name,loyalty.*.notes|int|exists:loyalty_number_types,id',
             'loyalty.*.name' => 'nullable|required_with:loyalty.*.notes,loyalty.*.type|string',
             'loyalty.*.notes' => 'nullable|required_with:loyalty.*.name,loyalty.*.type|string',
