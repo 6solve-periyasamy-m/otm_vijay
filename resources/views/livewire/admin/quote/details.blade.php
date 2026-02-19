@@ -1,7 +1,7 @@
 <div class="row">
     @php /** @var \App\Models\Quote\Quote $quote */ @endphp
     {{-- <div class="col-lg-9 mb-3"> --}}
-        <div class="main-section mb-3">
+        <div class="main-section mb-3 pr-1" style="padding-right:9px !important;">
 
             <div class="row g-2 mb-3">
                 <div class="col-md-3">
@@ -64,7 +64,7 @@
                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
-                                        <span class="fw-normal">{{ __('quotes.view.starts') }}</span>
+                                        <span class="fw-normal">{{ __('quotes.view.starts') }}:</span>
                                         <span>{{ f_date($quote->date_from) }} → {{ f_date($quote->date_to) }}</span>
                                     </div>
                                 </x-admin.section.header.detail>
@@ -92,7 +92,7 @@
                                     <x-slot:title></x-slot:title>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <span class="fw-normal">{{ __('quotes.view.agent') }}:</span>
-                                        {{ $quote->agent?->first_name }} {{ $quote->agent?->last_name ?? '-' }}
+                                        {{ $quote->agent?->first_name }} {{ $quote->agent?->last_name ?? '' }}
                                     </div>
                                 </x-admin.section.header.detail>
                             </div>
@@ -101,15 +101,21 @@
                                 <div class="d-flex align-items-center gap-2 mb-3">
                                     <x-slot:title></x-slot:title>
                                     <span class="fw-normal">{{ __('quotes.view.lead.contact') }}:</span>
-                                    <span class="text-break">
+                                    <span class="">
                                         <a href="mailto:{{ $quote->leadTraveller?->email }}">
-                                            {{ $quote->leadTraveller?->email ?? 'No Email Found' }}
+                                            {{ $quote->leadTraveller?->email }}
                                         </a>
+                                        @if($quote->leadTraveller?->phone)
                                         (
-                                        <a href="tel:{{ $quote->leadTraveller?->phone }}">
-                                            {{ $quote->leadTraveller?->phone ?? 'No Telephone Found' }}
-                                        </a>
+                                        <span class="">
+                                            <a href="tel:{{ $quote->leadTraveller->phone }}">
+                                                {{ $quote->leadTraveller->phone }}
+                                            </a>
+                                        </span>
                                         )
+
+                                        @endif
+
                                     </span>
                                 </div>
                             </x-admin.section.header.detail>
@@ -118,13 +124,13 @@
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <x-admin.section.header.detail>
-                                    <x-slot:title>{{ __('quotes.view.notes.internal') }}</x-slot:title>
+                                    <x-slot:title>{{ __('quotes.view.notes.internal') }}:</x-slot:title>
                                     {{ $quote->internal_notes ?? 'No Internal Notes' }}
                                 </x-admin.section.header.detail>
                             </div>
                             <div class="col-md-6">
                                 <x-admin.section.header.detail>
-                                    <x-slot:title>{{ __('quotes.view.notes.external') }}</x-slot:title>
+                                    <x-slot:title>{{ __('quotes.view.notes.external') }}:</x-slot:title>
                                     {{ $quote->external_notes ?? 'No External Notes' }}
                                 </x-admin.section.header.detail>
                             </div>
@@ -132,40 +138,46 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    @php
+                    // Match Calculator.php logic for all calculations
+                    $paying = max($quote->paying_count, (int)($quote->paying ?? 0));
+                    $travelling = max($quote->travelling_count, (int)($quote->travelling ?? 0));
+                    $leadPaying = $quote->leadTraveller?->paying ? 1 : 0;
+                    $leadTravelling = $quote->leadTraveller?->travelling ? 1 : 0;
+                    $totalTravellerCount = $paying + $travelling + $leadTravelling;
+                    $costToCompany = $quote->repository->getTotalCostToCompany($totalTravellerCount);
+                    $payingTotal = $paying + $leadPaying;
+                    $pricePerPerson = $quote->repository->getPricePerPerson($payingTotal)?->price_per_person ?? 0;
+                    $total = $pricePerPerson * $payingTotal;
+                    $commission = $quote->commission ? sigfig($total * ($quote->commission / 100)) : 0;
+                    $toBePaid = $total - ($commission ?? 0.0);
+                    $toRate = $quote->repository->getToRate();
+                    if ($quote->taxBracket()?->rate !== null) {
+                        $taxes = sigfig($quote->taxBracket()?->calculate($total));
+                    } else {
+                        $taxes = null;
+                    }
+                    if ($quote->currency !== null && $quote->currency_id !== Settings::currency()?->id) {
+                        if ($quote->from_rate === null) {
+                            $profit = null;
+                        } else {
+                            $profit = sigfig(sigfig($total * $quote->from_rate) - $costToCompany);
+                        }
+                    } else {
+                        $profit = sigfig($total - $costToCompany);
+                    }
+                    $profit = $profit === null ? null : ($profit - $commission);
+                    @endphp
                     <div class="rounded-3 shadow p-3 h-100 "
                         style="background-color: #A3CAEE;display: flex;flex-direction: column;justify-content: space-between; ">
-                        @php
-                        $totalTravellerCount = $paying + $travelling;
-                        $costToCompany = $quote->repository->getTotalCostToCompany($totalTravellerCount);
-                        $pricePerPerson = $quote->repository->getPricePerPerson($paying)?->price_per_person ?? 0;
-                        $total = $pricePerPerson * $paying;
-                        $commission = $quote->commission ? ($total * ($quote->commission / 100)) : 0;
-
-                        if ($quote->currency !== null && $quote->currency_id !== Settings::currency()?->id) {
-                        if ($quote->from_rate === null) {
-                        $profit = null;
-                        } else {
-                        $profit = sigfig(sigfig($total * $quote->from_rate) - $costToCompany);
-                        }
-                        } else {
-                        $profit = sigfig($total - $costToCompany);
-                        }
-                        if ($quote->taxBracket()?->rate !== null) {
-                        $taxes = sigfig($quote->taxBracket()?->calculate($total));
-                        } else {
-                        $taxes = null;
-                        }
-                        $profit = $profit === null ? null : ($profit - $commission);
-                        @endphp
                         <div class="row g-3 right_extra_class">
-                            <div class="col-md-5 d-flex flex-column gap-2 mb-3">
-
+                            <div class="col-md-5 d-flex flex-wrap gap-2 mb-3 w-100">
                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
                                         <span class="fw-normal">
                                             {{-- {{ __('quotes.view.cards.quick.calculator.cost') }} --}}
-                                            Order Value
+                                            Order Value:
                                         </span>
 
                                         {{ f_currency(
@@ -176,13 +188,20 @@
                                         ) }}
                                     </div>
                                 </x-admin.section.header.detail>
+                                 <x-admin.section.header.detail>
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                        <x-slot:title></x-slot:title>
+                                        <span class="fw-normal">{{ __('quotes.view.cards.quick.calculator.ctc') }}:</span>
+                                        <span>{{ f_currency($costToCompany, Settings::currency(), $toRate, $quote->currency) }}</span>
+                                    </div>
+                                </x-admin.section.header.detail>
 
                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
 
                                         <span class="fw-normal">
-                                            {{ __('quotes.view.cards.quick.calculator.taxes') }}
+                                           {{ __('quotes.view.cards.quick.calculator.final') }}:
                                         </span>
 
                                         <span>
@@ -195,14 +214,11 @@
                                         </span>
                                     </div>
                                 </x-admin.section.header.detail>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column gap-2">
-                                <x-admin.section.header.detail>
+                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
-
                                         <span class="fw-normal">
-                                            {{ __('quotes.view.cards.quick.calculator.profit') }}
+                                            {{ __('quotes.view.cards.quick.calculator.profit') }}:
                                         </span>
 
                                         <span>
@@ -219,11 +235,21 @@
                                         </span>
                                     </div>
                                 </x-admin.section.header.detail>
+                                 <x-admin.section.header.detail>
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                        <x-slot:title></x-slot:title>
+                                        <span class="fw-normal">{{ __('quotes.view.cards.quick.calculator.taxes') }}:</span>
+                                        <span>{{ f_currency($toBePaid, Settings::currency(), $toRate, $quote->currency) }}</span>
+                                    </div>
+                                </x-admin.section.header.detail>
+                          
+                               
+                               
                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
                                         <span class="fw-normal">
-                                            {{ __('quotes.view.cards.quick.calculator.commission') }}
+                                            {{ __('quotes.view.cards.quick.calculator.commission') }}:
                                         </span>
                                         <span>
                                             {{ f_currency(
@@ -288,7 +314,7 @@
 
         </div>
 
-        <div class="quote-page cost-calculator col-lg-3 d-flex flex-colum">
+        <div class="quote-page cost-calculator col-lg-3 d-flex flex-column" style="padding-left:4px !important;">
 
             <div class="">
                 <style>
@@ -307,8 +333,8 @@
                         border: 1.94px solid #A3CAEE;
                         box-shadow: 0px 3.88px 3.88px -2px #67676740;
                         border-radius: 10px;
-                        padding: 8px;
-                        height: 93.5%;
+                        padding: 12px;
+                        height:101%;
                     }
 
                     .title {
@@ -342,16 +368,20 @@
                     .right_extra_class .clse,
                     .right_extra_class .col-md-5 .clse {
                         flex: unset !important;
-                        width: 100% !important;
+                        width: 49% !important;
                     }
-                    
+                    @media only screen and (max-width: 1366px) {
+                    .quote-page .card{
+                        height: 105% !important;
+                    }
+                    }
                 </style>
 
                 <x-admin.section.card>
                     <div class="custom-quote-card">
                         <x-slot:title>Additional Travellers</x-slot:title>
 
-                            <h6 class="fw-bold">Add the number of additional travellers</h6>
+                        <h6 class="fw-bold">Add the number of additional travellers</h6>
 
                         @php
                         $paying = $quote->paying + ($quote->leadTraveller?->paying ? 1 : 0);
@@ -373,13 +403,13 @@
 
                         <span>{{ $string }}</span>
 
-                        <div class="row ">
+                        <div class="row mt-3">
 
 
                             <div class="col-12 row gx-2 mb-3">
 
                                 <div class="col-12 text-center">
-                                    <p>{{ __('quotes.view.cards.quick.calculator.paying') }}</p>
+                                    <p style="margin-bottom: unset;margin-top: 10px;">{{ __('quotes.view.cards.quick.calculator.paying') }}</p>
                                 </div>
 
                                 <div class="col-3 text-end">
@@ -408,7 +438,7 @@
                             <div class="col-12 row gx-2">
 
                                 <div class="col-12 text-center">
-                                    <abbr
+                                    <abbr style="text-decoration: none"
                                         title="Free-of-Charge (FOC) Travellers will be granted components, but will not be charged any fees">
                                         {{ __('quotes.view.cards.quick.calculator.travelling') }}
                                     </abbr>
