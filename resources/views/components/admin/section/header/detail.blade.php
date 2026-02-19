@@ -1,4 +1,4 @@
-<div class="col-12 col-xl-{{ $attributes->get('width', 12) }}">
+<div class="clse col-12 col-xl-{{ $attributes->get('width', 12) }}">
     <p class="title">{{ $title }}</p>
     @if ($attributes->has('raw'))
         {{ $slot }}

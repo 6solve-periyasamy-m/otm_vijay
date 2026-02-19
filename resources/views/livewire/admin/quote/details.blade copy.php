@@ -45,92 +45,116 @@
 
             <div class="row g-3 mb-3 d-flex  flex-colum">
                 <div class="col-md-6">
-                    <div class="rounded-3 shadow p-3 h-100 justify-content-between" style="background-color: #A3CAEE">
+    <div class="rounded-3 shadow p-3 h-100 d-flex flex-column justify-content-between"
+         style="background-color: #A3CAEE">
 
-                        <div class="row g-3">
+        <div class="row g-3">
 
-                            <div class="col-md-11 extraclass">
-                                <x-admin.section.header.detail>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <x-slot:title></x-slot:title>
-                                        <span class="fw-normal">{{ __('quotes.view.name') }}:</span>
-                                        <x-livewire.input wire:model="quote.name" value="{{ $quote->name }}"
-                                            class="rounded-2 flex-grow-1 p-1" />
-                                    </div>
-                                </x-admin.section.header.detail>
-                            </div>
-
-                            <div class="col-md-6 d-flex flex-wrap align-items-baseline text-break" style="width:100%">
-                                <x-admin.section.header.detail>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <x-slot:title></x-slot:title>
-                                        <span class="fw-normal">{{ __('quotes.view.starts') }}</span>
-                                        <span>{{ f_date($quote->date_from) }} → {{ f_date($quote->date_to) }}</span>
-                                    </div>
-                                </x-admin.section.header.detail>
-                                <x-admin.section.header.detail>
-                                    <x-slot:title></x-slot:title>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <span class="fw-normal">{{ __('quotes.view.expires') }}:</span>
-                                        {{ f_date($quote->expires) }}
-                                    </div>
-                                </x-admin.section.header.detail>
-                                <x-admin.section.header.detail>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <x-slot:title></x-slot:title>
-                                        <span class="fw-normal text-nowrap">{{ __('quotes.view.organization') }}:</span>
-                                        <span>
-                                            @if($quote->organization)
-                                            {{ $quote->organization->name }}
-                                            @else
-                                            -
-                                            @endif
-                                        </span>
-                                    </div>
-                                </x-admin.section.header.detail>
-                                <x-admin.section.header.detail>
-                                    <x-slot:title></x-slot:title>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <span class="fw-normal">{{ __('quotes.view.agent') }}:</span>
-                                        {{ $quote->agent?->first_name }} {{ $quote->agent?->last_name ?? '-' }}
-                                    </div>
-                                </x-admin.section.header.detail>
-                            </div>
-
-                            <x-admin.section.header.detail>
-                                <div class="d-flex align-items-center gap-2 mb-3">
-                                    <x-slot:title></x-slot:title>
-                                    <span class="fw-normal">{{ __('quotes.view.lead.contact') }}:</span>
-                                    <span class="text-break">
-                                        <a href="mailto:{{ $quote->leadTraveller?->email }}">
-                                            {{ $quote->leadTraveller?->email ?? 'No Email Found' }}
-                                        </a>
-                                        (
-                                        <a href="tel:{{ $quote->leadTraveller?->phone }}">
-                                            {{ $quote->leadTraveller?->phone ?? 'No Telephone Found' }}
-                                        </a>
-                                        )
-                                    </span>
-                                </div>
-                            </x-admin.section.header.detail>
-
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <x-admin.section.header.detail>
-                                    <x-slot:title>{{ __('quotes.view.notes.internal') }}</x-slot:title>
-                                    {{ $quote->internal_notes ?? 'No Internal Notes' }}
-                                </x-admin.section.header.detail>
-                            </div>
-                            <div class="col-md-6">
-                                <x-admin.section.header.detail>
-                                    <x-slot:title>{{ __('quotes.view.notes.external') }}</x-slot:title>
-                                    {{ $quote->external_notes ?? 'No External Notes' }}
-                                </x-admin.section.header.detail>
-                            </div>
-                        </div>
+            <div class="col-md-11">
+                <x-admin.section.header.detail>
+                    <div class="d-flex flex-wrap align-items-baseline gap-2 mb-3">
+                        <x-slot:title></x-slot:title>
+                        <span class="fw-normal">{{ __('quotes.view.name') }}:</span>
+                        <x-livewire.input 
+                            wire:model="quote.name" 
+                            value="{{ $quote->name }}"
+                            class="rounded-2 flex-grow-1 p-1" />
                     </div>
-                </div>
+                </x-admin.section.header.detail>
+            </div>
+
+            <div class="col-md-6 d-flex flex-column gap-2 text-break">
+
+                <x-admin.section.header.detail>
+                    <div class="d-flex flex-wrap align-items-baseline gap-2 mb-3">
+                        <x-slot:title></x-slot:title>
+                        <span class="fw-normal">{{ __('quotes.view.starts') }}</span>
+                        <span>{{ f_date($quote->date_from) }} → {{ f_date($quote->date_to) }}</span>
+                    </div>
+                </x-admin.section.header.detail>
+
+                <x-admin.section.header.detail>
+                    <div class="d-flex flex-wrap align-items-baseline gap-2 mb-3">
+                        <x-slot:title></x-slot:title>
+                        <span class="fw-normal text-nowrap">
+                            {{ __('quotes.view.organization') }}:
+                        </span>
+                        <span>
+                            @if($quote->organization)
+                                {{ $quote->organization->name }}
+                            @else
+                                No Organization
+                            @endif
+                        </span>
+                    </div>
+                </x-admin.section.header.detail>
+
+                <x-admin.section.header.detail>
+                    <div class="d-flex flex-wrap align-items-baseline gap-2 mb-3">
+                        <x-slot:title></x-slot:title>
+                        <span class="fw-normal">{{ __('quotes.view.lead.contact') }}:</span>
+                        <span>
+                            <a href="mailto:{{ $quote->leadTraveller?->email }}">
+                                {{ $quote->leadTraveller?->email ?? 'No Email Found' }}
+                            </a>
+                            (
+                            <a href="tel:{{ $quote->leadTraveller?->phone }}">
+                                {{ $quote->leadTraveller?->phone ?? 'No Telephone Found' }}
+                            </a>
+                            )
+                        </span>
+                    </div>
+                </x-admin.section.header.detail>
+
+            </div>
+
+            <div class="col-md-6 d-flex flex-column gap-2 text-break">
+
+                <x-admin.section.header.detail>
+                    <div class="d-flex flex-wrap align-items-baseline gap-2 mb-3">
+                        <x-slot:title></x-slot:title>
+                        <span class="fw-normal">{{ __('quotes.view.expires') }}:</span>
+                        <span>{{ f_date($quote->expires) }}</span>
+                    </div>
+                </x-admin.section.header.detail>
+
+                <x-admin.section.header.detail>
+                    <div class="d-flex flex-wrap align-items-baseline gap-2 mb-3">
+                        <x-slot:title></x-slot:title>
+                        <span class="fw-normal">{{ __('quotes.view.agent') }}:</span>
+                        <span>
+                            {{ $quote->agent?->first_name }} 
+                            {{ $quote->agent?->last_name ?? 'No Agent' }}
+                        </span>
+                    </div>
+                </x-admin.section.header.detail>
+
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <x-admin.section.header.detail>
+                    <x-slot:title>{{ __('quotes.view.notes.internal') }}</x-slot:title>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        {{ $quote->internal_notes ?? 'No Internal Notes' }}
+                    </div>
+                </x-admin.section.header.detail>
+            </div>
+
+            <div class="col-md-6">
+                <x-admin.section.header.detail>
+                    <x-slot:title>{{ __('quotes.view.notes.external') }}</x-slot:title>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        {{ $quote->external_notes ?? 'No External Notes' }}
+                    </div>
+                </x-admin.section.header.detail>
+            </div>
+        </div>
+
+    </div>
+</div>
+
                 <div class="col-md-6">
                     <div class="rounded-3 shadow p-3 h-100 "
                         style="background-color: #A3CAEE;display: flex;flex-direction: column;justify-content: space-between; ">
@@ -157,46 +181,10 @@
                         }
                         $profit = $profit === null ? null : ($profit - $commission);
                         @endphp
-                        <div class="row g-3 right_extra_class">
-                            <div class="col-md-5 d-flex flex-column gap-2 mb-3">
+                        <div class="row g-3 d-flex flex-wrap align-items-baseline">
 
-                                <x-admin.section.header.detail>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <x-slot:title></x-slot:title>
-                                        <span class="fw-normal">
-                                            {{-- {{ __('quotes.view.cards.quick.calculator.cost') }} --}}
-                                            Order Value
-                                        </span>
+                            <div class="col-md-5 d-flex flex-column gap-2">
 
-                                        {{ f_currency(
-                                        $total,
-                                        $quote->currency,
-                                        $quote->from_rate ?? 1,
-                                        Settings::currency()
-                                        ) }}
-                                    </div>
-                                </x-admin.section.header.detail>
-
-                                <x-admin.section.header.detail>
-                                    <div class="d-flex align-items-center gap-2 mb-3">
-                                        <x-slot:title></x-slot:title>
-
-                                        <span class="fw-normal">
-                                            {{ __('quotes.view.cards.quick.calculator.taxes') }}
-                                        </span>
-
-                                        <span>
-                                            {{ f_currency(
-                                            $taxes,
-                                            $quote->currency,
-                                            $quote->from_rate ?? 1,
-                                            Settings::currency()
-                                            ) }}
-                                        </span>
-                                    </div>
-                                </x-admin.section.header.detail>
-                            </div>
-                            <div class="col-md-6 d-flex flex-column gap-2">
                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
@@ -219,12 +207,38 @@
                                         </span>
                                     </div>
                                 </x-admin.section.header.detail>
+
                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
+
+                                        <span class="fw-normal">
+                                            {{ __('quotes.view.cards.quick.calculator.taxes') }}
+                                        </span>
+
+                                        <span>
+                                            {{ f_currency(
+                                            $taxes,
+                                            $quote->currency,
+                                            $quote->from_rate ?? 1,
+                                            Settings::currency()
+                                            ) }}
+                                        </span>
+                                    </div>
+                                </x-admin.section.header.detail>
+
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column gap-2">
+
+                                <x-admin.section.header.detail>
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                        <x-slot:title></x-slot:title>
+
                                         <span class="fw-normal">
                                             {{ __('quotes.view.cards.quick.calculator.commission') }}
                                         </span>
+
                                         <span>
                                             {{ f_currency(
                                             !empty($quote->commission) ? $commission : 0,
@@ -235,6 +249,22 @@
                                         </span>
                                     </div>
                                 </x-admin.section.header.detail>
+
+                                <x-admin.section.header.detail>
+                                    <x-slot:title></x-slot:title>
+                                    <span class="fw-normal">
+                                        {{-- {{ __('quotes.view.cards.quick.calculator.cost') }} --}}
+                                        Order Value
+                                    </span>
+
+                                    {{ f_currency(
+                                    $total,
+                                    $quote->currency,
+                                    $quote->from_rate ?? 1,
+                                    Settings::currency()
+                                    ) }}
+                                </x-admin.section.header.detail>
+
                             </div>
                         </div>
 
@@ -328,30 +358,11 @@
                         width: 8px !important;
                         height: 8px !important;
                     }
-
-                    .clse {
-                        flex: 0 0 auto;
-                        width: 50%;
-                        margin-top: unset;
-                    }
-
-                    .extraclass .clse {
-                        width: 100%
-                    }
-
-                    .right_extra_class .clse,
-                    .right_extra_class .col-md-5 .clse {
-                        flex: unset !important;
-                        width: 100% !important;
-                    }
-                    
                 </style>
 
                 <x-admin.section.card>
                     <div class="custom-quote-card">
-                        <x-slot:title>Additional Travellers</x-slot:title>
-
-                            <h6 class="fw-bold">Add the number of additional travellers</h6>
+                        <x-slot:title>{{ __('quotes.view.cards.quick.calculator.header') }}</x-slot:title>
 
                         @php
                         $paying = $quote->paying + ($quote->leadTraveller?->paying ? 1 : 0);
@@ -375,6 +386,7 @@
 
                         <div class="row ">
 
+                            <h4 class="fw-bold">{{ __('quotes.view.cards.quick.calculator.count') }}</h4>
 
                             <div class="col-12 row gx-2 mb-3">
 
