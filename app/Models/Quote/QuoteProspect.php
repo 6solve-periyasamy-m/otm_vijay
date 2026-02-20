@@ -71,12 +71,12 @@ class QuoteProspect extends Model
 
     public function getEmailAttribute(): string
     {
-        return $this->customer?->email_address ?? "Email Not Found";
+        return $this->customer?->email_address ?? "";
     }
 
     public function getPhoneAttribute(): string
     {
-        return $this->customer?->mobile_number ?? "Phone Not Found";
+        return $this->customer?->mobile_number ?? "";
     }
 
     public function getIsLeadAttribute(): bool

@@ -12,7 +12,8 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
 
 @extends('layout.master')
 
-@section('title', 'View Order')
+@section('title', __('View Order') . ($order->tour->event->name ? ' - ' . $order->tour->event->name : ''))
+
 {{-- TODO: Tidy up CSS --}}
 
 @section('footer-script')
@@ -66,7 +67,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         padding: 15px;
         box-shadow: 0px 4px 4px 0px #67676740;
         margin-bottom: 11px;
-        width: 21.63%;
+        width: 25%;
         margin-right: 0.84%;
     }
 
@@ -79,7 +80,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
 
     .view_order_row .left_blue_section {
         padding: 14px;
-        width: 53.02%;
+        width: 49.4%;
         margin-right: 0.84%;
         background-color: #A3CAEE;
         border-radius: 11px;
@@ -91,7 +92,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     }
 
     .view_order_row .view-cust-mail-addr {
-        width: 21.86%;
+        width: 25%;
         margin-right: 0.84%;
         background-color: #295F92;
         border-radius: 16px;
@@ -102,7 +103,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     }
 
     .view_order_row .view-cust-phn-numb {
-        width: 30.54%;
+        width: 25%;
         margin-right: 0.84%;
         background-color: #295F92;
         border-radius: 16px;
@@ -113,7 +114,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     }
 
     .view_order_row .view-cust-organizaton {
-        width: 23.38%;
+        width: 25%;
         background-color: #295F92;
         border-radius: 16px;
         color: #ffffff;
@@ -139,7 +140,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     }
 
     .view_order_row .right_blue_section {
-        width: 46.16%;
+        width: 49.76%;
         background-color: #A3CAEE;
         padding: 14px 20px;
         border-radius: 11px;
@@ -159,12 +160,18 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         justify-content: space-between; */
     }
 
-    .single_div_right .single_div,
+    .single_div_right .single_div{
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+        gap: 5px;
+    }
     .single_div_left .single_div {
         display: flex;
         align-items: center;
         margin-bottom: 25px;
         gap: 5px;
+        width: 47%;
     }
 
     .single_div_one {
@@ -316,7 +323,13 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
         gap: unset !important;
     }
 
-    .left_blue_section .single_div_inner .single_div_left,
+    .left_blue_section .single_div_inner .single_div_left{
+           width: 100%;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    
     .left_blue_section .single_div_inner .single_div_right {
         width: 49%;
         word-break: break-word;
@@ -341,6 +354,11 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
     .single_div h6 {
         margin-bottom: unset !important;
     }
+    .single_div_left{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline
+    }
 </style>
 @endsection
 
@@ -360,15 +378,18 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                     <h6 class="fw-bold"> {{ $order->booking_reference }}</h6>
                 </div>
                 <div class="view-cust-phn-numb">
-                    <p>Event</p>
+                    <p>Lead Booker</p>
                     <h6 class="fw-bold">
-                        {{ $order->tour->event->name }}
+                        {{ $order->leadBooker?->customer_name ?? 'N/A' }}
                     </h6>
                 </div>
                 <div class="view-cust-mail-addr">
-                    <p>Order Created Date</p>
+                     <p class="text-nowrap">Consultant</p>
                     <h6 class="fw-bold">
-                        {{ f_date($order->ordered_on) }}
+                        {{ $order->consultant
+                        ? $order->consultant->name 
+                        : 'No Consultant Set'
+                        }}
                     </h6>
                 </div>
                 <div class="view-cust-organizaton">
@@ -393,8 +414,14 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     {{ $order->tour?->name ?? 'Tour Deleted' }}
                                 </h6>
                             </div>
+                            <div class="single_div mt-4">
+                               <p></p>
+                                <h6 class="fw-bold">
+                                    
+                                </h6>
+                            </div>
                             <div class="single_div">
-                                <p>Tour Date</p>
+                                <p>Tour Date:</p>
                                 <h6 class="fw-bold">
                                     @if($order->tour)
                                     {{ f_date($order->tour->date_from) }} to {{ f_date($order->tour->date_to) }}
@@ -403,46 +430,50 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                     @endif
                                 </h6>
                             </div>
-
-
-                            <div class="single_div">
-                                <p>Lead Booker</p>
+                             <div class="single_div">
+                                <p>Order Created Date:</p>
                                 <h6 class="fw-bold">
-                                    {{ $order->leadBooker?->customer_name ?? 'N/A' }}
+                                    {{ f_date($order->ordered_on) }}
                                 </h6>
                             </div>
-                        </div>
-
-                        <div class="col-md-6 single_div_right">
                             <div class="single_div">
-                                <p class="text-nowrap">Consultant</p>
+                               <p>Organization:</p>
+                               <h6 class="fw-bold">{!! $order->organization->name ?? '' !!}</h6>
+                            </div>
+                            <div class="single_div">
+                                <p>Agent:</p>
                                 <h6 class="fw-bold">
-                                    {{ $order->consultant
-                                    ? $order->consultant->name . ' (' . $order->consultant->email . ')'
-                                    : 'No Consultant Set'
-                                    }}
+                                    {{ $order->agent?->first_name 
+                                        ? $order->agent->first_name . ' ' . $order->agent->last_name 
+                                        : '' }}
                                 </h6>
                             </div>
-                        </div>
+                            <div class="single_div ">
+                                <p class="text-nowrap">Booking Token:</p>
+                               <h6 class="fw-bold">{!! $order->token ?? '' !!}</h6>
+                            </div>
+                            
+                            </div>
+                       
                     </div>
                 </div>
                 <div class="row text-break">
                     <div class="col-md-6 mb-0">
-                        <span>Internal Notes</span>
+                        <span>Internal Notes:</span>
                         <h6 class="fw-bold">{!! nl2br($order->internal_notes ?? 'No Internal Notes') !!}</h6>
                     </div>
                     <div class="col-md-6">
-                        <span>External Notes</span>
+                        <span>External Notes:</span>
                         <h6 class="fw-bold mb-1">{!! nl2br($order->external_notes ?? 'No External Notes') !!}</h6>
 
                     </div>
                 </div>
             </div>
             <div class="right_blue_section d-flex  flex-column">
-                <div class="single_div_inner">
+                <div >
                     <div class="single_div_left">
                         <div class="single_div">
-                            <p>Order Value</p>
+                            <p>Order Value:</p>
                             <h6 class="fw-bold">
                                 @if($order->cancelled)
                                 {{ fr_currency($order->total, $order->currency) }}
@@ -462,46 +493,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             </h6>
                         </div>
                         <div class="single_div">
-                            <p>Total Paid</p>
-                            <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{
-                                fr_currency($order->paid * ($toSystem ?? 1), Settings::currency()) }}) @endif</h6>
-                        </div>
-                        <div class="single_div">
-                            <p>Next Payment Due</p>
-                            <h6 class="fw-bold">
-                                @if($order->next_installment !== null)
-                                {{f_date($order->next_installment->due_on)}} -
-                                {{fr_currency($order->next_installment->remaining, $order->currency)}}
-                                @if($nonSystem) ({{ fr_currency($order->next_installment->remaining * ($toSystem ?? 1),
-                                Settings::currency()) }}) @endif
-                                @else
-                                All installments paid
-                                @endif
-                            </h6>
-                        </div>
-
-                        <div class="single_div">
-                            <p>Balance Outstanding</p>
-                            <h6 class="fw-bold">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem)
-                                ({{ fr_currency($order->remaining * ($toSystem ?? 1), Settings::currency()) }}) @endif
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="single_div_right">
-                        <div class="single_div">
-                            <p style="margin-bottom:unset;">Tax Amount</p>
-                            <h6 class="fw-bold">
-                                @if($order->getTaxes() !== null)
-                                {{fr_currency($order->getTaxes(), $order->currency)}}
-                                @if($nonSystem) ({{ fr_currency($order->getTaxes() * ($toSystem ?? 1),
-                                Settings::currency()) }}) @endif
-                                @else
-                                No Taxes Due
-                                @endif
-                            </h6>
-                        </div>
-                        <div class="single_div">
-                            <p style="margin-bottom:unset;">Cost to Company</p>
+                            <p style="margin-bottom:unset;">Cost to Company:</p>
                             <h6 class="fw-bold">
                                 {{ fr_currency($order->repository->getCostToCompany() * ($fromSystem ?? 1),
                                 $order->currency) }}
@@ -518,7 +510,12 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                             </h6>
                         </div>
                         <div class="single_div">
-                            <p style="margin-bottom:unset;">Current Profit</p>
+                            <p>Total Paid:</p>
+                            <h6 class="fw-bold">{{ fr_currency($order->paid, $order->currency) }} @if($nonSystem) ({{
+                                fr_currency($order->paid * ($toSystem ?? 1), Settings::currency()) }}) @endif</h6>
+                        </div>
+                         <div class="single_div">
+                            <p style="margin-bottom:unset;">Current Profit:</p>
                             <h6 class="fw-bold">
                                 @if($order->cache->profit !== null)
                                 {{ fr_currency($order->cache->profit * ($fromSystem ?? 1), $order->currency) }}
@@ -527,12 +524,47 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                 No FX Rate for Conversion
                                 @endif
                             </h6>
-
-
-
-
-
-
+                        </div>
+                        <div class="single_div">
+                            <p>Next Payment Due:</p>
+                            <h6 class="fw-bold">
+                                @if($order->next_installment !== null)
+                                {{f_date($order->next_installment->due_on)}} -
+                                {{fr_currency($order->next_installment->remaining, $order->currency)}}
+                                @if($nonSystem) ({{ fr_currency($order->next_installment->remaining * ($toSystem ?? 1),
+                                Settings::currency()) }}) @endif
+                                @else
+                                All installments paid
+                                @endif
+                            </h6>
+                        </div>
+                         <div class="single_div">
+                            <p style="margin-bottom:unset;">Tax Amount:</p>
+                            <h6 class="fw-bold text-break">
+                                @if($order->getTaxes() !== null)
+                                {{fr_currency($order->getTaxes(), $order->currency)}}
+                                @if($nonSystem) ({{ fr_currency($order->getTaxes() * ($toSystem ?? 1),
+                                Settings::currency()) }}) @endif
+                                @else
+                                No Taxes Due
+                                @endif
+                            </h6>
+                        </div>
+                        <div class="single_div">
+                            <p>Balance Outstanding:</p>
+                            <h6 class="fw-bold text-primary">{{ fr_currency($order->remaining, $order->currency) }} @if($nonSystem)
+                                ({{ fr_currency($order->remaining * ($toSystem ?? 1), Settings::currency()) }}) @endif
+                            </h6>
+                        </div>
+                        <div class="single_div">
+                            <p style="margin-bottom:unset;">Commission:</p>
+                            <h6 class="fw-bold">
+                                @if($order->commission !== null)
+                                    {{ fr_currency($order->commission_amount, $order->currency) }} ({{ $order->commission }}%)
+                                @else
+                                    -
+                                @endif
+                            </h6>
                         </div>
                     </div>
                 </div>

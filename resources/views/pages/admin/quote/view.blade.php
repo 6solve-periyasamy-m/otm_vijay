@@ -2,7 +2,8 @@
 
 @extends('layout.master')
 
-@section('title', __('quotes.view.title'))
+{{-- @section('title', __('quotes.view.title')) --}}
+@section('title', __('quotes.view.title') . ($quote->event?->name ? ' - ' . $quote->event->name : ''))
 
 @section('footer-script')
 <script type="text/javascript">
