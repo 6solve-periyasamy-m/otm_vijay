@@ -440,39 +440,13 @@ class BookingController extends ApiController
                 'internal_notes'   => null,
             ]);
             DB::commit();
-
-
-            // Send booking confirmation email to customer with documents attached
-            try {
-                $mailer = $order->repository->mailer();
-                // Attach invoice and itinerary PDFs if available
-                if (method_exists($mailer, 'getInvoiceAttachment')) {
-                    $invoice = $mailer->getInvoiceAttachment();
-                    if ($invoice) {
-                        $mailer->attach($invoice['path'], [
-                            'as' => $invoice['name'],
-                            'mime' => $invoice['mime'] ?? 'application/pdf',
-                        ]);
-                    }
-                }
-                if (method_exists($mailer, 'getItineraryAttachment')) {
-                    $itinerary = $mailer->getItineraryAttachment();
-                    if ($itinerary) {
-                        $mailer->attach($itinerary['path'], [
-                            'as' => $itinerary['name'],
-                            'mime' => $itinerary['mime'] ?? 'application/pdf',
-                        ]);
-                    }
-                }
-                $mailer->sendBookingConfirmation();
-            } catch (\Throwable $e) {
-                \Log::error('Failed to send booking confirmation email: ' . $e->getMessage());
-            }
-
             return response()->json(['success' => true, 'message' => 'Payment confirmed successfully']);
         } catch (\Exception $e) {
             \Log::error('Payment confirmation error: ' . $e->getMessage(), [ 'booking_id' => $booking->id, 'order_id' => $order->id ]);
             return response()->json([ 'success' => false, 'message' => 'Payment confirmation failed', ], 500);
-        }            
+        }
+
     }
+
+
 }
