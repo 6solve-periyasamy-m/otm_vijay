@@ -32,6 +32,11 @@ use App\View\Components\Livewire\Input\Select\Customer\HatSize;
 use App\View\Components\Livewire\Input\Select\Customer\TShirtSize;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\IpLocationController;
+// IP-based location lookup
+Route::post('/ip-location', [IpLocationController::class, 'getLocation'])->name('api.ip-location');
+
+
 Route::prefix('/admin')->middleware([ExpectsJson::class, ApiAuthenticate::class])->name('api.admin.')->group(function () {
    Route::prefix('/activity')->name('activity.')->group(__DIR__ . '/api/admin/activity.php');
    Route::prefix('/accommodation')->name('accommodation.')->group(__DIR__ . '/api/admin/accommodation.php');

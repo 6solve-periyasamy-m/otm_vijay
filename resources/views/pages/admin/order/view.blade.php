@@ -448,7 +448,7 @@ $toSystem = \Settings::getConversionRate($order->currency, \Settings::currency()
                                         : '' }}
                                 </h6>
                             </div>
-                            <div class="single_div ">
+                            <div class=" ">
                                 <p class="text-nowrap">Booking Token:</p>
                                <h6 class="fw-bold">{!! $order->token ?? '' !!}</h6>
                             </div>

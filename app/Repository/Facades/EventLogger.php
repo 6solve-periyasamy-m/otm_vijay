@@ -57,4 +57,30 @@ class EventLogger
         if (is_bool($location)) { return null; }
         return "{$location->cityName}, {$location->countryName}, {$location->zipCode}";
     }
+
+      /**
+     * Get location info (city, state) for a given IP address.
+     * @param string $ip
+     * @return array|null [ 'city' => ..., 'state' => ... ]
+     */
+    public static function getLocationByIp(string $ip): ?array
+    {
+        try {
+            $location = \Location::get($ip);
+        } catch (\Exception $exception) {
+            \Log::error($exception);
+            return null;
+        }
+        if (!$location || is_bool($location)) {
+            return null;
+        }
+        return [
+          //  dd($location),
+            'countryCode' => $location->countryCode ?? null,
+            'countryName' => $location->countryName ?? null,
+            'state' => $location->regionName ?? null,
+            'city' => $location->cityName ?? null,
+            'timezone' => $location->timezone ?? null,
+        ];
+    }
 }

@@ -47,7 +47,32 @@ class OrderMailer
      */
     public function sendOrderConfirmation(string $email = null): bool
     {
-        return $this->sendMail('order-confirmation', $email);
+        try {
+            $mailer = $this->order->repository->mailer();
+            // Attach invoice and itinerary PDFs if available
+            if (method_exists($mailer, 'getInvoiceAttachment')) {
+                $invoice = $mailer->getInvoiceAttachment();
+                if ($invoice) {
+                    $mailer->attach($invoice['path'], [
+                        'as' => $invoice['name'],
+                        'mime' => $invoice['mime'] ?? 'application/pdf',
+                    ]);
+                }
+            }
+            if (method_exists($mailer, 'getItineraryAttachment')) {
+                $itinerary = $mailer->getItineraryAttachment();
+                if ($itinerary) {
+                    $mailer->attach($itinerary['path'], [
+                        'as' => $itinerary['name'],
+                        'mime' => $itinerary['mime'] ?? 'application/pdf',
+                    ]);
+                }
+            }
+            return $mailer->sendBookingConfirmation($email);
+        } catch (\Throwable $e) {
+            \Log::error('Failed to send booking confirmation email: ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**
