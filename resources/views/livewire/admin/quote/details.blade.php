@@ -202,19 +202,6 @@
                                 <x-admin.section.header.detail>
                                     <div class="d-flex align-items-center gap-2 mb-3">
                                         <x-slot:title></x-slot:title>
-
-                                        <span class="fw-normal">
-                                            {{ __('quotes.view.cards.quick.calculator.final') }}:
-                                        </span>
-
-                                        <span>
-                                            {{ f_currency(
-                                            $taxes,
-                                            $quote->currency,
-                                            $quote->from_rate ?? 1,
-                                            Settings::currency()
-                                            ) }}
-                                        </span>
                                     </div>
                                 </x-admin.section.header.detail>
                                 <x-admin.section.header.detail>
@@ -243,8 +230,14 @@
                                         <x-slot:title></x-slot:title>
                                         <span class="fw-normal">{{ __('quotes.view.cards.quick.calculator.taxes')
                                             }}:</span>
-                                        <span>{{ f_currency($toBePaid, Settings::currency(), $toRate, $quote->currency)
-                                            }}</span>
+                                            <span>
+                                            {{ f_currency(
+                                            $taxes,
+                                            $quote->currency,
+                                            $quote->from_rate ?? 1,
+                                            Settings::currency()
+                                            ) }}
+                                        </span>
                                     </div>
                                 </x-admin.section.header.detail>
 

@@ -390,6 +390,7 @@ class ReportRepository
         }
         foreach ($bookings->get() as $booking) {
             $row = collect();
+            $row->id = $booking->tour->id;
             $cDetailsSource = $booking->leadTraveller->customer ?? $booking->leadTraveller;
             if (empty($cDetailsSource->email_address) && empty($cDetailsSource->mobile_number)) { continue; }
             $row->name = $cDetailsSource?->title . ' ' . $cDetailsSource?->first_name . ' ' . $cDetailsSource?->last_name;

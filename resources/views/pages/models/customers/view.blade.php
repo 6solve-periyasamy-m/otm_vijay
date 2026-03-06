@@ -53,7 +53,7 @@
                     </h6>
                 </div>
                 <div class="view-cust-mail-addr">
-                    <p>In House Consultant:</p>
+                    <p>In House Consultant</p>
                     @if ($customer->consultant?->name)
                         <h6 class="fw-bold">
                             {{ $customer->consultant->name }}
@@ -70,12 +70,12 @@
             <div class="otm-view-cust-nxt-sec" style="display:flex;">
                 <div class="otm-view-cust-nxt-left-secton">
                     <div class="col-6">
-                        <p>Internal Notes</p>
-                        <h6 class="fw-bold">{{ $customer->internal_notes }}</h6>
+                        <p>Internal Notes:</p>
+                        <h6 class="fw-bold">{{ $customer->internal_notes ?? 'No Internal Notes' }}</h6>
                     </div>
                     <div class="col-6">
-                        <p>External Notes</p>
-                        <h6 class="fw-bold">{{ $customer->external_notes }}</h6>
+                        <p>External Notes:</p>
+                        <h6 class="fw-bold">{{ $customer->external_notes ?? 'No External Notes' }}</h6>
                     </div>
                 </div>
                 <div class="otm-view-cust-nxt-rght-secton" style="display:flex;">

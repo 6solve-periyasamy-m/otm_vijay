@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Models\Booking\Booking;
 use Illuminate\Http\Request;
+use App\Repository\Facades\EventLogger;
 
 trait CapturesBookingSource
 {
@@ -24,5 +25,16 @@ trait CapturesBookingSource
         $this->source_referrer = request()->headers->get('referer');
         $this->created_ip      = request()->ip();
         $this->user_agent      = request()->userAgent();
+
+        //  SAVE LOCATION HERE
+       //  $location = EventLogger::getLocationByIp('59.92.106.79');
+        $location = EventLogger::getLocationByIp($this->created_ip) ?? [];
+        $this->visitor_info = implode(',', [
+            $location['countryCode'] ?? '',
+            $location['countryName'] ?? '',
+            $location['state'] ?? '',
+            $location['city'] ?? '',
+            $location['timezone'] ?? '',
+        ]);
     }
 }

@@ -18,7 +18,7 @@
         @foreach($data as $row)
             <tr>
                 <th scope="row">{{ $row->date }}</th>
-                <td>{{ $row->tour }}</td>
+                <td><a href="{{ route('tours.view', $row->id) }}" class="link link-primary">{{ $row->tour }}</a></td>
                 <td>{{ $row->event }}</td>
                 <td>{{ $row->name }}</td>
                 <td>{{ $row->contact_email }}</td>
